@@ -1,0 +1,16 @@
+[project]
+name = "code-analyzer"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "flo", email = "florent.legac@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "libcst>=1.8.2",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

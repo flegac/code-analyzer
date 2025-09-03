@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Visualisation 3D du Graphe</title>
+    <script src="https://unpkg.com/3d-force-graph"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #graph {
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #legend {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            font-family: sans-serif;
+            font-size: 14px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+<div id="graph"></div>
+<div id="legend"><strong>Modules principaux</strong><br></div>
+
+<script>
+    fetch('depends_on.json')
+        .then(res => res.json())
+        .then(data => {
+            const nodes = [];
+            const links = [];
+            const rootMap = {};
+            const colorMap = {};
+            const palette = [
+                '#e6194b', '#3cb44b', '#ffe119', '#4363d8',
+                '#f58231', '#911eb4', '#46f0f0', '#f032e6',
+                '#bcf60c', '#fabebe', '#008080', '#e6beff'
+            ];
+            let colorIndex = 0;
+
+            // Build reverse map (used_by)
+            const usedBy = {};
+            Object.entries(data).forEach(([source, targets]) => {
+                targets.forEach(target => {
+                    if (!usedBy[target]) usedBy[target] = [];
+                    usedBy[target].push(source);
+                    links.push({source, target, curvature: 0.2});
+                });
+            });
+
+            // Extract nodes and assign root groups
+            Object.keys(data).forEach(id => {
+                const roots = id.split('.');
+                const root = roots.slice(0, 2).join('.');
+
+                if (!colorMap[root]) {
+                    colorMap[root] = palette[colorIndex % palette.length];
+                    colorIndex++;
+                }
+                rootMap[id] = root;
+
+                const outDegree = data[id]?.length || 0;
+                const inDegree = usedBy[id]?.length || 0;
+
+                // Positioning by role: Y axis
+                let y = 0;
+                if (inDegree > 3 && outDegree === 0) y = -200; // source
+                else if (outDegree > 3 && inDegree === 0) y = 200; // sink
+                else if (inDegree > 2 && outDegree > 2) y = 0; // hub
+                else if (inDegree === 0 && outDegree <= 2) y = -100; // leaf
+                else y = 100; // intermediate
+
+                nodes.push({
+                    id,
+                    group: root,
+                    color: colorMap[root],
+                    x: colorIndex * 50 + Math.random() * 20,
+                    y: y + Math.random() * 20,
+                    z: Math.random() * 50
+                });
+            });
+
+            // Update legend
+            const legend = document.getElementById('legend');
+            Object.entries(colorMap).forEach(([mod, color]) => {
+                const item = document.createElement('div');
+                item.innerHTML = `<span style="display:inline-block;width:12px;height:12px;background:${color};margin-right:5px;"></span>${mod}`;
+                legend.appendChild(item);
+            });
+
+            // Render graph
+            ForceGraph3D()(document.getElementById('graph'))
+                .graphData({nodes, links})
+                .nodeLabel('id')
+                .nodeColor('color')
+                .linkCurvature('curvature')
+                .linkDirectionalParticles(2)
+                .linkDirectionalArrowLength(3)
+                .linkDirectionalArrowColor(() => '#999')
+                .linkColor(() => '#ccc')
+                .onNodeClick(node => alert(`Module : ${node.id}`));
+        });
+</script>
+</body>
+</html>
