@@ -1,6 +1,7 @@
 import json
 import statistics
 import sys
+from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
@@ -101,7 +102,7 @@ def compute_stats(values: list[int], modules: list[str]) -> dict[str, Any]:
     }
 
 
-def analyze_project(root_dir: Path, output_dir:Path) -> None:
+def analyze_project(root_dir: Path, output_dir: Path) -> None:
     py_files = discover_py_files(root_dir)
     modules = [module_name_from_path(root_dir, f) for f in py_files]
     module_map = dict(zip(modules, py_files))
@@ -167,12 +168,98 @@ def analyze_project(root_dir: Path, output_dir:Path) -> None:
     (output_dir / "stats.json").write_text(json.dumps(final_stats, indent=2, ensure_ascii=False), encoding="utf-8")
     (output_dir / "graph.json").write_text(json.dumps(graph, indent=2, ensure_ascii=False), encoding="utf-8")
 
-    (output_dir / "depends_on.json").write_text(json.dumps({
+    depends_on_graph = {
         module: data["depends_from"]
         for module, data in graph.items()
-    }, indent=2, ensure_ascii=False), encoding="utf-8")
+    }
 
-    (output_dir / "used_by.json").write_text(json.dumps({
+    used_by_graph = {
         module: data["used_by"]
         for module, data in graph.items()
-    }, indent=2, ensure_ascii=False), encoding="utf-8")
+    }
+
+    for i in range(2,5):
+        g = enrich_graph_with_prefixes(depends_on_graph, sub_module_length=i)
+        (output_dir / f"used_by_{i}.json").write_text(json.dumps(g, indent=2, ensure_ascii=False), encoding="utf-8")
+
+
+
+    (output_dir / "depends_on.json").write_text(json.dumps(depends_on_graph, indent=2, ensure_ascii=False),
+                                                encoding="utf-8")
+
+    (output_dir / "used_by.json").write_text(json.dumps(used_by_graph, indent=2, ensure_ascii=False), encoding="utf-8")
+
+
+def enrich_graph_with_prefixes(graph: dict[str, list[str]], sub_module_length: int) -> dict[str, list[str]]:
+    enriched_graph: dict[str, list[str]] = defaultdict(list)
+
+    # Étape 1 : copier les liens existants
+    for mod, deps in graph.items():
+        enriched_graph[mod].extend(deps)
+
+    # Étape 2 : ajouter les préfixes comme sommets et relier les modules à leur préfixe
+    prefix_map: dict[str, list[str]] = defaultdict(list)  # prefix -> list of full modules
+    for mod in graph:
+        parts = mod.split('.')
+        if len(parts) >= sub_module_length:
+            prefix = '.'.join(parts[:sub_module_length])
+            if prefix != mod:
+                enriched_graph[prefix]  # assure que le sommet existe
+                enriched_graph[mod].append(prefix)
+                prefix_map[prefix].append(mod)
+
+    # Étape 3 : relier les préfixes entre eux si leurs enfants sont liés
+    for prefix_a, children_a in prefix_map.items():
+        for prefix_b, children_b in prefix_map.items():
+            if prefix_a == prefix_b:
+                continue
+            # Vérifie s'il existe un lien entre un enfant de A et un enfant de B
+            for child_a in children_a:
+                for child_b in children_b:
+                    if child_b in graph.get(child_a, []):
+                        enriched_graph[prefix_a].append(prefix_b)
+                        break
+                else:
+                    continue
+                break
+
+    # Nettoyage : suppression des doublons
+    return {k: sorted(set(v)) for k, v in enriched_graph.items()}
+
+def enrich_graph_with_prefixes(graph: list[str, list[str]], sub_module_length: int) -> dict[str, list[str]]:
+    enriched_graph: dict[str, list[str]] = defaultdict(list)
+    prefix_map: dict[str, list[str]] = defaultdict(list)  # prefix -> list of full modules
+
+    # Étape 1 : ajouter les préfixes comme sommets et relier les modules à leur préfixe
+    for mod in graph:
+        parts = mod.split('.')
+        if len(parts) >= sub_module_length:
+            prefix = '.'.join(parts[:sub_module_length])
+            if prefix != mod:
+                enriched_graph[prefix]  # assure que le sommet existe
+                enriched_graph[mod].append(prefix)
+                prefix_map[prefix].append(mod)
+
+    # Étape 2 : relier les préfixes entre eux si leurs enfants sont liés
+    for prefix_a, children_a in prefix_map.items():
+        for prefix_b, children_b in prefix_map.items():
+            if prefix_a == prefix_b:
+                continue
+            # Vérifie s'il existe un lien entre un enfant de A et un enfant de B
+            for child_a in children_a:
+                for child_b in children_b:
+                    if child_b in graph.get(child_a, []):
+                        enriched_graph[prefix_a].append(prefix_b)
+                        break
+                else:
+                    continue
+                break
+
+    # Étape 3 : nettoyage des doublons et suppression des liens directs entre modules d'origine
+    final_graph = {}
+    for node, neighbors in enriched_graph.items():
+        # On ne garde que les liens vers des préfixes
+        filtered = [n for n in neighbors if n.count('.') == sub_module_length - 1]
+        final_graph[node] = sorted(set(filtered))
+
+    return final_graph
