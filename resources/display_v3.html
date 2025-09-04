@@ -15,11 +15,9 @@
             height: 100vh;
         }
 
-        #legend {
+        #legend, #controls {
             position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.85);
             padding: 10px;
             border-radius: 5px;
             font-family: sans-serif;
@@ -27,79 +25,273 @@
             max-height: 90vh;
             overflow-y: auto;
         }
+
+        #legend {
+            top: 200px;
+            right: 10px;
+        }
+
+        #treeview {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            width: 250px;
+            max-height: 60vh;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 10px;
+            border-radius: 5px;
+            font-family: sans-serif;
+            font-size: 14px;
+        }
+
+        #treeview ul {
+            margin: 0;
+            padding-left: 1em;
+            list-style: none;
+        }
+
+        /* Par défaut, on cache toutes les sous-listes */
+        #treeview li ul {
+            display: none;
+        }
+
+        /* Quand un <li> porte la classe expanded, on montre sa sous-liste */
+        #treeview li.expanded > ul {
+            display: block;
+        }
+
+        /* Style du libellé pour indiquer la cliquabilité */
+        #treeview .tree-label {
+            cursor: pointer;
+            user-select: none;
+            display: inline-block;
+        }
+
+        /* Flèches avant le texte : ► pour fermé, ▼ pour ouvert, rien pour une feuille */
+        #treeview .tree-label::before {
+            content: "►";
+            display: inline-block;
+            width: 1em;
+        }
+
+        #treeview li.expanded > .tree-label::before {
+            content: "▼";
+        }
+
+        #treeview li.leaf > .tree-label::before {
+            content: "";
+        }
+
+
+        #controls {
+            top: 10px;
+            right: 10px;
+        }
     </style>
 </head>
 <body>
 <div id="graph"></div>
 <div id="legend"><strong>Modules principaux</strong><br></div>
+<div id="treeview"><strong>Arborescence des modules</strong></div>
+<div id="controls">
+    <label for="dataSelect">Fichier JSON :</label><br>
+    <select id="dataSelect">
+        <option value="graph.json">graph.json</option>
+        <option value="modules.json">modules.json</option>
+        <option value="dependencies.json">dependencies.json</option>
+        <option value="example.json">example.json</option>
+    </select><br><br>
+
+    <label for="depthSelect">Profondeur du préfixe :</label><br>
+    <select id="depthSelect">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2" selected>2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select><br><br>
+
+    <button id="reloadBtn">🔄 Recharger</button>
+</div>
 
 <script>
-    fetch('used_by_3.json')
-        .then(res => res.json())
-        .then(data => {
-            const nodes = [];
-            const links = [];
-            const rootMap = {};
-            const colorMap = {};
-            const palette = [
-                '#e6194b', '#3cb44b', '#ffe119', '#4363d8',
-                '#f58231', '#911eb4', '#46f0f0', '#f032e6',
-                '#bcf60c', '#fabebe', '#008080', '#e6beff'
-            ];
-            let colorIndex = 0;
+    let graphInstance = null;
 
-            // Build reverse map (used_by)
-            const usedBy = {};
-            Object.entries(data).forEach(([source, targets]) => {
-                targets.forEach(target => {
-                    if (!usedBy[target]) usedBy[target] = [];
-                    usedBy[target].push(source);
-                    links.push({source, target, curvature: 0.2});
-                });
-            });
+    const VizConfig = {
+        palette: [
+            '#e6194b', '#3cb44b', '#ffe119', '#4363d8',
+            '#f58231', '#911eb4', '#46f0f0', '#f032e6',
+            '#bcf60c', '#fabebe', '#008080', '#e6beff'
+        ]
+    };
 
-            // Extract nodes and assign root groups
-            Object.keys(data).forEach(id => {
-                const roots = id.split('.');
-                const root = roots.slice(0, 2).join('.');
+    class ColorStrategy {
+        constructor(config) {
+            this.palette = config.palette;
+            this.prefixDepth = config.modulePrefixDepth;
+            this.colorMap = {};
+            this.prefixOrder = [];
+        }
 
-                if (!colorMap[root]) {
-                    colorMap[root] = palette[colorIndex % palette.length];
-                    colorIndex++;
+        getModulePrefix(id) {
+            return id.split('.').slice(0, this.prefixDepth).join('.');
+        }
+
+        assignColors(modules) {
+            const seen = new Set();
+            for (const id of modules) {
+                const prefix = this.getModulePrefix(id);
+                if (!seen.has(prefix)) {
+                    seen.add(prefix);
+                    this.prefixOrder.push(prefix);
+                    this.colorMap[prefix] = this.palette[(this.prefixOrder.length - 1) % this.palette.length];
                 }
-                rootMap[id] = root;
+            }
+        }
 
-                const outDegree = data[id]?.length || 0;
-                const inDegree = usedBy[id]?.length || 0;
+        getColor(id) {
+            const prefix = this.getModulePrefix(id);
+            return this.colorMap[prefix] || '#999';
+        }
 
-                // Positioning by role: Y axis
-                let y = 0;
-                if (inDegree > 3 && outDegree === 0) y = -200; // source
-                else if (outDegree > 3 && inDegree === 0) y = 200; // sink
-                else if (inDegree > 2 && outDegree > 2) y = 0; // hub
-                else if (inDegree === 0 && outDegree <= 2) y = -100; // leaf
-                else y = 100; // intermediate
+        getColorIndex(id) {
+            const prefix = this.getModulePrefix(id);
+            return this.prefixOrder.indexOf(prefix);
+        }
 
-                nodes.push({
-                    id,
-                    group: root,
-                    color: colorMap[root],
-                    x: colorIndex * 50 + Math.random() * 20,
-                    y: y + Math.random() * 20,
-                    z: Math.random() * 50
+        getColorMap() {
+            return this.colorMap;
+        }
+    }
+
+    class TreeView {
+        /**
+         * @param {string[]} modules  Liste de tous les modules (id complets)
+         * @param {number} depth      Profondeur souhaitée pour l'arborescence
+         */
+        constructor(modules, depth) {
+            this.modules = modules;
+            this.depth = depth;
+            this.tree = {name: 'root', children: []};
+            this._build();
+        }
+
+        /**
+         * Construit l'arbre en regroupant par préfixe jusqu'à la profondeur donnée.
+         */
+        _build() {
+            for (const fullId of this.modules) {
+                const segments = fullId.split('.');
+                let cursor = this.tree;
+
+                // Itère sur chaque niveau jusqu'à `depth`
+                for (let level = 0; level < this.depth; level++) {
+                    const key = segments[level] || '(vide)';
+                    let child = cursor.children.find(n => n.name === key);
+
+                    if (!child) {
+                        child = {name: key, children: []};
+                        cursor.children.push(child);
+                    }
+                    cursor = child;
+                }
+
+                // À la profondeur max, on ajoute la “feuille” portant le reste du nom
+                const remainder = segments.slice(this.depth).join('.');
+                cursor.children.push({
+                    name: remainder || segments[this.depth - 1] || fullId,
+                    fullName: fullId
                 });
-            });
+            }
+        }
 
-            // Update legend
-            const legend = document.getElementById('legend');
-            Object.entries(colorMap).forEach(([mod, color]) => {
+        /**
+         * Retourne la structure arborescente.
+         * @returns {{ name: string, children: any[] }}
+         */
+        getTree() {
+            return this.tree;
+        }
+    }
+
+    class Graph {
+        constructor(data, colorStrategy) {
+            this.data = data;
+            this.colorStrategy = colorStrategy;
+            this.nodes = [];
+            this.links = [];
+            this.usedBy = {};
+            this.build();
+        }
+
+        computeNodePosition(inDegree, outDegree, colorIndex) {
+            return {
+                x: colorIndex * 10,
+                y: Math.random() * 100,
+                z: Math.random() * 100
+            };
+        }
+
+        build() {
+            for (const [source, targets] of Object.entries(this.data)) {
+                for (const target of targets) {
+                    if (!this.usedBy[target]) this.usedBy[target] = [];
+                    this.usedBy[target].push(source);
+                    this.links.push({source, target, curvature: 0.2});
+                }
+            }
+
+            this.colorStrategy.assignColors(Object.keys(this.data));
+
+            for (const id of Object.keys(this.data)) {
+                const outDegree = this.data[id]?.length || 0;
+                const inDegree = this.usedBy[id]?.length || 0;
+                const color = this.colorStrategy.getColor(id);
+                const colorIndex = this.colorStrategy.getColorIndex(id);
+
+                this.nodes.push({
+                    id,
+                    group: this.colorStrategy.getModulePrefix(id),
+                    color,
+                    ...this.computeNodePosition(inDegree, outDegree, colorIndex)
+                });
+            }
+        }
+
+        getGraphData() {
+            return {
+                nodes: this.nodes,
+                links: this.links,
+                colorMap: this.colorStrategy.getColorMap()
+            };
+        }
+    }
+
+    class GraphRenderer {
+        constructor(containerId, legendId) {
+            this.container = document.getElementById(containerId);
+            this.legend = document.getElementById(legendId);
+        }
+
+        renderLegend(colorMap) {
+            this.legend.innerHTML = '<strong>Modules principaux</strong><br>';
+            for (const [mod, color] of Object.entries(colorMap)) {
                 const item = document.createElement('div');
                 item.innerHTML = `<span style="display:inline-block;width:12px;height:12px;background:${color};margin-right:5px;"></span>${mod}`;
-                legend.appendChild(item);
-            });
+                this.legend.appendChild(item);
+            }
+        }
 
-            // Render graph
-            ForceGraph3D()(document.getElementById('graph'))
+        renderGraph({nodes, links}) {
+            // Nettoyer l'ancienne instance si elle existe
+            if (graphInstance && typeof graphInstance._destructor === 'function') {
+                graphInstance._destructor(); // méthode interne pour libérer les ressources
+            }
+
+            // Créer une nouvelle instance
+            graphInstance = ForceGraph3D()(this.container)
                 .graphData({nodes, links})
                 .nodeLabel('id')
                 .nodeColor('color')
@@ -109,7 +301,85 @@
                 .linkDirectionalArrowColor(() => '#999')
                 .linkColor(() => '#ccc')
                 .onNodeClick(node => alert(`Module : ${node.id}`));
-        });
+        }
+    }
+
+    function renderTree(node, container) {
+        const ul = document.createElement('ul');
+        container.appendChild(ul);
+
+        for (const child of node.children || []) {
+            const li = document.createElement('li');
+            const label = document.createElement('span');
+
+            label.textContent = child.name;
+            label.classList.add('tree-label');
+            li.appendChild(label);
+
+            // Si le nœud n'a pas d'enfants, taguez-le comme feuille
+            if (!child.children || child.children.length === 0) {
+                li.classList.add('leaf');
+            }
+
+            ul.appendChild(li);
+
+            // Si le nœud a des enfants, on crée récursivement la sous-liste
+            if (child.children && child.children.length > 0) {
+                renderTree(child, li);
+
+                // Au clic, on bascule la classe 'expanded' pour montrer/masquer
+                label.addEventListener('click', () => {
+                    li.classList.toggle('expanded');
+                });
+            }
+        }
+    }
+
+    async function loadGraph() {
+        const dataPath = document.getElementById('dataSelect').value;
+        const modulePrefixDepth = parseInt(document.getElementById('depthSelect').value, 10);
+
+        try {
+            const rawData = await fetch(dataPath).then(res => res.json());
+
+            // 1. Récupérer l'ensemble des modules (clé + cibles)
+            const moduleSet = new Set(Object.keys(rawData));
+            Object.values(rawData).forEach(arr => arr.forEach(id => moduleSet.add(id)));
+            const allModules = Array.from(moduleSet);
+
+            // 2. Construire et récupérer l'arbre
+            const treeView = new TreeView(allModules, modulePrefixDepth);
+            const treeData = treeView.getTree();
+
+
+            // Après avoir construit `treeData` :
+            const treeContainer = document.getElementById('treeview');
+            treeContainer.innerHTML = '<strong>Arborescence des modules</strong>';
+            renderTree(treeData, treeContainer);
+
+            console.log('Structure arborescente des modules :', treeData);
+            // → vous pouvez ensuite passer `treeData` à un composant UI d'arborescence,
+            //    l'afficher dans une <ul> / <ol>, ou tout autre rendu.
+
+            // 3. Continuer le rendu 3D comme avant...
+            const config = {...VizConfig, modulePrefixDepth};
+            const colorStrategy = new ColorStrategy(config);
+            const graph = new Graph(rawData, colorStrategy);
+            const renderer = new GraphRenderer('graph', 'legend');
+
+            const graphData = graph.getGraphData();
+            renderer.renderLegend(graphData.colorMap);
+            renderer.renderGraph(graphData);
+
+        } catch (err) {
+            alert("Erreur lors du chargement du fichier JSON : " + err.message);
+        }
+    }
+
+    document.getElementById('reloadBtn').addEventListener('click', loadGraph);
+
+    // Initialisation
+    window.addEventListener('DOMContentLoaded', loadGraph);
 </script>
 </body>
 </html>

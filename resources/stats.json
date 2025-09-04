@@ -1,0 +1,82 @@
+{
+  "lines": {
+    "mean": 48.45619335347432,
+    "std": 40.13394674366212,
+    "min": 3,
+    "max": {
+      "value": 285,
+      "files": [
+        "organism.gameplay.dna.graph.hex"
+      ]
+    }
+  },
+  "ClassDef": {
+    "mean": 1.0181268882175227,
+    "std": 0.6027493540855855,
+    "min": 0,
+    "max": {
+      "value": 5,
+      "files": [
+        "organism.gameplay.dna.model.body_dna"
+      ]
+    }
+  },
+  "FunctionDef": {
+    "mean": 0.39274924471299094,
+    "std": 1.0800429258968047,
+    "min": 0,
+    "max": {
+      "value": 11,
+      "files": [
+        "organism.gameplay.gaia.collision_service"
+      ]
+    },
+    "control_structures": {
+      "If": {
+        "mean": 0.4120639534883721,
+        "max": 7
+      },
+      "For": {
+        "mean": 0.14898255813953487,
+        "max": 4
+      },
+      "While": {
+        "mean": 0.015988372093023256,
+        "max": 4
+      }
+    }
+  },
+  "MethodDef": {
+    "mean": 3.7643504531722054,
+    "std": 5.123806390301574,
+    "min": 0,
+    "max": {
+      "value": 41,
+      "files": [
+        "organism.gameplay.dna.graph.hex"
+      ]
+    }
+  },
+  "Import_in": {
+    "mean": 5.610271903323262,
+    "std": 3.760530698979302,
+    "min": 0,
+    "max": {
+      "value": 27,
+      "files": [
+        "organism.game_content.painters.painter_service"
+      ]
+    }
+  },
+  "Import_out": {
+    "mean": 3.634441087613293,
+    "std": 6.530294756817089,
+    "min": 0,
+    "max": {
+      "value": 67,
+      "files": [
+        "organism.core.vec2"
+      ]
+    }
+  }
+}
