@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Graphe hiérarchique 3D</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 1em;
+    }
+    #controls {
+      margin-bottom: 1em;
+    }
+    #graph { width: 100vw; height: 100vh; }
+  </style>
+
+  <!-- 3d-force-graph -->
+  <script src="https://cdn.jsdelivr.net/npm/3d-force-graph"></script>
+
+</head>
+<body>
+
+  <div id="controls">
+    <label>
+      Fichier JSON :
+      <select id="dataSelect">
+        <option value="graph.json">graph.json</option>
+      </select>
+    </label>
+    <button id="reloadBtn" style="margin-left:1em;">Rafraîchir</button>
+  </div>
+  <div id="graph"></div>
+
+  <script>
+    class MyGraph {
+      constructor(data, baseRadius = 1) {
+        this.data = data; // Format { a: ['b','c'], ... }
+        this.nodes = [];
+        this.links = [];
+        this.usedBy = {};
+        this.build();
+      }
+
+      computeSubtreeSize(node, visited = new Set()) {
+        if (visited.has(node)) return 1;
+        visited.add(node);
+        let size = 1;
+        for (let child of this.data[node] || []) {
+          size += this.computeSubtreeSize(child, visited);
+        }
+        return size;
+      }
+
+      build() {
+
+        // Construire les liens et calculer inDegrees
+        for (const [source, targets] of Object.entries(this.data)) {
+          for (const target of targets) {
+            this.usedBy[target] = this.usedBy[target] || [];
+            this.usedBy[target].push(source);
+            this.links.push({ source, target, curvature: 0.0 });
+          }
+        }
+
+        for (const id of Object.keys(this.data)) {
+
+          const subtreeSize = this.computeSubtreeSize(id);
+          const radius = Math.pow(subtreeSize, 1.);
+
+          const nn = 0;
+          const parent = id.split('.').slice(0,nn+1).join('.');
+          const group = id.split('.').slice(0,nn+2).join('.');
+
+          this.nodes.push({
+            id,
+            parent: parent,
+            group: group,
+            radius: radius,
+            subtreeSize:subtreeSize,
+            inDeg: this.usedBy[id]?.length || 0,
+            outDeg: this.data[id]?.length || 0,
+            ...this.computeNodePosition(id),
+          });
+        }
+        
+      }
+
+      computeNodePosition(id) {
+        return {
+          x: (Math.random() - 0.5) * 100,
+          y: (Math.random() - 0.5) * 100,
+          z: (Math.random() - 0.5) * 100
+        };
+      }
+
+      getData() {
+        return {
+          nodes: this.nodes,
+          links: this.links
+        };
+      }
+    }
+    
+  function forceGroupCollide(groupFn, strength = 1.0) {
+      let nodes;
+
+      function force(alpha) {
+        // Grouper les nœuds par préfixe
+        const map = new Map();
+        for (const node of nodes) {
+          const key = groupFn(node);
+          if (!map.has(key)) map.set(key, []);
+          map.get(key).push(node);
+        }
+
+        // Pour chaque groupe, éviter les chevauchements O(n²)
+        for (const groupNodes of map.values()) {
+          const n = groupNodes.length;
+          for (let i = 0; i < n; i++) {
+            for (let j = i + 1; j < n; j++) {
+              const a = groupNodes[i];
+              const b = groupNodes[j];
+              const dx = b.x - a.x;
+              const dy = b.y - a.y;
+              const dz = b.z - a.z;
+              const dist = Math.hypot(dx, dy, dz);
+              const minDist = 2 *  (a.radius + b.radius);
+
+              if (!(dist > 0 && dist < minDist)) {
+                // Déplacement proportionnel à (minDist - dist)
+                const shift = ((minDist - dist) / dist) * alpha * strength;
+                const sx = dx * shift, sy = dy * shift, sz = dz * shift;
+                b.x += sx; b.y += sy; b.z += sz;
+                a.x -= sx; a.y -= sy; a.z -= sz;
+              }
+            }
+          }
+        }
+      }
+
+      force.initialize = _ => { nodes = _; };
+      return force;
+    }
+
+    async function loadGraph() {
+      const dataPath = document.getElementById('dataSelect').value;
+      
+      try {
+        // 1. Récupérer et fusionner toutes les clés + valeurs
+        const rawData = await fetch(dataPath).then(res => res.json());
+
+        const moduleSet = new Set(Object.keys(rawData));
+        Object.values(rawData).forEach(arr => arr.forEach(id => moduleSet.add(id)));
+        const allModules = Array.from(moduleSet);
+    
+        const graphData = new MyGraph(rawData);
+
+
+        // 🎯 Initialisation du graphe 3D
+        const Graph = ForceGraph3D()
+          (document.getElementById('graph'))
+          .graphData(graphData)
+          .nodeVal('subtreeSize')
+          .nodeLabel('id')
+          // .nodeAutoColorBy('parent')
+          .nodeAutoColorBy('group')
+          .linkDirectionalParticles(10)
+          .nodeRelSize(1)
+
+          // .dagMode('radialin')
+          // .dagLevelDistance(2000)
+
+          .d3Force(
+            'prefixCollide',
+            forceGroupCollide(
+              node => node.group,    
+              1.
+            )
+          )
+          .linkCurvature('curvature')
+          .linkDirectionalParticles(5)
+          .linkDirectionalArrowLength(1)
+          .linkDirectionalArrowColor(() => '#999')
+          .linkColor(() => '#ccc')
+
+          ;
+
+      } catch (err) {
+        alert('Erreur lors du chargement du JSON : ' + err.message);
+      }
+    }
+
+
+    document.getElementById('reloadBtn').addEventListener('click', loadGraph);
+    window.addEventListener('DOMContentLoaded', loadGraph);
+  </script>
+</body>
+</html>
