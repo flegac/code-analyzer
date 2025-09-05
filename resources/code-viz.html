@@ -287,8 +287,8 @@
 
 
         function force(alpha) {
-            const strength = .25; // CONFIG.groupForceStrength();
-            const baseDistance = 100; //50 * CONFIG.groupForceDistance();
+            const strength = .9; // CONFIG.groupForceStrength();
+            const baseDistance = 10; //50 * CONFIG.groupForceDistance();
 
             const groupMap = new Map();
             for (const node of nodes) {
@@ -314,15 +314,14 @@
 
 
                         let shift = .0;
-                        if (dist < maxDist) {
-                            shift = -((maxDist - dist) / dist);
+                        if (dist < maxDist ) {
+                            shift = -((maxDist - dist) / maxDist);
                         } else if (dist > minDist) {
-                            shift = ((maxDist - dist) / dist);
-                        } else {
-                            // shift = ((minDist - dist) / minDist);
-
+                            shift = ((minDist - dist) / dist);
+                        } else if( dist < minDist) {
+                            shift = ((minDist - dist) / minDist);
                         }
-                        shift *= alpha * strength * k / n;
+                        shift *= alpha * strength / n;
                         const sx = dx * shift, sy = dy * shift, sz = dz * shift;
                         b.x += sx;
                         b.y += sy;
@@ -343,8 +342,8 @@
 
     function updateGraph() {
         graphInstance.numDimensions(CONFIG.dimension());
-        graphInstance.d3Force('charge').distanceMax(50);
-        graphInstance.d3Force('charge').strength(-35);
+        graphInstance.d3Force('charge').distanceMax(10 * CONFIG.groupForceDistance());
+        graphInstance.d3Force('charge').strength(-10);
         // graphInstance.d3ReheatSimulation();
         graphInstance.cooldownTicks(Infinity);
     }
