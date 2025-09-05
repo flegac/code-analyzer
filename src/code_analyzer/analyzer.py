@@ -1,7 +1,6 @@
 import json
 import statistics
 import sys
-from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
@@ -171,53 +170,3 @@ def analyze_project(root_dir: Path, output_dir: Path) -> None:
     }
     (output_dir / "stats.json").write_text(json.dumps(final_stats, indent=2, ensure_ascii=False), encoding="utf-8")
     (output_dir / "graph.json").write_text(json.dumps(import_graph, indent=2, ensure_ascii=False), encoding="utf-8")
-
-    for i in range(2, 5):
-        g = enrich_graph_with_prefixes(import_graph, sub_module_length=i)
-        (output_dir / f"graph_{i}.json").write_text(json.dumps(g, indent=2, ensure_ascii=False), encoding="utf-8")
-
-
-def enrich_graph_with_prefixes(graph: dict[str, list[str]], sub_module_length: int, simplify_graph=False) -> dict[str, list[str]]:
-    enriched_graph: dict[str, list[str]] = defaultdict(list)
-
-    # Étape 1 : copier les liens existants
-    for mod, deps in graph.items():
-        enriched_graph[mod].extend(deps)
-
-    # Étape 2 : ajouter les préfixes comme sommets et relier les modules à leur préfixe
-    prefix_map: dict[str, list[str]] = defaultdict(list)  # prefix -> list of full modules
-    for mod in graph:
-        parts = mod.split('.')
-        if len(parts) >= sub_module_length:
-            prefix = '.'.join(parts[:sub_module_length])
-            if prefix != mod:
-                enriched_graph[prefix]  # assure que le sommet existe
-                enriched_graph[mod].append(prefix)
-                prefix_map[prefix].append(mod)
-
-    # Étape 3 : relier les préfixes entre eux si leurs enfants sont liés
-    for prefix_a, children_a in prefix_map.items():
-        for prefix_b, children_b in prefix_map.items():
-            if prefix_a == prefix_b:
-                continue
-            # Vérifie s'il existe un lien entre un enfant de A et un enfant de B
-            for child_a in children_a:
-                for child_b in children_b:
-                    if child_b in graph.get(child_a, []):
-                        enriched_graph[prefix_a].append(prefix_b)
-                        break
-                else:
-                    continue
-                break
-
-    final_graph = enriched_graph
-
-    if simplify_graph:
-        final_graph = {}
-        for node, neighbors in enriched_graph.items():
-            # On ne garde que les liens vers des préfixes
-            filtered = [n for n in neighbors if n.count('.') == sub_module_length - 1]
-            final_graph[node] = sorted(set(filtered))
-
-    # Nettoyage : suppression des doublons
-    return {k: sorted(set(v)) for k, v in final_graph.items()}

@@ -1,199 +1,490 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Graphe hiérarchique 3D</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      margin: 0;
-      padding: 1em;
-    }
-    #controls {
-      margin-bottom: 1em;
-    }
-    #graph { width: 100vw; height: 100vh; }
-  </style>
+    <meta charset="UTF-8">
+    <title>Code Viz 3D</title>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/3d-force-graph"></script>
+    <script src="https://unpkg.com/chroma-js@2.4.2/chroma.min.js"></script>
 
-  <!-- 3d-force-graph -->
-  <script src="https://cdn.jsdelivr.net/npm/3d-force-graph"></script>
+    <!--    <script src="https://unpkg.com/3d-force-graph"></script>-->
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
 
+        #graph {
+            width: 100vw;
+            height: 100vh;
+            display: block;
+
+        }
+
+        #legend, #controls, #treeview {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 10px;
+            border-radius: 5px;
+            font-family: sans-serif;
+            font-size: 14px;
+            max-height: 60vh;
+            max-width: 40vh;
+            width: 40vh;
+            overflow-y: auto;
+        }
+
+
+        #controls {
+            top: 10px;
+            right: 10px;
+        }
+
+        #legend {
+            top: 350px;
+            right: 10px;
+        }
+
+        #treeview {
+            left: 10px;
+            top: 10px;
+            width: 250px;
+        }
+
+        #treeview ul {
+            margin: 0;
+            padding-left: 1em;
+            list-style: none;
+        }
+
+        /* Par défaut, on cache toutes les sous-listes */
+        #treeview li ul {
+            display: none;
+        }
+
+        /* Quand un <li> porte la classe expanded, on montre sa sous-liste */
+        #treeview li.expanded > ul {
+            display: block;
+        }
+
+        /* Style du libellé pour indiquer la cliquabilité */
+        #treeview .tree-label {
+            cursor: pointer;
+            user-select: none;
+            display: inline-block;
+        }
+
+        /* Flèches avant le texte : ► pour fermé, ▼ pour ouvert, rien pour une feuille */
+        #treeview .tree-label::before {
+            content: "►";
+            display: inline-block;
+            width: 1em;
+        }
+
+        #treeview li.expanded > .tree-label::before {
+            content: "▼";
+        }
+
+        #treeview li.leaf > .tree-label::before {
+            content: "";
+        }
+
+    </style>
 </head>
 <body>
-
-  <div id="controls">
-    <label>
-      Fichier JSON :
-      <select id="dataSelect">
+<div id="graph"></div>
+<div id="legend"><strong>Modules principaux</strong><br></div>
+<div id="treeview"><strong>Arborescence des modules</strong></div>
+<div id="controls">
+    <label for="data-path">Fichier JSON :</label><br>
+    <select id="data-path">
         <option value="graph.json">graph.json</option>
-      </select>
-    </label>
-    <button id="reloadBtn" style="margin-left:1em;">Rafraîchir</button>
-  </div>
-  <div id="graph"></div>
+    </select><br><br>
 
-  <script>
+
+    <label for="graph-dimension">Projection dimension</label><br>
+    <select id="graph-dimension">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3" selected>3</option>
+    </select><br><br>
+
+    <label for="module-prefix-depth">Profondeur du préfixe :</label><br>
+    <select id="module-prefix-depth">
+        <option value="0">0</option>
+        <option value="1" selected>1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select><br><br>
+
+    <label for="group-force-strength">group force strength :</label>
+    <input type="range" id="group-force-strength" min="0" max=".2" step="0.01" value=".1">
+    <span id="group-force-strength-value">.1</span><br><br>
+
+    <label for="group-force-distance">group force distance :</label>
+    <input type="range" id="group-force-distance" min="1" max="100" step=".1" value="50">
+    <span id="group-force-distance-value">50</span><br><br>
+
+    <button id="reloadBtn">Reload</button>
+</div>
+
+<script>
+    let graphInstance = null;
+    let WIDGETS = {
+        graph: document.getElementById('graph'),
+        legend: document.getElementById('legend'),
+        treeView: document.getElementById('treeview'),
+
+        dataPath: document.getElementById('data-path'),
+        modulePrefixDepth: document.getElementById('module-prefix-depth'),
+        dimension: document.getElementById('graph-dimension'),
+        groupForceStrength: document.getElementById('group-force-strength'),
+        groupForceDistance: document.getElementById('group-force-distance'),
+    };
+    let CONFIG = {
+        dataPath: () => WIDGETS.dataPath.value,
+        modulePrefixDepth: () => parseInt(WIDGETS.modulePrefixDepth.value, 10),
+        dimension: () => parseInt(WIDGETS.dimension.value, 10),
+        groupForceStrength: () => parseFloat(WIDGETS.groupForceStrength.value).toFixed(2),
+        groupForceDistance: () => parseFloat(WIDGETS.groupForceDistance.value).toFixed(2),
+    };
+
+
+    // Met à jour l'affichage à chaque mouvement du slider
+    WIDGETS.groupForceStrength.addEventListener('input', () => {
+        document.getElementById('group-force-strength-value').textContent = CONFIG.groupForceStrength()
+        updateGraph();
+    });
+
+    WIDGETS.groupForceDistance.addEventListener('input', () => {
+        document.getElementById('group-force-distance-value').textContent = CONFIG.groupForceDistance()
+        updateGraph();
+    });
+    const paletteGenerator = chroma
+        .scale(['#f00', '#0f0', '#00f',])
+        // .mode('lab')           // interpolation en CIE Lab (perceptuellement uniforme)
+        // .mode('lch')
+        .mode('hsl')
+    ;
+
     class MyGraph {
-      constructor(data, baseRadius = 1) {
-        this.data = data; // Format { a: ['b','c'], ... }
-        this.nodes = [];
-        this.links = [];
-        this.usedBy = {};
-        this.build();
-      }
-
-      computeSubtreeSize(node, visited = new Set()) {
-        if (visited.has(node)) return 1;
-        visited.add(node);
-        let size = 1;
-        for (let child of this.data[node] || []) {
-          size += this.computeSubtreeSize(child, visited);
-        }
-        return size;
-      }
-
-      build() {
-
-        // Construire les liens et calculer inDegrees
-        for (const [source, targets] of Object.entries(this.data)) {
-          for (const target of targets) {
-            this.usedBy[target] = this.usedBy[target] || [];
-            this.usedBy[target].push(source);
-            this.links.push({ source, target, curvature: 0.0 });
-          }
+        constructor(data) {
+            this.data = data; // Format { a: ['b','c'], ... }
+            this.usedBy = {};
+            this.nodes = [];
+            this.links = [];
+            this.build();
         }
 
-        for (const id of Object.keys(this.data)) {
-
-          const subtreeSize = this.computeSubtreeSize(id);
-          const radius = Math.pow(subtreeSize, 1.);
-
-          const nn = 0;
-          const parent = id.split('.').slice(0,nn+1).join('.');
-          const group = id.split('.').slice(0,nn+2).join('.');
-
-          this.nodes.push({
-            id,
-            parent: parent,
-            group: group,
-            radius: radius,
-            subtreeSize:subtreeSize,
-            inDeg: this.usedBy[id]?.length || 0,
-            outDeg: this.data[id]?.length || 0,
-            ...this.computeNodePosition(id),
-          });
-        }
-        
-      }
-
-      computeNodePosition(id) {
-        return {
-          x: (Math.random() - 0.5) * 100,
-          y: (Math.random() - 0.5) * 100,
-          z: (Math.random() - 0.5) * 100
-        };
-      }
-
-      getData() {
-        return {
-          nodes: this.nodes,
-          links: this.links
-        };
-      }
-    }
-    
-  function forceGroupCollide(groupFn, strength = 1.0) {
-      let nodes;
-
-      function force(alpha) {
-        // Grouper les nœuds par préfixe
-        const map = new Map();
-        for (const node of nodes) {
-          const key = groupFn(node);
-          if (!map.has(key)) map.set(key, []);
-          map.get(key).push(node);
+        getData() {
+            return {
+                nodes: this.nodes,
+                links: this.links,
+            };
         }
 
-        // Pour chaque groupe, éviter les chevauchements O(n²)
-        for (const groupNodes of map.values()) {
-          const n = groupNodes.length;
-          for (let i = 0; i < n; i++) {
-            for (let j = i + 1; j < n; j++) {
-              const a = groupNodes[i];
-              const b = groupNodes[j];
-              const dx = b.x - a.x;
-              const dy = b.y - a.y;
-              const dz = b.z - a.z;
-              const dist = Math.hypot(dx, dy, dz);
-              const minDist = 2 *  (a.radius + b.radius);
+        computeNodePosition(id) {
+            return {
+                x: (Math.random() - 0.5) * 100,
+                y: (Math.random() - 0.5) * 100,
+                z: (Math.random() - 0.5) * 100
+            };
+        }
 
-              if (!(dist > 0 && dist < minDist)) {
-                // Déplacement proportionnel à (minDist - dist)
-                const shift = ((minDist - dist) / dist) * alpha * strength;
-                const sx = dx * shift, sy = dy * shift, sz = dz * shift;
-                b.x += sx; b.y += sy; b.z += sz;
-                a.x -= sx; a.y -= sy; a.z -= sz;
-              }
+        build() {
+            // compute links & reverse graph
+            for (const [source, targets] of Object.entries(this.data)) {
+                for (const target of targets) {
+                    this.usedBy[target] = this.usedBy[target] || [];
+                    this.usedBy[target].push(source);
+                    this.links.push({source, target});
+                }
             }
-          }
-        }
-      }
 
-      force.initialize = _ => { nodes = _; };
-      return force;
+            const nn = CONFIG.modulePrefixDepth();
+            for (const id of Object.keys(this.data)) {
+                const subtreeSize = this.computeSubtreeSize(id);
+                const radius = Math.pow(subtreeSize, 1.);
+
+                const parent = id.split('.').slice(0, nn).join('.');
+                const group = id.split('.').slice(0, nn + 1).join('.');
+
+                this.nodes.push({
+                    id,
+                    parent: parent,
+                    group: group,
+                    radius: radius,
+                    subtreeSize: subtreeSize,
+                    inDeg: this.usedBy[id]?.length || 0,
+                    outDeg: this.data[id]?.length || 0,
+                    ...this.computeNodePosition(id),
+                });
+            }
+
+            // compute color map
+            const uniqueGroups = Array.from(
+                new Set(this.nodes.map(node => node.group))
+            );
+            const k = uniqueGroups.length;
+            const palette = paletteGenerator.colors(k)
+            const decal = 1 + Math.round(k / 3)
+            this.groupColors = {};
+            uniqueGroups.forEach((grp, idx) => {
+                this.groupColors[grp] = palette[(idx + decal) % k];
+            });
+            // fix nodes
+            this.nodes.forEach(node => {
+                node.color = this.groupColors[node.group];
+            });
+
+        }
+
+        computeSubtreeSize(node, visited = new Set()) {
+            if (visited.has(node)) return 1;
+            visited.add(node);
+            let size = 1;
+            for (let child of this.data[node] || []) {
+                size += this.computeSubtreeSize(child, visited);
+            }
+            return size;
+        }
+    }
+
+    class TreeView {
+        constructor(modules) {
+            this.modules = modules;
+            this.tree = {name: 'root', children: []};
+            this._build();
+        }
+
+        _build() {
+            for (const fullId of this.modules) {
+                const segments = fullId.trim().split('.');
+                let cursor = this.tree;
+
+                for (let key of segments) {
+                    let child = cursor.children.find(n => n.name === key);
+
+                    if (!child) {
+                        child = {name: key, children: []};
+                        cursor.children.push(child);
+                    }
+                    cursor = child;
+                }
+            }
+        }
+
+        getTree() {
+            return this.tree;
+        }
+    }
+
+
+    function forceGroupCollide(groupFn) {
+        let nodes;
+
+
+        function force(alpha) {
+            const strength = .25; // CONFIG.groupForceStrength();
+            const baseDistance = 100; //50 * CONFIG.groupForceDistance();
+
+            const groupMap = new Map();
+            for (const node of nodes) {
+                const group = groupFn(node);
+                if (!groupMap.has(group)) groupMap.set(group, []);
+                groupMap.get(group).push(node);
+            }
+
+            const k = groupMap.size;
+
+            for (const groupNodes of groupMap.values()) {
+                const n = groupNodes.length;
+                for (let i = 0; i < n; i++) {
+                    for (let j = i + 1; j < n; j++) {
+                        const a = groupNodes[i];
+                        const b = groupNodes[j];
+                        const dx = b.x - a.x;
+                        const dy = b.y - a.y;
+                        const dz = b.z - a.z;
+                        const dist = Math.hypot(dx, dy, dz);
+                        const minDist = baseDistance + (a.radius + b.radius);
+                        const maxDist = 2 * baseDistance + (a.radius + b.radius);
+
+
+                        let shift = .0;
+                        if (dist < maxDist) {
+                            shift = -((maxDist - dist) / dist);
+                        } else if (dist > minDist) {
+                            shift = ((maxDist - dist) / dist);
+                        } else {
+                            // shift = ((minDist - dist) / minDist);
+
+                        }
+                        shift *= alpha * strength * k / n;
+                        const sx = dx * shift, sy = dy * shift, sz = dz * shift;
+                        b.x += sx;
+                        b.y += sy;
+                        b.z += sz;
+                        a.x -= sx;
+                        a.y -= sy;
+                        a.z -= sz;
+                    }
+                }
+            }
+        }
+
+        force.initialize = _ => {
+            nodes = _;
+        };
+        return force;
+    }
+
+    function updateGraph() {
+        graphInstance.numDimensions(CONFIG.dimension());
+        graphInstance.d3Force('charge').distanceMax(50);
+        graphInstance.d3Force('charge').strength(-35);
+        // graphInstance.d3ReheatSimulation();
+        graphInstance.cooldownTicks(Infinity);
+    }
+
+    class GraphRenderer {
+        renderLegend(colorMap) {
+            WIDGETS.legend.innerHTML = '<strong>Modules principaux</strong><br>';
+            for (const [mod, color] of Object.entries(colorMap)) {
+                const item = document.createElement('div');
+                item.innerHTML = `<span style="display:inline-block;width:12px;height:12px;background:${color};margin-right:5px;"></span>${mod}`;
+                WIDGETS.legend.appendChild(item);
+            }
+        }
+
+        renderGraph({nodes, links}) {
+            // Nettoyer l'ancienne instance si elle existe
+            if (graphInstance && typeof graphInstance._destructor === 'function') {
+                graphInstance._destructor(); // méthode interne pour libérer les ressources
+            }
+
+            // Créer une nouvelle instance
+            graphInstance = ForceGraph3D()(WIDGETS.graph)
+                .width(window.innerWidth)
+                .height(window.innerHeight)
+                .graphData({nodes, links})
+                .nodeLabel('id')
+                .nodeVal('inDeg')
+                .nodeColor('color')
+                // .nodeAutoColorBy('group')
+                .linkCurvature('curvature')
+                .linkDirectionalParticles(2)
+                .linkDirectionalArrowLength(3)
+                .linkDirectionalArrowColor(() => '#999')
+                .linkColor(() => '#ccc')
+                .nodeRelSize(4)
+                .d3Force(
+                    'prefixCollide',
+                    forceGroupCollide(node => node.group)
+                )
+            // .onNodeClick(node => {
+            //     const {x, y, z} = node;
+            //     graphInstance.centerAt(x, y, z, 1000); // durée en ms
+            //     graphInstance.zoom(4, 1000); // facteur de zoom, durée en ms
+            // })
+            ;
+
+
+            updateGraph();
+
+            // setTimeout(() => {
+            //     graphInstance.d3Force('prefixCollide')?.strength(0);
+            //     graphInstance.d3Force('charge')?.strength(0);
+            //     graphInstance.d3Force('link')?.strength(0);
+            //     console.log('Simulation arrêtée pour économiser les ressources.');
+            // }, 5000); // ou plus selon la taille du graphe
+
+        }
+    }
+
+    function renderTree(node, container) {
+        const ul = document.createElement('ul');
+        container.appendChild(ul);
+
+        for (const child of node.children || []) {
+            const li = document.createElement('li');
+            const label = document.createElement('span');
+
+            label.textContent = child.name;
+            label.classList.add('tree-label');
+            li.appendChild(label);
+
+            if (!child.children || child.children.length === 0) {
+                li.classList.add('leaf');
+            }
+
+            ul.appendChild(li);
+
+            // Si le nœud a des enfants, on crée récursivement la sous-liste
+            if (child.children && child.children.length > 0) {
+                renderTree(child, li);
+
+                // Au clic, on bascule la classe 'expanded' pour montrer/masquer
+                label.addEventListener('click', () => {
+                    li.classList.toggle('expanded');
+                });
+            }
+        }
     }
 
     async function loadGraph() {
-      const dataPath = document.getElementById('dataSelect').value;
-      
-      try {
-        // 1. Récupérer et fusionner toutes les clés + valeurs
-        const rawData = await fetch(dataPath).then(res => res.json());
+        try {
 
-        const moduleSet = new Set(Object.keys(rawData));
-        Object.values(rawData).forEach(arr => arr.forEach(id => moduleSet.add(id)));
-        const allModules = Array.from(moduleSet);
-    
-        const graphData = new MyGraph(rawData);
+            const rawData = await fetch(CONFIG.dataPath()).then(res => res.json());
+            const moduleSet = new Set(Object.keys(rawData));
+            Object.values(rawData).forEach(arr => arr.forEach(id => moduleSet.add(id)));
+            const allModules = Array.from(moduleSet);
+            const treeView = new TreeView(allModules);
+            const treeData = treeView.getTree();
+            WIDGETS.treeView.innerHTML = '<strong>Arborescence des modules</strong>';
+            renderTree(treeData, WIDGETS.treeView);
 
+            const graph = new MyGraph(rawData);
+            const renderer = new GraphRenderer();
 
-        // 🎯 Initialisation du graphe 3D
-        const Graph = ForceGraph3D()
-          (document.getElementById('graph'))
-          .graphData(graphData)
-          .nodeVal('subtreeSize')
-          .nodeLabel('id')
-          // .nodeAutoColorBy('parent')
-          .nodeAutoColorBy('group')
-          .linkDirectionalParticles(10)
-          .nodeRelSize(1)
+            renderer.renderGraph(graph.getData());
 
-          // .dagMode('radialin')
-          // .dagLevelDistance(2000)
+            renderer.renderLegend(graph.groupColors);
 
-          .d3Force(
-            'prefixCollide',
-            forceGroupCollide(
-              node => node.group,    
-              1.
-            )
-          )
-          .linkCurvature('curvature')
-          .linkDirectionalParticles(5)
-          .linkDirectionalArrowLength(1)
-          .linkDirectionalArrowColor(() => '#999')
-          .linkColor(() => '#ccc')
+            const scene = graphInstance.scene();
 
-          ;
-
-      } catch (err) {
-        alert('Erreur lors du chargement du JSON : ' + err.message);
-      }
+            const axesHelper = new THREE.AxesHelper(500); // taille des axes
+            axesHelper.position.set(0, 0, 0);
+            scene.add(axesHelper);
+        } catch (err) {
+            alert('Erreur lors du chargement du JSON : ' + err.message);
+        }
     }
-
 
     document.getElementById('reloadBtn').addEventListener('click', loadGraph);
     window.addEventListener('DOMContentLoaded', loadGraph);
-  </script>
+    window.addEventListener('resize', () => {
+        if (!graphInstance) return;
+
+
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        // Met à jour la taille du canvas
+        graphInstance.width(width);
+        graphInstance.height(height);
+
+        // Met à jour la caméra et le renderer
+        const renderer = graphInstance.renderer();
+        const camera = graphInstance.camera();
+
+        renderer.setSize(width, height);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+    });
+
+</script>
 </body>
 </html>

@@ -359,7 +359,6 @@
   ],
   "organism.engine.gui.widgets.text": [
     "organism.engine.gui.core.gui_painter",
-    "organism.utils.periodic",
     "organism.utils.periodic_provider"
   ],
   "organism.engine.gui.widgets.vertical": [
@@ -661,7 +660,7 @@
   "organism.gameplay.behaviors.brain.action_state": [
     "organism.gameplay.behaviors.action",
     "organism.gameplay.behaviors.target.target",
-    "organism.utils.periodic"
+    "organism.utils.periodic_provider"
   ],
   "organism.gameplay.behaviors.brain.brain_state": [
     "organism.gameplay.behaviors.behavior",
@@ -874,7 +873,7 @@
     "organism.gameplay.gaia.fluid.fluid_tag"
   ],
   "organism.gameplay.dna.model.computed_dna_stats": [
-    "organism.utils.periodic"
+    "organism.utils.periodic_provider"
   ],
   "organism.gameplay.dna.model.helix_dna": [],
   "organism.gameplay.dna.model.organism_dna": [
@@ -995,7 +994,6 @@
   ],
   "organism.gameplay.gaia.core.grid_area": [
     "organism.core.vec2",
-    "organism.engine.devices.system_service",
     "organism.gameplay.gaia.core.grid_cell",
     "organism.gameplay.gaia.core.grid_content",
     "organism.gameplay.gaia.gaia_item.gaia_item"
@@ -1100,7 +1098,7 @@
     "organism.gameplay.gaia.core.collision.tags"
   ],
   "organism.gameplay.gaia.gaia_service": [
-    "organism.engine.camera.camera_service",
+    "organism.core.vec2",
     "organism.game_content.config.paths",
     "organism.gameplay.gaia.cell.cell_service",
     "organism.gameplay.gaia.core.gaia",
@@ -1278,7 +1276,7 @@
     "organism.gameplay.rules.behaviors.blocks.move_behavior",
     "organism.gameplay.rules.behaviors.default_attack_target",
     "organism.gameplay.rules.behaviors.default_move_target",
-    "organism.utils.periodic"
+    "organism.utils.periodic_provider"
   ],
   "organism.gameplay.rules.behaviors.default_move_target": [
     "organism.core.vec2",
@@ -1367,7 +1365,7 @@
     "organism.gameplay.dna.model.computed_dna_stats",
     "organism.gameplay.dna.model.organism_dna",
     "organism.gameplay.gaia.cell.cell_tag",
-    "organism.utils.periodic"
+    "organism.utils.periodic_provider"
   ],
   "organism.gameplay.tool": [
     "organism.core.vec2"
@@ -1624,7 +1622,7 @@
     "organism.gameplay.organism.model.organism",
     "organism.gameplay.organism.organism_service",
     "organism.scenes.in_game.player.player_service",
-    "organism.utils.periodic"
+    "organism.utils.periodic_provider"
   ],
   "organism.scenes.in_game.systems.economy_system": [
     "organism.gameplay.organism.model.organism"
@@ -1645,6 +1643,7 @@
     "organism.gameplay.rules.physics.physic_service"
   ],
   "organism.scenes.in_game.systems.gaia_system": [
+    "organism.engine.camera.camera_service",
     "organism.gameplay.gaia.gaia_service"
   ],
   "organism.scenes.in_game.systems.metabolism_system": [
@@ -1802,11 +1801,8 @@
     "organism.gameplay.dna.graph.graph_algo",
     "organism.gameplay.dna.graph.hex"
   ],
-  "organism.utils.periodic": [
-    "organism.core.fast_rand"
-  ],
   "organism.utils.periodic_provider": [
-    "organism.utils.periodic"
+    "organism.core.fast_rand"
   ],
   "organism.utils.profiler": [],
   "organism.utils.serializer.json_encoder": [],
