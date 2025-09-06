@@ -2,7 +2,7 @@ from pprint import pprint
 from unittest import TestCase
 
 from code_analyzer.project.project import Project
-from code_analyzer.project_checker import ProjectChecker
+from code_analyzer.project.project_checker import ProjectChecker
 
 
 class TestProject(TestCase):

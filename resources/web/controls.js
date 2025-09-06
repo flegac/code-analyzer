@@ -4,7 +4,9 @@ class Controls {
         this.container.innerHTML = `
 <label for="data-path">Fichier JSON :</label><br>
 <select id="data-path">
-    <option value="graph.json">graph.json</option>
+    <option value="graph.json" selected>graph.json</option>
+    <option value="dependencies.json">dependencies.json</option>
+    <option value="hierarchy.json">hierarchy.json</option>
 </select><br>
 
 <label for="graph-dimension">Projection dimension</label><br>

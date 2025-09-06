@@ -56,6 +56,9 @@ class Module:
             return init_path
         raise FileNotFoundError(f'neither {base}{PYTHON_SUFFIX} nor {PYTHON_INIT}{PYTHON_SUFFIX} found')
 
+    def read_code(self, root: Path):
+        return self.path_from_root(root).read_text(encoding="utf-8")
+
     def check(self):
         for _ in self.parts:
             if not _.isidentifier():

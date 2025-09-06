@@ -7,8 +7,9 @@ class MyGraph {
     }
 
     computeNodePosition(id) {
+        const k = 1000;
         return {
-            x: (Math.random() - 0.5) * 100, y: (Math.random() - 0.5) * 100, z: (Math.random() - 0.5) * 100
+            x: (Math.random() - 0.5) * k, y: (Math.random() - 0.5) * k, z: (Math.random() - 0.5) * k
         };
     }
 
@@ -134,6 +135,16 @@ class MyGraph {
         this.graphInstance.d3Force('charge').strength(-control.chargeStrength());
         this.graphInstance.d3Force('prefixCollide', this.forceGroupCollide(node => node.group, control.groupDistance()));
 
+
+        this.nodes.forEach(node => {
+            if (node.group === '__disconnected__') {
+                node.fx = 0;
+                node.fy = 0;
+                node.fz = 0;
+            }
+        });
+
+
         // graph.graphInstance.d3ReheatSimulation();
         this.graphInstance.cooldownTicks(Infinity);
 
@@ -199,15 +210,15 @@ class MyGraph {
         this.graphInstance = graphInstance;
 
 
-        setTimeout(() => {
-            // graphInstance.d3Force('prefixCollide')?.strength(0);
-            // graphInstance.d3Force('charge')?.strength(-200);
-            // graphInstance.d3Force('link').distance(100);
-            // console.log(graphInstance.d3Force('link').strength(2.));
-            // console.log(graphInstance.d3Force('charge').strength()());
-            // graphInstance.d3Force('link')?.strength(.5);
-            console.log('Simulation arrêtée pour économiser les ressources.');
-        }, 1500); // ou plus selon la taille du graphe
+        // setTimeout(() => {
+        //     // graphInstance.d3Force('prefixCollide')?.strength(0);
+        //     // graphInstance.d3Force('charge')?.strength(-200);
+        //     // graphInstance.d3Force('link').distance(100);
+        //     // console.log(graphInstance.d3Force('link').strength(2.));
+        //     // console.log(graphInstance.d3Force('charge').strength()());
+        //     // graphInstance.d3Force('link')?.strength(.5);
+        //     console.log('Simulation arrêtée pour économiser les ressources.');
+        // }, 1500); // ou plus selon la taille du graphe
     }
 
 
