@@ -22,7 +22,7 @@ def _extract_module_name(node: cst.BaseExpression) -> Module:
 
 
 class FileStatsCollector(cst.CSTVisitor):
-    def __init__(self) -> None:
+    def __init__(self):
         self.lines = 0
         self.class_count = 0
         self.function_count = 0

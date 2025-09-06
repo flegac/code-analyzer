@@ -1,7 +1,7 @@
 class TreeView {
     constructor(container_id = 'module-tree') {
         this.container = createDiv(container_id, 'my-box tree-view');
-        loadCss('tree-view.css');
+        loadCss('web/tree-view.css');
         this.modules = null;
     }
 

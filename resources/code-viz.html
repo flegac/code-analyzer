@@ -6,15 +6,16 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/3d-force-graph"></script>
     <script src="https://unpkg.com/chroma-js@2.4.2/chroma.min.js"></script>
-    <script src="tree-view.js"></script>
-    <script src="infos.js"></script>
-    <script src="controls.js"></script>
-    <script src="legend.js"></script>
-    <script src="lib.js"></script>
-    <script src="utils.js"></script>
+    <script src="web/tree-view.js"></script>
+    <script src="web/infos.js"></script>
+    <script src="web/controls.js"></script>
+    <script src="web/legend.js"></script>
+    <script src="web/my-graph.js"></script>
+    <script src="web/graph-display.js"></script>
+    <script src="web/utils.js"></script>
 
     <!--    <script src="https://unpkg.com/3d-force-graph"></script>-->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="web/style.css">
 </head>
 <body>
 <div id="graph"></div>
@@ -24,14 +25,14 @@
     document.getElementById('reloadBtn').addEventListener('click', () => display.loadGraph());
     window.addEventListener('DOMContentLoaded', () => display.loadGraph());
     window.addEventListener('resize', () => {
-        if (!display.graphInstance) return;
+        if (!display.graph.graphInstance) return;
         const width = window.innerWidth;
         const height = window.innerHeight;
-        display.graphInstance.width(width);
-        display.graphInstance.height(height);
+        display.graph.graphInstance.width(width);
+        display.graph.graphInstance.height(height);
 
-        const renderer = display.graphInstance.renderer();
-        const camera = display.graphInstance.camera();
+        const renderer = display.graph.graphInstance.renderer();
+        const camera = display.graph.graphInstance.camera();
         renderer.setSize(width, height);
         camera.aspect = width / height;
         camera.updateProjectionMatrix();
