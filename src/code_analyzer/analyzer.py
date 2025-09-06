@@ -2,31 +2,23 @@ import json
 import statistics
 import sys
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterable
 
 import libcst as cst
 
-
-def discover_py_files(root_dir: Path) -> list[Path]:
-    return sorted(
-        f for f in root_dir.rglob("*.py")
-        if f.is_file() and f.name != "__init__.py"
-    )
+from code_analyzer.project.module import Module
+from code_analyzer.project.project import Project
 
 
-def module_name_from_path(root_dir: Path, path: Path) -> str:
-    rel = path.relative_to(root_dir).with_suffix("")
-    return ".".join(rel.parts)
-
-
-def _extract_module_name(node: cst.BaseExpression) -> str:
+def _extract_module_name(node: cst.BaseExpression) -> Module:
     parts = []
     while isinstance(node, cst.Attribute):
         parts.insert(0, node.attr.value)
         node = node.value
     if isinstance(node, cst.Name):
         parts.insert(0, node.value)
-    return ".".join(parts)
+
+    return Module.new(tuple(parts))
 
 
 class FileStatsCollector(cst.CSTVisitor):
@@ -36,7 +28,7 @@ class FileStatsCollector(cst.CSTVisitor):
         self.function_count = 0
         self.method_count = 0
         self.import_count = 0
-        self.imported_modules: set[str] = set()
+        self.imported_modules: set[Module] = set()
 
         self._in_class = 0
         self._in_function = False
@@ -85,14 +77,14 @@ class FileStatsCollector(cst.CSTVisitor):
             self._current_ctrl_counts["While"] += 1
 
 
-def compute_stats(values: list[int], modules: list[str]) -> dict[str, Any]:
+def compute_stats(values: list[int], modules: Iterable[Module]) -> dict[str, Any]:
     if not values:
         return {"mean": 0.0, "std": 0.0, "min": 0, "max": {"value": 0, "files": []}}
     mean = statistics.mean(values)
     std = statistics.stdev(values) if len(values) > 1 else 0.0
     min_val = min(values)
     max_val = max(values)
-    max_files = [mod for mod, val in zip(modules, values) if val == max_val]
+    max_files = [mod.full_name for mod, val in zip(modules, values) if val == max_val]
     return {
         "mean": mean,
         "std": std,
@@ -101,11 +93,7 @@ def compute_stats(values: list[int], modules: list[str]) -> dict[str, Any]:
     }
 
 
-def analyze_project(root_dir: Path, output_dir: Path) -> None:
-    py_files = discover_py_files(root_dir)
-    modules = [module_name_from_path(root_dir, f) for f in py_files]
-    module_map = dict(zip(modules, py_files))
-
+def analyze_project(project: Project, output_dir: Path) -> None:
     stats_data = {
         "lines": [],
         "ClassDef": [],
@@ -114,10 +102,11 @@ def analyze_project(root_dir: Path, output_dir: Path) -> None:
         "Import_in": [],
         "Import_out": [],
     }
-    imported_modules_by_file: dict[str, set[str]] = {}
+    import_by_module: dict[Module, set[Module]] = {}
     control_counts: list[dict[str, int]] = []
 
-    for path, mod in zip(py_files, modules):
+    for mod in project.modules:
+        path = mod.path_from_root(project.root)
         try:
             code = path.read_text(encoding="utf-8")
             tree = cst.parse_module(code)
@@ -133,26 +122,26 @@ def analyze_project(root_dir: Path, output_dir: Path) -> None:
         stats_data["FunctionDef"].append(visitor.function_count)
         stats_data["MethodDef"].append(visitor.method_count)
         stats_data["Import_in"].append(visitor.import_count)
-        imported_modules_by_file[mod] = visitor.imported_modules
+        import_by_module[mod] = visitor.imported_modules
         control_counts.extend(visitor.function_control_counts)
 
-    graph: dict[str, dict[str, list[str]]] = {
+    graph: dict[Module, dict[str, list[Module]]] = {
         mod: {"depends_from": [], "used_by": []}
-        for mod in modules
+        for mod in project.modules
     }
 
-    for mod, imports in imported_modules_by_file.items():
-        deps = [imp for imp in imports if imp in modules]
-        graph[mod]["depends_from"] = sorted(deps)
+    for mod, imports in import_by_module.items():
+        deps = [imp for imp in imports if imp in project.modules]
+        graph[mod]["depends_from"] = deps
 
-    for mod in modules:
+    for mod in project.modules:
         for dep in graph[mod]["depends_from"]:
             graph[dep]["used_by"].append(mod)
 
-    stats_data["Import_out"] = [len(graph[mod]["used_by"]) for mod in modules]
+    stats_data["Import_out"] = [len(graph[mod]["used_by"]) for mod in project.modules]
 
     final_stats = {
-        key: compute_stats(stats_data[key], modules)
+        key: compute_stats(stats_data[key], project.modules)
         for key in ["lines", "ClassDef", "FunctionDef", "MethodDef", "Import_in", "Import_out"]
     }
 
@@ -165,7 +154,7 @@ def analyze_project(root_dir: Path, output_dir: Path) -> None:
     }
 
     import_graph = {
-        module: data["depends_from"]
+        module.full_name: [_.full_name for _ in data["depends_from"]]
         for module, data in graph.items()
     }
     (output_dir / "stats.json").write_text(json.dumps(final_stats, indent=2, ensure_ascii=False), encoding="utf-8")

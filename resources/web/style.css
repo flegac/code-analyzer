@@ -1,0 +1,41 @@
+
+body {
+    margin: 0;
+    overflow: hidden;
+}
+
+#graph {
+    width: 100vw;
+    height: 100vh;
+    display: block;
+}
+
+.my-box {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.85);
+    padding: 10px;
+    border-radius: 5px;
+    font-family: sans-serif;
+    font-size: 14px;
+    max-height: 60vh;
+    max-width: 40vh;
+    width: 40vh;
+    overflow-y: auto;
+}
+
+#controls {
+    top: 10px;
+    right: 10px;
+}
+
+#legend {
+    top: 350px;
+    right: 10px;
+}
+
+#infos {
+    left: 10px;
+    top: 10px;
+    width: 250px;
+}
+
