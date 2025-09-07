@@ -11,6 +11,7 @@ class CodeStats:
     node: CSTNode = None
     lines: int = 0
     imports: int = 0
+    imported: int = 0
     class_count: int = 0
     function_count: int = 0
     method_count: int = 0
@@ -21,11 +22,24 @@ class CodeStats:
         if not ignore_lines:
             self.lines += other.lines
         self.imports += other.imports
+        self.imported += other.imported
         self.class_count += other.class_count
         self.function_count += other.function_count
         self.method_count += other.method_count
         self.loops += other.loops
         self.branches += other.branches
+
+    def to_dict(self):
+        return {
+            'lines': self.lines,
+            'imports': self.imports,
+            'imported': self.imported,
+            'class_count': self.class_count,
+            'function_count': self.function_count,
+            'method_count': self.method_count,
+            'loops': self.loops,
+            'branches': self.branches,
+        }
 
 
 @dataclass
@@ -64,6 +78,7 @@ class AggregatedCodeStats:
     count: int
     lines: AggregatedStats
     imports: AggregatedStats
+    imported: AggregatedStats
     class_count: AggregatedStats
     function_count: AggregatedStats
     method_count: AggregatedStats
@@ -76,6 +91,7 @@ class AggregatedCodeStats:
             count=len(values),
             lines=AggregatedStats.aggregate([_.lines for _ in values]),
             imports=AggregatedStats.aggregate([_.imports for _ in values]),
+            imported=AggregatedStats.aggregate([_.imported for _ in values]),
             class_count=AggregatedStats.aggregate([_.class_count for _ in values]),
             function_count=AggregatedStats.aggregate([_.function_count for _ in values]),
             method_count=AggregatedStats.aggregate([_.method_count for _ in values]),

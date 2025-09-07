@@ -9,5 +9,5 @@ if __name__ == "__main__":
     # project_root = Path("/home/flo/Documents/workspace/code-analyzer/src")
     project = Project(project_root).refresh()
 
-    target = Path.cwd().parent.parent / 'resources'
+    target = Path.cwd().parent.parent / 'resources/data'
     analyze_project(project, target)

@@ -4,45 +4,41 @@
     <meta charset="UTF-8">
     <title>Code Viz 3D</title>
 
-    <script type="module"
-            src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.83/dist/shoelace.js"></script>
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.83/dist/themes/light.css"/>
-
-
-    <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/3d-force-graph"></script>
     <script src="https://unpkg.com/chroma-js@2.4.2/chroma.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js"></script>
+
+
+    <script src="web/my-graph.js"></script>
     <script src="web/tree-view.js"></script>
+    <script src="web/table-view.js"></script>
     <script src="web/custom-force.js"></script>
     <script src="web/infos.js"></script>
     <script src="web/graph-controller.js"></script>
     <script src="web/legend.js"></script>
-    <script src="web/my-graph.js"></script>
-    <script src="web/graph-display.js"></script>
     <script src="web/utils.js"></script>
 
-    <!--    <script src="https://unpkg.com/3d-force-graph"></script>-->
     <link rel="stylesheet" href="web/style.css">
 </head>
 <body>
 
+
 <div id="graph"></div>
 
 <script>
-    const display = new GraphDisplay()
+    const graph = new MyGraph();
 
-    document.getElementById('reloadBtn').addEventListener('click', () => display.loadGraph());
-    window.addEventListener('DOMContentLoaded', () => display.loadGraph());
+    const controller = new GraphController(graph);
+
+    window.addEventListener('DOMContentLoaded', () => controller.loadGraph());
     window.addEventListener('resize', () => {
-        if (!display.graph.graphInstance) return;
+        if (!controller.graph.graphInstance) return;
         const width = window.innerWidth;
         const height = window.innerHeight;
-        display.graph.graphInstance.width(width);
-        display.graph.graphInstance.height(height);
+        controller.graph.graphInstance.width(width);
+        controller.graph.graphInstance.height(height);
 
-        const renderer = display.graph.graphInstance.renderer();
-        const camera = display.graph.graphInstance.camera();
+        const renderer = controller.graph.graphInstance.renderer();
+        const camera = controller.graph.graphInstance.camera();
         renderer.setSize(width, height);
         camera.aspect = width / height;
         camera.updateProjectionMatrix();

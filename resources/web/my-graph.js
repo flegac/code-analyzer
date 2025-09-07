@@ -2,13 +2,21 @@ class MyGraph {
     constructor() {
         this.container = document.getElementById('graph');
         this.graphInstance = null;
+
+
+        loadScript("https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js");
+        loadScript("https://cdn.jsdelivr.net/npm/3d-force-graph");
+        // <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
+        // <script src="https://cdn.jsdelivr.net/npm/3d-force-graph"></script>
+
     }
 
-    build(data, modulePrefixDepth) {
+    build(data, infos, modulePrefixDepth) {
         this.usedBy = {};
         this.nodes = [];
         this.links = [];
         this.groups = {};
+        this.nodesMap = {};
 
         function computeSubtreeSize(node, visited = new Set()) {
             if (visited.has(node)) return 1;
@@ -19,7 +27,6 @@ class MyGraph {
             }
             return size;
         }
-
 
         // compute links & reverse graph
         for (const [source, targets] of Object.entries(data)) {
@@ -37,6 +44,7 @@ class MyGraph {
             const outDeg = data[id]?.length || 0;
             const radius = Math.pow(subtreeSize, 1.);
 
+
             const parent = id.split('.').slice(0, nn).join('.');
             let group = id.split('.').slice(0, nn + 1).join('.');
             if (inDeg === 0) {
@@ -52,7 +60,7 @@ class MyGraph {
 
             this.groups[group] = this.groups[group] || [];
             this.groups[group].push(id);
-            this.nodes.push({
+            const node = {
                 id,
                 parent: parent,
                 group: group,
@@ -60,8 +68,11 @@ class MyGraph {
                 subtreeSize: subtreeSize,
                 inDeg: inDeg,
                 outDeg: outDeg,
+                infos: infos[id],
                 // x,y,z are induced by forces
-            });
+            };
+            this.nodesMap[id] = node;
+            this.nodes.push(node);
         }
     }
 
@@ -82,11 +93,10 @@ class MyGraph {
     }
 
     updateGraph(control) {
-        this.graphInstance.numDimensions(control.dimension());
-        this.graphInstance.d3Force('link').distance(10 * control.linkDistance());
-        this.graphInstance.d3Force('charge').strength(-control.chargeStrength());
-        this.graphInstance.d3Force('prefixCollide', forceGroupCollide(node => node.group, control.groupDistance()));
-
+        this.graphInstance.numDimensions(control.params.dimension);
+        this.graphInstance.d3Force('link').distance(10 * control.params.linkDistance);
+        this.graphInstance.d3Force('charge').strength(-control.params.chargeStrength);
+        this.graphInstance.d3Force('prefixCollide', forceGroupCollide(node => node.group, control.params.groupDistance));
         this.nodes.forEach(node => {
             if (node.group === '__disconnected__') {
                 node.fx = 0;
@@ -95,19 +105,27 @@ class MyGraph {
             }
         });
 
-
-        this.nodes.forEach(node => {
-            if (node.group === '__source__') {
-                // node.fx = node.x;
-                // node.fy = node.y; //Math.max(node.y, 100);
-                node.fy = 350;
-            }
-        });
-        this.nodes.forEach(node => {
-            if (node.group === '__sink__') {
-                node.fy = -350;
-            }
-        });
+        const sourceSinkDistance = 5 * control.params.sourceSinkDistance;
+        if (control.params.sourceSinkDistanceActive) {
+            this.nodes.forEach(node => {
+                if (node.group === '__source__') {
+                    // node.fx = node.x;
+                    // node.fy = node.y; //Math.max(node.y, 100);
+                    node.fy = sourceSinkDistance;
+                }
+            });
+            this.nodes.forEach(node => {
+                if (node.group === '__sink__') {
+                    node.fy = -sourceSinkDistance;
+                }
+            });
+        } else {
+            this.nodes.forEach(node => {
+                if (node.group === '__source__' || node.group === '__sink__') {
+                    node.fy = null;
+                }
+            });
+        }
 
         // graph.graphInstance.d3ReheatSimulation();
         // this.graphInstance.cooldownTicks(Infinity);
@@ -115,37 +133,51 @@ class MyGraph {
     }
 
 
-    renderGraph(data, modulePrefixDepth, paletteGenerator) {
+    renderGraph(data, infos, modulePrefixDepth, paletteGenerator) {
 
         // Nettoyer l'ancienne instance si elle existe
         if (this.graphInstance && typeof this.graphInstance._destructor === 'function') {
             this.graphInstance._destructor(); // méthode interne pour libérer les ressources
         }
 
-
-        this.build(data, modulePrefixDepth);
+        this.build(data, infos, modulePrefixDepth);
         this.updateColors(paletteGenerator)
         const {nodes, links} = this;
-
+        const nodesMap = this.nodesMap;
 
         // Créer une nouvelle instance
         const graphInstance = ForceGraph3D()(this.container)
-            .width(window.innerWidth)
-            .height(window.innerHeight)
             .graphData({nodes, links})
-            .nodeLabel('id')
+            .nodeLabel(node => {
+                return `${node.id}<br>\n${JSON.stringify(node.infos, null, 2)}`;
+            })
             .nodeVal('inDeg')
             .nodeColor('color')
             // .nodeAutoColorBy('group')
             // .linkCurvature(.3)
-            .linkDirectionalParticles(2)
-            .linkDirectionalArrowLength(3)
-            .linkDirectionalArrowColor(() => '#999')
-            .linkColor(() => '#ccc')
-            .nodeRelSize(8)
+            .linkDirectionalParticles(link => {
+                const src = nodesMap[link.source];
+                const dst = nodesMap[link.target];
+                if (src.group === dst.group) {
+                    return 0;
+                }
+                return 1;
+            })
+            .linkDirectionalArrowLength(5)
+            // .linkDirectionalArrowColor(() => '#999')
+            // .linkColor(() => '#ccc')
+            .linkColor((link) => {
+                const src = nodesMap[link.source];
+                const dst = nodesMap[link.target];
+                if (src.group === dst.group) {
+                    return '#ccc0';
+                }
+                return src.color;
+                // return '#ccc'
+            })
+            .nodeRelSize(4)
             .d3Force('prefixCollide', forceGroupCollide(node => node.group));
         graphInstance.onNodeClick((node, event) => {
-
             const cameraPos = graphInstance.cameraPosition(); // {x, y, z}
             const controls = graphInstance.controls();        // OrbitControls ou TrackballControls
 
@@ -163,6 +195,11 @@ class MyGraph {
         });
         this.graphInstance = graphInstance;
 
+        const resizeObserver = new ResizeObserver(() => {
+            graphInstance.width(this.container.clientWidth);
+            graphInstance.height(this.container.clientHeight);
+        });
+        resizeObserver.observe(this.container);
 
         // setTimeout(() => {
         //     // graphInstance.d3Force('prefixCollide')?.strength(0);

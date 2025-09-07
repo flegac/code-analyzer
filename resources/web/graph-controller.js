@@ -1,106 +1,60 @@
 class GraphController {
-    constructor(graph, id = 'controls') {
-        this.container = createDiv(id, 'my-box controls');
-
-        this.container.innerHTML = `
-<label for="data-path">Fichier JSON :</label><br>
-<select id="data-path">
-    <option value="dependencies.json">dependencies.json</option>
-    <option value="dependencies-reversed.json">dependencies-reversed.json</option>
-    <option value="hierarchy.json">hierarchy.json</option>
-    <option value="hierarchy-reversed.json">hierarchy-reversed.json</option>
-</select><br>
-
-<label for="graph-dimension">Projection dimension</label><br>
-<select id="graph-dimension">
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3" selected>3</option>
-</select><br>
-
-<label for="module-prefix-depth">Profondeur du préfixe :</label><br>
-<select id="module-prefix-depth">
-    <option value="0">0</option>
-    <option value="1" selected>1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-</select><br>
-
-<label for="charge-strength">charge-strength</label> [<span id="charge-strength-value">50</span>]<br>
-<input type="range" id="charge-strength" min="1" max="100" step=".1" value="50"><br>
+    constructor(graph) {
+        this.graph = graph;
 
 
-<label for="link-distance">link-distance</label> [<span id="link-distance-value">10</span>]<br>
-<input type="range" id="link-distance" min="1" max="100" step=".1" value="10"><br>
+        this.tree = new TreeView();
+        this.table = new TableView();
+        this.infos = new Infos();
+        this.legend = new Legend();
+        this.paletteGenerator = chroma
+            .scale(['#f00', '#0f0', '#00f',])
+            // .mode('lab')           // interpolation en CIE Lab (perceptuellement uniforme)
+            // .mode('lch')
+            .mode('hsl');
 
-
-<label for="group-distance">group-distance</label> [<span id="group-distance-value">50</span>]<br>
-<input type="range" id="group-distance" min="1" max="100" step=".1" value="50"><br>
-
-
-<button id="reloadBtn">Reload</button>
-`;
-
-        this.WIDGETS = {
-            dataPath: document.getElementById('data-path'),
-            modulePrefixDepth: document.getElementById('module-prefix-depth'),
-            dimension: document.getElementById('graph-dimension'),
-            chargeStrength: document.getElementById('charge-strength'),
-            linkDistance: document.getElementById('link-distance'),
-            groupDistance: document.getElementById('group-distance'),
+        // Paramètres contrôlés par dat.GUI
+        this.params = {
+            dataPath: 'data/dependencies.json',
+            infosPath: 'data/modules.json',
+            dimension: 3,
+            modulePrefixDepth: 1,
+            chargeStrength: 50,
+            linkDistance: 10,
+            groupDistance: 50,
+            sourceSinkDistance: 50,
+            sourceSinkDistanceActive: true,
+            reload: () => this.loadGraph()
         };
 
-        this.WIDGETS.dimension.addEventListener('input', async () => {
-            await this.rebuildGraph(graph);
-        });
-
-        this.WIDGETS.modulePrefixDepth.addEventListener('input', async () => {
-            await this.rebuildGraph(graph);
-        });
-
-        this.WIDGETS.chargeStrength.addEventListener('input', () => {
-            document.getElementById('charge-strength-value').textContent = this.chargeStrength()
-            this.updateGraph(graph);
-        });
-        this.WIDGETS.linkDistance.addEventListener('input', () => {
-            document.getElementById('link-distance-value').textContent = this.linkDistance()
-            this.updateGraph(graph);
-        });
-        this.WIDGETS.groupDistance.addEventListener('input', () => {
-            document.getElementById('group-distance-value').textContent = this.groupDistance()
-            this.updateGraph(graph);
-        });
-        this.WIDGETS.dimension.addEventListener('input', () => {
-            this.updateGraph(graph);
-        });
-
-
-    }
-
-    dataPath() {
-        return this.WIDGETS.dataPath.value
-    }
-
-    modulePrefixDepth() {
-        return parseInt(this.WIDGETS.modulePrefixDepth.value, 10);
-    }
-
-    dimension() {
-        return parseInt(this.WIDGETS.dimension.value, 10);
-    }
-
-    chargeStrength() {
-        return parseFloat(this.WIDGETS.chargeStrength.value).toFixed(2);
-    }
-
-    linkDistance() {
-        return parseFloat(this.WIDGETS.linkDistance.value).toFixed(2);
-    }
-
-    groupDistance() {
-        return parseFloat(this.WIDGETS.groupDistance.value).toFixed(2);
+        this.gui = new dat.GUI();
+        this.gui.domElement.id = 'controller';
+        this.gui.add(this.params, 'dataPath', {
+            'dependencies.json': 'data/dependencies.json',
+            'hierarchy.json': 'data/hierarchy.json'
+        }).name('Fichier JSON');
+        this.gui.add(this.params, 'dimension', {'2D': 2, '3D': 3})
+            .name('Projection')
+            .onChange(() => this.rebuildGraph(graph));
+        this.gui.add(this.params, 'modulePrefixDepth', 0, 5, 1)
+            .name('Profondeur')
+            .onChange(() => this.loadGraph());
+        this.gui.add(this.params, 'chargeStrength', 1, 100, 0.1)
+            .name('Charge')
+            .onChange(() => this.updateGraph(graph));
+        this.gui.add(this.params, 'linkDistance', 1, 100, 0.1)
+            .name('Distance lien')
+            .onChange(() => this.updateGraph(graph));
+        this.gui.add(this.params, 'groupDistance', 1, 100, 0.1)
+            .name('Distance groupe')
+            .onChange(() => this.updateGraph(graph));
+        this.gui.add(this.params, 'sourceSinkDistance', 1, 100, 0.1)
+            .name('Distance sources - puits')
+            .onChange(() => this.updateGraph(graph));
+        this.gui.add(this.params, 'sourceSinkDistanceActive')
+            .name('Limit distance sources - puits')
+            .onChange(() => this.updateGraph(graph));
+        this.gui.add(this.params, 'reload').name('Reload');
     }
 
 
@@ -109,12 +63,40 @@ class GraphController {
     }
 
     async rawData() {
-        return await fetch(this.dataPath()).then(res => res.json());
+        return await fetch(this.params.dataPath).then(res => res.json());
+    }
+
+    async loadModuleInfos() {
+        return await fetch(this.params.infosPath).then(res => res.json());
     }
 
     async rebuildGraph(graph) {
-        graph.renderGraph(await this.rawData(), display.controls.modulePrefixDepth(), display.paletteGenerator)
-        this.updateGraph(graph)
+        const raw = await this.rawData();
+        const infos = await this.loadModuleInfos();
+        graph.renderGraph(raw, infos, this.params.modulePrefixDepth, this.paletteGenerator);
+        this.updateGraph(graph);
     }
 
+
+    async loadGraph() {
+        try {
+            const data = await this.rawData();
+            const infos = await this.loadModuleInfos();
+
+            await this.rebuildGraph(this.graph, data);
+
+            this.infos.render(this.graph);
+            this.legend.render(this.graph);
+            this.tree.render(data);
+            this.table.render(infos);
+
+            const scene = this.graph.graphInstance.scene();
+
+            const axesHelper = new THREE.AxesHelper(500); // taille des axes
+            axesHelper.position.set(0, 0, 0);
+            scene.add(axesHelper);
+        } catch (err) {
+            alert('Erreur lors du chargement du JSON : ' + err.message);
+        }
+    }
 }

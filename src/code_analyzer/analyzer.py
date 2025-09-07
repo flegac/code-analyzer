@@ -1,3 +1,4 @@
+import json
 from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -24,12 +25,22 @@ class ProjectAnalyzer:
         for _ in tqdm.tqdm(self.project.modules):
             self.refresh(_)
 
+        for module in self.project.modules:
+            self.update_imported(module)
+
     def refresh(self, module: Module):
         visitor = self.modules[module.full_name]
         code = module.read_code(self.project.root)
         tree = cst.parse_module(code)
         tree_wrapper = MetadataWrapper(tree)
         tree_wrapper.visit(visitor)
+
+    def update_imported(self, module: Module):
+        count = 0
+        for k, v in self.modules.items():
+            if module in v.imported_modules:
+                count += 1
+        self.modules[module.full_name].stats.imported = count
 
     def dependencies(self):
         nodes = set(self.project.modules)
@@ -42,6 +53,12 @@ class ProjectAnalyzer:
                 links.add(Link(a_mod, b))
 
         return Relation(name='dependencies', nodes=nodes, links=links)
+
+    def infos(self):
+        return {
+            k: v.stats.to_dict()
+            for k, v in self.modules.items()
+        }
 
     def aggregate_stats(self):
         return AggregatedCodeStats.aggregate([
@@ -64,6 +81,9 @@ def analyze_project(project: Project, output_dir: Path) -> None:
 
     aggregate_stats = analyzer.aggregate_stats()
     pprint(aggregate_stats)
+
+    infos = analyzer.infos()
+    (output_dir / 'modules.json').write_text(json.dumps(infos, indent=2))
 
     # final_stats, import_graph = aggregate_stats(stats)
     # (output_dir / "stats.json").write_text(json.dumps(final_stats, indent=2, ensure_ascii=False), encoding="utf-8")

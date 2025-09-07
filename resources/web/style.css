@@ -4,6 +4,15 @@ body {
     overflow: hidden;
 }
 
+.ag-preload {
+    opacity: 0;
+    /*transition: opacity 0.3s ease;*/
+}
+
+.ag-visible {
+    opacity: 1;
+}
+
 .my-box {
     position: absolute;
     background: rgba(255, 255, 255, 0.85);
@@ -11,48 +20,56 @@ body {
     border-radius: 5px;
     font-family: sans-serif;
     font-size: 14px;
-    max-height: 60vh;
-    max-width: 40vh;
-    width: 30vh;
     overflow-y: auto;
     z-index: 1000;
 }
 
+#graph {
+    position: fixed;
+    width: 100vw;
+    height: 75vh;
+    top: 0;
+}
+
+#data-table {
+    position: fixed;
+    height: 25vh;
+    width: 100vw;
+    bottom: 0;
+}
+
 #module-tree {
     left: 10px;
-    top: 200px;
+    top: 300px;
+    width: 250px;
+    height: 300px;
+}
+
+
+#legend {
+    position: fixed;
+    top: 350px;
+    right: 10px;
+    height: 25vh;
+}
+
+#controller {
+    position: fixed;
+    left: 10px;
+    top: 10px;
     width: 250px;
 }
 
 #tree-container {
     position: fixed;
     left: 300px; /* x */
-    top: 10px; /* y */
+    top: 350px; /* y */
     width: 30vw; /* w */
-}
-
-#graph {
-    width: 100vw;
-    height: 100vh;
-    display: block;
-}
-
-#controls {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-}
-
-#legend {
-    position: fixed;
-    top: 350px;
-    right: 10px;
 }
 
 #infos {
     position: fixed;
-    left: 10px;
+    right: 10px;
     top: 10px;
     width: 250px;
 }
-
