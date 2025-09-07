@@ -1,12 +1,14 @@
-class Controls {
+class GraphController {
     constructor(graph, id = 'controls') {
         this.container = createDiv(id, 'my-box controls');
+
         this.container.innerHTML = `
 <label for="data-path">Fichier JSON :</label><br>
 <select id="data-path">
-    <option value="graph.json" selected>graph.json</option>
     <option value="dependencies.json">dependencies.json</option>
+    <option value="dependencies-reversed.json">dependencies-reversed.json</option>
     <option value="hierarchy.json">hierarchy.json</option>
+    <option value="hierarchy-reversed.json">hierarchy-reversed.json</option>
 </select><br>
 
 <label for="graph-dimension">Projection dimension</label><br>
@@ -74,6 +76,7 @@ class Controls {
             this.updateGraph(graph);
         });
 
+
     }
 
     dataPath() {
@@ -105,10 +108,12 @@ class Controls {
         graph.updateGraph(this);
     }
 
-    async rebuildGraph(graph) {
-        graph.data = await fetch(this.dataPath()).then(res => res.json());
+    async rawData() {
+        return await fetch(this.dataPath()).then(res => res.json());
+    }
 
-        graph.renderGraph(display.controls.modulePrefixDepth(), display.paletteGenerator)
+    async rebuildGraph(graph) {
+        graph.renderGraph(await this.rawData(), display.controls.modulePrefixDepth(), display.paletteGenerator)
         this.updateGraph(graph)
     }
 

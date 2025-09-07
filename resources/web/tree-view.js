@@ -1,69 +1,43 @@
 class TreeView {
     constructor(container_id = 'module-tree') {
-        this.container = createDiv(container_id, 'my-box tree-view');
-        loadCss('web/tree-view.css');
-        this.modules = null;
+        this.container = createDiv(container_id, 'my-box');
     }
-
-    _rebuild(modules) {
-        const tree = {name: 'root', children: []};
-
-        for (const fullId of modules) {
-            const segments = fullId.trim().split('.');
-            let cursor = tree;
-
-            for (let key of segments) {
-                let child = cursor.children.find(n => n.name === key);
-
-                if (!child) {
-                    child = {name: key, children: []};
-                    cursor.children.push(child);
-                }
-                cursor = child;
-            }
-        }
-        return tree;
-    }
-
 
     render(rawData) {
+        // Construire l'ensemble des modules à partir des clés et des dépendances
         const moduleSet = new Set(Object.keys(rawData));
         Object.values(rawData).forEach(arr => arr.forEach(id => moduleSet.add(id)));
         const modules = Array.from(moduleSet);
 
-        const tree = this._rebuild(modules);
+        // Nettoyer le conteneur
+        this.container.innerHTML = '<strong>Arborescence des modules</strong>';
 
-        const container = this.container;
-        container.innerHTML = '<strong>Arborescence des modules</strong>';
-        this._renderTree(tree, container);
+        // Créer l'arborescence Shoelace
+        const treeRoot = document.createElement('sl-tree');
+        this._buildTreeItems(modules, treeRoot);
+
+        this.container.appendChild(treeRoot);
     }
 
-    _renderTree(node, container) {
-        const ul = document.createElement('ul');
-        container.appendChild(ul);
+    _buildTreeItems(modules, treeRoot) {
+        const nodeMap = new Map(); // Map des chemins vers leurs éléments <sl-tree-item>
 
-        for (const child of node.children || []) {
-            const li = document.createElement('li');
-            const label = document.createElement('span');
+        for (let fullId of modules) {
+            const segments = fullId.trim().split('.');
+            let path = '';
+            let parent = treeRoot;
 
-            label.textContent = child.name;
-            label.classList.add('tree-label');
-            li.appendChild(label);
+            for (const segment of segments) {
+                path = path ? `${path}.${segment}` : segment;
 
-            if (!child.children || child.children.length === 0) {
-                li.classList.add('leaf');
-            }
+                if (!nodeMap.has(path)) {
+                    const item = document.createElement('sl-tree-item');
+                    item.textContent = segment;
+                    nodeMap.set(path, item);
+                    parent.appendChild(item);
+                }
 
-            ul.appendChild(li);
-
-            // Si le nœud a des enfants, on crée récursivement la sous-liste
-            if (child.children && child.children.length > 0) {
-                this._renderTree(child, li);
-
-                // Au clic, on bascule la classe 'expanded' pour montrer/masquer
-                label.addEventListener('click', () => {
-                    li.classList.toggle('expanded');
-                });
+                parent = nodeMap.get(path);
             }
         }
     }

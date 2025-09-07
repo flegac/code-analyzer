@@ -12,6 +12,13 @@ class Relation:
     nodes: set[Module]
     links: set[Link]
 
+    def reversed(self):
+        return Relation(
+            name=f'{self.name}-reversed',
+            nodes=set(self.nodes),
+            links={_.reversed() for _ in self.links}
+        )
+
     @staticmethod
     def hierarchy(modules: set[Module]):
         return Relation(
@@ -24,14 +31,13 @@ class Relation:
             }
         )
 
-    def dump(self, path: Path):
-        with path.open('w') as _:
-            json.dump({
-                'nodes': [n.full_name for n in self.nodes],
-                'links': [(a.full_name, b.full_name) for (a, b) in self.links]
-            }, _, sort_keys=True, indent=4)
+    def to_json1(self):
+        return {
+            'nodes': [n.full_name for n in self.nodes],
+            'links': [(a.full_name, b.full_name) for (a, b) in self.links]
+        }
 
-    def dump2(self, path: Path):
+    def to_json2(self):
         res = {
             k.full_name: set()
             for k in self.nodes
@@ -39,10 +45,17 @@ class Relation:
         for a, b in self.links:
             res[a.full_name].add(b.full_name)
 
-        res = {
+        return {
             k: list(v)
             for k, v in res.items()
         }
 
-        with path.open('w') as _:
-            json.dump(res, _, sort_keys=True, indent=4)
+    def dump(self, path: Path):
+        full_path = path / f'{self.name}.json'
+        with full_path.open('w') as _:
+            json.dump(self.to_json1(), _, sort_keys=True, indent=4)
+
+    def dump2(self, path: Path):
+        full_path = path / f'{self.name}.json'
+        with full_path.open('w') as _:
+            json.dump(self.to_json2(), _, sort_keys=True, indent=4)

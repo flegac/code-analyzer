@@ -17,6 +17,9 @@ class Link(NamedTuple):
     def free_memory():
         Link.new.cache_clear()
 
+    def reversed(self):
+        return Link.new(self.dest, self.src)
+
     def __hash__(self):
         return id(self)
 

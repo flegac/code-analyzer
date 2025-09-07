@@ -1,7 +1,7 @@
 class GraphDisplay {
     constructor() {
         this.graph = new MyGraph();
-        this.controls = new Controls(this.graph);
+        this.controls = new GraphController(this.graph);
 
         this.tree = new TreeView();
         this.infos = new Infos();
@@ -17,12 +17,13 @@ class GraphDisplay {
 
     async loadGraph() {
         try {
+            const data = await this.controls.rawData()
 
-            await this.controls.rebuildGraph(this.graph);
+            await this.controls.rebuildGraph(this.graph, data);
 
             this.infos.render(this.graph);
             this.legend.render(this.graph);
-            this.tree.render(this.graph.data);
+            this.tree.render(data);
 
             const scene = this.graph.graphInstance.scene();
 
