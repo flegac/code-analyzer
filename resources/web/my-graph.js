@@ -149,7 +149,11 @@ class MyGraph {
         const graphInstance = ForceGraph3D()(this.container)
             .graphData({nodes, links})
             .nodeLabel(node => {
-                return `${node.id}<br>\n${JSON.stringify(node.infos, null, 2)}`;
+                let infos = '';
+                if (node.infos) {
+                    infos = JSON.stringify(node.infos, null, 2);
+                }
+                return `${node.id}<br>\n${infos}`;
             })
             .nodeVal('inDeg')
             .nodeColor('color')
@@ -175,7 +179,7 @@ class MyGraph {
                 return src.color;
                 // return '#ccc'
             })
-            .nodeRelSize(4)
+            .nodeRelSize(5)
             .d3Force('prefixCollide', forceGroupCollide(node => node.group));
         graphInstance.onNodeClick((node, event) => {
             const cameraPos = graphInstance.cameraPosition(); // {x, y, z}
