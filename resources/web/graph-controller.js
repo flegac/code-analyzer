@@ -41,28 +41,23 @@ class GraphController {
             .onChange(() => this.loadGraph());
         this.gui.add(this.params, 'chargeStrength', 1, 100, 0.1)
             .name('Charge')
-            .onChange(() => this.updateGraph(graph));
+            .onChange(() => this.updateGraph());
         this.gui.add(this.params, 'linkDistance', 1, 100, 0.1)
             .name('Distance lien')
-            .onChange(() => this.updateGraph(graph));
+            .onChange(() => this.updateGraph());
         this.gui.add(this.params, 'groupDistance', 1, 100, 0.1)
             .name('Distance groupe')
-            .onChange(() => this.updateGraph(graph));
+            .onChange(() => this.updateGraph());
         this.gui.add(this.params, 'sourceSinkDistance', 1, 100, 0.1)
             .name('Distance sources - puits')
-            .onChange(() => this.updateGraph(graph));
+            .onChange(() => this.updateGraph());
         this.gui.add(this.params, 'sourceSinkDistanceActive')
             .name('Limit distance sources - puits')
-            .onChange(() => this.updateGraph(graph));
+            .onChange(() => this.updateGraph());
         this.gui.add(this.params, 'reload').name('Reload');
     }
 
-
-    updateGraph(graph) {
-        graph.updateGraph(this);
-    }
-
-    async rawData() {
+    async loadGraphData() {
         return await fetch(this.params.dataPath).then(res => res.json());
     }
 
@@ -70,20 +65,23 @@ class GraphController {
         return await fetch(this.params.infosPath).then(res => res.json());
     }
 
-    async rebuildGraph(graph) {
-        const raw = await this.rawData();
+    updateGraph() {
+        this.graph.updateGraph(this);
+    }
+
+    async rebuildGraph() {
+        const data = await this.loadGraphData();
         const infos = await this.loadModuleInfos();
-        graph.renderGraph(raw, infos, this.params.modulePrefixDepth, this.paletteGenerator);
-        this.updateGraph(graph);
+        this.graph.renderGraph(data, infos, this.params.modulePrefixDepth, this.paletteGenerator);
+        this.updateGraph();
     }
 
 
     async loadGraph() {
         try {
-            const data = await this.rawData();
+            const data = await this.loadGraphData();
             const infos = await this.loadModuleInfos();
-
-            await this.rebuildGraph(this.graph, data);
+            await this.rebuildGraph();
 
             this.infos.render(this.graph);
             this.legend.render(this.graph);
