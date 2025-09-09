@@ -35,6 +35,7 @@ function forceGroupCollide(groupFn, groupDistance = 1) {
                         shift = ((minDist - dist) / minDist);
                     }
                     shift *= alpha * strength / n;
+
                     const sx = dx * shift, sy = dy * shift, sz = dz * shift;
                     b.x += sx;
                     b.y += sy;

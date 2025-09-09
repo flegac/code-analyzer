@@ -1,102 +1,85 @@
 class MyGraph {
     constructor() {
-        this.container = document.getElementById('graph');
-        this.graphInstance = null;
-
-
+        this.container = createDiv('graph');
+        this.graph = null;
         loadScript("https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js");
         loadScript("https://cdn.jsdelivr.net/npm/3d-force-graph");
-        // <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
-        // <script src="https://cdn.jsdelivr.net/npm/3d-force-graph"></script>
-
     }
 
-    build(data, infos, modulePrefixDepth) {
-        this.usedBy = {};
+    build(hierarchy, dependencies, infos, params) {
         this.nodes = [];
-        this.links = [];
         this.groups = {};
         this.nodesMap = {};
 
-        function computeSubtreeSize(node, visited = new Set()) {
-            if (visited.has(node)) return 1;
-            visited.add(node);
-            let size = 1;
-            for (let child of data[node] || []) {
-                size += computeSubtreeSize(child, visited);
-            }
-            return size;
-        }
+        this.dependencies = new Relation('dependencies', dependencies);
+        this.hierarchy = new Relation('hierarchy', hierarchy);
 
-        // compute links & reverse graph
-        for (const [source, targets] of Object.entries(data)) {
-            for (const target of targets) {
-                this.usedBy[target] = this.usedBy[target] || [];
-                this.usedBy[target].push(source);
-                this.links.push({source, target});
-            }
-        }
+        for (const id of Object.keys(dependencies)) {
+            const usedBy = this.dependencies.usedBy[id]?.length || 0;
+            const dependOn = this.dependencies.dependOn[id]?.length || 0;
+            const radius = this.dependencies.usedBy[id]?.length || 0;
 
-        const nn = modulePrefixDepth;
-        for (const id of Object.keys(data)) {
-            const subtreeSize = computeSubtreeSize(id);
-            const inDeg = this.usedBy[id]?.length || 0;
-            const outDeg = data[id]?.length || 0;
-            const radius = Math.pow(subtreeSize, 1.);
-
-
-            const parent = id.split('.').slice(0, nn).join('.');
-            let group = id.split('.').slice(0, nn + 1).join('.');
-            if (inDeg === 0) {
+            let group = id.split('.').slice(0, params.groupHierarchyDepth).join('.');
+            if (usedBy === 0) {
                 group = '__source__';
             }
-            if (outDeg === 0) {
+            if (dependOn === 0) {
                 group = '__sink__'
             }
-            if (outDeg === 0 && inDeg === 0) {
+            if (dependOn === 0 && usedBy === 0) {
                 group = '__disconnected__'
             }
-
 
             this.groups[group] = this.groups[group] || [];
             this.groups[group].push(id);
             const node = {
                 id,
-                parent: parent,
                 group: group,
                 radius: radius,
-                subtreeSize: subtreeSize,
-                inDeg: inDeg,
-                outDeg: outDeg,
-                infos: infos[id],
-                // x,y,z are induced by forces
+                usedBy: usedBy,
+                dependOn: dependOn,
+                infos: infos[id] || {}, // x,y,z are induced by forces
             };
             this.nodesMap[id] = node;
             this.nodes.push(node);
         }
+
+        const groupGraph = {}
+        for (let [key, group] of Object.entries(this.groups)) {
+            const n = group.length;
+            for (let i = 0; i < n; i++) {
+                for (let j = i + 1; j < n; j++) {
+                    const a = group[i];
+                    const b = group[j];
+                    groupGraph[a] = groupGraph[a] || [];
+                    groupGraph[a].push(b);
+                }
+            }
+        }
+        this.grouping = new Relation('grouping', groupGraph);
+        console.log(this.grouping);
     }
 
-    updateColors(paletteGenerator) {
-        // compute color map
-        const uniqueGroups = Array.from(new Set(this.nodes.map(node => node.group)));
-        const k = uniqueGroups.length;
-        const palette = paletteGenerator.colors(k)
-        const decal = 0; //1 + Math.round(k / 3)
-        this.groupColors = {};
-        uniqueGroups.forEach((grp, idx) => {
-            this.groupColors[grp] = palette[(idx + decal) % k];
-        });
-        // fix nodes
-        this.nodes.forEach(node => {
-            node.color = this.groupColors[node.group];
-        });
-    }
 
     updateGraph(control) {
-        this.graphInstance.numDimensions(control.params.dimension);
-        this.graphInstance.d3Force('link').distance(10 * control.params.linkDistance);
-        this.graphInstance.d3Force('charge').strength(-control.params.chargeStrength);
-        this.graphInstance.d3Force('prefixCollide', forceGroupCollide(node => node.group, control.params.groupDistance));
+        // let group = id.split('.').slice(0, control.params.groupHierarchyDepth).join('.');
+
+
+        this.graph.numDimensions(control.params.dimension);
+        this.graph.d3Force('link').distance(10 * control.params.linkDistance);
+        this.graph.d3Force('charge').strength(-control.params.chargeStrength);
+        // this.graph.d3Force('prefixCollide', forceGroupCollide(node => node.group, control.params.groupDistance));
+        this.graph.d3Force('prefixCollide', forceGroupCollide(
+            node => node.id.split('.').slice(0, control.params.groupHierarchyDepth).join('.'),
+            control.params.groupDistance
+        ));
+        this.graph
+            .nodeVal(node => node.infos[control.params.nodeSize])
+            .nodeRelSize(4)
+            .nodeAutoColorBy('group')
+        // .linkCurvature(.3)
+        ;
+
         this.nodes.forEach(node => {
             if (node.group === '__disconnected__') {
                 node.fx = 0;
@@ -133,20 +116,24 @@ class MyGraph {
     }
 
 
-    renderGraph(data, infos, modulePrefixDepth, paletteGenerator) {
-
+    renderGraph(hierarchy, dependencies, infos, params) {
         // Nettoyer l'ancienne instance si elle existe
-        if (this.graphInstance && typeof this.graphInstance._destructor === 'function') {
-            this.graphInstance._destructor(); // méthode interne pour libérer les ressources
+        if (this.graph && typeof this.graph._destructor === 'function') {
+            this.graph._destructor(); // méthode interne pour libérer les ressources
         }
 
-        this.build(data, infos, modulePrefixDepth);
-        this.updateColors(paletteGenerator)
-        const {nodes, links} = this;
+        this.build(hierarchy, dependencies, infos, params);
+        // this.updateColors(paletteGenerator)
         const nodesMap = this.nodesMap;
+        const nodes = this.nodes;
+        const links = []
+                .concat(this.hierarchy.links)
+                .concat(this.dependencies.links)
+            // .concat(this.grouping.links)
+        ;
 
-        // Créer une nouvelle instance
-        const graphInstance = ForceGraph3D()(this.container)
+
+        this.graph = ForceGraph3D()(this.container)
             .graphData({nodes, links})
             .nodeLabel(node => {
                 let infos = '';
@@ -155,35 +142,30 @@ class MyGraph {
                 }
                 return `${node.id}<br>\n${infos}`;
             })
-            .nodeVal('inDeg')
-            .nodeColor('color')
-            // .nodeAutoColorBy('group')
-            // .linkCurvature(.3)
-            .linkDirectionalParticles(link => {
-                const src = nodesMap[link.source];
-                const dst = nodesMap[link.target];
-                if (src.group === dst.group) {
-                    return 0;
-                }
-                return 1;
-            })
-            .linkDirectionalArrowLength(5)
-            // .linkDirectionalArrowColor(() => '#999')
-            // .linkColor(() => '#ccc')
+            // .linkAutoColorBy('label')
             .linkColor((link) => {
-                const src = nodesMap[link.source];
-                const dst = nodesMap[link.target];
-                if (src.group === dst.group) {
-                    return '#ccc0';
+                if (link.label === 'hierarchy') {
+                    // return '#ccc'
+                    return '#0000'
                 }
-                return src.color;
-                // return '#ccc'
+                if (link.label === 'dependencies') {
+                    // return '#0000'
+
+                    const src = nodesMap[link.source];
+                    const dst = nodesMap[link.target];
+                    if (src.group === dst.group) {
+                        return '#ccc0';
+                    }
+                    return src.color;
+                    // return '#ccc'
+
+                }
             })
-            .nodeRelSize(5)
-            .d3Force('prefixCollide', forceGroupCollide(node => node.group));
-        graphInstance.onNodeClick((node, event) => {
-            const cameraPos = graphInstance.cameraPosition(); // {x, y, z}
-            const controls = graphInstance.controls();        // OrbitControls ou TrackballControls
+        ;
+
+        this.graph.onNodeClick((node, event) => {
+            const cameraPos = this.graph.cameraPosition(); // {x, y, z}
+            const controls = this.graph.controls();        // OrbitControls ou TrackballControls
 
             const lookAt = controls.target;
             const dx = node.x - lookAt.x;
@@ -191,17 +173,14 @@ class MyGraph {
             const dz = node.z - lookAt.z;
 
             const newPos = {
-                x: cameraPos.x + dx,
-                y: cameraPos.y + dy,
-                z: cameraPos.z + dz
+                x: cameraPos.x + dx, y: cameraPos.y + dy, z: cameraPos.z + dz
             };
-            graphInstance.cameraPosition(newPos, node, 1000); // transition vers le nœud
+            this.graph.cameraPosition(newPos, node, 1000); // transition vers le nœud
         });
-        this.graphInstance = graphInstance;
 
         const resizeObserver = new ResizeObserver(() => {
-            graphInstance.width(this.container.clientWidth);
-            graphInstance.height(this.container.clientHeight);
+            this.graph.width(this.container.clientWidth);
+            this.graph.height(this.container.clientHeight);
         });
         resizeObserver.observe(this.container);
 
@@ -215,7 +194,6 @@ class MyGraph {
         //     console.log('Simulation arrêtée pour économiser les ressources.');
         // }, 1500); // ou plus selon la taille du graphe
     }
-
 
 }
 

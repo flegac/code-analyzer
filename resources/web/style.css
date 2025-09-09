@@ -2,6 +2,9 @@
 body {
     margin: 0;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
 .ag-preload {
@@ -14,7 +17,7 @@ body {
 }
 
 .my-box {
-    position: absolute;
+    position: relative;
     background: rgba(255, 255, 255, 0.85);
     padding: 10px;
     border-radius: 5px;
@@ -24,35 +27,6 @@ body {
     z-index: 1000;
 }
 
-#graph {
-    position: fixed;
-    width: 100vw;
-    height: 75vh;
-    top: 0;
-}
-
-#data-table {
-    position: fixed;
-    height: 25vh;
-    width: 100vw;
-    bottom: 0;
-}
-
-#module-tree {
-    left: 10px;
-    top: 300px;
-    width: 250px;
-    height: 300px;
-}
-
-
-#legend {
-    position: fixed;
-    top: 350px;
-    right: 10px;
-    height: 25vh;
-}
-
 #controller {
     position: fixed;
     left: 10px;
@@ -60,16 +34,47 @@ body {
     width: 250px;
 }
 
-#tree-container {
-    position: fixed;
-    left: 300px; /* x */
-    top: 350px; /* y */
-    width: 30vw; /* w */
+#module-tree {
+    left: 10px;
+    top: 350px;
+    width: 250px;
+    height: 300px;
 }
+
 
 #infos {
     position: fixed;
     right: 10px;
     top: 10px;
     width: 250px;
+}
+
+
+#resizable-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 200px; /* hauteur initiale */
+    background: white;
+    border-top: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    resize: none; /* on gère le resize manuellement */
+    overflow: hidden;
+}
+
+#resize-handle {
+    height: 60px;
+    cursor: ns-resize;
+    background: #ddd;
+}
+
+
+#data-table {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    bottom: 0;
+    resize: both;
 }

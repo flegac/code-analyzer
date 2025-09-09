@@ -1,6 +1,11 @@
 class TableView {
     constructor(container_id = 'data-table') {
         this.container = createDiv(container_id, "ag-theme-alpine ag-preload");
+        const panel = createDiv('resizable-panel');
+        const handle = createDiv('resize-handle');
+        panel.appendChild(handle);
+        panel.appendChild(this.container);
+
         this.gridInstance = null;
 
         loadCSS('https://cdn.jsdelivr.net/npm/ag-grid-community/styles/ag-grid.css');
@@ -37,6 +42,35 @@ class TableView {
                 this.container.classList.add('ag-visible');
             }
         });
+
+        new ResizeObserver(() => {
+            if (this.gridInstance?.api) {
+                this.gridInstance.api.sizeColumnsToFit();
+            }
+        }).observe(document.getElementById('data-table'));
+
+
+        const panel = document.getElementById('resizable-panel');
+        const handle = document.getElementById('resize-handle');
+
+        let isResizing = false;
+
+        handle.addEventListener('mousedown', e => {
+            isResizing = true;
+            document.body.style.cursor = 'ns-resize';
+        });
+
+        document.addEventListener('mousemove', e => {
+            if (!isResizing) return;
+            const newHeight = window.innerHeight - e.clientY;
+            panel.style.height = `${newHeight}px`;
+        });
+
+        document.addEventListener('mouseup', () => {
+            isResizing = false;
+            document.body.style.cursor = 'default';
+        });
+
 
     }
 

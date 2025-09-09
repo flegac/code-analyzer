@@ -7,22 +7,18 @@
     <script src="https://unpkg.com/chroma-js@2.4.2/chroma.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js"></script>
 
-
+    <script src="web/relation.js"></script>
     <script src="web/my-graph.js"></script>
     <script src="web/tree-view.js"></script>
     <script src="web/table-view.js"></script>
     <script src="web/custom-force.js"></script>
     <script src="web/infos.js"></script>
     <script src="web/graph-controller.js"></script>
-    <script src="web/legend.js"></script>
     <script src="web/utils.js"></script>
 
     <link rel="stylesheet" href="web/style.css">
 </head>
 <body>
-
-
-<div id="graph"></div>
 
 <script>
     const graph = new MyGraph();
@@ -31,14 +27,14 @@
 
     window.addEventListener('DOMContentLoaded', () => controller.loadGraph());
     window.addEventListener('resize', () => {
-        if (!controller.graph.graphInstance) return;
+        if (!controller.graph.graph) return;
         const width = window.innerWidth;
         const height = window.innerHeight;
-        controller.graph.graphInstance.width(width);
-        controller.graph.graphInstance.height(height);
+        controller.graph.graph.width(width);
+        controller.graph.graph.height(height);
 
-        const renderer = controller.graph.graphInstance.renderer();
-        const camera = controller.graph.graphInstance.camera();
+        const renderer = controller.graph.graph.renderer();
+        const camera = controller.graph.graph.camera();
         renderer.setSize(width, height);
         camera.aspect = width / height;
         camera.updateProjectionMatrix();

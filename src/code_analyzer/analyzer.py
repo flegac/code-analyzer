@@ -77,7 +77,6 @@ def analyze_project(project: Project, output_dir: Path) -> None:
     ]
     for graph in graphs:
         graph.dump2(output_dir)
-        graph.reversed().dump2(output_dir)
 
     aggregate_stats = analyzer.aggregate_stats()
     pprint(aggregate_stats)

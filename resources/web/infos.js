@@ -5,8 +5,8 @@ class Infos {
 
     render(graph) {
         this.container.innerHTML = `<div>
-<span>nodes: ${graph.nodes.length}</span>
-<span>links: ${graph.links.length}</span>
+<span>hierarchy: nodes=${graph.hierarchy.nodes.size} links: ${graph.hierarchy.links.length}</span><br>
+<span>dependencies: nodes=${graph.dependencies.nodes.size} links: ${graph.dependencies.links.length}</span>
 </div>`
     }
 }
