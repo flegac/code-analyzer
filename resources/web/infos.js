@@ -9,7 +9,5 @@ class Infos {
 <span>hierarchy: (V=${graph.hierarchy.nodes.size}, E=${graph.hierarchy.links.length})</span><br>
 <span>dependencies: (V=${graph.dependencies.nodes.size}, E=${graph.dependencies.links.length})</span>
 </div>`;
-        console.log(this.container.innerHTML);
-
     }
 }

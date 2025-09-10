@@ -44,7 +44,7 @@ class ModuleStatsVisitor(cst.CSTVisitor):
 
     # ----- ClassDef context ---------------------------------------
     def visit_ClassDef(self, node: cst.ClassDef) -> None:
-        self.stack.current.class_count += 1
+        self.stack.current.classes += 1
         self._push_node(node)
 
     def leave_ClassDef(self, node: cst.ClassDef) -> None:
@@ -56,9 +56,9 @@ class ModuleStatsVisitor(cst.CSTVisitor):
         ctx = self.stack.current
         match ctx.node:
             case cst.ClassDef():
-                ctx.method_count += 1
+                ctx.methods += 1
             case _:
-                ctx.function_count += 1
+                ctx.functions += 1
 
         self._push_node(node)
 

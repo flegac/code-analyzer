@@ -41,7 +41,8 @@ class TableView {
 
         new ResizeObserver(() => {
             if (this.gridInstance?.api) {
-                this.gridInstance.api.sizeColumnsToFit();
+                const allColumnIds = this.gridInstance.api.getColumnDefs().map(col => col.field);
+                this.gridInstance.api.autoSizeColumns(allColumnIds);
             }
         }).observe(this.container);
 

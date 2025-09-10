@@ -1,33 +1,33 @@
 {
     "organism": [
-        "organism.engine",
-        "organism.game_content",
         "organism.utils",
-        "organism.main",
-        "organism.player",
-        "organism.core",
+        "organism.game_content",
+        "organism.scenes",
         "organism.gameplay",
-        "organism.scenes"
+        "organism.core",
+        "organism.engine",
+        "organism.main",
+        "organism.player"
     ],
     "organism.core": [
-        "organism.core.vec2",
-        "organism.core.data",
         "organism.core.fast_rand",
+        "organism.core.model",
         "organism.core.color",
-        "organism.core.model"
+        "organism.core.data",
+        "organism.core.vec2"
     ],
     "organism.core.color": [],
     "organism.core.data": [],
     "organism.core.fast_rand": [],
     "organism.core.model": [
         "organism.core.model.list_model",
-        "organism.core.model.field_model",
         "organism.core.model.bool_model",
-        "organism.core.model.value_model",
-        "organism.core.model.table_model",
-        "organism.core.model.utils",
         "organism.core.model.selector",
-        "organism.core.model.tab_model"
+        "organism.core.model.tab_model",
+        "organism.core.model.value_model",
+        "organism.core.model.utils",
+        "organism.core.model.table_model",
+        "organism.core.model.field_model"
     ],
     "organism.core.model.bool_model": [],
     "organism.core.model.field_model": [],
@@ -39,20 +39,20 @@
     "organism.core.model.value_model": [],
     "organism.core.vec2": [],
     "organism.engine": [
-        "organism.engine.app",
-        "organism.engine.fps",
-        "organism.engine.state",
         "organism.engine.profiler_service",
-        "organism.engine.glfw_app",
-        "organism.engine.window_manager",
-        "organism.engine.camera",
         "organism.engine.events",
-        "organism.engine.devices",
+        "organism.engine.app",
+        "organism.engine.glfw_app",
+        "organism.engine.state",
+        "organism.engine.camera",
         "organism.engine.services",
         "organism.engine.gui",
-        "organism.engine.graphics",
+        "organism.engine.window_manager",
+        "organism.engine.shader_service",
+        "organism.engine.fps",
         "organism.engine.gl_diagnostic",
-        "organism.engine.shader_service"
+        "organism.engine.graphics",
+        "organism.engine.devices"
     ],
     "organism.engine.app": [],
     "organism.engine.camera": [
@@ -67,15 +67,15 @@
         "organism.engine.devices.audio_service",
         "organism.engine.devices.screen_service",
         "organism.engine.devices.sdl",
-        "organism.engine.devices.system_service",
         "organism.engine.devices.mouse_service",
-        "organism.engine.devices.glfw"
+        "organism.engine.devices.glfw",
+        "organism.engine.devices.system_service"
     ],
     "organism.engine.devices.audio_service": [],
     "organism.engine.devices.glfw": [
         "organism.engine.devices.glfw.glfw_mouse_service",
-        "organism.engine.devices.glfw.glfw_system_service",
-        "organism.engine.devices.glfw.glfw_screen_service"
+        "organism.engine.devices.glfw.glfw_screen_service",
+        "organism.engine.devices.glfw.glfw_system_service"
     ],
     "organism.engine.devices.glfw.glfw_mouse_service": [],
     "organism.engine.devices.glfw.glfw_screen_service": [],
@@ -83,10 +83,10 @@
     "organism.engine.devices.mouse_service": [],
     "organism.engine.devices.screen_service": [],
     "organism.engine.devices.sdl": [
-        "organism.engine.devices.sdl.sdl_audio_service",
-        "organism.engine.devices.sdl.audio_chunk",
         "organism.engine.devices.sdl.music",
-        "organism.engine.devices.sdl.audio_loader"
+        "organism.engine.devices.sdl.audio_chunk",
+        "organism.engine.devices.sdl.audio_loader",
+        "organism.engine.devices.sdl.sdl_audio_service"
     ],
     "organism.engine.devices.sdl.audio_chunk": [],
     "organism.engine.devices.sdl.audio_loader": [],
@@ -95,14 +95,14 @@
     "organism.engine.devices.system_service": [],
     "organism.engine.events": [
         "organism.engine.events.model",
-        "organism.engine.events.core",
-        "organism.engine.events.events_utils"
+        "organism.engine.events.events_utils",
+        "organism.engine.events.core"
     ],
     "organism.engine.events.core": [
-        "organism.engine.events.core.joystick_handler",
-        "organism.engine.events.core.event_translater",
         "organism.engine.events.core.event_manager",
-        "organism.engine.events.core.event_handler"
+        "organism.engine.events.core.event_handler",
+        "organism.engine.events.core.joystick_handler",
+        "organism.engine.events.core.event_translater"
     ],
     "organism.engine.events.core.event_handler": [],
     "organism.engine.events.core.event_manager": [],
@@ -110,9 +110,9 @@
     "organism.engine.events.core.joystick_handler": [],
     "organism.engine.events.events_utils": [],
     "organism.engine.events.model": [
+        "organism.engine.events.model.event",
         "organism.engine.events.model.event_binding",
-        "organism.engine.events.model.action_mapping",
-        "organism.engine.events.model.event"
+        "organism.engine.events.model.action_mapping"
     ],
     "organism.engine.events.model.action_mapping": [],
     "organism.engine.events.model.event": [],
@@ -121,9 +121,9 @@
     "organism.engine.gl_diagnostic": [
         "organism.engine.gl_diagnostic.gl_values",
         "organism.engine.gl_diagnostic.gl_diagnostic",
-        "organism.engine.gl_diagnostic.gl_textures",
         "organism.engine.gl_diagnostic.gl_limits",
-        "organism.engine.gl_diagnostic.gl_material"
+        "organism.engine.gl_diagnostic.gl_material",
+        "organism.engine.gl_diagnostic.gl_textures"
     ],
     "organism.engine.gl_diagnostic.gl_diagnostic": [],
     "organism.engine.gl_diagnostic.gl_limits": [],
@@ -132,30 +132,30 @@
     "organism.engine.gl_diagnostic.gl_values": [],
     "organism.engine.glfw_app": [],
     "organism.engine.graphics": [
-        "organism.engine.graphics.viewport",
         "organism.engine.graphics.effects",
         "organism.engine.graphics.blocks",
         "organism.engine.graphics.core",
+        "organism.engine.graphics.viewport",
         "organism.engine.graphics.buffer"
     ],
     "organism.engine.graphics.blocks": [
-        "organism.engine.graphics.blocks.sequence_gl",
-        "organism.engine.graphics.blocks.disc",
-        "organism.engine.graphics.blocks.quads",
-        "organism.engine.graphics.blocks.dist_field",
         "organism.engine.graphics.blocks.polys",
+        "organism.engine.graphics.blocks.dist_field",
+        "organism.engine.graphics.blocks.quads",
         "organism.engine.graphics.blocks.camera_painter",
-        "organism.engine.graphics.blocks.links"
+        "organism.engine.graphics.blocks.links",
+        "organism.engine.graphics.blocks.disc",
+        "organism.engine.graphics.blocks.sequence_gl"
     ],
     "organism.engine.graphics.blocks.camera_painter": [],
     "organism.engine.graphics.blocks.disc": [
+        "organism.engine.graphics.blocks.disc.point_mapper",
+        "organism.engine.graphics.blocks.disc.metaball_painter",
+        "organism.engine.graphics.blocks.disc.circle_painter",
+        "organism.engine.graphics.blocks.disc.point_updater",
         "organism.engine.graphics.blocks.disc.point_buffer",
         "organism.engine.graphics.blocks.disc.painter_config",
-        "organism.engine.graphics.blocks.disc.point_painter",
-        "organism.engine.graphics.blocks.disc.circle_painter",
-        "organism.engine.graphics.blocks.disc.point_mapper",
-        "organism.engine.graphics.blocks.disc.point_updater",
-        "organism.engine.graphics.blocks.disc.metaball_painter"
+        "organism.engine.graphics.blocks.disc.point_painter"
     ],
     "organism.engine.graphics.blocks.disc.circle_painter": [],
     "organism.engine.graphics.blocks.disc.metaball_painter": [],
@@ -171,46 +171,46 @@
     "organism.engine.graphics.blocks.dist_field.dist_field_buffer": [],
     "organism.engine.graphics.blocks.dist_field.dist_field_painter": [],
     "organism.engine.graphics.blocks.links": [
-        "organism.engine.graphics.blocks.links.link_model",
+        "organism.engine.graphics.blocks.links.link_buffer",
         "organism.engine.graphics.blocks.links.link_painter",
-        "organism.engine.graphics.blocks.links.link_buffer"
+        "organism.engine.graphics.blocks.links.link_model"
     ],
     "organism.engine.graphics.blocks.links.link_buffer": [],
     "organism.engine.graphics.blocks.links.link_model": [],
     "organism.engine.graphics.blocks.links.link_painter": [],
     "organism.engine.graphics.blocks.polys": [
         "organism.engine.graphics.blocks.polys.poly_painter",
-        "organism.engine.graphics.blocks.polys.poly_model",
-        "organism.engine.graphics.blocks.polys.poly_buffer"
+        "organism.engine.graphics.blocks.polys.poly_buffer",
+        "organism.engine.graphics.blocks.polys.poly_model"
     ],
     "organism.engine.graphics.blocks.polys.poly_buffer": [],
     "organism.engine.graphics.blocks.polys.poly_model": [],
     "organism.engine.graphics.blocks.polys.poly_painter": [],
     "organism.engine.graphics.blocks.quads": [
-        "organism.engine.graphics.blocks.quads.quad_buffer",
+        "organism.engine.graphics.blocks.quads.quad_model",
         "organism.engine.graphics.blocks.quads.quad_painter",
-        "organism.engine.graphics.blocks.quads.quad_model"
+        "organism.engine.graphics.blocks.quads.quad_buffer"
     ],
     "organism.engine.graphics.blocks.quads.quad_buffer": [],
     "organism.engine.graphics.blocks.quads.quad_model": [],
     "organism.engine.graphics.blocks.quads.quad_painter": [],
     "organism.engine.graphics.blocks.sequence_gl": [],
     "organism.engine.graphics.buffer": [
-        "organism.engine.graphics.buffer.buffer_allocator",
-        "organism.engine.graphics.buffer.buffer_pointer"
+        "organism.engine.graphics.buffer.buffer_pointer",
+        "organism.engine.graphics.buffer.buffer_allocator"
     ],
     "organism.engine.graphics.buffer.buffer_allocator": [],
     "organism.engine.graphics.buffer.buffer_pointer": [],
     "organism.engine.graphics.core": [
-        "organism.engine.graphics.core.shader",
         "organism.engine.graphics.core.surface",
-        "organism.engine.graphics.core.block_gl",
-        "organism.engine.graphics.core.vertex_model",
-        "organism.engine.graphics.core.single_quad_buffer",
-        "organism.engine.graphics.core.composer_painter",
         "organism.engine.graphics.core.graphic_buffer",
-        "organism.engine.graphics.core.vertex_buffer",
-        "organism.engine.graphics.core.graph_gl"
+        "organism.engine.graphics.core.composer_painter",
+        "organism.engine.graphics.core.graph_gl",
+        "organism.engine.graphics.core.single_quad_buffer",
+        "organism.engine.graphics.core.vertex_model",
+        "organism.engine.graphics.core.block_gl",
+        "organism.engine.graphics.core.shader",
+        "organism.engine.graphics.core.vertex_buffer"
     ],
     "organism.engine.graphics.core.block_gl": [],
     "organism.engine.graphics.core.composer_painter": [],
@@ -224,15 +224,15 @@
     "organism.engine.graphics.effects": [],
     "organism.engine.graphics.viewport": [],
     "organism.engine.gui": [
+        "organism.engine.gui.features",
         "organism.engine.gui.core",
-        "organism.engine.gui.widgets",
-        "organism.engine.gui.features"
+        "organism.engine.gui.widgets"
     ],
     "organism.engine.gui.core": [
-        "organism.engine.gui.core.gui_painter",
-        "organism.engine.gui.core.auto_widget",
         "organism.engine.gui.core.box",
-        "organism.engine.gui.core.style_editor"
+        "organism.engine.gui.core.auto_widget",
+        "organism.engine.gui.core.style_editor",
+        "organism.engine.gui.core.gui_painter"
     ],
     "organism.engine.gui.core.auto_widget": [],
     "organism.engine.gui.core.box": [],
@@ -240,26 +240,26 @@
     "organism.engine.gui.core.style_editor": [],
     "organism.engine.gui.features": [
         "organism.engine.gui.features.timed",
-        "organism.engine.gui.features.tooltip",
-        "organism.engine.gui.features.window"
+        "organism.engine.gui.features.window",
+        "organism.engine.gui.features.tooltip"
     ],
     "organism.engine.gui.features.timed": [],
     "organism.engine.gui.features.tooltip": [],
     "organism.engine.gui.features.window": [],
     "organism.engine.gui.widgets": [
+        "organism.engine.gui.widgets.group",
+        "organism.engine.gui.widgets.combo",
+        "organism.engine.gui.widgets.text",
+        "organism.engine.gui.widgets.button",
+        "organism.engine.gui.widgets.table_widget",
+        "organism.engine.gui.widgets.horizontal",
+        "organism.engine.gui.widgets.list_box",
+        "organism.engine.gui.widgets.sub_window",
+        "organism.engine.gui.widgets.slider",
+        "organism.engine.gui.widgets.vertical",
         "organism.engine.gui.widgets.tab_widget",
         "organism.engine.gui.widgets.progress_bar",
-        "organism.engine.gui.widgets.vertical",
-        "organism.engine.gui.widgets.button",
-        "organism.engine.gui.widgets.list_box",
-        "organism.engine.gui.widgets.horizontal",
-        "organism.engine.gui.widgets.checkbox",
-        "organism.engine.gui.widgets.table_widget",
-        "organism.engine.gui.widgets.text",
-        "organism.engine.gui.widgets.slider",
-        "organism.engine.gui.widgets.combo",
-        "organism.engine.gui.widgets.sub_window",
-        "organism.engine.gui.widgets.group"
+        "organism.engine.gui.widgets.checkbox"
     ],
     "organism.engine.gui.widgets.button": [],
     "organism.engine.gui.widgets.checkbox": [],
@@ -277,11 +277,11 @@
     "organism.engine.profiler_service": [],
     "organism.engine.services": [
         "organism.engine.services.gui_service",
-        "organism.engine.services.game_state_service",
         "organism.engine.services.game_logic_service",
-        "organism.engine.services.event_service",
+        "organism.engine.services.gui_api",
         "organism.engine.services.text_service",
-        "organism.engine.services.gui_api"
+        "organism.engine.services.event_service",
+        "organism.engine.services.game_state_service"
     ],
     "organism.engine.services.event_service": [],
     "organism.engine.services.game_logic_service": [],
@@ -292,8 +292,8 @@
     "organism.engine.shader_service": [],
     "organism.engine.state": [
         "organism.engine.state.game_state",
-        "organism.engine.state.game_state_manager",
         "organism.engine.state.state_painter",
+        "organism.engine.state.game_state_manager",
         "organism.engine.state.game_graph"
     ],
     "organism.engine.state.game_graph": [],
@@ -308,13 +308,13 @@
         "organism.game_content.config"
     ],
     "organism.game_content.actions": [
-        "organism.game_content.actions.game_state_actions",
-        "organism.game_content.actions.utils",
-        "organism.game_content.actions.camera_actions",
         "organism.game_content.actions.gaia_editor_actions",
-        "organism.game_content.actions.dna_editor_actions",
+        "organism.game_content.actions.camera_actions",
+        "organism.game_content.actions.core_gui_actions",
         "organism.game_content.actions.avatar_actions",
-        "organism.game_content.actions.core_gui_actions"
+        "organism.game_content.actions.utils",
+        "organism.game_content.actions.game_state_actions",
+        "organism.game_content.actions.dna_editor_actions"
     ],
     "organism.game_content.actions.avatar_actions": [],
     "organism.game_content.actions.camera_actions": [],
@@ -324,17 +324,17 @@
     "organism.game_content.actions.game_state_actions": [],
     "organism.game_content.actions.utils": [],
     "organism.game_content.config": [
-        "organism.game_content.config.editor",
-        "organism.game_content.config.graphic_config",
-        "organism.game_content.config.physic_config",
         "organism.game_content.config.fluid_config",
-        "organism.game_content.config.config",
-        "organism.game_content.config.window_config",
-        "organism.game_content.config.paths",
-        "organism.game_content.config.organism_config",
+        "organism.game_content.config.graphic_config",
         "organism.game_content.config.biome_config",
+        "organism.game_content.config.organism_config",
+        "organism.game_content.config.window_config",
         "organism.game_content.config.gameplay",
-        "organism.game_content.config.inputs"
+        "organism.game_content.config.inputs",
+        "organism.game_content.config.paths",
+        "organism.game_content.config.editor",
+        "organism.game_content.config.config",
+        "organism.game_content.config.physic_config"
     ],
     "organism.game_content.config.biome_config": [],
     "organism.game_content.config.config": [],
@@ -348,20 +348,20 @@
     "organism.game_content.config.physic_config": [],
     "organism.game_content.config.window_config": [],
     "organism.game_content.painters": [
-        "organism.game_content.painters.painter_state",
         "organism.game_content.painters.painter_service",
         "organism.game_content.painters.mappers",
+        "organism.game_content.painters.painter_state",
         "organism.game_content.painters.datasources",
         "organism.game_content.painters.ingame_datasource"
     ],
     "organism.game_content.painters.datasources": [
         "organism.game_content.painters.datasources.gaia_item_datasources",
-        "organism.game_content.painters.datasources.polygon_datasources",
-        "organism.game_content.painters.datasources.link_datasources",
         "organism.game_content.painters.datasources.dna_datasources",
+        "organism.game_content.painters.datasources.polygon_datasources",
         "organism.game_content.painters.datasources.perception_datasources",
         "organism.game_content.painters.datasources.grid_link_datasource",
-        "organism.game_content.painters.datasources.powerup_datasources"
+        "organism.game_content.painters.datasources.powerup_datasources",
+        "organism.game_content.painters.datasources.link_datasources"
     ],
     "organism.game_content.painters.datasources.dna_datasources": [],
     "organism.game_content.painters.datasources.gaia_item_datasources": [],
@@ -372,10 +372,10 @@
     "organism.game_content.painters.datasources.powerup_datasources": [],
     "organism.game_content.painters.ingame_datasource": [],
     "organism.game_content.painters.mappers": [
-        "organism.game_content.painters.mappers.dna_mapper",
-        "organism.game_content.painters.mappers.fluid_mapper",
-        "organism.game_content.painters.mappers.gaia_item_mapper",
         "organism.game_content.painters.mappers.powerup_mapper",
+        "organism.game_content.painters.mappers.fluid_mapper",
+        "organism.game_content.painters.mappers.dna_mapper",
+        "organism.game_content.painters.mappers.gaia_item_mapper",
         "organism.game_content.painters.mappers.cell_mapper"
     ],
     "organism.game_content.painters.mappers.cell_mapper": [],
@@ -392,20 +392,20 @@
     "organism.game_content.sfx.sfx_library": [],
     "organism.game_content.sfx.sfx_service": [],
     "organism.gameplay": [
-        "organism.gameplay.behaviors",
-        "organism.gameplay.dna",
+        "organism.gameplay.gaia",
         "organism.gameplay.tool",
         "organism.gameplay.rules",
-        "organism.gameplay.gaia",
+        "organism.gameplay.dna",
+        "organism.gameplay.behaviors",
         "organism.gameplay.organism"
     ],
     "organism.gameplay.behaviors": [
-        "organism.gameplay.behaviors.behavior_service",
         "organism.gameplay.behaviors.target",
         "organism.gameplay.behaviors.action_service",
+        "organism.gameplay.behaviors.action",
         "organism.gameplay.behaviors.behavior",
         "organism.gameplay.behaviors.functions",
-        "organism.gameplay.behaviors.action",
+        "organism.gameplay.behaviors.behavior_service",
         "organism.gameplay.behaviors.brain"
     ],
     "organism.gameplay.behaviors.action": [],
@@ -413,23 +413,23 @@
     "organism.gameplay.behaviors.behavior": [],
     "organism.gameplay.behaviors.behavior_service": [],
     "organism.gameplay.behaviors.brain": [
+        "organism.gameplay.behaviors.brain.action_state",
         "organism.gameplay.behaviors.brain.perception_state",
-        "organism.gameplay.behaviors.brain.brain_state",
-        "organism.gameplay.behaviors.brain.action_state"
+        "organism.gameplay.behaviors.brain.brain_state"
     ],
     "organism.gameplay.behaviors.brain.action_state": [],
     "organism.gameplay.behaviors.brain.brain_state": [],
     "organism.gameplay.behaviors.brain.perception_state": [],
     "organism.gameplay.behaviors.functions": [
-        "organism.gameplay.behaviors.functions.reservoir",
-        "organism.gameplay.behaviors.functions.auto_destroy",
-        "organism.gameplay.behaviors.functions.rotate",
         "organism.gameplay.behaviors.functions.stock",
-        "organism.gameplay.behaviors.functions.shoot_action",
-        "organism.gameplay.behaviors.functions.sprint",
         "organism.gameplay.behaviors.functions.move",
+        "organism.gameplay.behaviors.functions.shoot_action",
         "organism.gameplay.behaviors.functions.follow_target",
-        "organism.gameplay.behaviors.functions.utils"
+        "organism.gameplay.behaviors.functions.auto_destroy",
+        "organism.gameplay.behaviors.functions.sprint",
+        "organism.gameplay.behaviors.functions.reservoir",
+        "organism.gameplay.behaviors.functions.utils",
+        "organism.gameplay.behaviors.functions.rotate"
     ],
     "organism.gameplay.behaviors.functions.auto_destroy": [],
     "organism.gameplay.behaviors.functions.follow_target": [],
@@ -441,10 +441,10 @@
     "organism.gameplay.behaviors.functions.stock": [],
     "organism.gameplay.behaviors.functions.utils": [],
     "organism.gameplay.behaviors.target": [
-        "organism.gameplay.behaviors.target.direction_target",
-        "organism.gameplay.behaviors.target.target",
         "organism.gameplay.behaviors.target.organism_target",
+        "organism.gameplay.behaviors.target.target",
         "organism.gameplay.behaviors.target.mouse_target",
+        "organism.gameplay.behaviors.target.direction_target",
         "organism.gameplay.behaviors.target.position_target"
     ],
     "organism.gameplay.behaviors.target.direction_target": [],
@@ -453,42 +453,42 @@
     "organism.gameplay.behaviors.target.position_target": [],
     "organism.gameplay.behaviors.target.target": [],
     "organism.gameplay.dna": [
-        "organism.gameplay.dna.model",
-        "organism.gameplay.dna.editor",
-        "organism.gameplay.dna.dna_editor_service",
         "organism.gameplay.dna.graph",
+        "organism.gameplay.dna.serializer",
+        "organism.gameplay.dna.dna_catalog_service",
         "organism.gameplay.dna.dna_provider",
         "organism.gameplay.dna.dna_service",
-        "organism.gameplay.dna.serializer",
-        "organism.gameplay.dna.dna_catalog_service"
+        "organism.gameplay.dna.model",
+        "organism.gameplay.dna.dna_editor_service",
+        "organism.gameplay.dna.editor"
     ],
     "organism.gameplay.dna.dna_catalog_service": [],
     "organism.gameplay.dna.dna_editor_service": [],
     "organism.gameplay.dna.dna_provider": [],
     "organism.gameplay.dna.dna_service": [],
     "organism.gameplay.dna.editor": [
-        "organism.gameplay.dna.editor.dna_brush",
-        "organism.gameplay.dna.editor.tools"
+        "organism.gameplay.dna.editor.tools",
+        "organism.gameplay.dna.editor.dna_brush"
     ],
     "organism.gameplay.dna.editor.dna_brush": [],
     "organism.gameplay.dna.editor.tools": [
         "organism.gameplay.dna.editor.tools.dna_multi_tool",
-        "organism.gameplay.dna.editor.tools.sculpting_tool",
+        "organism.gameplay.dna.editor.tools.tag_tool",
         "organism.gameplay.dna.editor.tools.dna_tool",
-        "organism.gameplay.dna.editor.tools.tag_tool"
+        "organism.gameplay.dna.editor.tools.sculpting_tool"
     ],
     "organism.gameplay.dna.editor.tools.dna_multi_tool": [],
     "organism.gameplay.dna.editor.tools.dna_tool": [],
     "organism.gameplay.dna.editor.tools.sculpting_tool": [],
     "organism.gameplay.dna.editor.tools.tag_tool": [],
     "organism.gameplay.dna.graph": [
+        "organism.gameplay.dna.graph.graph_editor",
         "organism.gameplay.dna.graph.graph",
         "organism.gameplay.dna.graph.data_graph",
-        "organism.gameplay.dna.graph.graph_editor",
         "organism.gameplay.dna.graph.plugins",
+        "organism.gameplay.dna.graph.hex",
         "organism.gameplay.dna.graph.hex_link",
-        "organism.gameplay.dna.graph.graph_algo",
-        "organism.gameplay.dna.graph.hex"
+        "organism.gameplay.dna.graph.graph_algo"
     ],
     "organism.gameplay.dna.graph.data_graph": [],
     "organism.gameplay.dna.graph.graph": [],
@@ -497,9 +497,9 @@
     "organism.gameplay.dna.graph.hex": [],
     "organism.gameplay.dna.graph.hex_link": [],
     "organism.gameplay.dna.graph.plugins": [
-        "organism.gameplay.dna.graph.plugins.graph_plugin",
         "organism.gameplay.dna.graph.plugins.edge_manager",
         "organism.gameplay.dna.graph.plugins.topology",
+        "organism.gameplay.dna.graph.plugins.graph_plugin",
         "organism.gameplay.dna.graph.plugins.autolink"
     ],
     "organism.gameplay.dna.graph.plugins.autolink": [],
@@ -507,13 +507,13 @@
     "organism.gameplay.dna.graph.plugins.graph_plugin": [],
     "organism.gameplay.dna.graph.plugins.topology": [],
     "organism.gameplay.dna.model": [
-        "organism.gameplay.dna.model.organism_dna",
         "organism.gameplay.dna.model.helix_dna",
-        "organism.gameplay.dna.model.cell_dna",
-        "organism.gameplay.dna.model.cell_dna_stats",
-        "organism.gameplay.dna.model.body_dna",
+        "organism.gameplay.dna.model.organism_dna",
         "organism.gameplay.dna.model.computed_dna_stats",
-        "organism.gameplay.dna.model.color_dna"
+        "organism.gameplay.dna.model.body_dna",
+        "organism.gameplay.dna.model.cell_dna_stats",
+        "organism.gameplay.dna.model.color_dna",
+        "organism.gameplay.dna.model.cell_dna"
     ],
     "organism.gameplay.dna.model.body_dna": [],
     "organism.gameplay.dna.model.cell_dna": [],
@@ -523,33 +523,33 @@
     "organism.gameplay.dna.model.helix_dna": [],
     "organism.gameplay.dna.model.organism_dna": [],
     "organism.gameplay.dna.serializer": [
-        "organism.gameplay.dna.serializer.dna_patch",
         "organism.gameplay.dna.serializer.dna_serializer",
-        "organism.gameplay.dna.serializer.graph_serializer"
+        "organism.gameplay.dna.serializer.graph_serializer",
+        "organism.gameplay.dna.serializer.dna_patch"
     ],
     "organism.gameplay.dna.serializer.dna_patch": [],
     "organism.gameplay.dna.serializer.dna_serializer": [],
     "organism.gameplay.dna.serializer.graph_serializer": [],
     "organism.gameplay.gaia": [
         "organism.gameplay.gaia.gaia_editor_service",
-        "organism.gameplay.gaia.particle",
-        "organism.gameplay.gaia.terrain",
-        "organism.gameplay.gaia.gaia_catalog_service",
         "organism.gameplay.gaia.gaia_service",
-        "organism.gameplay.gaia.powerup",
-        "organism.gameplay.gaia.gaia_item",
-        "organism.gameplay.gaia.cell",
+        "organism.gameplay.gaia.terrain",
         "organism.gameplay.gaia.serializer",
-        "organism.gameplay.gaia.editor",
-        "organism.gameplay.gaia.core",
+        "organism.gameplay.gaia.cell",
         "organism.gameplay.gaia.biomes",
-        "organism.gameplay.gaia.fluid",
-        "organism.gameplay.gaia.collision_service"
+        "organism.gameplay.gaia.collision_service",
+        "organism.gameplay.gaia.particle",
+        "organism.gameplay.gaia.core",
+        "organism.gameplay.gaia.gaia_catalog_service",
+        "organism.gameplay.gaia.gaia_item",
+        "organism.gameplay.gaia.powerup",
+        "organism.gameplay.gaia.editor",
+        "organism.gameplay.gaia.fluid"
     ],
     "organism.gameplay.gaia.biomes": [
-        "organism.gameplay.gaia.biomes.biome",
-        "organism.gameplay.gaia.biomes.biome_service",
         "organism.gameplay.gaia.biomes.spawner",
+        "organism.gameplay.gaia.biomes.biome_service",
+        "organism.gameplay.gaia.biomes.biome",
         "organism.gameplay.gaia.biomes.biome_update"
     ],
     "organism.gameplay.gaia.biomes.biome": [],
@@ -557,8 +557,8 @@
     "organism.gameplay.gaia.biomes.biome_update": [],
     "organism.gameplay.gaia.biomes.spawner": [],
     "organism.gameplay.gaia.cell": [
-        "organism.gameplay.gaia.cell.cell_tag",
         "organism.gameplay.gaia.cell.cell_service",
+        "organism.gameplay.gaia.cell.cell_tag",
         "organism.gameplay.gaia.cell.cell"
     ],
     "organism.gameplay.gaia.cell.cell": [],
@@ -566,18 +566,18 @@
     "organism.gameplay.gaia.cell.cell_tag": [],
     "organism.gameplay.gaia.collision_service": [],
     "organism.gameplay.gaia.core": [
-        "organism.gameplay.gaia.core.grid_cell",
-        "organism.gameplay.gaia.core.grid_content",
-        "organism.gameplay.gaia.core.grid_gaia",
         "organism.gameplay.gaia.core.grid_area",
-        "organism.gameplay.gaia.core.collision",
-        "organism.gameplay.gaia.core.gaia"
+        "organism.gameplay.gaia.core.grid_cell",
+        "organism.gameplay.gaia.core.grid_gaia",
+        "organism.gameplay.gaia.core.gaia",
+        "organism.gameplay.gaia.core.grid_content",
+        "organism.gameplay.gaia.core.collision"
     ],
     "organism.gameplay.gaia.core.collision": [
-        "organism.gameplay.gaia.core.collision.tags",
-        "organism.gameplay.gaia.core.collision.collision_groups",
+        "organism.gameplay.gaia.core.collision.collision_utils",
         "organism.gameplay.gaia.core.collision.collision_handler",
-        "organism.gameplay.gaia.core.collision.collision_utils"
+        "organism.gameplay.gaia.core.collision.collision_groups",
+        "organism.gameplay.gaia.core.collision.tags"
     ],
     "organism.gameplay.gaia.core.collision.collision_groups": [],
     "organism.gameplay.gaia.core.collision.collision_handler": [],
@@ -589,23 +589,23 @@
     "organism.gameplay.gaia.core.grid_content": [],
     "organism.gameplay.gaia.core.grid_gaia": [],
     "organism.gameplay.gaia.editor": [
-        "organism.gameplay.gaia.editor.gaia_brush",
-        "organism.gameplay.gaia.editor.tools"
+        "organism.gameplay.gaia.editor.tools",
+        "organism.gameplay.gaia.editor.gaia_brush"
     ],
     "organism.gameplay.gaia.editor.gaia_brush": [],
     "organism.gameplay.gaia.editor.tools": [
-        "organism.gameplay.gaia.editor.tools.gaia_multi_tool",
-        "organism.gameplay.gaia.editor.tools.gaia_item_tool",
         "organism.gameplay.gaia.editor.tools.terrain_tool",
-        "organism.gameplay.gaia.editor.tools.gaia_tool"
+        "organism.gameplay.gaia.editor.tools.gaia_tool",
+        "organism.gameplay.gaia.editor.tools.gaia_multi_tool",
+        "organism.gameplay.gaia.editor.tools.gaia_item_tool"
     ],
     "organism.gameplay.gaia.editor.tools.gaia_item_tool": [],
     "organism.gameplay.gaia.editor.tools.gaia_multi_tool": [],
     "organism.gameplay.gaia.editor.tools.gaia_tool": [],
     "organism.gameplay.gaia.editor.tools.terrain_tool": [],
     "organism.gameplay.gaia.fluid": [
-        "organism.gameplay.gaia.fluid.fluid_service",
         "organism.gameplay.gaia.fluid.lifetime_2",
+        "organism.gameplay.gaia.fluid.fluid_service",
         "organism.gameplay.gaia.fluid.fluid_tag",
         "organism.gameplay.gaia.fluid.fluid"
     ],
@@ -616,34 +616,34 @@
     "organism.gameplay.gaia.gaia_catalog_service": [],
     "organism.gameplay.gaia.gaia_editor_service": [],
     "organism.gameplay.gaia.gaia_item": [
-        "organism.gameplay.gaia.gaia_item.gaia_item",
         "organism.gameplay.gaia.gaia_item.item_tag",
-        "organism.gameplay.gaia.gaia_item.gaia_item_service"
+        "organism.gameplay.gaia.gaia_item.gaia_item_service",
+        "organism.gameplay.gaia.gaia_item.gaia_item"
     ],
     "organism.gameplay.gaia.gaia_item.gaia_item": [],
     "organism.gameplay.gaia.gaia_item.gaia_item_service": [],
     "organism.gameplay.gaia.gaia_item.item_tag": [],
     "organism.gameplay.gaia.gaia_service": [],
     "organism.gameplay.gaia.particle": [
-        "organism.gameplay.gaia.particle.particle_service",
-        "organism.gameplay.gaia.particle.particle"
+        "organism.gameplay.gaia.particle.particle",
+        "organism.gameplay.gaia.particle.particle_service"
     ],
     "organism.gameplay.gaia.particle.particle": [],
     "organism.gameplay.gaia.particle.particle_service": [],
     "organism.gameplay.gaia.powerup": [
+        "organism.gameplay.gaia.powerup.powerup_tag",
         "organism.gameplay.gaia.powerup.powerup_service",
-        "organism.gameplay.gaia.powerup.powerup",
-        "organism.gameplay.gaia.powerup.powerup_tag"
+        "organism.gameplay.gaia.powerup.powerup"
     ],
     "organism.gameplay.gaia.powerup.powerup": [],
     "organism.gameplay.gaia.powerup.powerup_service": [],
     "organism.gameplay.gaia.powerup.powerup_tag": [],
     "organism.gameplay.gaia.serializer": [
-        "organism.gameplay.gaia.serializer.gaia_serializer",
         "organism.gameplay.gaia.serializer.gaia_item_serializer",
         "organism.gameplay.gaia.serializer.area_serializer",
+        "organism.gameplay.gaia.serializer.terrain_serializer",
         "organism.gameplay.gaia.serializer.serializer_utils",
-        "organism.gameplay.gaia.serializer.terrain_serializer"
+        "organism.gameplay.gaia.serializer.gaia_serializer"
     ],
     "organism.gameplay.gaia.serializer.area_serializer": [],
     "organism.gameplay.gaia.serializer.gaia_item_serializer": [],
@@ -656,20 +656,20 @@
     "organism.gameplay.gaia.terrain.terrain_service": [],
     "organism.gameplay.organism": [
         "organism.gameplay.organism.position_finder",
-        "organism.gameplay.organism.model",
         "organism.gameplay.organism.metabolim_service",
+        "organism.gameplay.organism.model",
         "organism.gameplay.organism.creatures",
-        "organism.gameplay.organism.transform_service",
         "organism.gameplay.organism.organism_stat_service",
-        "organism.gameplay.organism.organism_service"
+        "organism.gameplay.organism.organism_service",
+        "organism.gameplay.organism.transform_service"
     ],
     "organism.gameplay.organism.creatures": [],
     "organism.gameplay.organism.metabolim_service": [],
     "organism.gameplay.organism.model": [
         "organism.gameplay.organism.model.cell_index",
-        "organism.gameplay.organism.model.organism_stats",
+        "organism.gameplay.organism.model.faction",
         "organism.gameplay.organism.model.organism",
-        "organism.gameplay.organism.model.faction"
+        "organism.gameplay.organism.model.organism_stats"
     ],
     "organism.gameplay.organism.model.cell_index": [],
     "organism.gameplay.organism.model.faction": [],
@@ -680,19 +680,19 @@
     "organism.gameplay.organism.position_finder": [],
     "organism.gameplay.organism.transform_service": [],
     "organism.gameplay.rules": [
-        "organism.gameplay.rules.damages",
-        "organism.gameplay.rules.rules_service",
         "organism.gameplay.rules.physics",
+        "organism.gameplay.rules.rules_service",
+        "organism.gameplay.rules.damages",
         "organism.gameplay.rules.collisions",
         "organism.gameplay.rules.behaviors"
     ],
     "organism.gameplay.rules.behaviors": [
+        "organism.gameplay.rules.behaviors.default_behavior",
         "organism.gameplay.rules.behaviors.avatar_behavior",
         "organism.gameplay.rules.behaviors.blocks",
         "organism.gameplay.rules.behaviors.default_move_target",
         "organism.gameplay.rules.behaviors.target_provider",
-        "organism.gameplay.rules.behaviors.default_attack_target",
-        "organism.gameplay.rules.behaviors.default_behavior"
+        "organism.gameplay.rules.behaviors.default_attack_target"
     ],
     "organism.gameplay.rules.behaviors.avatar_behavior": [],
     "organism.gameplay.rules.behaviors.blocks": [
@@ -706,9 +706,9 @@
     "organism.gameplay.rules.behaviors.default_move_target": [],
     "organism.gameplay.rules.behaviors.target_provider": [],
     "organism.gameplay.rules.collisions": [
-        "organism.gameplay.rules.collisions.fluid_collision",
+        "organism.gameplay.rules.collisions.eater_collision",
         "organism.gameplay.rules.collisions.powerup_collision",
-        "organism.gameplay.rules.collisions.eater_collision"
+        "organism.gameplay.rules.collisions.fluid_collision"
     ],
     "organism.gameplay.rules.collisions.eater_collision": [],
     "organism.gameplay.rules.collisions.fluid_collision": [],
@@ -720,15 +720,15 @@
     "organism.gameplay.rules.damages.damage": [],
     "organism.gameplay.rules.damages.damage_service": [],
     "organism.gameplay.rules.physics": [
-        "organism.gameplay.rules.physics.physic_service",
         "organism.gameplay.rules.physics.body",
-        "organism.gameplay.rules.physics.world",
-        "organism.gameplay.rules.physics.body_service"
+        "organism.gameplay.rules.physics.physic_service",
+        "organism.gameplay.rules.physics.body_service",
+        "organism.gameplay.rules.physics.world"
     ],
     "organism.gameplay.rules.physics.body": [
-        "organism.gameplay.rules.physics.body.body_wrap",
         "organism.gameplay.rules.physics.body.body_config",
-        "organism.gameplay.rules.physics.body.constraint_type"
+        "organism.gameplay.rules.physics.body.constraint_type",
+        "organism.gameplay.rules.physics.body.body_wrap"
     ],
     "organism.gameplay.rules.physics.body.body_config": [],
     "organism.gameplay.rules.physics.body.body_wrap": [],
@@ -740,50 +740,50 @@
     "organism.gameplay.tool": [],
     "organism.main": [],
     "organism.player": [
-        "organism.player.quest_service",
-        "organism.player.quest",
         "organism.player.player_service",
-        "organism.player.player"
+        "organism.player.quest_service",
+        "organism.player.player",
+        "organism.player.quest"
     ],
     "organism.player.player": [],
     "organism.player.player_service": [],
     "organism.player.quest": [],
     "organism.player.quest_service": [],
     "organism.scenes": [
+        "organism.scenes.in_game",
+        "organism.scenes.startup",
         "organism.scenes.gaia_editor",
-        "organism.scenes.scenes",
+        "organism.scenes.load_dna",
+        "organism.scenes.common",
         "organism.scenes.dna_editor",
         "organism.scenes.menus",
-        "organism.scenes.startup",
-        "organism.scenes.common",
-        "organism.scenes.in_game",
-        "organism.scenes.load_dna",
+        "organism.scenes.scenes",
         "organism.scenes.context_loader"
     ],
     "organism.scenes.common": [
-        "organism.scenes.common.common_state",
-        "organism.scenes.common.widgets"
+        "organism.scenes.common.widgets",
+        "organism.scenes.common.common_state"
     ],
     "organism.scenes.common.common_state": [],
     "organism.scenes.common.widgets": [
-        "organism.scenes.common.widgets.reload_dna_widget",
-        "organism.scenes.common.widgets.dna_catalog_widget",
-        "organism.scenes.common.widgets.player_widget",
-        "organism.scenes.common.widgets.helper",
         "organism.scenes.common.widgets.creature_widget",
         "organism.scenes.common.widgets.gaia_catalog_widget",
-        "organism.scenes.common.widgets.tool_selector_widget",
+        "organism.scenes.common.widgets.widget_utils",
         "organism.scenes.common.widgets.top_menu_widget",
-        "organism.scenes.common.widgets.widget_utils"
+        "organism.scenes.common.widgets.helper",
+        "organism.scenes.common.widgets.dna_catalog_widget",
+        "organism.scenes.common.widgets.player_widget",
+        "organism.scenes.common.widgets.reload_dna_widget",
+        "organism.scenes.common.widgets.tool_selector_widget"
     ],
     "organism.scenes.common.widgets.creature_widget": [],
     "organism.scenes.common.widgets.dna_catalog_widget": [],
     "organism.scenes.common.widgets.gaia_catalog_widget": [],
     "organism.scenes.common.widgets.helper": [
-        "organism.scenes.common.widgets.helper.status_widget",
         "organism.scenes.common.widgets.helper.debug_widget",
-        "organism.scenes.common.widgets.helper.helper_widget",
-        "organism.scenes.common.widgets.helper.painter_widget"
+        "organism.scenes.common.widgets.helper.painter_widget",
+        "organism.scenes.common.widgets.helper.status_widget",
+        "organism.scenes.common.widgets.helper.helper_widget"
     ],
     "organism.scenes.common.widgets.helper.debug_widget": [],
     "organism.scenes.common.widgets.helper.helper_widget": [],
@@ -801,10 +801,10 @@
     ],
     "organism.scenes.dna_editor.dna_editor_state": [],
     "organism.scenes.dna_editor.widgets": [
+        "organism.scenes.dna_editor.widgets.dna_widget",
         "organism.scenes.dna_editor.widgets.dna_editor_widget",
-        "organism.scenes.dna_editor.widgets.editor_config_widget",
         "organism.scenes.dna_editor.widgets.dna_stat_widget",
-        "organism.scenes.dna_editor.widgets.dna_widget"
+        "organism.scenes.dna_editor.widgets.editor_config_widget"
     ],
     "organism.scenes.dna_editor.widgets.dna_editor_widget": [],
     "organism.scenes.dna_editor.widgets.dna_stat_widget": [],
@@ -822,25 +822,25 @@
     ],
     "organism.scenes.gaia_editor.widgets.gaila_palette_widget": [],
     "organism.scenes.in_game": [
-        "organism.scenes.in_game.systems",
-        "organism.scenes.in_game.widgets",
         "organism.scenes.in_game.ecs_builder",
-        "organism.scenes.in_game.in_game_state"
+        "organism.scenes.in_game.in_game_state",
+        "organism.scenes.in_game.widgets",
+        "organism.scenes.in_game.systems"
     ],
     "organism.scenes.in_game.ecs_builder": [],
     "organism.scenes.in_game.in_game_state": [],
     "organism.scenes.in_game.systems": [
-        "organism.scenes.in_game.systems.physic_system",
-        "organism.scenes.in_game.systems.economy_system",
-        "organism.scenes.in_game.systems.organism_system",
-        "organism.scenes.in_game.systems.gaia_system",
-        "organism.scenes.in_game.systems.biome_system",
-        "organism.scenes.in_game.systems.player_system",
         "organism.scenes.in_game.systems.metabolism_system",
-        "organism.scenes.in_game.systems.audio_system",
-        "organism.scenes.in_game.systems.spawn_system",
+        "organism.scenes.in_game.systems.player_system",
+        "organism.scenes.in_game.systems.biome_system",
         "organism.scenes.in_game.systems.behavior_system",
-        "organism.scenes.in_game.systems.fluid_system"
+        "organism.scenes.in_game.systems.fluid_system",
+        "organism.scenes.in_game.systems.gaia_system",
+        "organism.scenes.in_game.systems.economy_system",
+        "organism.scenes.in_game.systems.audio_system",
+        "organism.scenes.in_game.systems.physic_system",
+        "organism.scenes.in_game.systems.organism_system",
+        "organism.scenes.in_game.systems.spawn_system"
     ],
     "organism.scenes.in_game.systems.audio_system": [],
     "organism.scenes.in_game.systems.behavior_system": [],
@@ -854,11 +854,11 @@
     "organism.scenes.in_game.systems.player_system": [],
     "organism.scenes.in_game.systems.spawn_system": [],
     "organism.scenes.in_game.widgets": [
+        "organism.scenes.in_game.widgets.quest_widget",
         "organism.scenes.in_game.widgets.resources_widget",
-        "organism.scenes.in_game.widgets.biome_widget",
         "organism.scenes.in_game.widgets.metabolism_widget",
         "organism.scenes.in_game.widgets.gaming_widget",
-        "organism.scenes.in_game.widgets.quest_widget"
+        "organism.scenes.in_game.widgets.biome_widget"
     ],
     "organism.scenes.in_game.widgets.biome_widget": [],
     "organism.scenes.in_game.widgets.gaming_widget": [],
@@ -866,18 +866,18 @@
     "organism.scenes.in_game.widgets.quest_widget": [],
     "organism.scenes.in_game.widgets.resources_widget": [],
     "organism.scenes.load_dna": [
-        "organism.scenes.load_dna.load_dna_state",
-        "organism.scenes.load_dna.widgets"
+        "organism.scenes.load_dna.widgets",
+        "organism.scenes.load_dna.load_dna_state"
     ],
     "organism.scenes.load_dna.load_dna_state": [],
     "organism.scenes.load_dna.widgets": [],
     "organism.scenes.menus": [
-        "organism.scenes.menus.main_menu",
-        "organism.scenes.menus.option_menu"
+        "organism.scenes.menus.option_menu",
+        "organism.scenes.menus.main_menu"
     ],
     "organism.scenes.menus.main_menu": [
-        "organism.scenes.menus.main_menu.widgets",
-        "organism.scenes.menus.main_menu.main_menu_state"
+        "organism.scenes.menus.main_menu.main_menu_state",
+        "organism.scenes.menus.main_menu.widgets"
     ],
     "organism.scenes.menus.main_menu.main_menu_state": [],
     "organism.scenes.menus.main_menu.widgets": [
@@ -890,11 +890,11 @@
     ],
     "organism.scenes.menus.option_menu.option_menu_state": [],
     "organism.scenes.menus.option_menu.widgets": [
-        "organism.scenes.menus.option_menu.widgets.option_menu_widget",
-        "organism.scenes.menus.option_menu.widgets.graphic_widget",
         "organism.scenes.menus.option_menu.widgets.controller_widget",
-        "organism.scenes.menus.option_menu.widgets.physic_widget",
-        "organism.scenes.menus.option_menu.widgets.sound_widget"
+        "organism.scenes.menus.option_menu.widgets.option_menu_widget",
+        "organism.scenes.menus.option_menu.widgets.sound_widget",
+        "organism.scenes.menus.option_menu.widgets.graphic_widget",
+        "organism.scenes.menus.option_menu.widgets.physic_widget"
     ],
     "organism.scenes.menus.option_menu.widgets.controller_widget": [],
     "organism.scenes.menus.option_menu.widgets.graphic_widget": [],
@@ -904,22 +904,22 @@
     "organism.scenes.scenes": [],
     "organism.scenes.startup": [],
     "organism.utils": [
-        "organism.utils.serializer",
-        "organism.utils.profiler",
-        "organism.utils.shapes",
         "organism.utils.graph_test_case",
-        "organism.utils.task_manager",
+        "organism.utils.profiler",
         "organism.utils.allocator",
-        "organism.utils.periodic_provider"
+        "organism.utils.shapes",
+        "organism.utils.periodic_provider",
+        "organism.utils.serializer",
+        "organism.utils.task_manager"
     ],
     "organism.utils.allocator": [],
     "organism.utils.graph_test_case": [],
     "organism.utils.periodic_provider": [],
     "organism.utils.profiler": [],
     "organism.utils.serializer": [
-        "organism.utils.serializer.report",
         "organism.utils.serializer.json_encoder",
-        "organism.utils.serializer.serializer_utils"
+        "organism.utils.serializer.serializer_utils",
+        "organism.utils.serializer.report"
     ],
     "organism.utils.serializer.json_encoder": [],
     "organism.utils.serializer.report": [],

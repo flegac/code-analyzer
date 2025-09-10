@@ -12,9 +12,9 @@ class CodeStats:
     lines: int = 0
     imports: int = 0
     imported: int = 0
-    class_count: int = 0
-    function_count: int = 0
-    method_count: int = 0
+    classes: int = 0
+    functions: int = 0
+    methods: int = 0
     loops: int = 0
     branches: int = 0
 
@@ -23,9 +23,9 @@ class CodeStats:
             self.lines += other.lines
         self.imports += other.imports
         self.imported += other.imported
-        self.class_count += other.class_count
-        self.function_count += other.function_count
-        self.method_count += other.method_count
+        self.classes += other.classes
+        self.functions += other.functions
+        self.methods += other.methods
         self.loops += other.loops
         self.branches += other.branches
 
@@ -34,9 +34,9 @@ class CodeStats:
             'lines': self.lines,
             'imports': self.imports,
             'imported': self.imported,
-            'class_count': self.class_count,
-            'function_count': self.function_count,
-            'method_count': self.method_count,
+            'classes': self.classes,
+            'functions': self.functions,
+            'methods': self.methods,
             'loops': self.loops,
             'branches': self.branches,
         }
@@ -92,9 +92,9 @@ class AggregatedCodeStats:
             lines=AggregatedStats.aggregate([_.lines for _ in values]),
             imports=AggregatedStats.aggregate([_.imports for _ in values]),
             imported=AggregatedStats.aggregate([_.imported for _ in values]),
-            class_count=AggregatedStats.aggregate([_.class_count for _ in values]),
-            function_count=AggregatedStats.aggregate([_.function_count for _ in values]),
-            method_count=AggregatedStats.aggregate([_.method_count for _ in values]),
+            class_count=AggregatedStats.aggregate([_.classes for _ in values]),
+            function_count=AggregatedStats.aggregate([_.functions for _ in values]),
+            method_count=AggregatedStats.aggregate([_.methods for _ in values]),
             loops=AggregatedStats.aggregate([_.loops for _ in values]),
             branches=AggregatedStats.aggregate([_.branches for _ in values]),
         )
