@@ -1,14 +1,13 @@
 class TreeView {
-    constructor(container_id = 'module-tree') {
-        this.container = createDiv(container_id, 'my-box');
+    constructor() {
+        this.container = window.document.createElement('div');
         loadCSS("https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.83/dist/themes/light.css");
         loadScript("https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.83/dist/shoelace.js", true);
     }
 
-    render(rawData) {
-
-        const moduleSet = new Set(Object.keys(rawData));
-        Object.values(rawData).forEach(arr => arr.forEach(id => moduleSet.add(id)));
+    rebuild(hierarchy) {
+        const moduleSet = new Set(Object.keys(hierarchy));
+        Object.values(hierarchy).forEach(arr => arr.forEach(id => moduleSet.add(id)));
         const modules = Array.from(moduleSet).map(id => {
             return id.includes('.') ? id : `others.${id}`;
         });

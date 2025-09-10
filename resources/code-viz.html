@@ -7,6 +7,15 @@
     <script src="https://unpkg.com/chroma-js@2.4.2/chroma.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js"></script>
 
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="https://golden-layout.com/files/latest/js/goldenlayout.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://golden-layout.com/files/latest/css/goldenlayout-base.css"/>
+    <link type="text/css" rel="stylesheet"
+          href="https://golden-layout.com/files/latest/css/goldenlayout-dark-theme.css"/>
+
+
+    <script src="https://unpkg.com/3d-force-graph"></script>
+
     <script src="web/relation.js"></script>
     <script src="web/my-graph.js"></script>
     <script src="web/tree-view.js"></script>
@@ -21,24 +30,72 @@
 <body>
 
 <script>
-    const graph = new MyGraph();
+    var config = {
+        settings: {
+            // hasHeaders: false,
+        },
+        content: [{
+            type: 'row',
+            content: [
+                {
+                    type: 'component',
+                    componentName: 'tree-view',
+                    componentState: {label: 'Tree View'},
+                    width: 20,
+                },
+                {
+                    type: 'stack',
+                    content: [
+                        {
+                            type: 'component',
+                            componentName: 'graph-view',
+                            componentState: {label: 'Graph View'}
+                        }, {
+                            type: 'component',
+                            componentName: 'table-view',
+                            componentState: {label: 'Table View'}
+                        },
+                    ]
+                }]
+        }]
+    };
 
-    const controller = new GraphController(graph);
+    const graph = new MyGraph();
+    const tree = new TreeView();
+    const infos = new Infos();
+    const controller = new GraphController(graph, tree, infos);
+    const table = new TableView();
+
+    var myLayout = new GoldenLayout(config);
+    myLayout.registerComponent('tree-view', function (container, componentState) {
+        (async () => {
+            container.getElement().append(infos.container);
+            container.getElement().append(controller.gui.domElement);
+            container.getElement().append(tree.container);
+
+
+            const hierarchy = await controller.hierarchy();
+            tree.rebuild(hierarchy);
+        })();
+    });
+
+    myLayout.registerComponent('graph-view', function (container, componentState) {
+        container.getElement().append(graph.container);
+    });
+
+    myLayout.registerComponent('table-view', function (container, componentState) {
+        (async () => {
+            const data = await controller.moduleInfos();
+            await table.rebuild(data);
+            container.getElement().append(table.container);
+        })();
+
+    });
+
 
     window.addEventListener('DOMContentLoaded', () => controller.loadGraph());
-    window.addEventListener('resize', () => {
-        if (!controller.graph.graph) return;
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-        controller.graph.graph.width(width);
-        controller.graph.graph.height(height);
+    myLayout.init();
 
-        const renderer = controller.graph.graph.renderer();
-        const camera = controller.graph.graph.camera();
-        renderer.setSize(width, height);
-        camera.aspect = width / height;
-        camera.updateProjectionMatrix();
-    });
 </script>
 
 </body>

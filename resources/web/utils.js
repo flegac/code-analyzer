@@ -1,8 +1,11 @@
-function createDiv(id, classes = null) {
+function createDiv(id, classes = null, parent = null) {
+    if (parent === null) {
+        parent = document.body;
+    }
     const container = document.createElement('div');
     container.id = id;
     if (classes !== null) container.className = classes;
-    document.body.appendChild(container);
+    parent.appendChild(container);
     return container
 }
 
@@ -17,7 +20,7 @@ function loadCss(path) {
         .catch(error => console.error('Erreur de chargement CSS :', error));
 }
 
-function loadScript(src, module = false, callback) {
+async function loadScript(src, module = false, callback) {
     const s = document.createElement('script');
     s.src = src;
     if (module !== false) s.type = 'module';
@@ -25,9 +28,30 @@ function loadScript(src, module = false, callback) {
     document.head.appendChild(s);
 }
 
+function loadScriptAsync(src) {
+    return new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = src;
+        s.onload = resolve;
+        s.onerror = reject;
+        document.head.appendChild(s);
+    });
+}
+
 function loadCSS(href) {
     const l = document.createElement('link');
     l.rel = 'stylesheet';
     l.href = href;
     document.head.appendChild(l);
+}
+
+async function loadCSSAsync(href) {
+    return new Promise((resolve, reject) => {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = href;
+        link.onload = () => resolve();
+        link.onerror = () => reject(new Error(`Erreur de chargement CSS : ${href}`));
+        document.head.appendChild(link);
+    });
 }

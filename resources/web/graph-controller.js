@@ -1,12 +1,8 @@
 class GraphController {
-    constructor(graph) {
-        this.container = createDiv('controller');
-        this.tree = new TreeView();
-        this.container.appendChild(this.tree.container);
-
+    constructor(graph, tree, infos) {
         this.graph = graph;
-        this.table = new TableView();
-        this.infos = new Infos();
+        this.tree = tree;
+        this.infos = infos;
 
         this.params = {
             dependenciesPath: 'data/dependencies.json',
@@ -52,7 +48,7 @@ class GraphController {
             'branches'
         ])
             .name('nodeSize')
-            .onChange(() => this.directGraph().nodeVal(node => node.infos[this.params.nodeSize]))
+            .onChange(() => this.graph.graph.nodeVal(node => node.infos[this.params.nodeSize]))
         ;
 
         this.gui.add(this.params, 'chargeStrength', 1, 100, 0.1)
@@ -78,10 +74,6 @@ class GraphController {
         this.gui.add(this.params, 'reload').name('Reload');
     }
 
-    directGraph() {
-        return this.graph.graph;
-    }
-
     async dependencies() {
         return await fetch(this.params.dependenciesPath).then(res => res.json());
     }
@@ -94,8 +86,16 @@ class GraphController {
         return await fetch(this.params.infosPath).then(res => res.json());
     }
 
-    updateGraph() {
-        this.graph.updateGraph(this);
+
+    async loadGraph() {
+        try {
+            const hierarchy = await this.hierarchy();
+            await this.rebuildGraph();
+            this.tree.rebuild(hierarchy);
+            this.infos.rebuild(this.graph)
+        } catch (err) {
+            alert('Erreur lors du chargement du JSON : ' + err.message);
+        }
     }
 
     async rebuildGraph() {
@@ -103,28 +103,13 @@ class GraphController {
         const hierarchy = await this.hierarchy();
         const infos = await this.moduleInfos();
         this.graph.renderGraph(hierarchy, dependencies, infos, this.params);
+
         this.updateGraph();
     }
 
-
-    async loadGraph() {
-        try {
-            const dependencies = await this.dependencies();
-            const hierarchy = await this.hierarchy();
-            const infos = await this.moduleInfos();
-            await this.rebuildGraph();
-
-            this.infos.render(this.graph);
-            this.tree.render(dependencies);
-            this.table.render(infos);
-
-            const scene = this.graph.graph.scene();
-
-            const axesHelper = new THREE.AxesHelper(500); // taille des axes
-            axesHelper.position.set(0, 0, 0);
-            scene.add(axesHelper);
-        } catch (err) {
-            alert('Erreur lors du chargement du JSON : ' + err.message);
-        }
+    updateGraph() {
+        this.graph.updateGraph(this);
     }
+
+
 }

@@ -2,8 +2,6 @@ class MyGraph {
     constructor() {
         this.container = createDiv('graph');
         this.graph = null;
-        loadScript("https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js");
-        loadScript("https://cdn.jsdelivr.net/npm/3d-force-graph");
     }
 
     build(hierarchy, dependencies, infos, params) {
@@ -13,6 +11,8 @@ class MyGraph {
 
         this.dependencies = new Relation('dependencies', dependencies);
         this.hierarchy = new Relation('hierarchy', hierarchy);
+
+
 
         for (const id of Object.keys(dependencies)) {
             const usedBy = this.dependencies.usedBy[id]?.length || 0;
@@ -57,13 +57,11 @@ class MyGraph {
             }
         }
         this.grouping = new Relation('grouping', groupGraph);
-        console.log(this.grouping);
     }
 
 
     updateGraph(control) {
         // let group = id.split('.').slice(0, control.params.groupHierarchyDepth).join('.');
-
 
         this.graph.numDimensions(control.params.dimension);
         this.graph.d3Force('link').distance(10 * control.params.linkDistance);
