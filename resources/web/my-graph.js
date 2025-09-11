@@ -2,66 +2,94 @@ class MyGraph {
     constructor() {
         this.container = createDiv('graph');
         this.graph = null;
+        this.groups = new Set();
+        this.paletteGenerator = chroma
+            .scale(['#f00', '#0f0', '#00f',])
+            // .mode('lab')           // interpolation en CIE Lab (perceptuellement uniforme)
+            // .mode('lch')
+            .mode('hsl');
     }
 
-    build(hierarchy, dependencies, infos, params) {
+    updateColors() {
+        // compute color map
+        const uniqueGroups = Array.from(new Set(this.nodes.map(node => node.group)));
+        const k = uniqueGroups.length;
+        const palette = this.paletteGenerator.colors(k)
+        const decal = 0; //1 + Math.round(k / 3)
+        this.groupColors = {};
+        uniqueGroups.forEach((grp, idx) => {
+            this.groupColors[grp] = palette[(idx + decal) % k];
+        });
+        // fix nodes
+        this.nodes.forEach(node => {
+            node.color = this.groupColors[node.group];
+        });
+    }
+
+    updateGroups() {
+        const groups = this.groups;
+
+        for (let node of Object.values(this.nodesMap)) {
+            const id = node.id;
+            let parts = id.split('.');
+            let group = id;
+            for (let i = 1; i < parts.length; i++) {
+                let g = parts.slice(0, -i).join('.')
+                if (groups.has(g)) {
+                    group = g;
+                    break;
+                }
+            }
+            if (node.usedBy === 0) {
+                group = '__source__';
+            }
+            if (node.dependOn === 0) {
+                group = '__sink__'
+            }
+            if (node.dependOn === 0 && node.usedBy === 0) {
+                group = '__disconnected__'
+            }
+            node.group = group;
+            node.infos['group'] = group;
+        }
+        this.updateColors()
+    }
+
+    rebuild(hierarchy, dependencies, infos, params) {
         this.nodes = [];
-        this.groups = {};
         this.nodesMap = {};
+        this.dependencies = dependencies;
+        this.hierarchy = hierarchy;
 
-        this.dependencies = new Relation('dependencies', dependencies);
-        this.hierarchy = new Relation('hierarchy', hierarchy);
-
-
-
-        for (const id of Object.keys(dependencies)) {
+        for (const id of dependencies.nodes) {
             const usedBy = this.dependencies.usedBy[id]?.length || 0;
             const dependOn = this.dependencies.dependOn[id]?.length || 0;
             const radius = this.dependencies.usedBy[id]?.length || 0;
-
             let group = id.split('.').slice(0, params.groupHierarchyDepth).join('.');
-            if (usedBy === 0) {
-                group = '__source__';
-            }
-            if (dependOn === 0) {
-                group = '__sink__'
-            }
-            if (dependOn === 0 && usedBy === 0) {
-                group = '__disconnected__'
-            }
-
-            this.groups[group] = this.groups[group] || [];
-            this.groups[group].push(id);
+            const xxx = infos[id] || {};
+            xxx['group'] = group;
             const node = {
                 id,
                 group: group,
                 radius: radius,
                 usedBy: usedBy,
                 dependOn: dependOn,
-                infos: infos[id] || {}, // x,y,z are induced by forces
+                infos: xxx,
+                // x,y,z are induced by forces
             };
             this.nodesMap[id] = node;
             this.nodes.push(node);
         }
 
-        const groupGraph = {}
-        for (let [key, group] of Object.entries(this.groups)) {
-            const n = group.length;
-            for (let i = 0; i < n; i++) {
-                for (let j = i + 1; j < n; j++) {
-                    const a = group[i];
-                    const b = group[j];
-                    groupGraph[a] = groupGraph[a] || [];
-                    groupGraph[a].push(b);
-                }
-            }
-        }
-        this.grouping = new Relation('grouping', groupGraph);
+        this.updateGroups()
+
     }
 
 
     updateGraph(control) {
         // let group = id.split('.').slice(0, control.params.groupHierarchyDepth).join('.');
+
+        this.updateGroups();
 
         this.graph.numDimensions(control.params.dimension);
         this.graph.d3Force('link').distance(10 * control.params.linkDistance);
@@ -108,9 +136,9 @@ class MyGraph {
             });
         }
 
-        // graph.graphInstance.d3ReheatSimulation();
-        // this.graphInstance.cooldownTicks(Infinity);
-        // this.graphInstance.pauseAnimation();
+        // this.graph.d3ReheatSimulation();
+        // this.graph.cooldownTicks(Infinity);
+        // this.graph.pauseAnimation();
     }
 
 
@@ -120,7 +148,7 @@ class MyGraph {
             this.graph._destructor(); // méthode interne pour libérer les ressources
         }
 
-        this.build(hierarchy, dependencies, infos, params);
+        this.rebuild(hierarchy, dependencies, infos, params);
         // this.updateColors(paletteGenerator)
         const nodesMap = this.nodesMap;
         const nodes = this.nodes;
@@ -181,16 +209,6 @@ class MyGraph {
             this.graph.height(this.container.clientHeight);
         });
         resizeObserver.observe(this.container);
-
-        // setTimeout(() => {
-        //     // graphInstance.d3Force('prefixCollide')?.strength(0);
-        //     // graphInstance.d3Force('charge')?.strength(-200);
-        //     // graphInstance.d3Force('link').distance(100);
-        //     // console.log(graphInstance.d3Force('link').strength(2.));
-        //     // console.log(graphInstance.d3Force('charge').strength()());
-        //     // graphInstance.d3Force('link')?.strength(.5);
-        //     console.log('Simulation arrêtée pour économiser les ressources.');
-        // }, 1500); // ou plus selon la taille du graphe
     }
 
 }

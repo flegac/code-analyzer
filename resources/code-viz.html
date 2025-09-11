@@ -7,6 +7,7 @@
     <script src="https://unpkg.com/chroma-js@2.4.2/chroma.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js"></script>
 
+
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script type="text/javascript" src="https://golden-layout.com/files/latest/js/goldenlayout.min.js"></script>
     <link type="text/css" rel="stylesheet" href="https://golden-layout.com/files/latest/css/goldenlayout-base.css"/>
@@ -64,15 +65,20 @@
     const tree = new TreeView();
     const infos = new Infos();
     const controller = new GraphController(graph, tree, infos);
+    tree.onUpdate = groups => {
+        console.log(groups);
+        graph.groups=groups;
+        controller.rebuildGraph();
+    };
     const table = new TableView();
 
     var myLayout = new GoldenLayout(config);
     myLayout.registerComponent('tree-view', function (container, componentState) {
         (async () => {
-            container.getElement().append(infos.container);
-            container.getElement().append(controller.gui.domElement);
-            container.getElement().append(tree.container);
-
+            let elt = container.getElement();
+            elt.append(infos.container);
+            elt.append(controller.gui.domElement);
+            elt.append(tree.container);
 
             const hierarchy = await controller.hierarchy();
             tree.rebuild(hierarchy);

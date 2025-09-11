@@ -75,11 +75,14 @@ class GraphController {
     }
 
     async dependencies() {
-        return await fetch(this.params.dependenciesPath).then(res => res.json());
+        const raw = await fetch(this.params.dependenciesPath).then(res => res.json());
+        return new Relation('dependencies', raw);
+
     }
 
     async hierarchy() {
-        return await fetch(this.params.hierarchyPath).then(res => res.json());
+        const raw = await fetch(this.params.hierarchyPath).then(res => res.json());
+        return new Relation('hierarchy', raw);
     }
 
     async moduleInfos() {
