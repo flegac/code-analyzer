@@ -1,6 +1,11 @@
+import hashlib
 from dataclasses import dataclass
 from functools import cache, cached_property
 from pathlib import Path
+
+import libcst as cst
+from easy_kit.timing import time_func
+from libcst import MetadataWrapper
 
 PYTHON_INIT = '__init__'
 PYTHON_SUFFIX = '.py'
@@ -8,9 +13,12 @@ PYTHON_MODULE_PATTERN = '*.py'
 MODULE_SEPARATOR = '.'
 
 
-@dataclass(frozen=True)
+@dataclass
 class Module:
     parts: tuple[str, ...]
+    content_id: str | None = None
+    _code: str | None = None
+    _tree: MetadataWrapper | None = None
 
     @staticmethod
     def from_path(root: Path, path: Path):
@@ -56,8 +64,22 @@ class Module:
             return init_path
         raise FileNotFoundError(f'neither {base}{PYTHON_SUFFIX} nor {PYTHON_INIT}{PYTHON_SUFFIX} found')
 
-    def read_code(self, root: Path):
-        return self.path_from_root(root).read_text(encoding="utf-8")
+    def is_update_required(self, root: Path) -> bool:
+        path = self.path_from_root(root)
+        content_id = hash_file(path)
+        return content_id != self.content_id
+
+    @time_func
+    def get_tree(self, root: Path):
+        path = self.path_from_root(root)
+        content_id = hash_file(path)
+        if content_id != self.content_id:
+            self.content_id = content_id
+            self._code = path.read_text(encoding="utf-8")
+            tree = cst.parse_module(self._code)
+            wrapper = MetadataWrapper(tree)
+            self._tree = wrapper
+        return self._tree
 
     def check(self):
         for _ in self.parts:
@@ -72,3 +94,12 @@ class Module:
 
     def __repr__(self):
         return self.full_name
+
+
+@time_func
+def hash_file(path):
+    hasher = hashlib.md5()
+    with open(path, 'rb') as f:
+        for chunk in iter(lambda: f.read(8192), b''):
+            hasher.update(chunk)
+    return hasher.hexdigest()

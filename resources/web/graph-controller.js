@@ -10,7 +10,7 @@ class GraphController {
             infosPath: 'data/modules.json',
             dimension: 3,
             groupHierarchyDepth: 2,
-            nodeSize: 'lines',
+            nodeSize: 'branches',
             chargeStrength: 50,
             linkDistance: 10,
             groupDistance: 50,

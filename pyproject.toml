@@ -8,6 +8,7 @@ authors = [
 ]
 requires-python = ">=3.13"
 dependencies = [
+    "easy-kit>=0.1.25",
     "libcst>=1.8.2",
     "loguru>=0.7.3",
     "tabulate>=0.9.0",

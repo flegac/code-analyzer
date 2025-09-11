@@ -7,6 +7,7 @@ name = "code-analyzer"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "easy-kit" },
     { name = "libcst" },
     { name = "loguru" },
     { name = "tabulate" },
@@ -15,6 +16,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "easy-kit", specifier = ">=0.1.25" },
     { name = "libcst", specifier = ">=1.8.2" },
     { name = "loguru", specifier = ">=0.7.3" },
     { name = "tabulate", specifier = ">=0.9.0" },
@@ -28,6 +30,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/d8/53/6f443c9a4a8358a93a6792e2acffb9d9d5cb0a5cfd8802644b7b1c9a02e4/colorama-0.4.6.tar.gz", hash = "sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44", size = 27697, upload-time = "2022-10-25T02:36:22.414Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/d1/d6/3965ed04c63042e047cb6a3e6ed1a63a35087b6a609aa3a15ed8ac56c221/colorama-0.4.6-py2.py3-none-any.whl", hash = "sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6", size = 25335, upload-time = "2022-10-25T02:36:20.889Z" },
+]
+
+[[package]]
+name = "easy-kit"
+version = "0.1.25"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/73/09/f6ae6ccc41004dec2ae5777c973f0cde74089bbd55dbd95adb291c2f12b3/easy_kit-0.1.25.tar.gz", hash = "sha256:ce2aca6b9521a6ed3a098dc3dd46378083d1a3f95a76203f32e1ca28c4193591", size = 5970, upload-time = "2025-07-30T21:23:19.27Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/60/f1/871cb6e63f2970e78ed4b8182e8366edcc67118be8d32071e287c201136a/easy_kit-0.1.25-py3-none-any.whl", hash = "sha256:d4b1bbd69f95f97eb52bbf72ba8de8b538572dc609a54eb880a559747f8cded7", size = 7364, upload-time = "2025-07-30T21:23:18.473Z" },
 ]
 
 [[package]]

@@ -2,6 +2,8 @@ import json
 from dataclasses import dataclass
 from pathlib import Path
 
+from easy_kit.timing import time_func
+
 from code_analyzer.project.link import Link
 from code_analyzer.project.module import Module
 
@@ -20,6 +22,7 @@ class Relation:
         )
 
     @staticmethod
+    @time_func
     def hierarchy(modules: set[Module]):
         return Relation(
             name='hierarchy',
@@ -46,7 +49,7 @@ class Relation:
             res[a.full_name].add(b.full_name)
 
         return {
-            k: list(v)
+            k: list(sorted(v))
             for k, v in res.items()
         }
 

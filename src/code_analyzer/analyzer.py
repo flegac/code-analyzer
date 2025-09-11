@@ -4,14 +4,12 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from pprint import pprint
 
-import libcst as cst
 import tqdm
-from libcst import MetadataWrapper
+from easy_kit.timing import time_func
 
-from code_analyzer.project.link import Link
+from code_analyzer.dependencies.dependency_analyzer import DependencyAnalyzer
 from code_analyzer.project.module import Module
 from code_analyzer.project.project import Project
-from code_analyzer.project.relation import Relation
 from code_analyzer.stats.code_stats import AggregatedCodeStats
 from code_analyzer.stats.module_stats_visitor import ModuleStatsVisitor
 
@@ -21,6 +19,7 @@ class ProjectAnalyzer:
     project: Project
     modules: dict[str, ModuleStatsVisitor] = field(default_factory=lambda: defaultdict(ModuleStatsVisitor))
 
+    @time_func
     def refresh_all(self):
         for _ in tqdm.tqdm(self.project.modules):
             self.refresh(_)
@@ -28,12 +27,10 @@ class ProjectAnalyzer:
         for module in self.project.modules:
             self.update_imported(module)
 
+    @time_func
     def refresh(self, module: Module):
         visitor = self.modules[module.full_name]
-        code = module.read_code(self.project.root)
-        tree = cst.parse_module(code)
-        tree_wrapper = MetadataWrapper(tree)
-        tree_wrapper.visit(visitor)
+        module.get_tree(self.project.root).visit(visitor)
 
     def update_imported(self, module: Module):
         count = 0
@@ -41,18 +38,6 @@ class ProjectAnalyzer:
             if module in v.imported_modules:
                 count += 1
         self.modules[module.full_name].stats.imported = count
-
-    def dependencies(self):
-        nodes = set(self.project.modules)
-        links = set()
-        for a, stats in self.modules.items():
-            a_mod = Module.new(a)
-            nodes.add(a_mod)
-            for b in stats.imported_modules:
-                nodes.add(b)
-                links.add(Link(a_mod, b))
-
-        return Relation(name='dependencies', nodes=nodes, links=links)
 
     def infos(self):
         return {
@@ -67,13 +52,14 @@ class ProjectAnalyzer:
         ])
 
 
+@time_func
 def analyze_project(project: Project, output_dir: Path) -> None:
     analyzer = ProjectAnalyzer(project)
     analyzer.refresh_all()
 
     graphs = [
         analyzer.project.hierarchy(),
-        analyzer.dependencies()
+        DependencyAnalyzer(project).analyze()
     ]
     for graph in graphs:
         graph.dump2(output_dir)

@@ -4,12 +4,14 @@ from pathlib import Path
 from code_analyzer.project.module import PYTHON_MODULE_PATTERN, Module
 from code_analyzer.project.relation import Relation
 
+ModuleId = str
+
 
 class Project:
     def __init__(self, root: Path | str) -> None:
         self.root = Path(root).absolute()
         self.modules: set[Module] = set()
-        self.files: dict[str, Path] = {}
+        self.files: dict[ModuleId, Path] = {}
 
     def refresh(self, path: Path = None):
         if path is None:

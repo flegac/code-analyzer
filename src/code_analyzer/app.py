@@ -1,8 +1,12 @@
 import sys
 from pathlib import Path
 
+from easy_kit.timing import setup_timing
+
 from code_analyzer.analyzer import analyze_project
 from code_analyzer.project.project import Project
+
+setup_timing()
 
 if __name__ == "__main__":
     project_root = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("/home/flo/Documents/workspace/organism/src")

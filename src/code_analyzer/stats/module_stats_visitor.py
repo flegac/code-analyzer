@@ -4,19 +4,10 @@ from typing import Optional
 import libcst as cst
 from libcst.metadata import PositionProvider, ParentNodeProvider, ScopeProvider
 
+from code_analyzer.dependencies.dependency_visitor import _extract_module
 from code_analyzer.project.module import Module
 from code_analyzer.stats.code_stats import CodeStats
 from code_analyzer.stats.stack_context import StackContext
-
-
-def _extract_module(node: cst.BaseExpression) -> Module:
-    parts = []
-    while isinstance(node, cst.Attribute):
-        parts.insert(0, node.attr.value)
-        node = node.value
-    if isinstance(node, cst.Name):
-        parts.insert(0, node.value)
-    return Module.new(tuple(parts))
 
 
 class ModuleStatsVisitor(cst.CSTVisitor):
