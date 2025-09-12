@@ -4,7 +4,7 @@ from typing import Optional
 import libcst as cst
 from libcst.metadata import PositionProvider, ParentNodeProvider, ScopeProvider
 
-from code_analyzer.dependencies.dependency_visitor import _extract_module
+from code_analyzer.dependencies.dependency_analyzer import _extract_module
 from code_analyzer.project.module import Module
 from code_analyzer.stats.code_stats import CodeStats
 from code_analyzer.stats.stack_context import StackContext

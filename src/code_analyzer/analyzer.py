@@ -59,10 +59,10 @@ def analyze_project(project: Project, output_dir: Path) -> None:
 
     graphs = [
         analyzer.project.hierarchy(),
-        DependencyAnalyzer(project).analyze()
+        DependencyAnalyzer().analyze(project)
     ]
     for graph in graphs:
-        graph.dump2(output_dir)
+        graph.dump(output_dir)
 
     aggregate_stats = analyzer.aggregate_stats()
     pprint(aggregate_stats)

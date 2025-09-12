@@ -1,24 +1,21 @@
-import hashlib
 from dataclasses import dataclass
 from functools import cache, cached_property
 from pathlib import Path
 
-import libcst as cst
 from easy_kit.timing import time_func
 from libcst import MetadataWrapper
+from tree_sitter import Tree, QueryCursor, Query
 
-PYTHON_INIT = '__init__'
-PYTHON_SUFFIX = '.py'
-PYTHON_MODULE_PATTERN = '*.py'
-MODULE_SEPARATOR = '.'
+from code_analyzer.project.tree_parser import TreeParser
+from code_analyzer.project.utils import PYTHON_INIT, PYTHON_SUFFIX, MODULE_SEPARATOR, hash_file
 
 
 @dataclass
 class Module:
     parts: tuple[str, ...]
     content_id: str | None = None
-    _code: str | None = None
-    _tree: MetadataWrapper | None = None
+    _source: bytes | None = None
+    _tree: Tree | MetadataWrapper | None = None
 
     @staticmethod
     def from_path(root: Path, path: Path):
@@ -70,15 +67,14 @@ class Module:
         return content_id != self.content_id
 
     @time_func
-    def get_tree(self, root: Path):
+    def update(self, root: Path, parser: TreeParser):
         path = self.path_from_root(root)
         content_id = hash_file(path)
         if content_id != self.content_id:
             self.content_id = content_id
-            self._code = path.read_text(encoding="utf-8")
-            tree = cst.parse_module(self._code)
-            wrapper = MetadataWrapper(tree)
-            self._tree = wrapper
+            self._source = path.read_bytes()
+            self._tree = parser.get_tree(self._source)
+
         return self._tree
 
     def check(self):
@@ -89,17 +85,19 @@ class Module:
                 return False
         return True
 
+    def matches(self, query: str):
+        query_cursor = QueryCursor(Query(self._tree.language, query))
+        for _, match in query_cursor.matches(self._tree.root_node):
+            yield {
+                pattern: [
+                    self._source[node.start_byte:node.end_byte].decode("utf8")
+                    for node in nodes
+                ]
+                for pattern, nodes in match.items()
+            }
+
     def __hash__(self):
         return id(self)
 
     def __repr__(self):
         return self.full_name
-
-
-@time_func
-def hash_file(path):
-    hasher = hashlib.md5()
-    with open(path, 'rb') as f:
-        for chunk in iter(lambda: f.read(8192), b''):
-            hasher.update(chunk)
-    return hasher.hexdigest()
