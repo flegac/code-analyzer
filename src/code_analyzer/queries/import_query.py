@@ -1,4 +1,4 @@
-IMPORT_QUERY = """
+PYTHON_IMPORT_QUERY = """
 (import_statement
   (dotted_name) @module)
 
