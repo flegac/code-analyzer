@@ -16,7 +16,6 @@ class Relation {
             }
         }
 
-
         function computeSubtreeSize(node, visited = new Set()) {
             if (visited.has(node)) return 1;
             visited.add(node);

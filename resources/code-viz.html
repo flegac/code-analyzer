@@ -17,12 +17,17 @@
     <script src="https://unpkg.com/3d-force-graph"></script>
 
     <script src="web/relation.js"></script>
-    <script src="web/my-graph.js"></script>
+    <script src="web/custom-force.js"></script>
+
+    <script src="web/graph.js"></script>
+    <script src="web/graph-vertex-updater.js"></script>
+    <script src="web/graph-edge-updater.js"></script>
+    <script src="web/graph-group-updater.js"></script>
+    <script src="web/graph-force-updater.js"></script>
+
+    <script src="web/graph-controller.js"></script>
     <script src="web/tree-view.js"></script>
     <script src="web/table-view.js"></script>
-    <script src="web/custom-force.js"></script>
-    <script src="web/infos.js"></script>
-    <script src="web/graph-controller.js"></script>
     <script src="web/utils.js"></script>
 
     <link rel="stylesheet" href="web/style.css">
@@ -61,14 +66,14 @@
         }]
     };
 
-    const graph = new MyGraph();
+    const graph = new Graph();
     const tree = new TreeView();
-    const infos = new Infos();
-    const controller = new GraphController(graph, tree, infos);
+    const controller = new GraphController(graph, tree);
     tree.onUpdate = groups => {
-        console.log(groups);
-        graph.groups=groups;
+        controller.groups = groups;
         controller.rebuildGraph();
+        // controller.updateGraph();
+
     };
     const table = new TableView();
 
@@ -76,7 +81,6 @@
     myLayout.registerComponent('tree-view', function (container, componentState) {
         (async () => {
             let elt = container.getElement();
-            elt.append(infos.container);
             elt.append(controller.gui.domElement);
             elt.append(tree.container);
 

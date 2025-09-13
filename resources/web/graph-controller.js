@@ -1,18 +1,26 @@
 class GraphController {
-    constructor(graph, tree, infos) {
+    constructor(graph, tree) {
+        this.updaters = [
+            new GraphGroupUpdater(this),
+            new GraphVertexUpdater(this),
+            new GraphEdgeUpdater(this),
+            new GraphForceUpdater(this),
+        ];
+
+        this.groups = new Set();
         this.graph = graph;
         this.tree = tree;
-        this.infos = infos;
 
         this.params = {
-            dependenciesPath: 'data/dependencies.json',
-            hierarchyPath: 'data/hierarchy.json',
-            infosPath: 'data/modules.json',
+            datasetPath: 'data/dependencies.json',
             dimension: 3,
             groupHierarchyDepth: 2,
             nodeSize: 'branches',
             chargeStrength: 50,
-            linkDistance: 10,
+            linkDistances: {
+                hierarchy: 10.,
+                dependencies: 10.
+            },
             groupDistance: 50,
             sourceSinkDistance: 50,
             sourceSinkDistanceActive: true,
@@ -22,12 +30,11 @@ class GraphController {
         this.gui = new dat.GUI();
         this.gui.domElement.id = 'controller';
 
-        this.gui.add(this.params, 'dependenciesPath', {
+        this.gui.add(this.params, 'datasetPath', {
+            'class_graph.json': 'data/class_graph.json',
             'dependencies.json': 'data/dependencies.json',
-        }).name('Dependencies');
-        this.gui.add(this.params, 'hierarchyPath', {
-            'hierarchy.json': 'data/hierarchy.json'
-        }).name('Hierarchy');
+        }).name('Dataset')
+            .onChange(() => this.changeDataset());
 
         this.gui.add(this.params, 'dimension', {'2D': 2, '3D': 3})
             .name('Projection')
@@ -55,8 +62,12 @@ class GraphController {
             .name('Charge')
             .onChange(() => this.updateGraph());
 
-        this.gui.add(this.params, 'linkDistance', 1, 100, 0.1)
-            .name('Distance lien')
+        this.gui.add(this.params.linkDistances, 'hierarchy', 1, 100, 0.1)
+            .name('Hierarchy link')
+            .onChange(() => this.updateGraph());
+
+        this.gui.add(this.params.linkDistances, 'dependencies', 1, 100, 0.1)
+            .name('Dependency link')
             .onChange(() => this.updateGraph());
 
         this.gui.add(this.params, 'groupDistance', 1, 100, 0.1)
@@ -75,44 +86,86 @@ class GraphController {
     }
 
     async dependencies() {
-        const raw = await fetch(this.params.dependenciesPath).then(res => res.json());
+        const raw = await fetch(this.params.datasetPath).then(res => res.json());
         return new Relation('dependencies', raw);
-
     }
 
     async hierarchy() {
-        const raw = await fetch(this.params.hierarchyPath).then(res => res.json());
-        return new Relation('hierarchy', raw);
+        const graph = await this.dependencies();
+        const nodes = graph.nodes;
+
+        const hierarchy = {};
+
+        for (const full of nodes) {
+            const [prefix, suffix] = full.split("::");
+            const parts = prefix ? prefix.split(".") : [];
+
+            for (let i = 1; i < parts.length; i++) {
+                const parent = parts.slice(0, i).join(".");
+                const child = parts.slice(0, i + 1).join(".");
+
+                if (!hierarchy[parent]) {
+                    hierarchy[parent] = [];
+                }
+                if (!hierarchy[parent].includes(child)) {
+                    hierarchy[parent].push(child);
+                }
+            }
+
+            if (suffix) {
+                let a = null;
+                let b = null;
+                [a, b] = suffix.split("/");
+
+                if (a !== null) {
+                    const base = parts.join(".");
+                    const className = [base, a].join('::');
+                    if (!hierarchy[base]) {
+                        hierarchy[base] = [];
+                    }
+                    hierarchy[base].push(className);
+                    if (b != null) {
+                        const methodName = [className, b].join('/');
+                        if (!hierarchy[className]) {
+                            hierarchy[className] = [];
+                        }
+                        hierarchy[className].push(methodName);
+                    }
+                }
+            }
+
+
+        }
+        // const raw = await fetch(this.params.hierarchyPath).then(res => res.json());
+        return new Relation('hierarchy', hierarchy);
     }
 
     async moduleInfos() {
-        return await fetch(this.params.infosPath).then(res => res.json());
+        return await fetch('data/modules.json').then(res => res.json());
     }
 
 
     async loadGraph() {
-        try {
-            const hierarchy = await this.hierarchy();
-            await this.rebuildGraph();
-            this.tree.rebuild(hierarchy);
-            this.infos.rebuild(this.graph)
-        } catch (err) {
-            alert('Erreur lors du chargement du JSON : ' + err.message);
-        }
+        await this.changeDataset()
+        await this.rebuildGraph();
+    }
+
+    async changeDataset() {
+        const hierarchy = await this.hierarchy();
+        this.tree.rebuild(hierarchy);
     }
 
     async rebuildGraph() {
         const dependencies = await this.dependencies();
         const hierarchy = await this.hierarchy();
-        const infos = await this.moduleInfos();
-        this.graph.renderGraph(hierarchy, dependencies, infos, this.params);
 
-        this.updateGraph();
+        this.graph.renderGraph(hierarchy, dependencies);
+        await this.updateGraph();
     }
 
-    updateGraph() {
-        this.graph.updateGraph(this);
+    async updateGraph() {
+        for (let updater of this.updaters) {
+            await updater.apply(this.graph);
+        }
     }
-
-
 }
