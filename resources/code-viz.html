@@ -5,8 +5,7 @@
     <title>Code Viz 3D</title>
 
     <script src="https://unpkg.com/chroma-js@2.4.2/chroma.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/lil-gui@0.20"></script>
 
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script type="text/javascript" src="https://golden-layout.com/files/latest/js/goldenlayout.min.js"></script>
@@ -14,25 +13,34 @@
     <link type="text/css" rel="stylesheet"
           href="https://golden-layout.com/files/latest/css/goldenlayout-dark-theme.css"/>
 
+    <script src="https://unpkg.com/three@0.150.1/build/three.min.js"></script>
     <script src="https://unpkg.com/3d-force-graph"></script>
 
+    <script src="web/utils.js"></script>
     <script src="web/relation.js"></script>
     <script src="web/custom-force.js"></script>
 
     <script src="web/graph.js"></script>
-    <script src="web/graph-vertex-updater.js"></script>
+    <script src="web/graph-camera-controller.js"></script>
+    <script src="web/graph-node-updater.js"></script>
+
     <script src="web/graph-edge-updater.js"></script>
+    <script src="web/graph-edge-controller.js"></script>
+
     <script src="web/graph-group-updater.js"></script>
     <script src="web/graph-force-updater.js"></script>
 
+    <script src="web/graph-updater.js"></script>
     <script src="web/graph-controller.js"></script>
+
     <script src="web/tree-view.js"></script>
     <script src="web/table-view.js"></script>
-    <script src="web/utils.js"></script>
 
     <link rel="stylesheet" href="web/style.css">
 </head>
 <body>
+
+<input type="file" id="file-browser" style="display: none" accept=".json"/>
 
 <script>
     var config = {
@@ -43,11 +51,22 @@
             type: 'row',
             content: [
                 {
-                    type: 'component',
-                    componentName: 'tree-view',
-                    componentState: {label: 'Tree View'},
-                    width: 20,
+                    type: 'stack',
+                    width: 15,
+                    content: [
+                        {
+                            type: 'component',
+                            componentName: 'graph-controller',
+                            componentState: {label: 'Graph Controller'},
+                        },
+                        {
+                            type: 'component',
+                            componentName: 'tree-view',
+                            componentState: {label: 'Tree View'},
+                        },
+                    ]
                 },
+
                 {
                     type: 'stack',
                     content: [
@@ -68,24 +87,35 @@
 
     const graph = new Graph();
     const tree = new TreeView();
-    const controller = new GraphController(graph, tree);
-    tree.onUpdate = groups => {
-        controller.groups = groups;
-        controller.rebuildGraph();
-        // controller.updateGraph();
 
+    const updater = new GraphUpdater(graph, tree);
+    const controller = new GraphController(updater);
+
+    const edgeController = new GraphEdgeController(updater.edgeControl.params);
+    edgeController.onChange = () => {
+        updater.edgeControl.apply(graph);
+    };
+
+    tree.onUpdate = groups => {
+        updater.groups = groups;
+        updater.rebuildGraph();
+        // controller.updateGraph();
     };
     const table = new TableView();
 
     var myLayout = new GoldenLayout(config);
-    myLayout.registerComponent('tree-view', function (container, componentState) {
+    myLayout.registerComponent('graph-controller', function (container, componentState) {
         (async () => {
             let elt = container.getElement();
-            elt.append(controller.gui.domElement);
-            elt.append(tree.container);
-
-            const hierarchy = await controller.hierarchy();
+            elt.append(controller.container);
+            elt.append(edgeController.container);
+        })();
+    })
+    myLayout.registerComponent('tree-view', function (container, componentState) {
+        (async () => {
+            const hierarchy = await updater.hierarchy();
             tree.rebuild(hierarchy);
+            container.getElement().append(tree.container);
         })();
     });
 
@@ -95,7 +125,7 @@
 
     myLayout.registerComponent('table-view', function (container, componentState) {
         (async () => {
-            const data = await controller.moduleInfos();
+            const data = await updater.moduleInfos();
             await table.rebuild(data);
             container.getElement().append(table.container);
         })();
@@ -103,7 +133,7 @@
     });
 
 
-    window.addEventListener('DOMContentLoaded', () => controller.loadGraph());
+    window.addEventListener('DOMContentLoaded', () => controller.updater.loadGraph());
     myLayout.init();
 
 </script>

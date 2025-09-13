@@ -16,13 +16,6 @@
     overflow: hidden;
 }
 
-#controller {
-    position: relative;
-    padding: 0;
-    margin: 0;
-    padding-bottom: 20px;
-    /*z-index: 1000;*/
-}
 #infos {
     padding: 0;
     margin: 0;

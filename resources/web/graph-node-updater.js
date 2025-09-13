@@ -1,4 +1,4 @@
-class GraphVertexUpdater {
+class GraphNodeUpdater {
     constructor(controls) {
         this.controls = controls;
         this.paletteGenerator = chroma

@@ -1,39 +1,39 @@
 class GraphEdgeUpdater {
-    constructor(controls) {
-        this.controls = controls;
+    constructor() {
+        this.params = {
+            dependencies: {
+                color: '#0f0',
+                distance: 10,
+                strength: 1.,
+                width: 1,
+            },
+            hierarchy: {
+                color: '#ffff00',
+                distance: 10,
+                strength: 100.,
+                width: 10,
+            },
+        }
     }
 
     async apply(graph) {
+        graph.graph.d3Force('link').distance(link => {
+            return 10 * this.params[link.label]?.distance ?? 10;
+        });
+        graph.graph.d3Force('link').strength(link => {
+            return .01 * this.params[link.label]?.strength ?? .1;
+        });
 
         graph.graph
             // .linkCurvature(.3)
             // .linkAutoColorBy('label')
             .linkWidth((link) => {
-                if (link.label === 'hierarchy') {
-                    return 3;
-                }
-                return 1;
+                return this.params[link.label]?.width ?? 1;
             })
             .linkColor((link) => {
-                if (link.label === 'hierarchy') {
-                    return '#0f0'
-                    // return '#0000'
-                }
-                if (link.label === 'dependencies') {
-                    // return '#0000'
-                    const src = graph.nodesMap[link.source];
-                    const dst = graph.nodesMap[link.target];
-                    if (src && dst) {
-                        if (src.group === dst.group) {
-                            return '#ccc';
-                        }
-                        return dst.color;
-                    }
-
-                    return '#c800ff'
-                }
-                return '#f00';
+                return this.params[link.label]?.color ?? '#f00';
             })
         ;
+        graph.graph.d3ReheatSimulation();
     }
 }

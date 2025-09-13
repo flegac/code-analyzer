@@ -1,7 +1,7 @@
 function forceGroupCollide(groupFn, groupDistance = 1) {
     let nodes;
-    const strength = 1.; // CONFIG.groupForceStrength();
-    const baseDistance = groupDistance; //groupDistance; //50 * CONFIG.groupForceDistance();
+    const strength = 1.;
+    const baseDistance = groupDistance;
 
     function force(alpha) {
 
@@ -22,9 +22,8 @@ function forceGroupCollide(groupFn, groupDistance = 1) {
                     const dy = b.y - a.y;
                     const dz = b.z - a.z;
                     const dist = Math.hypot(dx, dy, dz);
-                    const minDist = 100 * baseDistance + (a.radius + b.radius);
-                    const maxDist = 200 * baseDistance + (a.radius + b.radius);
-
+                    const minDist = 2.5 * baseDistance + (a.radius + b.radius);
+                    const maxDist = 5. * baseDistance + (a.radius + b.radius);
 
                     let shift = .0;
                     if (dist > maxDist) {

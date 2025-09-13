@@ -20,10 +20,6 @@ class Graph {
             relation.nodes.forEach(_ => nodes.add(_))
         }
 
-        console.log(hierarchy.nodes);
-        console.log(dependencies.nodes);
-        console.log(nodes);
-
         for (const id of nodes) {
             const usedBy = dependencies.usedBy[id]?.length || 0;
             const dependOn = dependencies.dependOn[id]?.length || 0;
@@ -47,7 +43,7 @@ class Graph {
         if (this.graph && typeof this.graph._destructor === 'function') {
             this.graph._destructor();
         }
-        this.graph = ForceGraph3D()(this.container);
+        this.graph = ForceGraph3D()(this.container,);
         this.graph.nodeLabel(node => {
             let infos = '';
             if (node.infos) {
@@ -56,19 +52,17 @@ class Graph {
             return `${node.id}<br>\n${infos}`;
         });
 
-        this.graph.onNodeClick((node, event) => {
-            const cameraPos = this.graph.cameraPosition(); // {x, y, z}
-            const controls = this.graph.controls();        // OrbitControls ou TrackballControls
+        this.graph.nodeThreeObjectExtend(true);
+        this.graph.nodeThreeObject(node => {
+            const partsCount = node.id.split('.').length;
+            const shouldShowText = partsCount <= 2;
 
-            const lookAt = controls.target;
-            const dx = node.x - lookAt.x;
-            const dy = node.y - lookAt.y;
-            const dz = node.z - lookAt.z;
+            if (!shouldShowText) return;
 
-            const newPos = {
-                x: cameraPos.x + dx, y: cameraPos.y + dy, z: cameraPos.z + dz
-            };
-            this.graph.cameraPosition(newPos, node, 1000); // transition vers le nœud
+            // const group = new THREE.Group();
+            // group.add(createTextSprite(node.id));
+            // return group;
+            return createTextSprite(node.id);
         });
 
         const resizeObserver = new ResizeObserver(() => {
@@ -76,9 +70,43 @@ class Graph {
             this.graph.height(this.container.clientHeight);
         });
         resizeObserver.observe(this.container);
+
+        new GraphCameraController(this.graph).start();
+
         this.nodes = [];
         this.links = [];
         this.nodesMap = {};
     }
 }
 
+
+const FONT_SIZE = 128;
+const SCALE_FACTOR = .1;
+const TEXT_OFFSET_Y = 10;
+const FONT_FAMILY = 'Arial';
+const TEXT_COLOR = 'white';
+
+function createTextSprite(text) {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+
+    context.font = `${FONT_SIZE}px ${FONT_FAMILY}`;
+    const textWidth = context.measureText(text).width;
+    const textHeight = FONT_SIZE + 12;
+
+    canvas.width = textWidth;
+    canvas.height = textHeight;
+
+    context.font = `${FONT_SIZE}px ${FONT_FAMILY}`;
+    context.fillStyle = TEXT_COLOR;
+    context.fillText(text, 0, FONT_SIZE);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    const material = new THREE.SpriteMaterial({map: texture, transparent: true});
+    const sprite = new THREE.Sprite(material);
+
+    sprite.scale.set(textWidth * SCALE_FACTOR, textHeight * SCALE_FACTOR, 1);
+    sprite.position.set(0, TEXT_OFFSET_Y, 0);
+
+    return sprite;
+}

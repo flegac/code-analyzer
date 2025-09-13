@@ -1,3 +1,12 @@
+class GuiGraphController {
+    constructor(params, id, title = null) {
+        this.params = params;
+        this.container = createDiv(id);
+        this.gui = new lil.GUI({container: this.container});
+        this.container.querySelector('.title').textContent = title;
+    }
+}
+
 function createDiv(id, classes = null, parent = null) {
     if (parent === null) {
         parent = document.body;
