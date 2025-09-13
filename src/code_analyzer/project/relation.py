@@ -3,9 +3,7 @@ from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 
-from easy_kit.timing import time_func
-
-from code_analyzer.project.module import Module
+from code_analyzer.scope.module_ref import ModuleRef
 
 
 @dataclass
@@ -24,12 +22,11 @@ class Relation:
         )
 
     @staticmethod
-    @time_func
-    def hierarchy(modules: set[Module]):
+    def hierarchy(modules: set[ModuleRef]):
         data = defaultdict(set)
         for module in modules:
             if module.depth >= 1:
-                data[module.parent.full_name].add(module.full_name)
+                data[module.parent.ref_id].add(module.ref_id)
 
         return Relation(
             name='hierarchy',
@@ -39,16 +36,14 @@ class Relation:
     def to_json(self):
         return {
             k: list(sorted(v))
-            for k,v in self.graph.items()
+            for k, v in self.graph.items()
         }
-
 
     def dump(self, path: Path):
         full_path = path / f'{self.name}.json'
         with full_path.open('w') as _:
             json.dump(self.to_json(), _, sort_keys=True, indent=4)
 
-
     def __repr__(self):
-        edges = sum( map(len, self.graph.values()))
+        edges = sum(map(len, self.graph.values()))
         return f'{self.name}(V={len(self.graph)}, E={edges})'

@@ -7,8 +7,8 @@ from pprint import pprint
 import tqdm
 from easy_kit.timing import time_func
 
-from code_analyzer.dependencies.dependency_analyzer import DependencyAnalyzer
-from code_analyzer.project.module import Module
+from code_analyzer.dependencies.dependency_cst_analyzer import DependencyCstAnalyzer
+from code_analyzer.scope.module_ref import ModuleRef
 from code_analyzer.project.project import Project
 from code_analyzer.stats.code_stats import AggregatedCodeStats
 from code_analyzer.stats.module_stats_visitor import ModuleStatsVisitor
@@ -28,16 +28,16 @@ class ProjectAnalyzer:
             self.update_imported(module)
 
     @time_func
-    def refresh(self, module: Module):
-        visitor = self.modules[module.full_name]
+    def refresh(self, module: ModuleRef):
+        visitor = self.modules[module.ref_id]
         module.get_tree(self.project.root).visit(visitor)
 
-    def update_imported(self, module: Module):
+    def update_imported(self, module: ModuleRef):
         count = 0
         for k, v in self.modules.items():
             if module in v.imported_modules:
                 count += 1
-        self.modules[module.full_name].stats.imported = count
+        self.modules[module.ref_id].stats.imported = count
 
     def infos(self):
         return {
@@ -59,7 +59,7 @@ def analyze_project(project: Project, output_dir: Path) -> None:
 
     graphs = [
         analyzer.project.hierarchy(),
-        DependencyAnalyzer().analyze(project)
+        DependencyCstAnalyzer().analyze(project)
     ]
     for graph in graphs:
         graph.dump(output_dir)

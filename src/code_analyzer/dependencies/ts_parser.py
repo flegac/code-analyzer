@@ -24,6 +24,16 @@ class TsParser:
         parsed = sexpdata.loads(raw)
         return s_format(parsed)
 
+    # def captures(self, query: str, tree: Tree, source: bytes):
+    #     query_cursor = QueryCursor(Query(tree.language, query))
+    #     for pattern, nodes in query_cursor.captures(tree.root_node).items():
+    #         yield {
+    #             pattern: [
+    #                 source[node.start_byte:node.end_byte].decode("utf8")
+    #                 for node in nodes
+    #             ]
+    #         }
+
     def matches(self, query: str, tree: Tree, source: bytes):
         query_cursor = QueryCursor(Query(tree.language, query))
         for _, match in query_cursor.matches(tree.root_node):
@@ -42,3 +52,6 @@ def s_format(items, indent=1):
         return f'{items}'
     lines = [s_format(_, indent + 1) for _ in items]
     return '(' + f'\n{decal}'.join(lines) + ')'
+
+
+PYTHON_PARSER = TsParser()

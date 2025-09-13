@@ -1,0 +1,4 @@
+PYTHON_INIT = '__init__'
+PYTHON_SUFFIX = '.py'
+PYTHON_MODULE_PATTERN = '*.py'
+MODULE_SEPARATOR = '.'

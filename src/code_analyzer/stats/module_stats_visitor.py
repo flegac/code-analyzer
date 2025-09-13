@@ -4,8 +4,8 @@ from typing import Optional
 import libcst as cst
 from libcst.metadata import PositionProvider, ParentNodeProvider, ScopeProvider
 
-from code_analyzer.dependencies.dependency_analyzer import _extract_module
-from code_analyzer.project.module import Module
+from code_analyzer.dependencies.dependency_cst_analyzer import _extract_name
+from code_analyzer.scope.module_ref import ModuleRef
 from code_analyzer.stats.code_stats import CodeStats
 from code_analyzer.stats.stack_context import StackContext
 
@@ -20,7 +20,7 @@ class ModuleStatsVisitor(cst.CSTVisitor):
 
         self.classes: list[CodeStats] = []
         self.functions: list[CodeStats] = []
-        self.imported_modules: set[Module] = set()
+        self.imported_modules: set[ModuleRef] = set()
         self.stack = StackContext[CodeStats]()
 
     # ----- Module context ---------------------------------------
@@ -61,12 +61,12 @@ class ModuleStatsVisitor(cst.CSTVisitor):
     def visit_Import(self, node: cst.Import) -> None:
         self.stack.current.imports += len(node.names)
         for alias in node.names:
-            self.imported_modules.add(_extract_module(alias.name))
+            self.imported_modules.add(_extract_name(alias.name))
 
     def visit_ImportFrom(self, node: cst.ImportFrom) -> None:
         if node.module:
             self.stack.current.imports += 1
-            self.imported_modules.add(_extract_module(node.module))
+            self.imported_modules.add(_extract_name(node.module))
 
     # ----- Branches  ---------------------------------------
     def visit_If(self, node: cst.If) -> None:

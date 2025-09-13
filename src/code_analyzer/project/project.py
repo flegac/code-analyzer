@@ -1,9 +1,8 @@
-from functools import cache
 from pathlib import Path
 
-from code_analyzer.project.module import Module
+from code_analyzer.project.module_cache import ModuleCache
 from code_analyzer.project.relation import Relation
-from code_analyzer.project.utils import PYTHON_MODULE_PATTERN
+from code_analyzer.scope.config import PYTHON_MODULE_PATTERN
 
 ModuleId = str
 
@@ -11,26 +10,24 @@ ModuleId = str
 class Project:
     def __init__(self, root: Path | str) -> None:
         self.root = Path(root).absolute()
-        self.modules: set[Module] = set()
-        self.files: dict[ModuleId, Path] = {}
-
-
+        self.modules: dict[ModuleId, ModuleCache] = {}
 
     def iter_files(self):
-        return list(self.root.rglob(PYTHON_MODULE_PATTERN))
+        return set(self.root.rglob(PYTHON_MODULE_PATTERN))
+
+    def iter_modules(self):
+        return [_ for _ in self.modules.values()]
 
     def update(self):
+        modules = [
+            ModuleCache.from_path(self.root, _)
+            for _ in self.iter_files()
+        ]
         self.modules = {
-            Module.from_path(self.root, _)
-            for _ in self.root.rglob(PYTHON_MODULE_PATTERN)
+            _.ref.ref_id: _
+            for _ in modules
         }
-        self.files = {
-            _.full_name: _.path_from_root(self.root)
-            for _ in self.modules
-        }
-        self.hierarchy.cache_clear()
         return self
 
-    @cache
     def hierarchy(self):
-        return Relation.hierarchy(self.modules)
+        return Relation.hierarchy({_.ref for _ in self.modules.values()})
