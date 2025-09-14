@@ -1,9 +1,18 @@
-function forceGroupCollide(groupFn, groupDistance = 1) {
+function forceGroupCollide(physics) {
     let nodes;
     const strength = 1.;
-    const baseDistance = groupDistance;
+    const baseDistance = physics.groupDistance;
+    const dimension = physics.dimension;
+
+    function groupFn(node) {
+        return node.id.split('.').slice(0, physics.groupHierarchyDepth).join('.');
+    }
+
 
     function force(alpha) {
+        if (dimension < 3) {
+            return;
+        }
 
         const groupMap = new Map();
         for (const node of nodes) {

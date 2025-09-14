@@ -1,13 +1,13 @@
-class GraphEdgeController extends GuiGraphController {
-    constructor(params) {
-        super(params, 'graph-edge-controller', 'Edges');
-        this.onChange = () => null;
-        this.addLinkFolder('Dependencies', this.params.dependencies);
-        this.addLinkFolder('Hierarchy', this.params.hierarchy);
+class GraphControllerRelation extends GuiGraphController {
+    constructor(updater) {
+        super('graph-edge-controller', 'Relations');
+        this.updater = updater;
+        this.addLinkFolder('Dependencies', this.updater.params.relations.dependencies);
+        this.addLinkFolder('Hierarchy', this.updater.params.relations.hierarchy);
     }
 
     addLinkFolder(title, params) {
-        const onChange = () => this.onChange();
+        const onChange = () => this.updater.children.edges.apply(this.updater.graph);
         const folder = this.gui.addFolder(title);
         folder.add(params, 'distance', 1, 100, 0.1).name('distance').onChange(onChange);
         folder.add(params, 'strength', 1, 100, 0.1).name('strength').onChange(onChange);

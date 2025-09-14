@@ -1,6 +1,5 @@
 class GuiGraphController {
-    constructor(params, id, title = null) {
-        this.params = params;
+    constructor(id, title = null) {
         this.container = createDiv(id);
         this.gui = new lil.GUI({container: this.container});
         this.container.querySelector('.title').textContent = title;

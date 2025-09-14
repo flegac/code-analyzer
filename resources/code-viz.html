@@ -16,22 +16,30 @@
     <script src="https://unpkg.com/three@0.150.1/build/three.min.js"></script>
     <script src="https://unpkg.com/3d-force-graph"></script>
 
+
+    <script src="web/layout.js"></script>
     <script src="web/utils.js"></script>
     <script src="web/relation.js"></script>
+
     <script src="web/custom-force.js"></script>
 
+    <script src="web/graph-updater-dataset.js"></script>
+
     <script src="web/graph.js"></script>
-    <script src="web/graph-camera-controller.js"></script>
-    <script src="web/graph-node-updater.js"></script>
-
-    <script src="web/graph-edge-updater.js"></script>
-    <script src="web/graph-edge-controller.js"></script>
-
-    <script src="web/graph-group-updater.js"></script>
-    <script src="web/graph-force-updater.js"></script>
+    <script src="web/graph-controller-camera.js"></script>
 
     <script src="web/graph-updater.js"></script>
     <script src="web/graph-controller.js"></script>
+
+
+    <script src="web/graph-updater-node.js"></script>
+    <script src="web/graph-controller-node.js"></script>
+
+    <script src="web/graph-updater-relation.js"></script>
+    <script src="web/graph-controller-relation.js"></script>
+
+    <script src="web/graph-updater-group.js"></script>
+    <script src="web/graph-updater-physics.js"></script>
 
     <script src="web/tree-view.js"></script>
     <script src="web/table-view.js"></script>
@@ -43,47 +51,6 @@
 <input type="file" id="file-browser" style="display: none" accept=".json"/>
 
 <script>
-    var config = {
-        settings: {
-            // hasHeaders: false,
-        },
-        content: [{
-            type: 'row',
-            content: [
-                {
-                    type: 'stack',
-                    width: 15,
-                    content: [
-                        {
-                            type: 'component',
-                            componentName: 'graph-controller',
-                            componentState: {label: 'Graph Controller'},
-                        },
-                        {
-                            type: 'component',
-                            componentName: 'tree-view',
-                            componentState: {label: 'Tree View'},
-                        },
-                    ]
-                },
-
-                {
-                    type: 'stack',
-                    content: [
-                        {
-                            type: 'component',
-                            componentName: 'graph-view',
-                            componentState: {label: 'Graph View'}
-                        },
-                        {
-                            type: 'component',
-                            componentName: 'table-view',
-                            componentState: {label: 'Table View'}
-                        },
-                    ]
-                }]
-        }]
-    };
 
     const graph = new Graph();
     const tree = new TreeView();
@@ -91,10 +58,6 @@
     const updater = new GraphUpdater(graph, tree);
     const controller = new GraphController(updater);
 
-    const edgeController = new GraphEdgeController(updater.edgeControl.params);
-    edgeController.onChange = () => {
-        updater.edgeControl.apply(graph);
-    };
 
     tree.onUpdate = groups => {
         updater.groups = groups;
@@ -103,29 +66,29 @@
     };
     const table = new TableView();
 
-    var myLayout = new GoldenLayout(config);
-    myLayout.registerComponent('graph-controller', function (container, componentState) {
+    LAYOUT.registerComponent('graph-controller', function (container, componentState) {
         (async () => {
             let elt = container.getElement();
             elt.append(controller.container);
-            elt.append(edgeController.container);
+            elt.append(controller.control.nodes.container);
+            elt.append(controller.control.edges.container);
         })();
     })
-    myLayout.registerComponent('tree-view', function (container, componentState) {
+    LAYOUT.registerComponent('tree-view', function (container, componentState) {
         (async () => {
-            const hierarchy = await updater.hierarchy();
+            const hierarchy = await updater.children.dataset.hierarchy();
             tree.rebuild(hierarchy);
             container.getElement().append(tree.container);
         })();
     });
 
-    myLayout.registerComponent('graph-view', function (container, componentState) {
+    LAYOUT.registerComponent('graph-view', function (container, componentState) {
         container.getElement().append(graph.container);
     });
 
-    myLayout.registerComponent('table-view', function (container, componentState) {
+    LAYOUT.registerComponent('table-view', function (container, componentState) {
         (async () => {
-            const data = await updater.moduleInfos();
+            const data = await updater.children.dataset.moduleInfos();
             await table.rebuild(data);
             container.getElement().append(table.container);
         })();
@@ -134,7 +97,7 @@
 
 
     window.addEventListener('DOMContentLoaded', () => controller.updater.loadGraph());
-    myLayout.init();
+    LAYOUT.init();
 
 </script>
 

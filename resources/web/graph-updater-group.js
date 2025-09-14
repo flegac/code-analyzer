@@ -1,4 +1,4 @@
-class GraphGroupUpdater {
+class GraphUpdaterGroup {
     constructor(controls) {
         this.controls = controls;
     }
@@ -18,7 +18,7 @@ class GraphGroupUpdater {
                 }
             }
 
-            // let group = id.split('.').slice(0, this.controls.params.groupHierarchyDepth).join('.');
+            // let group = id.split('.').slice(0, this.updater.params.physics.groupHierarchyDepth).join('.');
             if (node.usedBy === 0) {
                 group = '__source__';
             }
