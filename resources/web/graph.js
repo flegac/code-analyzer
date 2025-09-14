@@ -2,14 +2,11 @@ class Graph {
     constructor() {
         this.container = createDiv('graph');
         this.graph = ForceGraph3D()(this.container);
-        this.nodes = [];
-        this.links = [];
         this.nodesMap = {};
     }
 
-
-    uniqueGroups() {
-        return new Set(Array.from(this.nodes, node => node.group));
+    data() {
+        return this.graph.graphData()
     }
 
     async renderGraph(dataset, params) {
@@ -19,27 +16,29 @@ class Graph {
         await this.resetGraph(params);
         const nodes = new Set();
         for (let relation of [hierarchy, dependencies]) {
-            relation.links.forEach(_ => this.links.push(_))
             relation.nodes.forEach(_ => nodes.add(_))
         }
 
         for (const id of nodes) {
-            const usedBy = dependencies.usedBy[id]?.length || 0;
-            const dependOn = dependencies.dependOn[id]?.length || 0;
-            const radius = dependencies.usedBy[id]?.length || 0;
-            const node = {
+            const usedBy = dependencies.usedBy[id] || [];
+            const dependOn = dependencies.dependOn[id] || [];
+            this.nodesMap[id] = {
                 id,
                 group: id,
-                radius: radius,
+                radius: 1,
                 usedBy: usedBy,
                 dependOn: dependOn,
                 // x,y,z are induced by forces
             };
-            this.nodesMap[id] = node;
-            this.nodes.push(node);
         }
 
-        this.graph.graphData({nodes: this.nodes, links: this.links});
+        this.graph.graphData({
+            nodes: Object.values(this.nodesMap),
+            links: [
+                ...hierarchy.links,
+                ...dependencies.links
+            ]
+        });
     }
 
     async resetGraph(params) {
@@ -63,8 +62,6 @@ class Graph {
 
         new GraphControllerCamera(this.graph).start();
 
-        this.nodes = [];
-        this.links = [];
         this.nodesMap = {};
     }
 }

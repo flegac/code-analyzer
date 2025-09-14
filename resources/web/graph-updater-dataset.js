@@ -22,27 +22,8 @@ class GraphUpdaterDataset {
             console.log(`loading from ${this.params().datasetPath}`);
         }
         let raw = this.params().dataset;
-
         const config = await this.loadConfig();
-        const excluded = config.excluded;
-
-
-        const exactExcludes = excluded.filter(e => !e.endsWith('.*'));
-        const prefixExcludes = excluded
-            .filter(e => e.endsWith('.*'))
-            .map(e => e.slice(0, -2)); // retirer le ".*"
-
-        function isExcluded(id) {
-            if (exactExcludes.includes(id)) return true;
-            return prefixExcludes.some(prefix => id.startsWith(prefix));
-        }
-
-        const filtered = Object.fromEntries(
-            Object.entries(raw)
-                .filter(([key]) => !isExcluded(key))
-                .map(([key, values]) => [key, values.filter(v => !isExcluded(v))])
-        );
-
+        const filtered = new GraphFilter(config).apply(raw);
         return new Relation('dependencies', filtered);
     }
 

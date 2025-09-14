@@ -5,7 +5,7 @@ const GENERAL_GRAPH_CONFIG = {
         dimension: 3,
         groupHierarchyDepth: 2,
         repulsionStrength: 50, // chargeStrength
-        groupDistance: 50,
+        groupDistance: 100,
     },
 
     dataset: {
@@ -17,7 +17,7 @@ const GENERAL_GRAPH_CONFIG = {
 
     nodes: {
         groupHierarchyDepth: 2,
-        size: 'branches',
+        size: 'imported',
         color: 'group',
         fontSize: 64,
         scaleFactor: .2
@@ -26,13 +26,13 @@ const GENERAL_GRAPH_CONFIG = {
     relations: {
         dependencies: {
             color: '#0f0',
-            distance: 10,
+            distance: 2,
             strength: 1.,
-            width: 1,
+            width: .5,
         },
         hierarchy: {
             color: '#ffff00',
-            distance: 10,
+            distance: 2,
             strength: 100.,
             width: 10,
         },
