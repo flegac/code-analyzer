@@ -16,9 +16,10 @@ const GENERAL_GRAPH_CONFIG = {
     },
 
     nodes: {
+        groupHierarchyDepth: 2,
         size: 'branches',
         color: 'group',
-        fontSize : 128,
+        fontSize: 64,
         scaleFactor: .2
     },
 
@@ -43,7 +44,6 @@ class GraphUpdater {
     constructor(graph, tree) {
         this.params = GENERAL_GRAPH_CONFIG;
 
-        this.groups = new Set();
         this.graph = graph;
         this.tree = tree;
 
@@ -51,7 +51,6 @@ class GraphUpdater {
             dataset: new GraphUpdaterDataset(this),
             nodes: new GraphUpdaterNode(this),
             edges: new GraphUpdaterRelation(this),
-            groups: new GraphUpdaterGroup(this),
             forces: new GraphUpdaterPhysics(this),
         }
     }

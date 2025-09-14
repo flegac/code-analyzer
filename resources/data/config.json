@@ -1,5 +1,6 @@
 {
   "excluded": [
+    "easy_ecs.*",
     "typing",
     "dataclasses",
     "loguru",

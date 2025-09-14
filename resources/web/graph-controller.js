@@ -1,6 +1,8 @@
 class GraphController extends GuiGraphController {
     constructor(updater) {
         super('controller', 'General');
+
+
         this.updater = updater;
         this.control = {
             nodes: new GraphControllerNode(this.updater),
@@ -39,6 +41,12 @@ class GraphController extends GuiGraphController {
                 await this.updater.children.dataset.apply()
             });
         this.gui.add({'reload': () => this.updater.loadGraph()}, 'reload');
+        this.gui.add({
+            'simControl': async () => {
+                this.updater.params.physics.isActive = !this.updater.params.physics.isActive;
+                await this.updater.children.forces.apply(this.updater.graph);
+            }
+        }, 'simControl').name('pause/resume');
 
         this.gui.add(this.updater.params.physics, 'dimension', {'2D': 2, '3D': 3})
             .name('Projection')
@@ -57,6 +65,49 @@ class GraphController extends GuiGraphController {
             .name('Distance groupe')
             .onChange(() => this.updater.updateGraph());
 
+
+        // const debugInfos = new RenderDebug(() => this.updater.graph.graph.renderer());
+        // debugInfos.start();
+        // debugInfos.loadGui(this.gui);
+
+
     }
 
+}
+
+class RenderDebug {
+    constructor(rendererProvider) {
+
+        this.rendererProvider = rendererProvider
+
+        this.params = {
+            drawCalls: 0,
+            textures: 0,
+            geometries: 0,
+            triangles: 0,
+            points: 0,
+            lines: 0,
+        };
+    }
+
+    start() {
+        const renderer = this.rendererProvider();
+        this.params.geometries = renderer.info.memory.geometries;
+        this.params.textures = renderer.info.memory.textures;
+        this.params.drawCalls = renderer.info.render.calls;
+        this.params.triangles = renderer.info.render.triangles;
+        this.params.points = renderer.info.render.points;
+        this.params.lines = renderer.info.render.lines;
+        requestAnimationFrame(() => this.start());
+    }
+
+    loadGui(gui) {
+
+        gui.add(this.params, 'drawCalls').name('Draw Calls').listen().disable();
+        gui.add(this.params, 'geometries').name('Geometries').listen().disable();
+        gui.add(this.params, 'textures').name('Textures').listen().disable();
+        gui.add(this.params, 'triangles').listen().disable();
+        gui.add(this.params, 'points').listen().disable();
+        gui.add(this.params, 'lines').listen().disable();
+    }
 }

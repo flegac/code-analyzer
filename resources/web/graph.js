@@ -16,7 +16,7 @@ class Graph {
         const dependencies = await dataset.dependencies();
         const hierarchy = await dataset.hierarchy();
 
-        this.resetGraph(params);
+        await this.resetGraph(params);
         const nodes = new Set();
         for (let relation of [hierarchy, dependencies]) {
             relation.links.forEach(_ => this.links.push(_))
@@ -42,22 +42,7 @@ class Graph {
         this.graph.graphData({nodes: this.nodes, links: this.links});
     }
 
-    updateText(params) {
-        this.graph.nodeThreeObjectExtend(true);
-        this.graph.nodeThreeObject(node => {
-            const partsCount = node.id.split('.').length;
-            const shouldShowText = partsCount <= 2;
-
-            if (!shouldShowText) return;
-
-            // const group = new THREE.Group();
-            // group.add(createTextSprite(node.id));
-            // return group;
-            return createTextSprite(node.id, params.fontSize, params.scaleFactor);
-        });
-    }
-
-    resetGraph(params) {
+    async resetGraph(params) {
         if (this.graph && typeof this.graph._destructor === 'function') {
             this.graph._destructor();
         }
@@ -69,8 +54,6 @@ class Graph {
             }
             return `${node.id}<br>\n${infos}`;
         });
-
-        this.updateText(params);
 
         const resizeObserver = new ResizeObserver(() => {
             this.graph.width(this.container.clientWidth);
@@ -87,33 +70,3 @@ class Graph {
 }
 
 
-const FONT_SIZE = 128;
-const SCALE_FACTOR = .1;
-const TEXT_OFFSET_Y = 10;
-const FONT_FAMILY = 'Arial';
-const TEXT_COLOR = 'white';
-
-function createTextSprite(text, fontSize = FONT_SIZE, scaleFactor = SCALE_FACTOR) {
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-
-    context.font = `${fontSize}px ${FONT_FAMILY}`;
-    const textWidth = context.measureText(text).width;
-    const textHeight = fontSize + 12;
-
-    canvas.width = textWidth;
-    canvas.height = textHeight;
-
-    context.font = `${fontSize}px ${FONT_FAMILY}`;
-    context.fillStyle = TEXT_COLOR;
-    context.fillText(text, 0, fontSize);
-
-    const texture = new THREE.CanvasTexture(canvas);
-    const material = new THREE.SpriteMaterial({map: texture, transparent: true});
-    const sprite = new THREE.Sprite(material);
-
-    sprite.scale.set(textWidth * scaleFactor, textHeight * scaleFactor, 1);
-    sprite.position.set(0, TEXT_OFFSET_Y, 0);
-
-    return sprite;
-}
