@@ -18,7 +18,9 @@ class GraphUpdaterNode {
             .nodeAutoColorBy('group')
             .nodeRelSize(4)
         ;
-        await new GraphUpdaterNodeText(this.updater.params.nodes).apply(this.updater.graph);
+        // const renderer = new ShaderNodeRenderer(graph.graph);
+        // new GraphNodeRenderer().apply(graph.graph);
+        await new GraphUpdaterNodeText(this.updater.params.nodes).apply(graph);
 
     }
 }

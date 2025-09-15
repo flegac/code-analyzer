@@ -4,8 +4,8 @@ class GraphUpdaterDataset {
     }
 
     async apply(graph = null) {
-        const hierarchy = await this.hierarchy();
-        this.updater.tree.rebuild(hierarchy);
+        const dependencies = await this.dependencies()
+        this.updater.tree.rebuild(dependencies.hierarchy());
     }
 
     params() {
@@ -25,56 +25,6 @@ class GraphUpdaterDataset {
         const config = await this.loadConfig();
         const filtered = new GraphFilter(config).apply(raw);
         return new Relation('dependencies', filtered);
-    }
-
-    async hierarchy() {
-        const graph = await this.dependencies();
-        const nodes = graph.nodes;
-
-        const hierarchy = {};
-
-        for (const full of nodes) {
-            const [prefix, suffix] = full.split("::");
-            const parts = prefix ? prefix.split(".") : [];
-
-            for (let i = 1; i < parts.length; i++) {
-                const parent = parts.slice(0, i).join(".");
-                const child = parts.slice(0, i + 1).join(".");
-
-                if (!hierarchy[parent]) {
-                    hierarchy[parent] = [];
-                }
-                if (!hierarchy[parent].includes(child)) {
-                    hierarchy[parent].push(child);
-                }
-            }
-
-            if (suffix) {
-                let a = null;
-                let b = null;
-                [a, b] = suffix.split("/");
-
-                if (a !== null) {
-                    const base = parts.join(".");
-                    const className = [base, a].join('::');
-                    if (!hierarchy[base]) {
-                        hierarchy[base] = [];
-                    }
-                    hierarchy[base].push(className);
-                    if (b != null) {
-                        const methodName = [className, b].join('/');
-                        if (!hierarchy[className]) {
-                            hierarchy[className] = [];
-                        }
-                        hierarchy[className].push(methodName);
-                    }
-                }
-            }
-
-
-        }
-        // const raw = await fetch(this.params.hierarchyPath).then(res => res.json());
-        return new Relation('hierarchy', hierarchy);
     }
 
     async moduleInfos() {

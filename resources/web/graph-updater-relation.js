@@ -21,11 +21,11 @@ class GraphUpdaterRelation {
         graph.graph
             // .linkCurvature(.3)
             // .linkAutoColorBy('label')
-            .linkDirectionalParticles(2)
-            .linkDirectionalParticleWidth(link => {
-                return 2 + params[link.label]?.width * .5;
-            })
-            .linkDirectionalParticleSpeed(0.01)
+            // .linkDirectionalParticleWidth(link => {
+            //     return 2 + params[link.label]?.width * .5;
+            // })
+            // .linkDirectionalParticles(2)
+            // .linkDirectionalParticleSpeed(0.01)
             .linkWidth((link) => {
                 return params[link.label]?.width ?? 1;
             })

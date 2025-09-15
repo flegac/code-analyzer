@@ -33,6 +33,8 @@
     <script src="web/graph-controller.js"></script>
 
 
+    <script src="web/graph-node-renderer.js"></script>
+
     <script src="web/graph-updater-node.js"></script>
     <script src="web/graph-updater-node-text.js"></script>
     <script src="web/graph-controller-node.js"></script>
@@ -77,8 +79,8 @@
     })
     LAYOUT.registerComponent('tree-view', function (container, componentState) {
         (async () => {
-            const hierarchy = await updater.children.dataset.hierarchy();
-            tree.rebuild(hierarchy);
+            const graph = await updater.children.dataset.dependencies();
+            tree.rebuild(graph.hierarchy());
             container.getElement().append(tree.container);
         })();
     });

@@ -66,10 +66,9 @@ class GraphController extends GuiGraphController {
             .onChange(() => this.updater.updateGraph());
 
 
-        // const debugInfos = new RenderDebug(() => this.updater.graph.graph.renderer());
-        // debugInfos.start();
-        // debugInfos.loadGui(this.gui);
-
+        const debugInfos = new RenderDebug(() => this.updater.graph.graph.renderer());
+        debugInfos.start();
+        debugInfos.loadGui(this.gui);
 
     }
 

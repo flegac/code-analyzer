@@ -55,14 +55,12 @@ class GraphUpdater {
         }
     }
 
-
     async loadGraph() {
         await this.rebuildGraph();
     }
 
-
     async rebuildGraph() {
-        await this.graph.renderGraph(this.children.dataset, this.params.nodes);
+        await this.graph.renderGraph(this.children.dataset);
         await this.updateGraph();
     }
 

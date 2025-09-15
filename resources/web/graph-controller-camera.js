@@ -7,8 +7,8 @@ class GraphControllerCamera {
     }
 
     start() {
-        const camera = this.graph.camera();
-        const controls = this.graph.controls();
+        const camera = this.graph.graph.camera();
+        const controls = this.graph.graph.controls();
         this.target = controls.target.clone();
 
         document.addEventListener('keydown', e => {
@@ -19,9 +19,9 @@ class GraphControllerCamera {
             this.keysPressed[e.key.toLowerCase()] = false;
         });
 
-        this.graph.onNodeClick(node => {
-            const camera = this.graph.camera();
-            const controls = this.graph.controls();
+        this.graph.graph.onNodeClick(node => {
+            const camera = this.graph.graph.camera();
+            const controls = this.graph.graph.controls();
 
             // Nouvelle cible : le nœud cliqué
             this.target.set(node.x, node.y, node.z);
@@ -45,7 +45,7 @@ class GraphControllerCamera {
     }
 
     animateCamera() {
-        const camera = this.graph.camera();
+        const camera = this.graph.graph.camera();
 
         // Vecteurs de base
         const front = new THREE.Vector3().subVectors(this.target, camera.position).normalize();
@@ -77,7 +77,7 @@ class GraphControllerCamera {
         }
 
         camera.lookAt(this.target);
-        this.graph.controls().update();
+        this.graph.graph.controls().update();
 
         requestAnimationFrame(() => this.animateCamera());
     }
