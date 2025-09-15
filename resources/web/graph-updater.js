@@ -1,45 +1,3 @@
-const GENERAL_GRAPH_CONFIG = {
-
-    physics: {
-        isActive: true,
-        dimension: 3,
-        groupHierarchyDepth: 2,
-        repulsionStrength: 50, // chargeStrength
-        groupDistance: 100,
-    },
-
-    dataset: {
-        datasetPath: 'data/dependencies.json',
-        configPath: 'data/config.json',
-        moduleInfosPath: 'data/modules.json',
-        dataset: null,
-    },
-
-    nodes: {
-        groupHierarchyDepth: 2,
-        size: 'imported',
-        color: 'group',
-        fontSize: 64,
-        scaleFactor: .2
-    },
-
-    relations: {
-        dependencies: {
-            color: '#0f0',
-            distance: 2,
-            strength: 1.,
-            width: .5,
-        },
-        hierarchy: {
-            color: '#ffff00',
-            distance: 2,
-            strength: 100.,
-            width: 10,
-        },
-    }
-
-};
-
 class GraphUpdater {
     constructor(graph, tree) {
         this.params = GENERAL_GRAPH_CONFIG;
@@ -48,10 +6,9 @@ class GraphUpdater {
         this.tree = tree;
 
         this.children = {
-            dataset: new GraphUpdaterDataset(this),
-            nodes: new GraphUpdaterNode(this),
-            edges: new GraphUpdaterRelation(this),
-            forces: new GraphUpdaterPhysics(this),
+            dataset: new DatasetUpdater(this),
+            physics: new PhysicsUpdater(this),
+            display: new DisplayUpdater(this),
         }
     }
 
@@ -60,7 +17,8 @@ class GraphUpdater {
     }
 
     async rebuildGraph() {
-        await this.graph.rebuild(this.children.dataset);
+        const dependencies = await this.children.dataset.dependencies();
+        this.graph.rebuild(dependencies);
         await this.apply();
     }
 
@@ -68,10 +26,13 @@ class GraphUpdater {
         for (const [_, updater] of Object.entries(this.children)) {
             await updater.apply();
         }
-        
+        //FIXME: This should not be necessary ! (link color is wring, relative to groupHierarchyDepth)
+        for (const [_, updater] of Object.entries(this.children)) {
+            await updater.apply();
+        }
         // TODO: better handling of that
         // TODO: automatic resize ?
-        const renderer = new GraphNodeRenderer(this.params.nodes)
+        const renderer = new DisplayNodeUpdater(this.params.nodes)
         renderer.apply(this.graph.graph);
     }
 }

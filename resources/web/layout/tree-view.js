@@ -8,12 +8,7 @@ class TreeView {
     }
 
     rebuild(hierarchy) {
-        // const moduleSet = new Set(Object.keys(hierarchy));
-        // Object.values(hierarchy).forEach(arr => arr.forEach(id => moduleSet.add(id)));
-        // const modules = Array.from(moduleSet).map(id => {
-        //     return id.includes('.') ? id : `others.${id}`;
-        // });
-        const modules = hierarchy.nodes;
+        const modules = hierarchy.getNodes();
 
         this.container.innerHTML = '<strong>Arborescence des modules</strong>';
         const treeRoot = document.createElement('sl-tree');

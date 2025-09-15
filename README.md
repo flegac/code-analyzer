@@ -1,5 +1,17 @@
 # Code Graph vizualisation
 
+## Usage
+
+First define your data:
+
+- [dependencies](./resources/data/dependencies.json)
+- [modules (node metadata)](./resources/data/modules.json)
+- [config / graph filtering](./resources/data/config.json)
+
+Then open the viewer (requires a simple server to fetch data on disk)
+
+- [viewer](./resources/code-viz.html)
+
 
 ## Graph definition
 
@@ -52,4 +64,3 @@ Each group defined in `groups` section or in `selected` / `excluded` must be one
 - 'a.b.*' : prefix match
 - '*.b.c': suffix match
 - '@groupId': replaced by the group defined in the `groups` section.
-

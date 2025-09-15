@@ -1,4 +1,4 @@
-class GraphUpdaterPhysics {
+class PhysicsUpdater {
     constructor(updater) {
         this.updater = updater;
     }
@@ -6,7 +6,7 @@ class GraphUpdaterPhysics {
     async apply() {
         const graph = this.updater.graph;
         const physics = this.updater.params.physics;
-        const relations = this.updater.params.relations;
+        const relations = this.updater.params.links;
 
         const links = graph.graph.d3Force('link');
         const charge = graph.graph.d3Force('charge');
@@ -21,13 +21,13 @@ class GraphUpdaterPhysics {
             links.strength(link => {
                 return .01 * relations[link.label]?.strength ?? .1;
             });
+            graph.graph.cooldownTicks(Infinity);
 
         } else {
             links.strength(0);
             charge.strength(0);
+            graph.graph.cooldownTicks(0);
         }
-
-        // graph.graph.d3ReheatSimulation();
-        // graph.graph.cooldownTicks(Infinity);
+        graph.graph.d3ReheatSimulation();
     }
 }

@@ -19,40 +19,46 @@
     <script src="https://cdn.jsdelivr.net/npm/stats.js/build/stats.min.js"></script>
 
     <!--    graphology-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/graphology/0.21.0/graphology.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/graphology@0.21.0/dist/graphology.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/graphology-library@latest/dist/graphology-library.min.js"></script>
+    <script src="web/graph/my-graph.js"></script>
 
 
-    <script src="web/event-handler.js"></script>
-    <script src="web/layout.js"></script>
-    <script src="web/utils.js"></script>
-    <script src="web/relation.js"></script>
+    <script src="web/view-config.js"></script>
 
-    <script src="web/custom-force.js"></script>
+    <script src="web/core/event-handler.js"></script>
+    <script src="web/layout/layout.js"></script>
+    <script src="web/core/utils.js"></script>
 
-    <script src="web/graph-filter.js"></script>
-    <script src="web/graph-updater-dataset.js"></script>
 
-    <script src="web/graph-display.js"></script>
+    <script src="web/graph/graph-filter.js"></script>
+
+    <script src="web/layout/graph-view.js"></script>
     <script src="web/camera-controller.js"></script>
+    <script src="web/render-debug.js"></script>
 
 
     <script src="web/graph-updater.js"></script>
     <script src="web/graph-controller.js"></script>
 
+    <!-- dataset -->
+    <script src="web/dataset-updater.js"></script>
+    <script src="web/dataset-controller.js"></script>
 
-    <script src="web/graph-node-renderer.js"></script>
+    <!-- physics -->
+    <script src="web/physics-updater.js"></script>
+    <script src="web/physics-controller.js"></script>
+    <script src="web/custom-force.js"></script>
 
-    <script src="web/graph-updater-node.js"></script>
-    <script src="web/graph-controller-node.js"></script>
 
-    <script src="web/graph-updater-relation.js"></script>
-    <script src="web/graph-controller-relation.js"></script>
+    <!-- display -->
+    <script src="web/display-node-updater.js"></script>
+    <script src="web/display-updater.js"></script>
+    <script src="web/display-controller.js"></script>
 
-    <script src="web/graph-updater-physics.js"></script>
 
-    <script src="web/tree-view.js"></script>
-    <script src="web/table-view.js"></script>
+    <script src="web/layout/tree-view.js"></script>
+    <script src="web/layout/table-view.js"></script>
 
     <link rel="stylesheet" href="web/style.css">
 </head>
@@ -80,7 +86,7 @@
 <input type="file" id="file-browser" style="display: none" accept=".json"/>
 <script>
 
-    const graph = new GraphDisplay();
+    const graph = new GraphView();
     const tree = new TreeView();
 
     const updater = new GraphUpdater(graph, tree);
@@ -91,19 +97,19 @@
     };
     const table = new TableView();
 
-    LAYOUT.registerComponent('graph-controller', function (container, componentState) {
+    LAYOUT.registerComponent('control-view', function (container, componentState) {
         (async () => {
             let elt = container.getElement();
             elt.append(controller.control.dataset.container);
+            elt.append(controller.control.physics.container);
+            elt.append(controller.control.display.container);
             elt.append(controller.container);
-            elt.append(controller.control.nodes.container);
-            elt.append(controller.control.edges.container);
         })();
     })
     LAYOUT.registerComponent('tree-view', function (container, componentState) {
         (async () => {
             const graph = await updater.children.dataset.dependencies();
-            tree.rebuild(graph.hierarchy());
+            tree.rebuild(MyGraph.hierarchy(graph));
             container.getElement().append(tree.container);
         })();
     });

@@ -1,11 +1,11 @@
-class GraphUpdaterDataset {
+class DatasetUpdater {
     constructor(updater) {
         this.updater = updater
     }
 
     async apply() {
         const dependencies = await this.dependencies()
-        this.updater.tree.rebuild(dependencies.hierarchy());
+        this.updater.tree.rebuild(MyGraph.hierarchy(dependencies));
     }
 
     params() {
@@ -24,7 +24,7 @@ class GraphUpdaterDataset {
         let raw = this.params().dataset;
         const config = await this.loadConfig();
         const filtered = new GraphFilter(config).apply(raw);
-        return new Relation('dependencies', filtered);
+        return new MyGraph('dependencies', filtered);
     }
 
     async moduleInfos() {

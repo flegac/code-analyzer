@@ -1,9 +1,8 @@
-
-
 class GraphFilter {
     static GROUP_REF = '@';
     static WILDCARD = '*';
     static SEPARATOR = '.';
+
     constructor(config) {
         this.config = config;
         this.groups = config.groups;
@@ -54,7 +53,6 @@ class GraphFilter {
             return this._expand(refGroup, visited);
         });
     }
-
 }
 
 

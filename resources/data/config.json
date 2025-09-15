@@ -6,7 +6,8 @@
     "@excluded",
     "@stdlib",
     "@external",
-    "organism.engine.*"
+    "organism.engine.*",
+    "organism.main"
   ],
   "groups": {
     "organism": [

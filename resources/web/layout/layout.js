@@ -7,11 +7,11 @@ const LAYOUT = new GoldenLayout({
         content: [
             {
                 type: 'stack',
-                width: 15,
+                width:20,
                 content: [
                     {
                         type: 'component',
-                        componentName: 'graph-controller',
+                        componentName: 'control-view',
                         componentState: {label: 'Graph Controller'},
                     },
                     {
@@ -21,7 +21,6 @@ const LAYOUT = new GoldenLayout({
                     },
                 ]
             },
-
             {
                 type: 'stack',
                 content: [

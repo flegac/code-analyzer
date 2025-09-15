@@ -1,8 +1,8 @@
-class GraphNodeRenderer {
+class DisplayNodeUpdater {
     constructor(params) {
         this._bilboardMaterial = new THREE.ShaderMaterial({
-            vertexShader: GraphNodeRenderer.vertexShader,
-            fragmentShader: GraphNodeRenderer.fragmentShader,
+            vertexShader: DisplayNodeUpdater.vertexShader,
+            fragmentShader: DisplayNodeUpdater.fragmentShader,
             transparent: true,
         });
         this._bilboardGeometry = this.bilboardGeometry();
@@ -30,6 +30,10 @@ class GraphNodeRenderer {
                 hitbox: this.createHitbox(node),
                 text: this.createTextSprite(node),
             };
+            if( node.mesh.text) {
+                node.mesh.billboard = null;
+                node.mesh.hitbox = null;
+            }
 
             Object.entries(node.mesh).forEach(([key, value]) => {
                 if (value && value !== group) group.add(value);
