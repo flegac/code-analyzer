@@ -13,8 +13,10 @@
     <link type="text/css" rel="stylesheet"
           href="https://golden-layout.com/files/latest/css/goldenlayout-dark-theme.css"/>
 
+    <script src="https://unpkg.com/cash-dom"></script>
     <script src="https://unpkg.com/three@0.150.1/build/three.min.js"></script>
     <script src="https://unpkg.com/3d-force-graph"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stats.js/build/stats.min.js"></script>
 
 
     <script src="web/layout.js"></script>
@@ -50,8 +52,26 @@
 </head>
 <body>
 
-<input type="file" id="file-browser" style="display: none" accept=".json"/>
+<script>
+  const stats = new Stats();
+  stats.dom.classList.add('stats-panel');
+  stats.showPanel(0); // 0 = FPS, 1 = MS, 2 = MB
+  document.body.appendChild(stats.dom);
 
+
+  function animate() {
+    stats.begin();
+
+    // ton code animé ici…
+
+    stats.end();
+    requestAnimationFrame(animate);
+  }
+
+  requestAnimationFrame(animate);
+</script>
+
+<input type="file" id="file-browser" style="display: none" accept=".json"/>
 <script>
 
     const graph = new Graph();
@@ -60,11 +80,8 @@
     const updater = new GraphUpdater(graph, tree);
     const controller = new GraphController(updater);
 
-
     tree.onUpdate = groups => {
-        updater.groups = groups;
-        updater.rebuildGraph();
-        // controller.updateGraph();
+       console.log(groups);
     };
     const table = new TableView();
 
@@ -98,7 +115,7 @@
     });
 
 
-    window.addEventListener('DOMContentLoaded', () => controller.updater.loadGraph());
+    $(() => controller.updater.loadGraph());
     LAYOUT.init();
 
 </script>

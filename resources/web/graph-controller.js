@@ -16,9 +16,10 @@ class GraphController extends GuiGraphController {
         }, 'fileBrowser').name('📂 Charger un fichier');
 
         // file handler
-        document.getElementById('file-browser').addEventListener('change', async (event) => {
+        $('#file-browser').on('change', async event => {
             const file = event.target.files[0];
             if (!file) return;
+
             const reader = new FileReader();
             reader.onload = async e => {
                 try {
@@ -28,7 +29,7 @@ class GraphController extends GuiGraphController {
                     console.error('Erreur de parsing JSON :', err);
                 }
             };
-            await reader.readAsText(file);
+            reader.readAsText(file);
         });
 
 
@@ -40,7 +41,7 @@ class GraphController extends GuiGraphController {
                 this.updater.params.dataset.dataset = null;
                 await this.updater.children.dataset.apply()
             });
-        this.gui.add({'reload': () => this.updater.loadGraph()}, 'reload');
+        this.gui.add({ 'reload': () => this.updater.loadGraph() }, 'reload');
         this.gui.add({
             'simControl': async () => {
                 this.updater.params.physics.isActive = !this.updater.params.physics.isActive;
@@ -48,30 +49,28 @@ class GraphController extends GuiGraphController {
             }
         }, 'simControl').name('pause/resume');
 
-        this.gui.add(this.updater.params.physics, 'dimension', {'2D': 2, '3D': 3})
+        this.gui.add(this.updater.params.physics, 'dimension', { '2D': 2, '3D': 3 })
             .name('Projection')
             .onChange(() => this.updater.rebuildGraph(graph));
 
 
         this.gui.add(this.updater.params.physics, 'repulsionStrength', 1, 100, 0.1)
             .name('Repulsion Strength')
-            .onChange(() => this.updater.updateGraph());
+            .onChange(() => this.updater.apply());
 
         this.gui.add(this.updater.params.physics, 'groupHierarchyDepth', 0, 5, 1)
             .name('Group hierarchy depth')
-            .onChange(() => this.updater.updateGraph())
+            .onChange(() => this.updater.apply())
 
         this.gui.add(this.updater.params.physics, 'groupDistance', 1, 100, 0.1)
             .name('Distance groupe')
-            .onChange(() => this.updater.updateGraph());
+            .onChange(() => this.updater.apply());
 
 
         const debugInfos = new RenderDebug(() => this.updater.graph.graph.renderer());
         debugInfos.start();
         debugInfos.loadGui(this.gui);
-
     }
-
 }
 
 class RenderDebug {

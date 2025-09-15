@@ -3,7 +3,8 @@ class GraphUpdaterRelation {
         this.updater = updater;
     }
 
-    async apply(graph) {
+    async apply() {
+        const graph = this.updater.graph;
         const params = this.updater.params.relations;
 
 
@@ -21,11 +22,12 @@ class GraphUpdaterRelation {
         graph.graph
             // .linkCurvature(.3)
             // .linkAutoColorBy('label')
-            // .linkDirectionalParticleWidth(link => {
-            //     return 2 + params[link.label]?.width * .5;
-            // })
+
             // .linkDirectionalParticles(2)
-            // .linkDirectionalParticleSpeed(0.01)
+            .linkDirectionalParticleWidth(link => {
+                return 2 + params[link.label]?.width * .5;
+            })
+            .linkDirectionalParticleSpeed(0.01)
             .linkWidth((link) => {
                 return params[link.label]?.width ?? 1;
             })

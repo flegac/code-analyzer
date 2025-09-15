@@ -4,21 +4,16 @@ class GraphControllerCamera {
         this.keysPressed = {};
         this.rotationSpeed = 3.5 * Math.PI / 180; // ~3.5° par frame
         this.target = new THREE.Vector3(0, 0, 0); // point central
-    }
-
-    start() {
-        const camera = this.graph.graph.camera();
-        const controls = this.graph.graph.controls();
-        this.target = controls.target.clone();
-
-        document.addEventListener('keydown', e => {
+        $(document).on('keydown', e => {
             this.keysPressed[e.key.toLowerCase()] = true;
         });
-
-        document.addEventListener('keyup', e => {
+        $(document).on('keyup', e => {
             this.keysPressed[e.key.toLowerCase()] = false;
         });
+        this.animateCamera();
+    }
 
+    handleClicks() {
         this.graph.graph.onNodeClick(node => {
             const camera = this.graph.graph.camera();
             const controls = this.graph.graph.controls();
@@ -41,10 +36,10 @@ class GraphControllerCamera {
             controls.target.copy(this.target);
             controls.update();
         });
-        this.animateCamera();
     }
 
     animateCamera() {
+        if( !this.graph.graph) return;
         const camera = this.graph.graph.camera();
 
         // Vecteurs de base

@@ -1,11 +1,13 @@
 class GraphNodeRenderer {
     constructor(params) {
-        this.material = new THREE.ShaderMaterial({
+        this._bilboardMaterial = new THREE.ShaderMaterial({
             vertexShader: GraphNodeRenderer.vertexShader,
             fragmentShader: GraphNodeRenderer.fragmentShader,
-            transparent: true
+            transparent: true,
         });
-        this.geometry = this.bilboardGeometry();
+        this._bilboardGeometry = this.bilboardGeometry();
+        this._hitboxMaterial = new THREE.MeshBasicMaterial({ visible: false });
+        this._hitboxGeometry = new THREE.PlaneGeometry(1, 1);
 
         this.params = params;
         this.textOffsetY = 10
@@ -13,24 +15,26 @@ class GraphNodeRenderer {
         this.textColor = 'white';
     }
 
-
     apply(graph) {
         graph.nodeThreeObject(node => {
             const group = new THREE.Group();
-
-            const billboard = this.createBillboard(node);
-            group.add(billboard);
-            node.my_billboard = billboard;
+            group.userData = {
+                _isBillboard: true,
+                nodeRef: node,
+            }
 
             const partsCount = node.id.split('.').length;
             const shouldShowText = partsCount === 1 || partsCount === this.params.groupHierarchyDepth;
+            node.mesh = {
+                group: group,
+                billboard: this.createBillboard(node),
+                hitbox: this.createHitbox(node),
+                text: shouldShowText ? this.createTextSprite(node) : null
+            };
 
-            if (shouldShowText) {
-                const textSprite = this.createTextSprite(node.id);
-                textSprite.position.set(0, 25, 0); // positionne le texte au-dessus du billboard
-                group.add(textSprite);
-                node.my_textSprite = textSprite;
-            }
+            Object.entries(node.mesh).forEach(([key, value]) => {
+                if (value && value !== group) group.add(value);
+            });
 
             return group;
         });
@@ -41,9 +45,8 @@ class GraphNodeRenderer {
             function updateBillboardOrientation() {
                 const camera = graph.camera();
                 graph.graphData().nodes.forEach(node => {
-                    const obj = node.my_billboard;
-                    if (obj && obj.userData && obj.userData._isBillboard) {
-                        obj.lookAt(camera.position);
+                    if (node.mesh) {
+                        node.mesh.group.lookAt(camera.position);
                     }
                 });
                 requestAnimationFrame(updateBillboardOrientation);
@@ -53,13 +56,18 @@ class GraphNodeRenderer {
         }
     }
 
+    createHitbox(node) {
+        const size = node.radius;
+        const mesh = new THREE.Mesh(this._hitboxGeometry.clone(), this._hitboxMaterial);
+        mesh.userData.nodeRef = node;
+        mesh.scale.set(size, size);
+        return mesh;
+    }
+
     createBillboard(node) {
-        const geo = this.geometry.clone();
-
+        const geo = this._bilboardGeometry.clone();
         const c = new THREE.Color(node.color || '#ffffff');
-        const s = node.size || 20;
-
-        // Injecte la couleur
+        const size = node.radius;
         const colorArray = new Float32Array([
             c.r, c.g, c.b,
             c.r, c.g, c.b,
@@ -67,26 +75,29 @@ class GraphNodeRenderer {
             c.r, c.g, c.b
         ]);
         geo.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
-
-        // Injecte la taille
-        const sizeArray = new Float32Array([s, s, s, s]);
+        const sizeArray = new Float32Array([size, size, size, size]);
         geo.setAttribute('size', new THREE.BufferAttribute(sizeArray, 1));
+        const mesh = new THREE.Mesh(geo, this._bilboardMaterial);
+        // mesh.renderOrder = 500;
 
-        const mesh = new THREE.Mesh(geo, this.material);
-        mesh.userData = {_isBillboard: true};
-        mesh.renderOrder = 999;
         return mesh;
     }
 
-    createTextSprite(text) {
+    createTextSprite(node) {
+        const text = node.id;
+        const parts = node.id.split('.');
+        const size = 5 / Math.pow(2, parts.length);
+        console.log(size)
+        const display = formatPath(parts);
+
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
 
         const fontSize = this.params.fontSize;
-        const scaleFactor = this.params.scaleFactor;
+        const scaleFactor = this.params.scaleFactor * size;
 
         context.font = `${fontSize}px ${this.fontFamily}`;
-        const textWidth = context.measureText(text).width;
+        const textWidth = context.measureText(display).width;
         const textHeight = fontSize + 12;
 
         canvas.width = textWidth;
@@ -94,20 +105,19 @@ class GraphNodeRenderer {
 
         context.font = `${fontSize}px ${this.fontFamily}`;
         context.fillStyle = this.textColor;
-        context.fillText(text, 0, fontSize * .75);
+        context.fillText(display, 0, fontSize * .75);
 
         const texture = new THREE.CanvasTexture(canvas);
-        const material = new THREE.SpriteMaterial({map: texture, transparent: true});
-        const sprite = new THREE.Sprite(material);
+        const material = new THREE.SpriteMaterial({ map: texture, transparent: true });
+        const mesh = new THREE.Sprite(material);
 
-        sprite.scale.set(textWidth * scaleFactor, textHeight * scaleFactor, 1);
-        sprite.position.set(0, this.textOffsetY, 0);
-
-        return sprite;
+        mesh.scale.set(textWidth * scaleFactor, textHeight * scaleFactor, 1);
+        mesh.position.set(0, this.textOffsetY, 0);
+        return mesh;
     }
 
-    bilboardGeometry() {
 
+    bilboardGeometry() {
         const geometry = new THREE.PlaneGeometry(1, 1); // quad orienté vers la caméra
         const colors = new Float32Array([
             1, 1, 1,  // vertex 1
@@ -116,7 +126,7 @@ class GraphNodeRenderer {
             1, 1, 1   // vertex 4
         ]);
         geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-        const sizes = new Float32Array([20, 20, 20, 20]);
+        const sizes = new Float32Array([1, 1, 1, 1]);
         geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
         return geometry;
     }
@@ -152,4 +162,12 @@ void main() {
 }
 `;
 
+}
+function formatPath(parts) {
+    if (!Array.isArray(parts) || parts.length === 0) return '';
+    if (parts.length === 1) return parts[0];
+    if (parts.length === 2) return parts.join('.');
+
+    const res = parts.slice(-2).join('.');
+    return `_.${res}`;
 }

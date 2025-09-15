@@ -1,4 +1,4 @@
-const NODE_ATTRIBUTES = [
+const SIZE_ATTRIBUTES = [
     'lines',
     'imported',
     'imports',
@@ -8,7 +8,10 @@ const NODE_ATTRIBUTES = [
     'loops',
     'branches'
 ];
-
+const COLOR_ATTRIBUTES = [
+    'group',
+    'category',
+];
 class GraphControllerNode extends GuiGraphController {
     constructor(updater) {
         super('graph-node-controller', 'Nodes');
@@ -23,11 +26,11 @@ class GraphControllerNode extends GuiGraphController {
             .name('text size')
             .onChange(() => this.updater.children.nodes.apply(this.updater.graph));
 
-        this.gui.add(params, 'color', NODE_ATTRIBUTES)
+        this.gui.add(params, 'color', COLOR_ATTRIBUTES)
             .name('color')
             .onChange(() => this.updater.children.nodes.apply(this.updater.graph));
 
-        this.gui.add(params, 'size', NODE_ATTRIBUTES)
+        this.gui.add(params, 'size', SIZE_ATTRIBUTES)
             .name('size')
             .onChange(() => this.updater.children.nodes.apply(this.updater.graph));
     }

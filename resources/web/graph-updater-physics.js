@@ -3,7 +3,8 @@ class GraphUpdaterPhysics {
         this.updater = updater;
     }
 
-    async apply(graph) {
+    async apply() {
+        const graph = this.updater.graph;
         const physics = this.updater.params.physics;
         const relations = this.updater.params.relations;
 

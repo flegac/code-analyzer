@@ -3,8 +3,10 @@ class GraphUpdaterNode {
         this.updater = updater;
     }
 
-    async apply(graph) {
+    async apply() {
+        const graph = this.updater.graph;
         const infos = await this.updater.children.dataset.moduleInfos();
+        const nodeBaseRadius = 12;
 
 
         graph.data().nodes.forEach(node => {
@@ -12,12 +14,11 @@ class GraphUpdaterNode {
             let group = node.id.split('.').slice(0, this.updater.params.nodes.groupHierarchyDepth).join('.');
             node.group = group;
             node.infos.group = group;
+            node.radius = Math.max(nodeBaseRadius, Math.cbrt(1 + node.infos[this.updater.params.nodes.size]) * nodeBaseRadius);
         });
         graph.graph
-            .nodeVal(node => node.infos[this.updater.params.nodes.size])
             .nodeAutoColorBy('group')
-            .nodeRelSize(4)
-        ;
+            ;
 
         // TODO: better handling of that
         // TODO: automatic resize ?

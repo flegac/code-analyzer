@@ -1,8 +1,8 @@
 class Graph {
     constructor() {
         this.container = createDiv('graph');
-        this.graph = ForceGraph3D()(this.container);
-        new GraphControllerCamera(this).start();
+        this.graph = this._rebuild();
+        this.cam = new GraphControllerCamera(this);
         const resizeObserver = new ResizeObserver(() => {
             this.graph
                 .width(this.container.clientWidth)
@@ -15,15 +15,26 @@ class Graph {
         return this.graph.graphData()
     }
 
-    async renderGraph(dataset) {
+    reset() {
+        if (this.graph && typeof this.graph._destructor === 'function') {
+            this.graph._destructor();
+        }
+        this.graph = this._rebuild();
+        this.cam.handleClicks()
+
+    }
+
+    async rebuild(dataset) {
+        // TODO: why is it needed to reallocate a new Graph object ?
+        this.reset();
+
         const dependencies = await dataset.dependencies();
         const hierarchy = dependencies.hierarchy();
+        const nodeIds = new Set([
+            ...dependencies.nodes,
+            ...hierarchy.nodes
+        ]);
 
-        this.resetGraph();
-        const nodeIds = new Set();
-        for (let relation of [hierarchy, dependencies]) {
-            relation.nodes.forEach(_ => nodeIds.add(_))
-        }
         this.graph.graphData({
             nodes: Array.from(nodeIds).map(id => {
                 return {
@@ -40,13 +51,13 @@ class Graph {
                 ...dependencies.links
             ]
         });
+
+        
     }
 
-    resetGraph() {
-        if (this.graph && typeof this.graph._destructor === 'function') {
-            this.graph._destructor();
-        }
-        this.graph = ForceGraph3D()(this.container)
+
+    _rebuild() {
+        return ForceGraph3D()(this.container)
             .nodeLabel(node => {
                 let infos = '';
                 if (node.infos) {
@@ -56,8 +67,6 @@ class Graph {
             })
             .width(this.container.clientWidth)
             .height(this.container.clientHeight);
-
     }
+
 }
-
-

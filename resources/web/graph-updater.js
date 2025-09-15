@@ -60,13 +60,18 @@ class GraphUpdater {
     }
 
     async rebuildGraph() {
-        await this.graph.renderGraph(this.children.dataset);
-        await this.updateGraph();
+        await this.graph.rebuild(this.children.dataset);
+        await this.apply();
     }
 
-    async updateGraph() {
+    async apply() {
         for (const [_, updater] of Object.entries(this.children)) {
-            await updater.apply(this.graph);
+            await updater.apply();
         }
+        
+        // TODO: better handling of that
+        // TODO: automatic resize ?
+        const renderer = new GraphNodeRenderer(this.params.nodes)
+        renderer.apply(this.graph.graph);
     }
 }

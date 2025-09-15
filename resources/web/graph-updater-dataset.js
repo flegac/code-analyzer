@@ -3,7 +3,7 @@ class GraphUpdaterDataset {
         this.updater = updater
     }
 
-    async apply(graph = null) {
+    async apply() {
         const dependencies = await this.dependencies()
         this.updater.tree.rebuild(dependencies.hierarchy());
     }
