@@ -1,13 +1,7 @@
-class GraphController extends GuiGraphController {
+class DatasetController extends GuiGraphController {
     constructor(updater) {
-        super('controller', 'General');
-
-
+        super('dataset-controller', 'Dataset');
         this.updater = updater;
-        this.control = {
-            nodes: new GraphControllerNode(this.updater),
-            edges: new GraphControllerRelation(this.updater),
-        }
 
         this.gui.add({
             fileBrowser: () => {
@@ -32,7 +26,6 @@ class GraphController extends GuiGraphController {
             reader.readAsText(file);
         });
 
-
         this.gui.add(this.updater.params.dataset, 'datasetPath', {
             'class_graph.json': 'data/class_graph.json',
             'dependencies.json': 'data/dependencies.json',
@@ -41,7 +34,22 @@ class GraphController extends GuiGraphController {
                 this.updater.params.dataset.dataset = null;
                 await this.updater.children.dataset.apply()
             });
-        this.gui.add({ 'reload': () => this.updater.loadGraph() }, 'reload');
+        this.gui.add({'reload': () => this.updater.loadGraph()}, 'reload');
+
+    }
+
+}
+
+class GraphController extends GuiGraphController {
+    constructor(updater) {
+        super('controller', 'General');
+        this.updater = updater;
+        this.control = {
+            dataset: new DatasetController(this.updater),
+            nodes: new GraphControllerNode(this.updater),
+            edges: new GraphControllerRelation(this.updater),
+        }
+
         this.gui.add({
             'simControl': async () => {
                 this.updater.params.physics.isActive = !this.updater.params.physics.isActive;
@@ -49,7 +57,7 @@ class GraphController extends GuiGraphController {
             }
         }, 'simControl').name('pause/resume');
 
-        this.gui.add(this.updater.params.physics, 'dimension', { '2D': 2, '3D': 3 })
+        this.gui.add(this.updater.params.physics, 'dimension', {'2D': 2, '3D': 3})
             .name('Projection')
             .onChange(() => this.updater.rebuildGraph(graph));
 

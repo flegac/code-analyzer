@@ -18,7 +18,12 @@
     <script src="https://unpkg.com/3d-force-graph"></script>
     <script src="https://cdn.jsdelivr.net/npm/stats.js/build/stats.min.js"></script>
 
+    <!--    graphology-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/graphology/0.21.0/graphology.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/graphology-library@latest/dist/graphology-library.min.js"></script>
 
+
+    <script src="web/event-handler.js"></script>
     <script src="web/layout.js"></script>
     <script src="web/utils.js"></script>
     <script src="web/relation.js"></script>
@@ -28,8 +33,9 @@
     <script src="web/graph-filter.js"></script>
     <script src="web/graph-updater-dataset.js"></script>
 
-    <script src="web/graph.js"></script>
-    <script src="web/graph-controller-camera.js"></script>
+    <script src="web/graph-display.js"></script>
+    <script src="web/camera-controller.js"></script>
+
 
     <script src="web/graph-updater.js"></script>
     <script src="web/graph-controller.js"></script>
@@ -53,41 +59,42 @@
 <body>
 
 <script>
-  const stats = new Stats();
-  stats.dom.classList.add('stats-panel');
-  stats.showPanel(0); // 0 = FPS, 1 = MS, 2 = MB
-  document.body.appendChild(stats.dom);
+    const stats = new Stats();
+    stats.dom.classList.add('stats-panel');
+    stats.showPanel(0); // 0 = FPS, 1 = MS, 2 = MB
+    document.body.appendChild(stats.dom);
 
 
-  function animate() {
-    stats.begin();
+    function animate() {
+        stats.begin();
 
-    // ton code animé ici…
+        // ton code animé ici…
 
-    stats.end();
+        stats.end();
+        requestAnimationFrame(animate);
+    }
+
     requestAnimationFrame(animate);
-  }
-
-  requestAnimationFrame(animate);
 </script>
 
 <input type="file" id="file-browser" style="display: none" accept=".json"/>
 <script>
 
-    const graph = new Graph();
+    const graph = new GraphDisplay();
     const tree = new TreeView();
 
     const updater = new GraphUpdater(graph, tree);
     const controller = new GraphController(updater);
 
     tree.onUpdate = groups => {
-       console.log(groups);
+        console.log(groups);
     };
     const table = new TableView();
 
     LAYOUT.registerComponent('graph-controller', function (container, componentState) {
         (async () => {
             let elt = container.getElement();
+            elt.append(controller.control.dataset.container);
             elt.append(controller.container);
             elt.append(controller.control.nodes.container);
             elt.append(controller.control.edges.container);

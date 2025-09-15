@@ -6,7 +6,7 @@ class GraphNodeRenderer {
             transparent: true,
         });
         this._bilboardGeometry = this.bilboardGeometry();
-        this._hitboxMaterial = new THREE.MeshBasicMaterial({ visible: false });
+        this._hitboxMaterial = new THREE.MeshBasicMaterial({visible: false});
         this._hitboxGeometry = new THREE.PlaneGeometry(1, 1);
 
         this.params = params;
@@ -23,13 +23,12 @@ class GraphNodeRenderer {
                 nodeRef: node,
             }
 
-            const partsCount = node.id.split('.').length;
-            const shouldShowText = partsCount === 1 || partsCount === this.params.groupHierarchyDepth;
+
             node.mesh = {
                 group: group,
                 billboard: this.createBillboard(node),
                 hitbox: this.createHitbox(node),
-                text: shouldShowText ? this.createTextSprite(node) : null
+                text: this.createTextSprite(node),
             };
 
             Object.entries(node.mesh).forEach(([key, value]) => {
@@ -84,20 +83,23 @@ class GraphNodeRenderer {
     }
 
     createTextSprite(node) {
-        const text = node.id;
         const parts = node.id.split('.');
+        const partsCount = parts.length;
+        const shouldShowText = partsCount === 1 || partsCount <= this.params.groupHierarchyDepth;
+        if (!shouldShowText) return null;
+
         const size = 5 / Math.pow(2, parts.length);
-        console.log(size)
-        const display = formatPath(parts);
+        const text = formatPath(parts);
 
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
 
         const fontSize = this.params.fontSize;
         const scaleFactor = this.params.scaleFactor * size;
 
         context.font = `${fontSize}px ${this.fontFamily}`;
-        const textWidth = context.measureText(display).width;
+        const textWidth = context.measureText(text).width;
         const textHeight = fontSize + 12;
 
         canvas.width = textWidth;
@@ -105,14 +107,17 @@ class GraphNodeRenderer {
 
         context.font = `${fontSize}px ${this.fontFamily}`;
         context.fillStyle = this.textColor;
-        context.fillText(display, 0, fontSize * .75);
-
+        context.textBaseline = 'top';
+        context.fillText(text, 0, 0);
         const texture = new THREE.CanvasTexture(canvas);
-        const material = new THREE.SpriteMaterial({ map: texture, transparent: true });
+        const material = new THREE.SpriteMaterial({
+            map: texture,
+            transparent: true,
+        });
         const mesh = new THREE.Sprite(material);
 
         mesh.scale.set(textWidth * scaleFactor, textHeight * scaleFactor, 1);
-        mesh.position.set(0, this.textOffsetY, 0);
+        // mesh.position.set(0, this.textOffsetY, 0);
         return mesh;
     }
 
@@ -163,6 +168,7 @@ void main() {
 `;
 
 }
+
 function formatPath(parts) {
     if (!Array.isArray(parts) || parts.length === 0) return '';
     if (parts.length === 1) return parts[0];

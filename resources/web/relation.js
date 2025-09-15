@@ -15,23 +15,11 @@ class Relation {
                 this.links.push({source, target, label});
             }
         }
-
-        function computeSubtreeSize(node, visited = new Set()) {
-            if (visited.has(node)) return 1;
-            visited.add(node);
-            let size = 1;
-            for (let child of graph[node] || []) {
-                size += computeSubtreeSize(child, visited);
-            }
-            return size;
-        }
     }
-
 
     hierarchy() {
         return buildHierarchy(this);
     }
-
 }
 
 function buildHierarchy(graph) {
@@ -75,8 +63,6 @@ function buildHierarchy(graph) {
                 }
             }
         }
-
-
     }
     // const raw = await fetch(this.params.hierarchyPath).then(res => res.json());
     return new Relation('hierarchy', hierarchy);

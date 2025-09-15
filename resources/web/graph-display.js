@@ -1,8 +1,8 @@
-class Graph {
+class GraphDisplay {
     constructor() {
         this.container = createDiv('graph');
         this.graph = this._rebuild();
-        this.cam = new GraphControllerCamera(this);
+        this.cam = new CameraController(this);
         const resizeObserver = new ResizeObserver(() => {
             this.graph
                 .width(this.container.clientWidth)
@@ -20,8 +20,7 @@ class Graph {
             this.graph._destructor();
         }
         this.graph = this._rebuild();
-        this.cam.handleClicks()
-
+        this.graph.onNodeClick(node => this.cam.focusOn(node));
     }
 
     async rebuild(dataset) {
@@ -52,7 +51,7 @@ class Graph {
             ]
         });
 
-        
+
     }
 
 
