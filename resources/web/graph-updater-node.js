@@ -18,9 +18,10 @@ class GraphUpdaterNode {
             .nodeAutoColorBy('group')
             .nodeRelSize(4)
         ;
-        // const renderer = new ShaderNodeRenderer(graph.graph);
-        // new GraphNodeRenderer().apply(graph.graph);
-        await new GraphUpdaterNodeText(this.updater.params.nodes).apply(graph);
 
+        // TODO: better handling of that
+        // TODO: automatic resize ?
+        const renderer = new GraphNodeRenderer(this.updater.params.nodes)
+        renderer.apply(graph.graph);
     }
 }
