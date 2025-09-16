@@ -1,8 +1,8 @@
 
 class DatasetController extends GuiGraphController {
-    constructor(updater) {
+    constructor(app) {
         super('dataset-controller', 'Dataset');
-        this.updater = updater;
+        this.app = app;
 
         this.gui.add({
             fileBrowser: () => {
@@ -14,12 +14,12 @@ class DatasetController extends GuiGraphController {
         $('#file-browser').on('change', async event => {
             const file = event.target.files[0];
             if (!file) return;
-
             const reader = new FileReader();
             reader.onload = async e => {
                 try {
-                    this.state().dataset = JSON.parse(e.target.result);
-                    await this.updater.loadGraph();
+                    app.state.dataset.dataset = JSON.parse(e.target.result);
+                    console.log(`${app}`)
+                    await app.loadGraph();
                 } catch (err) {
                     console.error('Erreur de parsing JSON :', err);
                 }
@@ -27,19 +27,19 @@ class DatasetController extends GuiGraphController {
             reader.readAsText(file);
         });
 
-        this.gui.add(this.state(), 'datasetPath', {
+        this.gui.add(this.app.state.dataset, 'datasetPath', {
             'class_graph.json': 'data/class_graph.json',
             'dependencies.json': 'data/dependencies.json',
         }).name('Dataset')
             .onChange(async () => {
                 this.state().dataset = null;
-                await this.updater.dataset.apply()
+                await this.app.dataset.apply()
             });
-        this.gui.add({ 'reload': () => this.updater.loadGraph() }, 'reload');
+        this.gui.add({ 'reload': () => this.app.loadGraph() }, 'reload');
     }
 
     state() {
-        return this.updater.state;
+        return this.app.state;
     }
 
 }

@@ -1,15 +1,15 @@
 class DisplayController extends GuiGraphController {
     constructor(updater) {
         super('graph-edge-controller', 'Display');
-        this.updater = updater;
-        const nodes = this.updater.state.nodes;
+        this.app = updater;
+        const nodes = this.app.state.nodes;
         const nodesFolder = this.gui.addFolder('Nodes');
 
-        const onChange = () => this.updater.display.apply();
-        const onChange2 = () => this.updater.apply();
+        const onChange = () => this.app.display.apply();
+        const onChange2 = () => this.app.apply();
 
         nodesFolder.add(nodes, 'groupHierarchyDepth', 0, 5, 1)
-            .name('Group hierarchy depth').onChange(onChange2)
+            .name('Group hierarchy depth').onChange(onChange2);
         nodesFolder.add(nodes, 'scaleFactor', .0, 1., 0.01)
             .name('text size').onChange(onChange);
         nodesFolder.add(nodes, 'color', COLOR_ATTRIBUTES)
@@ -17,15 +17,15 @@ class DisplayController extends GuiGraphController {
         nodesFolder.add(nodes, 'size', SIZE_ATTRIBUTES)
             .name('size').onChange(onChange);
 
-        this.addLinkFolder('Dependencies', this.updater.state.links.dependencies);
-        this.addLinkFolder('Hierarchy', this.updater.state.links.hierarchy);
+        this.addLinkFolder('Dependencies', this.app.state.links.dependencies);
+        this.addLinkFolder('Hierarchy', this.app.state.links.hierarchy);
     }
 
     addLinkFolder(title, params) {
-        const onChange = () => this.updater.display.apply();
+        const onChange = () => this.app.display.apply();
         const folder = this.gui.addFolder(title);
         folder.addColor(params, 'color').name('Color').onChange(onChange);
-        folder.add(params, 'width', 0.1, 10, 0.1).name('width').onChange(onChange);
+        folder.add(params, 'width', 0.0, 10, 0.01).name('width').onChange(onChange);
         folder.add(params, 'particles', 0, 5, 1).name('particles').onChange(onChange);
         return folder;
     }

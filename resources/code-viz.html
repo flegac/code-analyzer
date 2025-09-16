@@ -8,13 +8,21 @@
         {
             "imports": {
                 "events": "./web/core/event-handler.js",
+
+                "app": "./web/app.js",
+                "app-layout": "./web/app-layout.js",
+                "app-controller": "./web/app-controller.js",
+
                 "camera-controller": "./web/camera-controller.js",
-                "tree-view": "./web/layout/tree-view.js",
-                "table-view": "./web/layout/table-view.js",
-                "graph-view": "./web/layout/graph-view.js",
-                "global-app": "./web/global-app.js",
+                "tree-view": "./web/view/tree-view.js",
+                "table-view": "./web/view/table-view.js",
+                "graph-view": "./web/view/graph-view.js",
+
                 "graph-controller": "./web/graph-controller.js",
-                "render-debug": "./web/render-debug.js"
+                "render-debug": "./web/render-debug.js",
+                "graph-display": "./web/graph-display.js",
+
+                "display-updater": "./web/display-updater.js"
             }
         }
     </script>
@@ -41,8 +49,8 @@
 
     <!-- core -->
     <script src="web/core/utils.js"></script>
-    <script src="web/view-config.js"></script>
-    <script src="web/layout/layout.js"></script>
+    <script src="web/app-state.js"></script>
+    <script src="web/core/layout.js"></script>
     <script src="web/graph/graph-filter.js"></script>
 
     <!-- dataset -->
@@ -56,7 +64,7 @@
 
     <!-- display -->
     <script src="web/display-node-updater.js"></script>
-    <script src="web/display-updater.js"></script>
+<!--    <script src="web/display-updater.js"></script>-->
     <script src="web/display-controller.js"></script>
 
 </head>
@@ -68,32 +76,35 @@
     stats.dom.classList.add('stats-panel');
     stats.showPanel(0); // 0 = FPS, 1 = MS, 2 = MB
     document.body.appendChild(stats.dom);
+
     function animate() {
         stats.begin();
         stats.end();
         requestAnimationFrame(animate);
     }
+
     requestAnimationFrame(animate);
 </script>
 <script type="module">
-    import { GlobalApp } from "global-app";
-    import { GraphController } from "graph-controller";
+    import {AppLayout} from "app-layout";
+    import {App} from "app";
+    import {AppController} from "app-controller";
 
-    const updater = new GlobalApp();
-    const layout = updater.layout;
-    const controller = new GraphController(updater);
+    const layout = new AppLayout();
+    const app = new App(layout, APP_STATE);
+    const controller = new AppController(app);
 
-    const dependencies = await updater.dataset.dependencies();
-    const moduleInfos = await updater.dataset.moduleInfos();
+    const dependencies = await app.dataset.dependencies();
+    const moduleInfos = await app.dataset.moduleInfos();
 
     await layout.table.rebuild(moduleInfos);
 
     loadLayout({
         'control-view': () => [
-            controller.dataset.container, 
-            controller.physics.container, 
-            controller.display.container, 
-            controller.container, 
+            controller.dataset.container,
+            controller.physics.container,
+            controller.display.container,
+            controller.container,
         ],
         'tree-view': async () => {
             layout.tree.rebuild(MyGraph.hierarchy(dependencies));
@@ -105,17 +116,17 @@
             layout.graph.container
         ],
         'table-view': async () => [
-                layout.table.container
+            layout.table.container
         ],
     });
 
-    $(() => updater.loadGraph());
+
+    $(() => app.loadGraph());
     $(() => {
+        $(window).on('resize', () => LAYOUT.updateSize())
         const $leftPanel = $('.lm_stack').first();
         const $mainPanel = $('.lm_stack').eq(1);
         $leftPanel.attr("id", "left-panel");
-
-
         const width = 250;
         const widthString = `${width}px`;
 
@@ -138,6 +149,8 @@
             'overflow-y': 'auto',
             'height': '100%'
         });
+
+        LAYOUT.updateSize();
     });
 </script>
 

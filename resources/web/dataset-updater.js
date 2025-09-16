@@ -1,15 +1,15 @@
 class DatasetUpdater {
-    constructor(updater) {
-        this.updater = updater
+    constructor(app) {
+        this.app = app
     }
 
     async apply() {
         const dependencies = await this.dependencies()
-        this.updater.layout.tree.rebuild(MyGraph.hierarchy(dependencies));
+        this.app.layout.tree.rebuild(MyGraph.hierarchy(dependencies));
     }
 
     state() {
-        return this.updater.state.dataset
+        return this.app.state.dataset
     }
 
     async loadConfig() {
@@ -17,13 +17,18 @@ class DatasetUpdater {
     }
 
     async dependencies() {
-        if (this.state().dataset === null) {
-            this.state().dataset = await fetch(this.state().datasetPath).then(res => res.json());
-            console.log(`loading from ${this.state().datasetPath}`);
+        if (this.app.state.dataset.dataset === null) {
+            this.app.state.dataset.dataset = await fetch(this.app.state.dataset.datasetPath).then(res => res.json());
+            console.log(`loading from ${this.app.state.dataset.datasetPath}`);
         }
         let raw = this.state().dataset;
         const config = await this.loadConfig();
         const filtered = new GraphFilter(config).apply(raw);
+        // const collapsed = new GraphTransformer(
+        //     new GroupStrategy(
+        //         this.app.state.dataset.rootCollapseLevel,
+        //     ).apply
+        // ).apply(filtered);
         return new MyGraph('dependencies', filtered);
     }
 

@@ -5,7 +5,6 @@ const LAYOUT = new GoldenLayout({
     content: [{
         type: 'row',
         content: [
-
             {
                 type: 'stack',
                 content: [

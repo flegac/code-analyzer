@@ -1,12 +1,10 @@
-function forceGroupCollide(physics) {
+function forceGroupCollide(state) {
     let nodes;
-    const strength = 1.;
-    const baseDistance = physics.groupDistance;
-    const dimension = physics.dimension;
+    const dimension = state.physics.dimension;
 
-    function groupFn(node) {
-        return node.id.split('.').slice(0, physics.groupHierarchyDepth).join('.');
-    }
+
+    const strategy = new GroupStrategy(state.physics.collapsingDepth);
+
 
 
     function force(alpha) {
@@ -16,7 +14,7 @@ function forceGroupCollide(physics) {
 
         const groupMap = new Map();
         for (const node of nodes) {
-            const group = groupFn(node);
+            const group = strategy.apply(node.id);
             if (!groupMap.has(group)) groupMap.set(group, []);
             groupMap.get(group).push(node);
         }
@@ -31,18 +29,10 @@ function forceGroupCollide(physics) {
                     const dy = b.y - a.y;
                     const dz = b.z - a.z;
                     const dist = Math.hypot(dx, dy, dz);
-                    const minDist = 2.5 * baseDistance + (a.radius + b.radius);
-                    const maxDist = 5. * baseDistance + (a.radius + b.radius);
+                    const minDist = 1. + (a.radius + b.radius);
 
-                    let shift = .0;
-                    if (dist > maxDist) {
-
-                    } else if (dist < maxDist) {
-                        shift = -((maxDist - dist) / maxDist);
-                    } else {
-                        shift = ((minDist - dist) / minDist);
-                    }
-                    shift *= alpha * strength / n;
+                    let shift = ((minDist - dist) / Math.max(dist, minDist));
+                    shift *= alpha / n;
 
                     const sx = dx * shift, sy = dy * shift, sz = dz * shift;
                     b.x += sx;

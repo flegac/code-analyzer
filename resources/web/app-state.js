@@ -8,14 +8,16 @@ const APP_STATE = {
 
     physics: {
         isActive: true,
+        friction: .1,
         dimension: 3,
-        groupHierarchyDepth: 3,
-        repulsionStrength: 25,
-        groupDistance: 100,
-        linkBalanceRatio: .5
+        repulsionStrength: 30,
+        groupAttractionRatio: .5,
+        collapsingDepth: 1,
+        dependencyWeightRatio: .15,
     },
 
     nodes: {
+        baseRadius: 12,
         groupHierarchyDepth: 2,
         size: 'imported',
         color: 'group',
@@ -26,18 +28,17 @@ const APP_STATE = {
     links: {
         dependencies: {
             color: '#f00',
-            distance: 2,
-            strength: 1.,
+            distance: 25,
+            strength: 25.,
             width: 1.5,
             particles: 1,
         },
         hierarchy: {
             color: '#ffff00',
-            distance: 2,
-            strength: 100.,
+            distance: 25,
+            strength: 25.,
             width: 10,
             particles: 0,
         },
     }
-
 };

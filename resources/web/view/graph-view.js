@@ -1,4 +1,4 @@
-import { CameraController } from "camera-controller"
+import {CameraController} from "camera-controller"
 
 export class GraphView {
     constructor() {
@@ -25,15 +25,21 @@ export class GraphView {
         this.graph = this._rebuild();
 
 
-        this.graph.onEngineTick(() => {
-            this.graph.graphData().nodes.forEach(n => {
-                if (isNaN(n.x)) n.x = 1000 * (Math.random() - .5);
-                if (isNaN(n.y)) n.y = 1000 * (Math.random() - .5);
-                if (isNaN(n.z)) n.z = 1000 * (Math.random() - .5);
-            });
-        });
+        this.graph.nodeLabel(node => {
+            let infos = '';
+            if (node.infos) {
+                infos = JSON.stringify(node.infos, null, 2);
+            }
+            return `${node.id}<br>\n${infos}`;
+        })
 
-
+        // this.graph.onEngineTick(() => {
+        //     this.graph.graphData().nodes.forEach(n => {
+        //         if (isNaN(n.x)) n.x = 1000 * (Math.random() - .5);
+        //         if (isNaN(n.y)) n.y = 1000 * (Math.random() - .5);
+        //         if (isNaN(n.z)) n.z = 1000 * (Math.random() - .5);
+        //     });
+        // });
         this.graph.onNodeClick(node => {
             this.cam.focusOn(node);
             this.selected = node;
@@ -50,7 +56,6 @@ export class GraphView {
         //
         //     this.graph.linkDirectionalParticleSpeed(0.01);
         // });
-
     }
 
     rebuild(dependencies) {
@@ -63,25 +68,19 @@ export class GraphView {
             ...hierarchy.getNodes()
         ]);
         this.graph.graphData({
-            nodes: Array.from(nodeIds).map(id => ({ id })),
+            nodes: Array.from(nodeIds).map(id => ({id})),
             links: [
                 ...hierarchy.getLinks(),
                 ...dependencies.getLinks(),
             ]
         });
+
     }
 
 
     _rebuild() {
         this.selected = null;
         return ForceGraph3D()(this.container)
-            .nodeLabel(node => {
-                let infos = '';
-                if (node.infos) {
-                    infos = JSON.stringify(node.infos, null, 2);
-                }
-                return `${node.id}<br>\n${infos}`;
-            })
             .width(this.container.clientWidth)
             .height(this.container.clientHeight);
     }

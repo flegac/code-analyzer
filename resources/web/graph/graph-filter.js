@@ -1,3 +1,46 @@
+class GraphTransformer {
+    constructor(strategy) {
+        this.strategy = strategy;
+    }
+
+    apply(graph) {
+        const transformed = {};
+
+        for (const [key, targets] of Object.entries(graph)) {
+            const newKey = this.strategy(key);
+            if (!transformed[newKey]) transformed[newKey] = [];
+
+            for (const target of targets) {
+                const newTarget = this.strategy(target);
+                transformed[newKey].push(newTarget);
+            }
+        }
+
+        for (const key in transformed) {
+            transformed[key] = [...new Set(transformed[key])];
+        }
+
+        return transformed;
+    }
+
+}
+
+class GroupStrategy {
+    constructor(collapsingDepth = 0) {
+        this.collapsingDepth = collapsingDepth;
+    }
+
+    apply(label) {
+        const parts = label.split('.');
+        const total = parts.length;
+
+        const limit = Math.min(this.collapsingDepth + 1, total);
+        const kept = parts.slice(0, limit).join('.');
+        return kept || label;
+    }
+}
+
+
 class GraphFilter {
     static GROUP_REF = '@';
     static WILDCARD = '*';

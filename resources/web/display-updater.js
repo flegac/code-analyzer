@@ -1,63 +1,59 @@
-class DisplayUpdater {
-    constructor(updater) {
-        this.updater = updater;
+import {GraphDisplay} from "graph-display";
+
+export class DisplayUpdater {
+    constructor(app) {
+        this.app = app;
     }
 
     async apply() {
-        await this.applyLinks();
-        await this.applyNodes();
-    }
+        const graph = this.app.layout.graph;
+        const state = this.app.state;
 
-    async applyLinks() {
-        const graph = this.updater.layout.graph;
-        const params = this.updater.state.links;
-
-        graph.graph
-            // .linkCurvature(.3)
-            // .linkAutoColorBy('label')
-            .linkDirectionalParticles(link => {
-                 if (link.label !== 'hierarchy' && link.source.group === link.target.group) {
-                    return 0;
-                }
-                return params[link.label]?.particles ?? 0;
-            })
-            .linkDirectionalParticleWidth(link => {
-                return 2 + params[link.label]?.width * .5;
-            })
-            .linkDirectionalParticleSpeed(0.01)
-            .linkWidth((link) => {
-                return params[link.label]?.width ?? 1;
-            })
-            .linkColor((link) => {
+        const display = new GraphDisplay()
+        Object.assign(display.link, {
+            color: link => {
                 if (link.label !== 'hierarchy' && link.source.group === link.target.group) {
                     return '#ccc'
                 }
+                return state.links[link.label]?.color ?? '#f00';
+            },
+            width: link => {
+                return state.links[link.label]?.width
+            },
+            particleNumber: link => {
+                if (link.label !== 'hierarchy' && link.source.group === link.target.group) {
+                    return 0;
+                }
+                return state.links[link.label]?.particles ?? 0;
+            },
+            particleWidth: link => {
+                return 2 + state.links[link.label]?.width * .5;
+            },
+        });
+        await display.link.apply(graph);
 
-                return params[link.label]?.color ?? '#f00';
-            })
-        ;
+        await this.applyNodes();
     }
 
     async applyNodes() {
-        const graph = this.updater.layout.graph;
-        const infos = await this.updater.dataset.moduleInfos();
-        const nodeBaseRadius = 12;
-
+        const graph = this.app.layout.graph;
+        const infos = await this.app.dataset.moduleInfos();
+        const nodeBaseRadius = this.app.state.nodes.baseRadius;
 
         graph.data().nodes.forEach(node => {
             node.infos = infos[node.id] || {};
-            let group = node.id.split('.').slice(0, this.updater.state.nodes.groupHierarchyDepth).join('.');
+            let group = node.id.split('.').slice(0, this.app.state.nodes.groupHierarchyDepth + 1).join('.');
             node.group = group;
             node.infos.group = group;
-            node.radius = Math.max(nodeBaseRadius, Math.cbrt(1 + node.infos[this.updater.state.nodes.size]) * nodeBaseRadius);
+            node.radius = Math.max(nodeBaseRadius, Math.cbrt(1 + node.infos[this.app.state.nodes.size]) * nodeBaseRadius);
         });
         graph.graph
             .nodeAutoColorBy('group')
         ;
 
-        // TODO: better handling of that
-        // TODO: automatic resize ?
-        const renderer = new DisplayNodeUpdater(this.updater.state.nodes)
+        const renderer = new DisplayNodeUpdater(this.app.state.nodes)
         renderer.apply(graph.graph);
     }
+
+
 }
