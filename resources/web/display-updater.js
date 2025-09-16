@@ -9,8 +9,8 @@ class DisplayUpdater {
     }
 
     async applyLinks() {
-        const graph = this.updater.graph;
-        const params = this.updater.params.links;
+        const graph = this.updater.layout.graph;
+        const params = this.updater.state.links;
 
         graph.graph
             // .linkCurvature(.3)
@@ -39,17 +39,17 @@ class DisplayUpdater {
     }
 
     async applyNodes() {
-        const graph = this.updater.graph;
-        const infos = await this.updater.children.dataset.moduleInfos();
+        const graph = this.updater.layout.graph;
+        const infos = await this.updater.dataset.moduleInfos();
         const nodeBaseRadius = 12;
 
 
         graph.data().nodes.forEach(node => {
             node.infos = infos[node.id] || {};
-            let group = node.id.split('.').slice(0, this.updater.params.nodes.groupHierarchyDepth).join('.');
+            let group = node.id.split('.').slice(0, this.updater.state.nodes.groupHierarchyDepth).join('.');
             node.group = group;
             node.infos.group = group;
-            node.radius = Math.max(nodeBaseRadius, Math.cbrt(1 + node.infos[this.updater.params.nodes.size]) * nodeBaseRadius);
+            node.radius = Math.max(nodeBaseRadius, Math.cbrt(1 + node.infos[this.updater.state.nodes.size]) * nodeBaseRadius);
         });
         graph.graph
             .nodeAutoColorBy('group')
@@ -57,7 +57,7 @@ class DisplayUpdater {
 
         // TODO: better handling of that
         // TODO: automatic resize ?
-        const renderer = new DisplayNodeUpdater(this.updater.params.nodes)
+        const renderer = new DisplayNodeUpdater(this.updater.state.nodes)
         renderer.apply(graph.graph);
     }
 }

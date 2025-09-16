@@ -18,7 +18,7 @@ class DatasetController extends GuiGraphController {
             const reader = new FileReader();
             reader.onload = async e => {
                 try {
-                    this.updater.params.dataset.dataset = JSON.parse(e.target.result);
+                    this.state().dataset = JSON.parse(e.target.result);
                     await this.updater.loadGraph();
                 } catch (err) {
                     console.error('Erreur de parsing JSON :', err);
@@ -27,16 +27,19 @@ class DatasetController extends GuiGraphController {
             reader.readAsText(file);
         });
 
-        this.gui.add(this.updater.params.dataset, 'datasetPath', {
+        this.gui.add(this.state(), 'datasetPath', {
             'class_graph.json': 'data/class_graph.json',
             'dependencies.json': 'data/dependencies.json',
         }).name('Dataset')
             .onChange(async () => {
-                this.updater.params.dataset.dataset = null;
-                await this.updater.children.dataset.apply()
+                this.state().dataset = null;
+                await this.updater.dataset.apply()
             });
-        this.gui.add({'reload': () => this.updater.loadGraph()}, 'reload');
+        this.gui.add({ 'reload': () => this.updater.loadGraph() }, 'reload');
+    }
 
+    state() {
+        return this.updater.state;
     }
 
 }

@@ -34,9 +34,3 @@
     right: 10px !important;
     z-index: 10000;
 }
-
-#left-panel {
-    overflow-y: auto;
-    max-height: 100%;
-    width: 4cm;
-}

@@ -1,16 +1,18 @@
-const GENERAL_GRAPH_CONFIG = {
+const APP_STATE = {
     dataset: {
         datasetPath: 'data/dependencies.json',
         configPath: 'data/config.json',
         moduleInfosPath: 'data/modules.json',
         dataset: null,
     },
+
     physics: {
         isActive: true,
         dimension: 3,
         groupHierarchyDepth: 3,
         repulsionStrength: 25,
         groupDistance: 100,
+        linkBalanceRatio: .5
     },
 
     nodes: {

@@ -4,42 +4,46 @@
     <meta charset="UTF-8">
     <title>Code Viz 3D</title>
 
+    <script type="importmap">
+        {
+            "imports": {
+                "events": "./web/core/event-handler.js",
+                "camera-controller": "./web/camera-controller.js",
+                "tree-view": "./web/layout/tree-view.js",
+                "table-view": "./web/layout/table-view.js",
+                "graph-view": "./web/layout/graph-view.js",
+                "global-app": "./web/global-app.js",
+                "graph-controller": "./web/graph-controller.js",
+                "render-debug": "./web/render-debug.js"
+            }
+        }
+    </script>
+
     <script src="https://unpkg.com/chroma-js@2.4.2/chroma.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lil-gui@0.20"></script>
 
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script type="text/javascript" src="https://golden-layout.com/files/latest/js/goldenlayout.min.js"></script>
-    <link type="text/css" rel="stylesheet" href="https://golden-layout.com/files/latest/css/goldenlayout-base.css"/>
-    <link type="text/css" rel="stylesheet"
-          href="https://golden-layout.com/files/latest/css/goldenlayout-dark-theme.css"/>
+    <!-- <script src="https://unpkg.com/cash-dom"></script> -->
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://golden-layout.com/files/latest/js/goldenlayout.min.js"></script>
+    <link rel="stylesheet" href="https://golden-layout.com/files/latest/css/goldenlayout-base.css"/>
+    <link rel="stylesheet" href="https://golden-layout.com/files/latest/css/goldenlayout-dark-theme.css"/>
+    <link rel="stylesheet" href="web/style.css">
 
-    <script src="https://unpkg.com/cash-dom"></script>
+    <!-- 3d force graph -->
     <script src="https://unpkg.com/three@0.150.1/build/three.min.js"></script>
     <script src="https://unpkg.com/3d-force-graph"></script>
     <script src="https://cdn.jsdelivr.net/npm/stats.js/build/stats.min.js"></script>
 
-    <!--    graphology-->
+    <!-- graphology -->
     <script src="https://cdn.jsdelivr.net/npm/graphology@0.21.0/dist/graphology.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/graphology-library@latest/dist/graphology-library.min.js"></script>
     <script src="web/graph/my-graph.js"></script>
 
-
-    <script src="web/view-config.js"></script>
-
-    <script src="web/core/event-handler.js"></script>
-    <script src="web/layout/layout.js"></script>
+    <!-- core -->
     <script src="web/core/utils.js"></script>
-
-
+    <script src="web/view-config.js"></script>
+    <script src="web/layout/layout.js"></script>
     <script src="web/graph/graph-filter.js"></script>
-
-    <script src="web/layout/graph-view.js"></script>
-    <script src="web/camera-controller.js"></script>
-    <script src="web/render-debug.js"></script>
-
-
-    <script src="web/graph-updater.js"></script>
-    <script src="web/graph-controller.js"></script>
 
     <!-- dataset -->
     <script src="web/dataset-updater.js"></script>
@@ -50,87 +54,91 @@
     <script src="web/physics-controller.js"></script>
     <script src="web/custom-force.js"></script>
 
-
     <!-- display -->
     <script src="web/display-node-updater.js"></script>
     <script src="web/display-updater.js"></script>
     <script src="web/display-controller.js"></script>
 
-
-    <script src="web/layout/tree-view.js"></script>
-    <script src="web/layout/table-view.js"></script>
-
-    <link rel="stylesheet" href="web/style.css">
 </head>
 <body>
+<input type="file" id="file-browser" style="display: none" accept=".json"/>
 
 <script>
     const stats = new Stats();
     stats.dom.classList.add('stats-panel');
     stats.showPanel(0); // 0 = FPS, 1 = MS, 2 = MB
     document.body.appendChild(stats.dom);
-
-
     function animate() {
         stats.begin();
-
-        // ton code animé ici…
-
         stats.end();
         requestAnimationFrame(animate);
     }
-
     requestAnimationFrame(animate);
 </script>
+<script type="module">
+    import { GlobalApp } from "global-app";
+    import { GraphController } from "graph-controller";
 
-<input type="file" id="file-browser" style="display: none" accept=".json"/>
-<script>
-
-    const graph = new GraphView();
-    const tree = new TreeView();
-
-    const updater = new GraphUpdater(graph, tree);
+    const updater = new GlobalApp();
+    const layout = updater.layout;
     const controller = new GraphController(updater);
 
-    tree.onUpdate = groups => {
-        console.log(groups);
-    };
-    const table = new TableView();
+    const dependencies = await updater.dataset.dependencies();
+    const moduleInfos = await updater.dataset.moduleInfos();
 
-    LAYOUT.registerComponent('control-view', function (container, componentState) {
-        (async () => {
-            let elt = container.getElement();
-            elt.append(controller.control.dataset.container);
-            elt.append(controller.control.physics.container);
-            elt.append(controller.control.display.container);
-            elt.append(controller.container);
-        })();
-    })
-    LAYOUT.registerComponent('tree-view', function (container, componentState) {
-        (async () => {
-            const graph = await updater.children.dataset.dependencies();
-            tree.rebuild(MyGraph.hierarchy(graph));
-            container.getElement().append(tree.container);
-        })();
+    await layout.table.rebuild(moduleInfos);
+
+    loadLayout({
+        'control-view': () => [
+            controller.dataset.container, 
+            controller.physics.container, 
+            controller.display.container, 
+            controller.container, 
+        ],
+        'tree-view': async () => {
+            layout.tree.rebuild(MyGraph.hierarchy(dependencies));
+            return [
+                layout.tree.container
+            ];
+        },
+        'graph-view': () => [
+            layout.graph.container
+        ],
+        'table-view': async () => [
+                layout.table.container
+        ],
     });
 
-    LAYOUT.registerComponent('graph-view', function (container, componentState) {
-        container.getElement().append(graph.container);
+    $(() => updater.loadGraph());
+    $(() => {
+        const $leftPanel = $('.lm_stack').first();
+        const $mainPanel = $('.lm_stack').eq(1);
+        $leftPanel.attr("id", "left-panel");
+
+
+        const width = 250;
+        const widthString = `${width}px`;
+
+        $mainPanel.css({
+            flex: "1 1 auto",
+            width: "auto",
+            minWidth: "0"
+        });
+        $mainPanel.parent().css({
+            display: "flex"
+        });
+
+        $leftPanel.css({
+            width: widthString,
+            minWidth: widthString,
+            maxWidth: widthString
+        });
+
+        $leftPanel.find('.lm_content').css({
+            'overflow-y': 'auto',
+            'height': '100%'
+        });
     });
-
-    LAYOUT.registerComponent('table-view', function (container, componentState) {
-        (async () => {
-            const data = await updater.children.dataset.moduleInfos();
-            await table.rebuild(data);
-            container.getElement().append(table.container);
-        })();
-
-    });
-
-
-    $(() => controller.updater.loadGraph());
-    LAYOUT.init();
-
 </script>
 
 </body>

@@ -1,4 +1,4 @@
-class TableView {
+export class TableView {
     constructor(container_id = 'data-table') {
         this.container = window.document.createElement('div');
         this.container.id = container_id

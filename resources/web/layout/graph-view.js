@@ -1,4 +1,6 @@
-class GraphView {
+import { CameraController } from "camera-controller"
+
+export class GraphView {
     constructor() {
         this.container = createDiv('graph');
         this.graph = this._rebuild();
@@ -61,7 +63,7 @@ class GraphView {
             ...hierarchy.getNodes()
         ]);
         this.graph.graphData({
-            nodes: Array.from(nodeIds).map(id => ({id})),
+            nodes: Array.from(nodeIds).map(id => ({ id })),
             links: [
                 ...hierarchy.getLinks(),
                 ...dependencies.getLinks(),

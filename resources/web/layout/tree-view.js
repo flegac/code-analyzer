@@ -1,10 +1,12 @@
-class TreeView {
+export class TreeView {
     constructor(onUpdate = null) {
         this.container = window.document.createElement('div');
         loadCSS("https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.83/dist/themes/light.css");
         loadScript("https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.83/dist/shoelace.js", true);
         this.visibleLeaves = new Set();
-        this.onUpdate = onUpdate;
+        this.onUpdate = onUpdate || ((groups) => {
+            console.log(groups);
+        });
     }
 
     rebuild(hierarchy) {

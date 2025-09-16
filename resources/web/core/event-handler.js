@@ -54,3 +54,5 @@ class EventHandler {
 
 const EVENTS = new EventHandler();
 EVENTS.start();
+
+export { EVENTS };

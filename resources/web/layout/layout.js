@@ -5,19 +5,19 @@ const LAYOUT = new GoldenLayout({
     content: [{
         type: 'row',
         content: [
+
             {
                 type: 'stack',
-                width:20,
                 content: [
                     {
                         type: 'component',
                         componentName: 'control-view',
-                        componentState: {label: 'Graph Controller'},
+                        componentState: { label: 'Graph Controller' },
                     },
                     {
                         type: 'component',
                         componentName: 'tree-view',
-                        componentState: {label: 'Tree View'},
+                        componentState: { label: 'Tree View' },
                     },
                 ]
             },
@@ -27,14 +27,29 @@ const LAYOUT = new GoldenLayout({
                     {
                         type: 'component',
                         componentName: 'graph-view',
-                        componentState: {label: 'Graph View'}
+                        componentState: { label: 'Graph View' }
                     },
                     {
                         type: 'component',
                         componentName: 'table-view',
-                        componentState: {label: 'Table View'}
+                        componentState: { label: 'Table View' }
                     },
                 ]
             }]
     }]
 });
+
+
+
+function loadLayout(providerMap) {
+    Object.entries(providerMap).forEach(([key, provider]) => {
+        LAYOUT.registerComponent(key, function (container, componentState) {
+            (async () => {
+                const elt = container.getElement();
+                const providers = await provider();
+                providers.forEach(x => elt.append(x));
+            })();
+        });
+    });
+    LAYOUT.init();
+}

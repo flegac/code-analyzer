@@ -1,4 +1,6 @@
-class CameraController {
+import { EVENTS } from "events";
+
+export class CameraController {
     constructor(graph) {
         this.graph = graph;
         this.rotationSpeed = 3.5 * Math.PI / 180; // ~3.5° par frame
@@ -86,7 +88,7 @@ class CameraController {
 
             .register('a', () => this.rotateZ(this.rotationSpeed))
             .register('e', () => this.rotateZ(-this.rotationSpeed))
-        ;
+            ;
     }
 
     _camera() {

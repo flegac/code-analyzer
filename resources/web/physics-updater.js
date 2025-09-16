@@ -4,12 +4,17 @@ class PhysicsUpdater {
     }
 
     async apply() {
-        const graph = this.updater.graph;
-        const physics = this.updater.params.physics;
-        const relations = this.updater.params.links;
+        const graph = this.updater.layout.graph;
+        const physics = this.updater.state.physics;
+        const relations = this.updater.state.links;
 
         const links = graph.graph.d3Force('link');
         const charge = graph.graph.d3Force('charge');
+
+        const linkBalance = physics.linkBalanceRatio;
+
+
+        console.log(linkBalance)
 
         if (physics.isActive) {
             graph.graph.numDimensions(physics.dimension);
@@ -19,7 +24,8 @@ class PhysicsUpdater {
                 return 10 * relations[link.label]?.distance ?? 10;
             });
             links.strength(link => {
-                return .01 * relations[link.label]?.strength ?? .1;
+                const k = link.label === 'hierarchy' ? linkBalance : 1-linkBalance;
+                return k * .02 * relations[link.label]?.strength ?? .1;
             });
             graph.graph.cooldownTicks(Infinity);
 

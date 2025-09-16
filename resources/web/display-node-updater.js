@@ -1,5 +1,5 @@
 class DisplayNodeUpdater {
-    constructor(params) {
+    constructor(state) {
         this._bilboardMaterial = new THREE.ShaderMaterial({
             vertexShader: DisplayNodeUpdater.vertexShader,
             fragmentShader: DisplayNodeUpdater.fragmentShader,
@@ -9,7 +9,7 @@ class DisplayNodeUpdater {
         this._hitboxMaterial = new THREE.MeshBasicMaterial({visible: false});
         this._hitboxGeometry = new THREE.PlaneGeometry(1, 1);
 
-        this.params = params;
+        this.state = state;
         this.textOffsetY = 10
         this.fontFamily = 'Arial';
         this.textColor = 'white';
@@ -69,7 +69,7 @@ class DisplayNodeUpdater {
 
     createBillboard(node) {
         const geo = this._bilboardGeometry.clone();
-        const c = new THREE.Color(node.color || '#ffffff');
+        const c = new THREE.Color(node.color || '#fff');
         const size = node.radius;
         const colorArray = new Float32Array([
             c.r, c.g, c.b,
@@ -81,15 +81,13 @@ class DisplayNodeUpdater {
         const sizeArray = new Float32Array([size, size, size, size]);
         geo.setAttribute('size', new THREE.BufferAttribute(sizeArray, 1));
         const mesh = new THREE.Mesh(geo, this._bilboardMaterial);
-        // mesh.renderOrder = 500;
-
         return mesh;
     }
 
     createTextSprite(node) {
         const parts = node.id.split('.');
         const partsCount = parts.length;
-        const shouldShowText = partsCount === 1 || partsCount <= this.params.groupHierarchyDepth;
+        const shouldShowText = partsCount === 1 || partsCount <= this.state.groupHierarchyDepth;
         if (!shouldShowText) return null;
 
         const size = 5 / Math.pow(2, parts.length);
@@ -99,8 +97,8 @@ class DisplayNodeUpdater {
         const context = canvas.getContext('2d');
         context.clearRect(0, 0, canvas.width, canvas.height);
 
-        const fontSize = this.params.fontSize;
-        const scaleFactor = this.params.scaleFactor * size;
+        const fontSize = this.state.fontSize;
+        const scaleFactor = this.state.scaleFactor * size;
 
         context.font = `${fontSize}px ${this.fontFamily}`;
         const textWidth = context.measureText(text).width;
