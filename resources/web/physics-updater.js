@@ -13,17 +13,9 @@ class PhysicsUpdater {
 
         graph.graph.d3VelocityDecay(physics.friction);
 
-
-        const graphData = graph.data()
         const groupStrategy = new GroupStrategy(
             this.app.state.physics.collapsingDepth,
         );
-        const groupMap = new Map();
-        for (const node of graphData.nodes) {
-            const group = groupStrategy.apply(node.id);
-            if (!groupMap.has(group)) groupMap.set(group, []);
-            groupMap.get(group).push(node);
-        }
 
         const dependencyWeightRatio = physics.dependencyWeightRatio;
         const groupAttractionRatio = physics.groupAttractionRatio;

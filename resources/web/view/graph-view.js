@@ -1,8 +1,11 @@
 import {CameraController} from "camera-controller"
+import {defaultDisplayProvider} from "display-provider";
+
 
 export class GraphView {
     constructor() {
         this.container = createDiv('graph');
+        this.displayProvider = defaultDisplayProvider;
         this.graph = this._rebuild();
         this.cam = new CameraController(this);
         this.selected = null;
@@ -33,13 +36,16 @@ export class GraphView {
             return `${node.id}<br>\n${infos}`;
         })
 
-        // this.graph.onEngineTick(() => {
-        //     this.graph.graphData().nodes.forEach(n => {
-        //         if (isNaN(n.x)) n.x = 1000 * (Math.random() - .5);
-        //         if (isNaN(n.y)) n.y = 1000 * (Math.random() - .5);
-        //         if (isNaN(n.z)) n.z = 1000 * (Math.random() - .5);
-        //     });
-        // });
+        //FIXME: this should not be necessary !
+        this.graph.onEngineTick(() => {
+            this.graph.graphData().nodes.forEach(n => {
+                const radius = 200;
+                if (isNaN(n.x)) n.x = radius * (Math.random() - .5);
+                if (isNaN(n.y)) n.y = radius * (Math.random() - .5);
+                if (isNaN(n.z)) n.z = radius * (Math.random() - .5);
+            });
+        });
+
         this.graph.onNodeClick(node => {
             this.cam.focusOn(node);
             this.selected = node;

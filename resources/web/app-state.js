@@ -18,11 +18,11 @@ const APP_STATE = {
 
     nodes: {
         baseRadius: 12,
-        groupHierarchyDepth: 2,
+        groupHierarchyDepth: 3,
         size: 'imported',
         color: 'group',
         fontSize: 64,
-        scaleFactor: .2
+        scaleFactor: .3
     },
 
     links: {

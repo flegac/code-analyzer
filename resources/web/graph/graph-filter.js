@@ -38,6 +38,17 @@ class GroupStrategy {
         const kept = parts.slice(0, limit).join('.');
         return kept || label;
     }
+
+    computeGroupMap(nodes) {
+        const groupMap = new Map();
+        for (const node of nodes) {
+            const group = this.apply(node.id);
+            if (!groupMap.has(group)) groupMap.set(group, []);
+            groupMap.get(group).push(node);
+        }
+        return groupMap;
+    }
+
 }
 
 

@@ -22,15 +22,13 @@ class DisplayNodeUpdater {
                 _isBillboard: true,
                 nodeRef: node,
             }
-
-
             node.mesh = {
                 group: group,
                 billboard: this.createBillboard(node),
                 hitbox: this.createHitbox(node),
                 text: this.createTextSprite(node),
             };
-            if( node.mesh.text) {
+            if (node.mesh.text) {
                 node.mesh.billboard = null;
                 node.mesh.hitbox = null;
             }
@@ -176,6 +174,7 @@ function formatPath(parts) {
     if (parts.length === 1) return parts[0];
     if (parts.length === 2) return parts.join('.');
 
-    const res = parts.slice(-2).join('.');
-    return `_.${res}`;
+    return parts.slice(-1);
+    // const res = parts.slice(-2).join('.');
+    // return `_.${res}`;
 }

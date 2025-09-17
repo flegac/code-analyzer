@@ -1,23 +1,13 @@
 function forceGroupCollide(state) {
     let nodes;
     const dimension = state.physics.dimension;
-
-
     const strategy = new GroupStrategy(state.physics.collapsingDepth);
-
-
 
     function force(alpha) {
         if (dimension < 3) {
             return;
         }
-
-        const groupMap = new Map();
-        for (const node of nodes) {
-            const group = strategy.apply(node.id);
-            if (!groupMap.has(group)) groupMap.set(group, []);
-            groupMap.get(group).push(node);
-        }
+        const groupMap = strategy.computeGroupMap(nodes);
 
         for (const groupNodes of groupMap.values()) {
             const n = groupNodes.length;

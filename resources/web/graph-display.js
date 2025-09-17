@@ -32,6 +32,11 @@ class GraphDisplay {
         this.node = new NodeDisplay();
         this.link = new LinkDisplay();
     }
+
+    async apply(graph) {
+        // await this.node.apply(graph);
+        await this.link.apply(graph);
+    }
 }
 
 export {LinkDisplay, NodeDisplay, GraphDisplay};

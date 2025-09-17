@@ -23,16 +23,12 @@ export class App {
     async apply() {
 
         await this.dataset.apply()
-        await this.physics.apply();
         await this.display.apply();
-        //FIXME: This should not be necessary ! (link color is wrong, relative to groupHierarchyDepth)
         await this.physics.apply();
+
+        //FIXME: This should not be necessary ! (link color is wrong, relative to groupHierarchyDepth)
         await this.display.apply();
 
-        // TODO: better handling of that
-        // TODO: automatic resize ?
-        const renderer = new DisplayNodeUpdater(this.state.nodes)
-        renderer.apply(this.layout.graph.graph);
     }
 }
 
