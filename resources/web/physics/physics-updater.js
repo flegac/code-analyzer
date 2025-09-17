@@ -38,7 +38,7 @@ export class PhysicsUpdater {
                 return scaling * 10 * linkValue(link.label, physics.link.distance, physics.link.dependencyStrengthFactor);
             });
             links.strength(link => {
-                return physics.link.strength;
+                return .01 * physics.link.strength;
             });
             graph.graph.cooldownTicks(Infinity);
         } else {
