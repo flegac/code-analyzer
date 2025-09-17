@@ -1,6 +1,13 @@
 const Graph = graphology.Graph;
 
-class MyGraph {
+export function linkValue(label, baseValue, ratio) {
+    if (label === "dependencies") {
+        ratio = 1 - ratio;
+    }
+    return baseValue * ratio;
+}
+
+export class MyGraph {
     static hierarchy(graph) {
         const hierarchy = new Graph({type: 'directed'});
         graph.graph.forEachNode(full => {

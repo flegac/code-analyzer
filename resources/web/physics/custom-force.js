@@ -1,7 +1,9 @@
-function forceGroupCollide(state) {
+import {GroupStrategy} from "/graph/group-strategy.js"
+
+export function forceGroupCollide(state) {
     let nodes;
-    const dimension = state.physics.dimension;
-    const strategy = new GroupStrategy(state.physics.collapsingDepth);
+    const dimension = state.dimension;
+    const strategy = new GroupStrategy(state.collapsingDepth);
 
     function force(alpha) {
         if (dimension < 3) {
@@ -19,10 +21,9 @@ function forceGroupCollide(state) {
                     const dy = b.y - a.y;
                     const dz = b.z - a.z;
                     const dist = Math.hypot(dx, dy, dz);
-                    const minDist = 1. + (a.radius + b.radius);
+                    const minDist = (a.radius + b.radius);
 
-                    let shift = ((minDist - dist) / Math.max(dist, minDist));
-                    shift *= alpha / n;
+                    let shift = alpha / n * ((minDist - dist) / Math.max(dist, minDist));
 
                     const sx = dx * shift, sy = dy * shift, sz = dz * shift;
                     b.x += sx;

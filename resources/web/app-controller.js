@@ -1,4 +1,8 @@
-import {RenderDebug} from "render-debug"
+import {RenderDebug} from "/view/render-debug.js"
+import {GuiGraphController} from "/core/utils.js"
+import {DatasetController} from "/dataset/dataset-controller.js"
+import {DisplayController} from "/display/display-controller.js"
+import {PhysicsController} from "/physics/physics-controller.js"
 
 export class AppController extends GuiGraphController {
     constructor(updater) {

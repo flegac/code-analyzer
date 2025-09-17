@@ -1,5 +1,7 @@
+import {GuiGraphController} from "/core/utils.js"
 
-class DatasetController extends GuiGraphController {
+
+export class DatasetController extends GuiGraphController {
     constructor(app) {
         super('dataset-controller', 'Dataset');
         this.app = app;
@@ -13,10 +15,13 @@ class DatasetController extends GuiGraphController {
         // file handler
         $('#file-browser').on('change', async event => {
             const file = event.target.files[0];
+            console.log(file);
             if (!file) return;
             const reader = new FileReader();
             reader.onload = async e => {
                 try {
+                    console.log(app.state.dataset);
+
                     app.state.dataset.dataset = JSON.parse(e.target.result);
                     console.log(`${app}`)
                     await app.loadGraph();
@@ -32,10 +37,10 @@ class DatasetController extends GuiGraphController {
             'dependencies.json': 'data/dependencies.json',
         }).name('Dataset')
             .onChange(async () => {
-                this.state().dataset = null;
+                this.app.state.dataset.dataset = null;
                 await this.app.dataset.apply()
             });
-        this.gui.add({ 'reload': () => this.app.loadGraph() }, 'reload');
+        this.gui.add({'reload': () => this.app.loadGraph()}, 'reload');
     }
 
     state() {

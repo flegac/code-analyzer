@@ -1,20 +1,30 @@
-import {CameraController} from "camera-controller"
-import {defaultDisplayProvider} from "display-provider";
-
+import {defaultDisplayProvider} from "/display/display-provider.js";
+import {createDiv} from "/core/utils.js";
+import {MyGraph} from "/graph/my-graph.js"
+import {GroupStrategy} from "/graph/group-strategy.js";
 
 export class GraphView {
     constructor() {
         this.container = createDiv('graph');
         this.displayProvider = defaultDisplayProvider;
         this.graph = this._rebuild();
-        this.cam = new CameraController(this);
+        this.cam = null;
         this.selected = null;
-        const resizeObserver = new ResizeObserver(() => {
-            this.graph
-                .width(this.container.clientWidth)
-                .height(this.container.clientHeight);
-        });
-        resizeObserver.observe(this.container);
+
+        const graph = this;
+
+        function updateBillboardOrientation() {
+            const camera = graph.graph.camera();
+            graph.graph.graphData().nodes.forEach(node => {
+                if (node.mesh) {
+                    node.mesh.group.lookAt(camera.position);
+                }
+            });
+            requestAnimationFrame(updateBillboardOrientation);
+        }
+
+        updateBillboardOrientation();
+        this._autoResize();
     }
 
     data() {
@@ -22,50 +32,22 @@ export class GraphView {
     }
 
     reset() {
+        // TODO: why is it needed to reallocate a new Graph object ?
         if (this.graph && typeof this.graph._destructor === 'function') {
             this.graph._destructor();
         }
         this.graph = this._rebuild();
 
-
-        this.graph.nodeLabel(node => {
-            let infos = '';
-            if (node.infos) {
-                infos = JSON.stringify(node.infos, null, 2);
-            }
-            return `${node.id}<br>\n${infos}`;
-        })
-
         //FIXME: this should not be necessary !
-        this.graph.onEngineTick(() => {
-            this.graph.graphData().nodes.forEach(n => {
-                const radius = 200;
-                if (isNaN(n.x)) n.x = radius * (Math.random() - .5);
-                if (isNaN(n.y)) n.y = radius * (Math.random() - .5);
-                if (isNaN(n.z)) n.z = radius * (Math.random() - .5);
-            });
-        });
+        this._autoPatch();
 
-        this.graph.onNodeClick(node => {
-            this.cam.focusOn(node);
-            this.selected = node;
-        });
-        // this.graph.onNodeHover(node => {
-        //     this.graph.linkDirectionalParticles(link => {
-        //         return node && (link.source === node || link.target === node || link.target === this.selected || link.source === this.selected) ? 5 : 0;
-        //     });
-        //
-        //     this.graph.linkDirectionalParticleWidth(link => {
-        //         console.log(link);
-        //         return node && (link.source === node || link.target === node || link.target === this.selected || link.source === this.selected) ? 10 : 0;
-        //     });
-        //
-        //     this.graph.linkDirectionalParticleSpeed(0.01);
-        // });
+        if (this.cam !== null) {
+            this.cam.takeControl(this);
+        }
+
     }
 
-    rebuild(dependencies) {
-        // TODO: why is it needed to reallocate a new Graph object ?
+    rebuild(dependencies, infos, state) {
         this.reset();
 
         const hierarchy = MyGraph.hierarchy(dependencies);
@@ -73,14 +55,28 @@ export class GraphView {
             ...dependencies.getNodes(),
             ...hierarchy.getNodes()
         ]);
+
+        const strategy = new GroupStrategy(state.nodes.colorGroupDepthRange - 1);
+
         this.graph.graphData({
-            nodes: Array.from(nodeIds).map(id => ({id})),
+            nodes: Array.from(nodeIds).map(id => {
+                const group = strategy.apply(id);
+                const nodeInfos = (infos && infos[id]) ?? {};
+                nodeInfos.group = group;
+
+                const value = nodeInfos[state.nodes.size] ?? 1;
+                return {
+                    id,
+                    group: group,
+                    infos: nodeInfos,
+                    radius: Math.max(1, Math.cbrt(1 + value))
+                };
+            }),
             links: [
                 ...hierarchy.getLinks(),
                 ...dependencies.getLinks(),
             ]
         });
-
     }
 
 
@@ -89,6 +85,26 @@ export class GraphView {
         return ForceGraph3D()(this.container)
             .width(this.container.clientWidth)
             .height(this.container.clientHeight);
+    }
+
+    _autoResize() {
+        const resizeObserver = new ResizeObserver(() => {
+            this.graph
+                .width(this.container.clientWidth)
+                .height(this.container.clientHeight);
+        });
+        resizeObserver.observe(this.container);
+    }
+
+    _autoPatch() {
+        this.graph.onEngineTick(() => {
+            this.graph.graphData().nodes.forEach(n => {
+                const radius = 200;
+                if (isNaN(n.x)) n.x = radius * (Math.random() - .5);
+                if (isNaN(n.y)) n.y = radius * (Math.random() - .5);
+                if (isNaN(n.z)) n.z = radius * (Math.random() - .5);
+            });
+        });
     }
 
 }

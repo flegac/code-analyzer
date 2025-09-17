@@ -1,3 +1,5 @@
+import { loadCSS, loadScript } from "/core/utils.js";
+
 export class TreeView {
     constructor(onUpdate = null) {
         this.container = window.document.createElement('div');

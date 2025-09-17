@@ -1,3 +1,5 @@
+import { loadCSS, loadScriptAsync } from "/core/utils.js";
+
 export class TableView {
     constructor(container_id = 'data-table') {
         this.container = window.document.createElement('div');
@@ -11,6 +13,9 @@ export class TableView {
     }
 
     async rebuild(data) {
+        if (!data) {
+            return
+        }
         await loadScriptAsync("https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js");
 
         const columnDefs = this.generateColumnDefs(data);

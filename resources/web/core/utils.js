@@ -1,4 +1,4 @@
-class GuiGraphController {
+export class GuiGraphController {
     constructor(id, title = null) {
         this.container = createDiv(id);
         this.gui = new lil.GUI({container: this.container});
@@ -6,7 +6,7 @@ class GuiGraphController {
     }
 }
 
-function createDiv(id, classes = null, parent = null) {
+export function createDiv(id, classes = null, parent = null) {
     if (parent === null) {
         parent = document.body;
     }
@@ -17,7 +17,7 @@ function createDiv(id, classes = null, parent = null) {
     return container
 }
 
-function loadCss(path) {
+export function loadCss(path) {
     fetch(path)
         .then(response => response.text())
         .then(css => {
@@ -28,7 +28,7 @@ function loadCss(path) {
         .catch(error => console.error('Erreur de chargement CSS :', error));
 }
 
-async function loadScript(src, module = false, callback) {
+export async function loadScript(src, module = false, callback) {
     const s = document.createElement('script');
     s.src = src;
     if (module !== false) s.type = 'module';
@@ -36,7 +36,7 @@ async function loadScript(src, module = false, callback) {
     document.head.appendChild(s);
 }
 
-function loadScriptAsync(src) {
+export function loadScriptAsync(src) {
     return new Promise((resolve, reject) => {
         const s = document.createElement('script');
         s.src = src;
@@ -46,14 +46,14 @@ function loadScriptAsync(src) {
     });
 }
 
-function loadCSS(href) {
+export function loadCSS(href) {
     const l = document.createElement('link');
     l.rel = 'stylesheet';
     l.href = href;
     document.head.appendChild(l);
 }
 
-async function loadCSSAsync(href) {
+export async function loadCSSAsync(href) {
     return new Promise((resolve, reject) => {
         const link = document.createElement('link');
         link.rel = 'stylesheet';

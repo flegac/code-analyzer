@@ -1,4 +1,7 @@
-class DatasetUpdater {
+import {GraphFilter} from "/graph/graph-filter.js"
+import {MyGraph} from "/graph/my-graph.js"
+
+export class DatasetUpdater {
     constructor(app) {
         this.app = app
     }
@@ -8,12 +11,8 @@ class DatasetUpdater {
         this.app.layout.tree.rebuild(MyGraph.hierarchy(dependencies));
     }
 
-    state() {
-        return this.app.state.dataset
-    }
-
     async loadConfig() {
-        return await fetch(this.state().configPath).then(res => res.json());
+        return await fetch(this.app.state.dataset.configPath).then(res => res.json());
     }
 
     async dependencies() {
@@ -21,7 +20,7 @@ class DatasetUpdater {
             this.app.state.dataset.dataset = await fetch(this.app.state.dataset.datasetPath).then(res => res.json());
             console.log(`loading from ${this.app.state.dataset.datasetPath}`);
         }
-        let raw = this.state().dataset;
+        let raw = this.app.state.dataset.dataset;
         const config = await this.loadConfig();
         const filtered = new GraphFilter(config).apply(raw);
         // const collapsed = new GraphTransformer(
@@ -33,6 +32,12 @@ class DatasetUpdater {
     }
 
     async moduleInfos() {
-        return await fetch(this.state().moduleInfosPath).then(res => res.json());
+        const path = this.app.state.dataset.moduleInfosPath
+        try {
+            return await fetch(path).then(res => res.json());
+        } catch (e) {
+            console.warn(`error loading ${path}: ${e}`)
+            return null;
+        }
     }
 }

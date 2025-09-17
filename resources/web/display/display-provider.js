@@ -1,4 +1,5 @@
-import {GraphDisplay} from "graph-display";
+import {GraphDisplay} from "/display/graph-display.js";
+
 
 export function defaultDisplayProvider(state) {
     const display = new GraphDisplay()
@@ -9,8 +10,12 @@ export function defaultDisplayProvider(state) {
             }
             return state.links[link.label]?.color ?? '#f00';
         },
+        visibility: link => {
+            const width = state.links[link.label]?.width;
+            return width > 0;
+        },
         width: link => {
-            return state.links[link.label]?.width
+            return state.links[link.label]?.width;
         },
         particleNumber: link => {
             if (link.label !== 'hierarchy' && link.source.group === link.target.group) {
@@ -19,7 +24,7 @@ export function defaultDisplayProvider(state) {
             return state.links[link.label]?.particles ?? 0;
         },
         particleWidth: link => {
-            return 2 + state.links[link.label]?.width * .5;
+            return 2 * state.links[link.label]?.width ?? 0;
         },
     });
     return display;

@@ -23,6 +23,11 @@ class EventHandler {
         return this;
     }
 
+    registerMap(mapping) {
+        Object.entries(mapping).forEach(([key, value]) => this.register(key, value))
+        return this;
+    }
+
     start() {
         if (this._listening) return;
         this._listening = true;

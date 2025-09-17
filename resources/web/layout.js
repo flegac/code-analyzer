@@ -1,4 +1,4 @@
-const LAYOUT = new GoldenLayout({
+export const LAYOUT = new GoldenLayout({
     settings: {
         // hasHeaders: false,
     },
@@ -7,31 +7,52 @@ const LAYOUT = new GoldenLayout({
         content: [
             {
                 type: 'stack',
+                header: {
+                    show: 'top',
+                    popout: false,
+                    maximise: false,
+                    close: false
+                },
                 content: [
                     {
                         type: 'component',
-                        componentName: 'control-view',
-                        componentState: { label: 'Graph Controller' },
+                        componentName: 'dataset',
+                        componentState: {label: 'physics'},
                     },
                     {
                         type: 'component',
-                        componentName: 'tree-view',
-                        componentState: { label: 'Tree View' },
+                        componentName: 'physics',
+                        componentState: {label: 'physics'},
                     },
+
+                    {
+                        type: 'component',
+                        componentName: 'display',
+                        componentState: {label: 'physics'},
+                    },
+
+
                 ]
             },
+
             {
                 type: 'stack',
                 content: [
                     {
                         type: 'component',
                         componentName: 'graph-view',
-                        componentState: { label: 'Graph View' }
+                        componentState: {label: 'Graph View'}
                     },
                     {
                         type: 'component',
                         componentName: 'table-view',
-                        componentState: { label: 'Table View' }
+                        componentState: {label: 'Table View'}
+                    },
+
+                    {
+                        type: 'component',
+                        componentName: 'tree-view',
+                        componentState: {label: 'Tree View'},
                     },
                 ]
             }]
@@ -39,8 +60,7 @@ const LAYOUT = new GoldenLayout({
 });
 
 
-
-function loadLayout(providerMap) {
+export function loadLayout(providerMap) {
     Object.entries(providerMap).forEach(([key, provider]) => {
         LAYOUT.registerComponent(key, function (container, componentState) {
             (async () => {
