@@ -2,18 +2,17 @@ import {keyBindings} from "/config/key-bindings.js"
 import {AppLayout} from "/lib/app-layout.js"
 import {App} from "/lib/app.js"
 import {AppController} from "/lib/app-controller.js"
-import {LAYOUT, loadLayout} from "/lib/layout.js"
-import {MyGraph} from "/graph/my-graph.js"
+import {MyLayout} from "/config/layout.js"
 import {EVENTS} from "/core/event-handler.js";
 import Stats from "stats";
+import {MyGraph} from "/graph/my-graph.js";
+
 
 export async function main() {
-
     const layout = new AppLayout();
     const app = new App(layout);
     const controller = new AppController(app);
     const cam = layout.cam;
-
     EVENTS
         .onStart(() => {
         })
@@ -32,7 +31,9 @@ export async function main() {
 
     await layout.table.rebuild(moduleInfos);
 
-    loadLayout({
+
+    new MyLayout().loadComponents({
+        'left-panel': () => [],
         'dataset': () => [
             controller.dataset.container,
             controller.container,
@@ -43,55 +44,22 @@ export async function main() {
         'display': () => [
             controller.display.container,
         ],
+
+        'graph-view': () => [
+            layout.graph.container
+        ],
         'tree-view': async () => {
             layout.tree.rebuild(MyGraph.hierarchy(dependencies));
             return [
                 layout.tree.container
             ];
         },
-        'graph-view': () => [
-            layout.graph.container
-        ],
         'table-view': async () => [
             layout.table.container
         ],
     });
-
-
     $(() => app.loadGraph());
-    $(() => {
-        $(window).on('resize', () => LAYOUT.updateSize())
-        const $leftPanel = $('.lm_stack').first();
-        const $mainPanel = $('.lm_stack').eq(1);
-        $leftPanel.attr("id", "left-panel");
-        const width = 260;
-        const widthString = `${width}px`;
-
-        $mainPanel.css({
-            flex: "1 1 auto",
-            width: "auto",
-            minWidth: "0"
-        });
-        $mainPanel.parent().css({
-            display: "flex"
-        });
-
-        $leftPanel.css({
-            width: widthString,
-            minWidth: widthString,
-            maxWidth: widthString
-        });
-
-        $leftPanel.find('.lm_content').css({
-            'overflow-y': 'auto',
-            'height': '100%'
-        });
-
-        LAYOUT.updateSize();
-    });
-
     startFpsPanel();
-
 }
 
 function startFpsPanel() {

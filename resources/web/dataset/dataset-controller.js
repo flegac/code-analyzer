@@ -40,6 +40,12 @@ export class DatasetController extends GuiGraphController {
                 this.app.state.dataset.dataset = null;
                 await this.app.dataset.apply()
             });
+        this.gui.add(this.app.state.dataset, 'depthCollapseLimit', 1, 10, 1)
+            .name('depth collapse limit')
+            .onChange(async () => {
+                await this.app.dataset.apply()
+            })
+
         this.gui.add({'reload': () => this.app.loadGraph()}, 'reload');
     }
 

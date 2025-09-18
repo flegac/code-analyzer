@@ -1,5 +1,6 @@
 import {GraphFilter} from "/graph/graph-filter.js"
 import {MyGraph} from "/graph/my-graph.js"
+import {nodeReducer} from "/graph/graph-algo.js"
 
 export class DatasetUpdater {
     constructor(app) {
@@ -22,13 +23,16 @@ export class DatasetUpdater {
         }
         let raw = this.app.state.dataset.dataset;
         const config = await this.loadConfig();
-        const filtered = new GraphFilter(config).apply(raw);
-        // const collapsed = new GraphTransformer(
-        //     new GroupStrategy(
-        //         this.app.state.dataset.rootCollapseLevel,
-        //     ).apply
-        // ).apply(filtered);
-        return new MyGraph('dependencies', filtered);
+
+        const pipeline = [
+            graph => new GraphFilter(config).apply(graph),
+            nodeReducer((node) => {
+                return node.split('.').slice(0, this.app.state.dataset.depthCollapseLimit).join('.');
+            })
+        ];
+        const graph = pipeline.reduce((acc, mapper) => mapper(acc), raw);
+
+        return new MyGraph('dependencies', graph);
     }
 
     async moduleInfos() {

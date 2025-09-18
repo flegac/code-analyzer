@@ -1,11 +1,11 @@
 import {defaultDisplayProvider} from "/display/display-provider.js";
-import {createDiv} from "/core/utils.js";
 import {MyGraph} from "/graph/my-graph.js"
 import {GroupStrategy} from "/graph/group-strategy.js";
 
 export class GraphView {
     constructor() {
-        this.container = createDiv('graph');
+        this.container = window.document.createElement('div');
+        this.container.id = 'graph-view';
         this.displayProvider = defaultDisplayProvider;
         this.graph = this._rebuild();
         this.cam = null;
@@ -52,8 +52,8 @@ export class GraphView {
 
         const hierarchy = MyGraph.hierarchy(dependencies);
         const nodeIds = new Set([
-            ...dependencies.getNodes(),
-            ...hierarchy.getNodes()
+            ...dependencies.nodes(),
+            ...hierarchy.nodes()
         ]);
 
         const strategy = new GroupStrategy(state.nodes.colorGroupDepthRange - 1);
@@ -73,8 +73,8 @@ export class GraphView {
                 };
             }),
             links: [
-                ...hierarchy.getLinks(),
-                ...dependencies.getLinks(),
+                ...hierarchy.links(),
+                ...dependencies.links(),
             ]
         });
     }
@@ -88,11 +88,34 @@ export class GraphView {
     }
 
     _autoResize() {
-        const resizeObserver = new ResizeObserver(() => {
-            this.graph
-                .width(this.container.clientWidth)
-                .height(this.container.clientHeight);
-        });
+        const resize = () => {
+            const w = this.container.offsetWidth;
+            const h = this.container.offsetHeight;
+            if (w > 0 && h > 0) {
+                this.graph.width(w).height(h);
+            }
+        };
+
+        // Resize initial
+      requestAnimationFrame(resize);
+
+
+        // Resize quand l'onglet devient actif
+        const rightTabs = document.getElementById('right-tabs');
+        if (rightTabs) {
+            rightTabs.addEventListener('sl-tab-show', (event) => {
+                if (event.detail.name === 'graph-view') {
+                requestAnimationFrame(resize);
+
+                }
+            });
+        }
+
+        // Resize quand la fenêtre change
+        window.addEventListener('resize', resize);
+
+        // Resize quand le conteneur change (ex: split-panel)
+        const resizeObserver = new ResizeObserver(resize);
         resizeObserver.observe(this.container);
     }
 
@@ -106,5 +129,4 @@ export class GraphView {
             });
         });
     }
-
 }

@@ -1,10 +1,7 @@
-import { loadCSS, loadScript } from "/core/utils.js";
-
 export class TreeView {
-    constructor(onUpdate = null) {
+    constructor(onUpdate = null, id = 'tree-view') {
         this.container = window.document.createElement('div');
-        loadCSS("https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.83/dist/themes/light.css");
-        loadScript("https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.83/dist/shoelace.js", true);
+        this.container.id = id;
         this.visibleLeaves = new Set();
         this.onUpdate = onUpdate || ((groups) => {
             console.log(groups);
@@ -12,7 +9,7 @@ export class TreeView {
     }
 
     rebuild(hierarchy) {
-        const modules = hierarchy.getNodes();
+        const modules = hierarchy.nodes();
 
         this.container.innerHTML = '<strong>Arborescence des modules</strong>';
         const treeRoot = document.createElement('sl-tree');

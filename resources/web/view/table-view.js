@@ -1,9 +1,9 @@
-import { loadCSS, loadScriptAsync } from "/core/utils.js";
+import {loadCSS, loadScriptAsync} from "/core/utils.js";
 
 export class TableView {
-    constructor(container_id = 'data-table') {
+    constructor(id = 'table-view') {
         this.container = window.document.createElement('div');
-        this.container.id = container_id
+        this.container.id = id
         this.container.className = "ag-theme-alpine ag-preload";
 
         this.gridInstance = null;

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="sl-theme-dark">
 <head>
     <meta charset="UTF-8">
     <title>Code Viz 3D</title>
@@ -21,13 +21,15 @@
             }
         }
     </script>
-
-    <link rel="stylesheet" href="https://golden-layout.com/files/latest/css/goldenlayout-base.css"/>
-    <link rel="stylesheet" href="https://golden-layout.com/files/latest/css/goldenlayout-dark-theme.css"/>
     <link rel="stylesheet" href="web/style.css">
 
     <script src="https://unpkg.com/chroma-js@2.4.2/chroma.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lil-gui@0.20"></script>
+
+    <!-- shoelace -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/themes/dark.css" />
+    <script type="module"
+            src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/shoelace-autoloader.js"></script>
 
     <!-- <script src="https://unpkg.com/cash-dom"></script> -->
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -44,6 +46,8 @@
 
 <body>
 <input type="file" id="file-browser" style="display: none" accept=".json"/>
+
+
 <script type="module">
     import {main} from "/lib/main.js"
 

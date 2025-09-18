@@ -1,6 +1,14 @@
 import {forceGroupCollide} from "/physics/custom-force.js"
 import {GroupStrategy} from "/graph/group-strategy.js"
-import {linkValue} from "/graph/my-graph.js";
+
+
+function linkValue(label, baseValue, ratio) {
+    if (label === "dependencies") {
+        ratio = 1 - ratio;
+    }
+    return baseValue * ratio;
+}
+
 
 export class PhysicsUpdater {
     constructor(app) {

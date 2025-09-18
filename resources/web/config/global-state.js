@@ -3,7 +3,8 @@ export const GLOBAL_STATE = {
         datasetPath: 'data/dependencies.json',
         configPath: 'data/config.json',
         moduleInfosPath: 'data/modules.json',
-        dataset: null
+        depthCollapseLimit: 3,
+        dataset: null,
     },
 
     physics: {
@@ -61,5 +62,4 @@ export const GLOBAL_STATE = {
             },
         }
     },
-
 };

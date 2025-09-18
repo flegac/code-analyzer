@@ -1,16 +1,10 @@
 const Graph = graphology.Graph;
 
-export function linkValue(label, baseValue, ratio) {
-    if (label === "dependencies") {
-        ratio = 1 - ratio;
-    }
-    return baseValue * ratio;
-}
 
-export class MyGraph {
+class MyGraph {
     static hierarchy(graph) {
         const hierarchy = new Graph({type: 'directed'});
-        graph.graph.forEachNode(full => {
+        graph.toGraphology().forEachNode(full => {
             const [prefix, suffix] = full.split('::');
             const parts = prefix ? prefix.split('.') : [];
             _addPrefixHierarchy(hierarchy, parts);
@@ -27,28 +21,48 @@ export class MyGraph {
 
     constructor(label, adjacencyList) {
         this.label = label;
-        this.graph = new Graph({type: 'directed'});
-        for (const [source, targets] of Object.entries(adjacencyList)) {
-            if (!this.graph.hasNode(source)) this.graph.addNode(source);
+        this.adjacencyList = adjacencyList;
+        this.graph = this.toForceGraph()
+    }
+
+    links() {
+        return this.graph.links;
+    }
+
+    nodes() {
+        return this.graph.nodes;
+    }
+
+    toForceGraph() {
+        const nodesSet = new Set();
+        const links = [];
+
+        for (const [source, targets] of Object.entries(this.adjacencyList)) {
+            nodesSet.add(source);
             for (const target of targets) {
-                if (!this.graph.hasNode(target)) this.graph.addNode(target);
-                this.graph.addEdge(source, target, {label});
+                nodesSet.add(target);
+                links.push({source, target, label: this.label});
             }
         }
+
+        const nodes = Array.from(nodesSet);
+        return {
+            nodes,
+            links
+        };
     }
 
-    getLinks() {
-        return this.graph.edges().map(edge => ({
-            source: this.graph.source(edge),
-            target: this.graph.target(edge),
-            label: this.label
-        }));
+    toGraphology() {
+        const graph = new Graph({type: 'directed'});
+        for (const [source, targets] of Object.entries(this.adjacencyList)) {
+            if (!graph.hasNode(source)) graph.addNode(source);
+            for (const target of targets) {
+                if (!graph.hasNode(target)) graph.addNode(target);
+                graph.addEdge(source, target, {label: this.label});
+            }
+        }
+        return graph;
     }
-
-    getNodes() {
-        return this.graph.nodes();
-    }
-
 }
 
 function _addPrefixHierarchy(hierarchy, parts) {
@@ -76,3 +90,5 @@ function _addSuffixHierarchy(hierarchy, parts, suffix) {
         hierarchy.mergeEdge(className, methodName);
     }
 }
+
+export {MyGraph};
