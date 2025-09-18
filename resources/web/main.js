@@ -31,7 +31,6 @@ export async function main() {
 
     await layout.table.rebuild(moduleInfos);
 
-
     new MyLayout().loadComponents({
         'left-panel': () => [],
         'dataset': () => [

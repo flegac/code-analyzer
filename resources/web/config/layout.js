@@ -1,6 +1,20 @@
 import {MyComponent} from "/core/utils.js";
 
 const LAYOUT_TEMPLATE = `
+
+<!--<div style="max-height: calc(6 * 2em); overflow-y: auto; border: 1px solid var(&#45;&#45;sl-color-neutral-300); border-radius: var(&#45;&#45;sl-border-radius-medium); padding: 0.5em;">-->
+<!--  <sl-menu>-->
+<!--    <sl-menu-item value="item1">Item 1</sl-menu-item>-->
+<!--    <sl-menu-item value="item2">Item 2</sl-menu-item>-->
+<!--    <sl-menu-item value="item3">Item 3</sl-menu-item>-->
+<!--    <sl-menu-item value="item4">Item 4</sl-menu-item>-->
+<!--    <sl-menu-item value="item5">Item 5</sl-menu-item>-->
+<!--    <sl-menu-item value="item6">Item 6</sl-menu-item>-->
+<!--    <sl-menu-item value="item7">Item 7</sl-menu-item>-->
+<!--    <sl-menu-item value="item8">Item 8</sl-menu-item>-->
+<!--  </sl-menu>-->
+<!--</div>-->
+
 <sl-split-panel>
   <!-- Panneau gauche -->
   <div slot="start">
@@ -30,6 +44,7 @@ const LAYOUT_TEMPLATE = `
     </sl-tab-group>
   </div>
 </sl-split-panel>
+
 `;
 
 
