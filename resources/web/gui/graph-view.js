@@ -1,4 +1,4 @@
-import {defaultDisplayProvider} from "/display/display-provider.js";
+import {defaultDisplayProvider} from "/graph/display/display-provider.js";
 import {MyGraph} from "/graph/my-graph.js"
 import {GroupStrategy} from "/graph/group-strategy.js";
 

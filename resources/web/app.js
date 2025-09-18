@@ -1,6 +1,6 @@
-import {DisplayUpdater} from "/display/display-updater.js"
-import {PhysicsUpdater} from "/physics/physics-updater.js"
-import {DatasetUpdater} from "/dataset/dataset-updater.js"
+import {DisplayUpdater} from "/lib/display-updater.js"
+import {PhysicsUpdater} from "/lib/physics-updater.js"
+import {DatasetUpdater} from "/lib/dataset-updater.js"
 import {GLOBAL_STATE} from "/config/global-state.js";
 
 

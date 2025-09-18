@@ -1,17 +1,19 @@
-import {createDiv} from "/core/utils.js";
+import {MyComponent} from "/core/utils.js";
 
 const LAYOUT_TEMPLATE = `
-<sl-split-panel style="height: 100vh;"  position-in-pixels="260">
+<sl-split-panel>
   <!-- Panneau gauche -->
   <div slot="start">
     <sl-tab-group id="left-tabs">
       <sl-tab slot="nav" panel="dataset">Dataset</sl-tab>
       <sl-tab slot="nav" panel="physics">Physics</sl-tab>
-      <sl-tab slot="nav" panel="display">Display</sl-tab>
+      <sl-tab slot="nav" panel="links">Links</sl-tab>
+      <sl-tab slot="nav" panel="nodes">Nodes</sl-tab>
 
       <sl-tab-panel name="dataset"></sl-tab-panel>
       <sl-tab-panel name="physics"></sl-tab-panel>
-      <sl-tab-panel name="display"></sl-tab-panel>
+      <sl-tab-panel name="links"></sl-tab-panel>
+      <sl-tab-panel name="nodes"></sl-tab-panel>
     </sl-tab-group>
   </div>
 
@@ -30,10 +32,10 @@ const LAYOUT_TEMPLATE = `
 </sl-split-panel>
 `;
 
-export class MyLayout {
-    constructor(id = 'app-layout', template = LAYOUT_TEMPLATE) {
-        this.container = createDiv(id);
-        this.container.innerHTML = template;
+
+export class MyLayout extends MyComponent {
+    constructor() {
+        super('app-layout', LAYOUT_TEMPLATE);
     }
 
     async loadComponents(providerMap) {

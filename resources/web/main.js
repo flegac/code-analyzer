@@ -1,8 +1,8 @@
 import {keyBindings} from "/config/key-bindings.js"
-import {AppLayout} from "/lib/app-layout.js"
-import {App} from "/lib/app.js"
-import {AppController} from "/lib/app-controller.js"
 import {MyLayout} from "/config/layout.js"
+import {App} from "/lib/app.js"
+import {AppLayout} from "/gui/app-layout.js"
+import {AppController} from "/gui/app-controller.js"
 import {EVENTS} from "/core/event-handler.js";
 import Stats from "stats";
 import {MyGraph} from "/graph/my-graph.js";
@@ -36,13 +36,16 @@ export async function main() {
         'left-panel': () => [],
         'dataset': () => [
             controller.dataset.container,
-            controller.container,
+            controller.debugView.container,
         ],
         'physics': () => [
             controller.physics.container,
         ],
-        'display': () => [
-            controller.display.container,
+        'nodes': () => [
+            controller.nodes.container,
+        ],
+        'links': () => [
+            controller.links.container,
         ],
 
         'graph-view': () => [

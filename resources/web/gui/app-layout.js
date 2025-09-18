@@ -1,7 +1,7 @@
-import { GraphView } from "/view/graph-view.js"
-import { TreeView } from "/view/tree-view.js"
-import { TableView } from "/view/table-view.js"
-import { CameraController } from "/view/camera-controller.js"
+import { GraphView } from "/gui/graph-view.js"
+import { TreeView } from "/gui/tree-view.js"
+import { TableView } from "/gui/table-view.js"
+import { CameraController } from "/gui/camera-controller.js"
 
 export class AppLayout {
     constructor() {

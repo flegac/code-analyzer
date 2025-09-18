@@ -1,4 +1,4 @@
-import {forceGroupCollide} from "/physics/custom-force.js"
+import {forceGroupCollide} from "/lib/custom-force.js"
 import {GroupStrategy} from "/graph/group-strategy.js"
 
 

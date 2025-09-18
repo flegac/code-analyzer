@@ -6,6 +6,14 @@ export class GuiGraphController {
     }
 }
 
+export class MyComponent {
+    constructor(id, template) {
+        this.container = document.createElement("div");
+        this.container.id = id;
+        this.container.innerHTML = template;
+    }
+}
+
 export function createDiv(id, classes = null, parent = null) {
     if (parent === null) {
         parent = document.body;

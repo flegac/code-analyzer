@@ -1,4 +1,4 @@
-import {GraphDisplay} from "/display/graph-display.js";
+import {GraphDisplay} from "/graph/display/graph-display.js";
 
 
 export function defaultDisplayProvider(state) {
