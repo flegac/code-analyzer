@@ -2,114 +2,33 @@ html, body {
     margin: 0;
     padding: 0;
     height: 100%;
-    overflow: hidden;
 }
 
-.stats-panel {
-    position: fixed !important;
-    top: 20px !important;
-    left: auto !important;
-    right: 10px !important;
-    z-index: 10000;
-}
 
-sl-details,
-sl-details::part(base),
-sl-details::part(content),
-sl-details::part(summary) {
-    padding: 0 !important;
-    margin: 0 !important;
-}
-
-sl-tab-group::part(nav) {
-    gap: 0.2em;
-}
-
-sl-tab::part(base) {
-    padding: 0.2em 0.2em;
-    font-size: 0.8em;
-}
-
-sl-tab-panel::part(base) {
-    padding: 0.2em;
-}
-
-sl-button::part(base) {
-    padding: 0.2em 0.2em;
-    font-size: 0.85em;
-}
-
-/* Le split-panel doit être en flex vertical */
-sl-split-panel {
-    display: flex;
-    height: 100vh;
-    overflow: hidden;
-
-}
-
-/* Panneau gauche : scroll autorisé */
-[slot="start"] {
+/* Panneau gauche : scroll indépendant */
+sl-split-panel > [slot="start"] {
+    height: 100%;
+    overflow: auto;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
-    height: 100%;
-    width: 300px;
 }
 
-/* Panneau droit : contenu fluide, pas d'ascenseur */
-[slot="end"] {
+/* Panneau droit : scroll indépendant */
+sl-split-panel > [slot="end"] {
+    height: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    height: 100%;
-}
-
-/* Onglets Shoelace dans le panneau droit */
-#right-tabs {
-    flex: 1;
-    overflow: hidden;
-}
-
-/* Chaque tab-panel dans le panneau droit */
-#right-tabs sl-tab-panel::part(base) {
-    height: 100%;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    padding: 0;
-    margin: 0;
-}
-
-sl-tab-panel[name="graph-view"] {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow: hidden;
-}
-
-sl-tab-panel[name="graph-view"] #graph-view {
-    flex: 1;
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
 }
 
 #graph-view {
-    position: relative;
-    overflow: hidden;
     pointer-events: auto;
     touch-action: none;
-    width: 100%;
-    height: 100%;
 }
 
-sl-tab-panel:not([active]) #graph-view {
-    display: none !important;
-}
-
-#tree-view, #table-view {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    resize: both;
+sl-tab-panel {
+    border: 2px solid red;
+    height: calc(100vh - 55px);
 }

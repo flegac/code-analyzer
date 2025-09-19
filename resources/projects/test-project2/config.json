@@ -1,0 +1,68 @@
+{
+  "selected": [
+  ],
+  "excluded": [
+    "@excluded",
+    "@stdlib",
+    "@external",
+    "organism.engine.*",
+    "organism.main"
+  ],
+  "groups": {
+    "organism": [
+    ],
+    "excluded": [
+      "easy_ecs.*",
+      "organism.core.vec2",
+      "easy_kit.*"
+    ],
+    "external": [
+      "numpy",
+      "pyglm",
+      "imgui.*",
+      "sdl2",
+      "shapely",
+      "reactivex.*",
+      "cv2",
+      "glfw",
+      "OpenGL.*",
+      "pymunk.*",
+      "pydantic.*",
+      "loguru"
+    ],
+    "stdlib": [
+      "typing",
+      "dataclasses",
+      "functools",
+      "math",
+      "abc",
+      "sys",
+      "contextlib",
+      "re",
+      "copy",
+      "numbers",
+      "pathlib",
+      "random",
+      "unittest",
+      "datetime",
+      "enum",
+      "json",
+      "time",
+      "yaml",
+      "shutil",
+      "traceback",
+      "dotenv",
+      "os",
+      "base64",
+      "atexit",
+      "threading",
+      "zlib",
+      "shlex",
+      "subprocess",
+      "uuid",
+      "platform",
+      "collections",
+      "collections.abc"
+    ]
+  }
+}

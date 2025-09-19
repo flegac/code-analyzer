@@ -1,4 +1,4 @@
-import {GroupStrategy} from "/graph/group-strategy.js"
+import {GroupStrategy} from "/model/group.strategy.model.js"
 
 export function forceGroupCollide(state) {
     let nodes;

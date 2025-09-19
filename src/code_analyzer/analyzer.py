@@ -8,8 +8,8 @@ import tqdm
 from easy_kit.timing import time_func
 
 from code_analyzer.dependencies.dependency_cst_analyzer import DependencyCstAnalyzer
-from code_analyzer.scope.module_ref import ModuleRef
 from code_analyzer.project.project import Project
+from code_analyzer.scope.module_ref import ModuleRef
 from code_analyzer.stats.code_stats import AggregatedCodeStats
 from code_analyzer.stats.module_stats_visitor import ModuleStatsVisitor
 
@@ -54,6 +54,9 @@ class ProjectAnalyzer:
 
 @time_func
 def analyze_project(project: Project, output_dir: Path) -> None:
+    node_path = output_dir / 'nodes'
+    node_path.mkdir(exist_ok=True, parents=True)
+
     analyzer = ProjectAnalyzer(project)
     analyzer.refresh_all()
 
@@ -68,7 +71,7 @@ def analyze_project(project: Project, output_dir: Path) -> None:
     pprint(aggregate_stats)
 
     infos = analyzer.infos()
-    (output_dir / 'modules.json').write_text(json.dumps(infos, indent=2))
+    (output_dir / 'nodes/stats.json').write_text(json.dumps(infos, indent=2))
 
     # final_stats, import_graph = aggregate_stats(stats)
     # (output_dir / "stats.json").write_text(json.dumps(final_stats, indent=2, ensure_ascii=False), encoding="utf-8")
