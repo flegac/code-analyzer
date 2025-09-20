@@ -1,5 +1,4 @@
 import {forceGroupCollide} from "/lib/custom-force.js"
-import {GroupStrategy} from "/model/group.strategy.model.js"
 import {LayoutService} from "/service/layout.service.js"
 
 
@@ -40,7 +39,6 @@ export class PhysicsService {
         const charge = graph.graph.d3Force('charge');
 
         graph.graph.d3VelocityDecay(physics.friction);
-        const groupStrategy = new GroupStrategy(physics.collapsingDepth);
 
         if (physics.isActive) {
             const repulsionStrength = Math.pow(10, 4 * physics.repulsionFactor);

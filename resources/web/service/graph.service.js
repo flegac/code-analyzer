@@ -12,6 +12,8 @@ export class GraphService {
     constructor() {
 
         this.nodeById = {};
+        this.nodes = [];
+        this.links = [];
 
         this.selected = null
         this._navigation = {

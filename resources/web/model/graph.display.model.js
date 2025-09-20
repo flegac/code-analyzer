@@ -1,4 +1,7 @@
 import {NodeMeshModel} from "/mesh/node.mesh.model.js";
+import {GraphService} from "/service/graph.service.js";
+import {LayoutService} from "/service/layout.service.js";
+
 
 class NodeDisplay {
     constructor() {
@@ -7,6 +10,8 @@ class NodeDisplay {
     }
 
     async apply(graph, state) {
+        const G = GraphService.singleton;
+        G.updateGroup();
         graph.graph
             .nodeAutoColorBy('group')
             .nodeThreeObject(node => new NodeMeshModel(node, state).mesh)
@@ -50,8 +55,8 @@ class GraphDisplay {
     }
 
     async apply(graph, state) {
-        await this.link.apply(graph);
         await this.node.apply(graph, state);
+        await this.link.apply(graph);
     }
 }
 
