@@ -17,8 +17,7 @@ const TEMPLATE = `
     <sl-range id="repulsionFactor" label="Repulsion" min="0" max="1" step="0.01"></sl-range>
 
     <sl-range id="strength" label="Link strength" min="0" max="25" step="0.01"></sl-range>
-    <sl-range id="distance" label="Link distance" min="0" max="1000" step="1"></sl-range>
-    <sl-range id="dependencyStrengthFactor" label="Dependency strength" min="0" max="1" step="0.01"></sl-range>
+    <sl-range id="relationStrengthFactor" label="Hierarchy <--> Relation" min="0" max="1" step="0.01"></sl-range>
   </div>
 `;
 
@@ -56,8 +55,7 @@ export class PhysicsComponent extends BaseComponent {
             ['collapsingDepth', state, 'collapsingDepth'],
             ['repulsionFactor', state, 'repulsionFactor'],
             ['strength', state.link, 'strength'],
-            ['distance', state.link, 'distance'],
-            ['dependencyStrengthFactor', state.link, 'dependencyStrengthFactor']
+            ['relationStrengthFactor', state.link, 'relationStrengthFactor']
         ];
 
         sliders.forEach(([id, target, key]) => {

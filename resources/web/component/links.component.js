@@ -6,17 +6,17 @@ const TEMPLATE = `
   <div style="display: flex; flex-direction: column; gap: 1em; padding: 1em;">
 
     <div>
+      <h3>Relation</h3>
+      <sl-color-picker id="relation-color" size="small" label="Color"></sl-color-picker>
+      <sl-range id="relation-particles" label="Particles" min="0" max="10" step="1"></sl-range>
+      <sl-range id="relation-width" label="Width" min="0" max="30" step="0.1"></sl-range>
+    </div>
+
+    <div>
       <h3>Hierarchy</h3>
       <sl-color-picker id="hierarchy-color" size="small" label="Color"></sl-color-picker>
       <sl-range id="hierarchy-particles" label="Particles" min="0" max="10" step="1"></sl-range>
       <sl-range id="hierarchy-width" label="Width" min="0" max="30" step="0.1"></sl-range>
-    </div>
-
-    <div>
-      <h3>Dependencies</h3>
-      <sl-color-picker id="dependencies-color" size="small" label="Color"></sl-color-picker>
-      <sl-range id="dependencies-particles" label="Particles" min="0" max="10" step="1"></sl-range>
-      <sl-range id="dependencies-width" label="Width" min="0" max="30" step="0.1"></sl-range>
     </div>
 
   </div>
@@ -33,7 +33,7 @@ export class LinksComponent extends BaseComponent {
 
     // 🔗 Links
     this._bindLinkControls('hierarchy', links.hierarchy, onChange);
-    this._bindLinkControls('dependencies', links.dependencies, onChange);
+    this._bindLinkControls('relation', links.relation, onChange);
   }
 
   _bindLinkControls(prefix, state, onChange) {

@@ -50,12 +50,14 @@ export class GraphService {
         this.selected = null;
 
         const relation = DatasetService.singleton.state.relation();
+
+        const centrality = DatasetService.singleton.state.computeCentrality();
+
         const moduleInfos = DatasetService.singleton.state.moduleInfos();
         const hierarchy = DatasetService.singleton.state.hierarchy();
         if (relation === null) {
             return;
         }
-
 
         const state = DisplayService.singleton.nodes;
 
@@ -63,16 +65,18 @@ export class GraphService {
             ...relation.nodes(),
             ...hierarchy.nodes()
         ]);
-        const strategy = new GroupStrategy(state.colorGroupDepthRange - 1);
+        const strategy = new GroupStrategy(state.mesh.colorGroupDepthRange - 1);
         const links = [
             ...hierarchy.links(),
             ...relation.links(),
         ];
         const nodes = Array.from(nodeIds).map(id => {
             const nodeInfos = {...(moduleInfos?.[id] ?? {}), group: strategy.apply(id)};
-            const value = nodeInfos[state.size] ?? 1;
+            nodeInfos['centrality'] = centrality[id];
+            const value = nodeInfos[state.mesh.size] ?? 1;
             return {
                 id,
+                centrality: centrality[id],
                 group: nodeInfos.group,
                 infos: nodeInfos,
                 radius: Math.max(1, Math.cbrt(1 + value)),

@@ -7,8 +7,8 @@ export class DatasetService {
     static singleton = new DatasetService();
 
     constructor() {
-        this.depthCollapseLimit = 3;
         this.state = new Dataset();
+        this.depthCollapseLimit = 3;
         console.log('initialize', this);
     }
 

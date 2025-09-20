@@ -26,10 +26,7 @@ export class DatasetComponent extends BaseComponent {
         fileInput.addEventListener('change', async event => {
             const files = event.target.files;
             if (!files || files.length === 0) return;
-
-            const firstPath = files[0].webkitRelativePath;
-            const folderName = firstPath.split('/')[0];
-
+            const folderName = files[0].webkitRelativePath.split('/')[0];
             await DatasetService.singleton.load(folderName, files);
         });
 

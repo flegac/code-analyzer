@@ -1,11 +1,11 @@
-import { forceGroupCollide } from "/lib/custom-force.js"
-import { GroupStrategy } from "/model/group.strategy.model.js"
-import { LayoutService } from "/service/layout.service.js"
-import { Physics } from "/model/config.model.js";
+import {forceGroupCollide} from "/lib/custom-force.js"
+import {GroupStrategy} from "/model/group.strategy.model.js"
+import {LayoutService} from "/service/layout.service.js"
+import {Physics} from "/model/physics.model.js";
 
 
 function linkValue(label, baseValue, ratio) {
-    if (label === "dependencies") {
+    if (label !== "relation") {
         ratio = 1 - ratio;
     }
     return baseValue * ratio;
@@ -35,23 +35,9 @@ export class PhysicsService {
             graph.graph.numDimensions(physics.dimension);
             charge.strength(-repulsionStrength);
             graph.graph.d3Force('prefixCollide', forceGroupCollide(physics));
-            links.distance(link => {
-                const src = link.source;
-                const target = link.target;
-                const srcGroup = groupStrategy.apply(src.id);
-                const targetGroup = groupStrategy.apply(target.id);
-                if ((src.infos?.imported ?? 0) + (src.infos?.imports ?? 0) === 0) {
-                    return 0;
-                }
-                if ((target.infos?.imported ?? 0) + (target.infos?.imports ?? 0) === 0) {
-                    return 0;
-                }
-
-                const scaling = srcGroup === targetGroup ? .0 : 1.;
-                return scaling * 10 * linkValue(link.label, physics.link.distance, physics.link.dependencyStrengthFactor);
-            });
             links.strength(link => {
-                return .01 * physics.link.strength;
+                const value = linkValue(link.label, physics.link.strength, physics.link.relationStrengthFactor);
+                return .01 * value;
             });
             graph.graph.cooldownTicks(Infinity);
         } else {

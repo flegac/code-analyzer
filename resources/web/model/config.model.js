@@ -1,20 +1,5 @@
 
 
-class Physics {
-    constructor() {
-        this.isActive = true;
-        this.friction = 0.1;
-        this.dimension = 3;
-        this.collapsingDepth = 1;
-        this.repulsionFactor = 0.5;
-        this.link = {
-            distance: 100,
-            dependencyStrengthFactor: 0.15,
-            strength: 5,
-        };
-    }
-}
-
 class Nodes {
     constructor() {
         this.mesh = {
@@ -45,7 +30,7 @@ class Nodes {
 
 class Links {
     constructor() {
-        this.dependencies = {
+        this.relation = {
             color: '#f00',
             particles: 1,
             width: 1.0,
@@ -58,4 +43,4 @@ class Links {
     }
 }
 
-export {Physics, Nodes, Links};
+export {Nodes, Links};

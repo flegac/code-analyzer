@@ -22,10 +22,10 @@ export class NodeMeshModel {
             nodeRef: node,
         };
 
-
-        // billboard
+        //mesh
+        const color = node.color;
         const nodeSize = node.radius * state.mesh.baseRadius;
-        const billboard = state.mesh.isVisible ? new Billboard(nodeSize, node.color).mesh : null;
+        const billboard = state.mesh.isVisible ? new Billboard(nodeSize, color).mesh : null;
 
         //text
         const parts = node.id.split('.');
