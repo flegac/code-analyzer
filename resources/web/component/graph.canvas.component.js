@@ -2,7 +2,6 @@ export class GraphCanvasComponent {
     constructor() {
         this.container = window.document.createElement('div');
         this.container.id = 'graph-view';
-        this.nodeById = {};
         this.graph = ForceGraph3D()(this.container, {controlType: 'orbit'});
 
         this._patchNaNPositions();
@@ -21,9 +20,7 @@ export class GraphCanvasComponent {
 
 
     reload(nodes, links) {
-        this.nodeById = Object.fromEntries(nodes.map(n => [n.id, n]));
         this.graph.graphData({nodes, links});
-
     }
 
     _patchNaNPositions(r = 200) {

@@ -1,5 +1,6 @@
 import {LayoutService} from "/service/layout.service.js"
 import {defaultDisplayProvider} from "/model/display-provider.js";
+import {GraphService} from "/service/graph.service.js"
 
 
 class Nodes {
@@ -58,7 +59,11 @@ export class DisplayService {
     async apply() {
         const graph = LayoutService.singleton.graph;
         const state = DisplayService.singleton.nodes;
+
+        GraphService.singleton.updateDisplayParameters();
+
         const displayProvider = this.displayProvider();
         await displayProvider.apply(graph, state);
+
     }
 }

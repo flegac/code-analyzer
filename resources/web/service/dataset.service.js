@@ -2,9 +2,6 @@ import {GraphService} from "/service/graph.service.js"
 import {Dataset} from "/model/dataset.model.js"
 import {GraphFilter} from "/model/graph.filter.model.js"
 import {LayoutService} from "/service/layout.service.js"
-import {NodeService} from "/service/node.service.js"
-import {DisplayService} from "/service/display.service.js"
-import {GroupStrategy} from "/model/group.strategy.model.js";
 
 export class DatasetService {
     static singleton = new DatasetService();

@@ -10,6 +10,9 @@ export class GraphService {
     static singleton = new GraphService()
 
     constructor() {
+
+        this.nodeById = {};
+
         this.selected = null
         this._navigation = {
             node: null,
@@ -47,10 +50,43 @@ export class GraphService {
         this.listeners.delete(cb);
     }
 
+
+    updateGroup() {
+        const state = DisplayService.singleton.nodes;
+        const strategy = new GroupStrategy(state.mesh.colorGroupDepthRange - 1);
+
+        this.nodes.forEach(node => {
+            node.group = strategy.apply(node.id);
+            node.infos.group = node.group;
+        });
+    }
+
+
+    updateConnectivityStats() {
+        this.nodes.forEach(node => {
+            node.outgoing = [];
+            node.incoming = [];
+        });
+        this.links.forEach(link => {
+            this.nodeById[link.source].outgoing.push(link.target);
+            this.nodeById[link.target].outgoing.push(link.source);
+        });
+        const centrality = DatasetService.singleton.state.computeCentrality();
+        this.nodes.forEach(node => {
+            node.centrality = node.infos.centrality = centrality[node.id];
+        });
+    }
+
+    updateDisplayParameters() {
+        this.nodes.forEach(node => {
+            const value = node.infos[DisplayService.singleton.nodes.mesh.size] ?? 1;
+            node.radius = Math.max(1, Math.cbrt(1 + value));
+        });
+    }
+
     async rebuildGraph() {
         this.selected = null;
         const relation = DatasetService.singleton.state.relation();
-        const centrality = DatasetService.singleton.state.computeCentrality();
         const nodesInfos = DatasetService.singleton.state.nodes();
         const hierarchy = DatasetService.singleton.state.hierarchy();
         if (relation === null) {
@@ -62,41 +98,36 @@ export class GraphService {
             ...relation.nodes(),
             ...hierarchy.nodes()
         ]);
-        const strategy = new GroupStrategy(state.mesh.colorGroupDepthRange - 1);
-        const links = [
+
+        this.links = [
             ...hierarchy.links(),
             ...relation.links(),
         ];
-
-        const nodes = Array.from(nodeIds).map(id => {
-            const nodeInfos = {...(nodesInfos?.[id] ?? {}), group: strategy.apply(id)};
-            nodeInfos['centrality'] = centrality[id];
-            const value = nodeInfos[state.mesh.size] ?? 1;
+        this.nodes = Array.from(nodeIds).map(id => {
+            const nodeInfos = nodesInfos?.[id] ?? {};
             return {
                 id,
-                centrality: centrality[id],
-                group: nodeInfos.group,
                 infos: nodeInfos,
-                radius: Math.max(1, Math.cbrt(1 + value)),
-                outgoing: links.filter(e => e.source === id).map(e => e.target),
-                incoming: links.filter(e => e.target === id).map(e => e.source),
             };
         });
+        this.nodeById = Object.fromEntries(
+            this.nodes.map(n => [n.id, n])
+        );
+
+        this.updateGroup();
+        this.updateConnectivityStats();
+        this.updateDisplayParameters();
 
         const graph = LayoutService.singleton.graph;
-
-        graph.reload(nodes, links);
+        graph.reload(this.nodes, this.links);
         CameraService.singleton.takeControl(graph);
 
         await this.apply();
     }
 
     async apply() {
-        await DisplayService.singleton.apply();
         await PhysicsService.singleton.apply();
-        //FIXME: This should not be necessary ! (link color is wrong, relative to groupHierarchyDepth)
         await DisplayService.singleton.apply();
-        await PhysicsService.singleton.apply();
     }
 
     nodeReducer(mapping) {
