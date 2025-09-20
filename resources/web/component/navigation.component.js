@@ -5,18 +5,21 @@ import {CameraService} from "/service/camera.service.js"
 
 
 const TEMPLATE = `
-<div>
-  <div id="nav-title">Navigation</div>
-  <div>
-    <div>Incoming</div>
-    <sl-menu id="nav-incoming"></sl-menu>
-  </div>
-  <div>
-    <div>Outgoing</div>
-    <sl-menu id="nav-outgoing"></sl-menu>
-  </div>
+<div class="nav-wrapper">
+  <h2 id="nav-title" class="nav-title">Navigation</h2>
+
+  <section class="nav-section">
+    <h3 class="nav-heading">Entrées</h3>
+    <sl-menu id="nav-incoming" class="nav-menu"></sl-menu>
+  </section>
+
+  <section class="nav-section">
+    <h3 class="nav-heading">Sorties</h3>
+    <sl-menu id="nav-outgoing" class="nav-menu"></sl-menu>
+  </section>
 </div>
 `;
+
 
 export class NavigationComponent extends BaseComponent {
     constructor() {
@@ -44,7 +47,7 @@ export class NavigationComponent extends BaseComponent {
 
         const nodeName = navigation.selected?.label || navigation.selected?.id || 'Navigation';
 
-        title.textContent = `🧭 ${nodeName}`;
+        title.textContent = `${nodeName}`;
 
         incomingMenu.innerHTML = '';
         outgoingMenu.innerHTML = '';
@@ -66,15 +69,4 @@ export class NavigationComponent extends BaseComponent {
         });
     }
 
-
-    startAutoRefresh() {
-        this.refreshInterval = setInterval(() => {
-            this.updateMenu();
-        }, 1000); // rafraîchit toutes les secondes
-    }
-
-    disconnectedCallback() {
-        super.disconnectedCallback();
-        clearInterval(this.refreshInterval); // nettoyage si le composant est retiré
-    }
 }

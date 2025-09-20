@@ -2,6 +2,9 @@ import {GraphService} from "/service/graph.service.js"
 import {Dataset} from "/model/dataset.model.js"
 import {GraphFilter} from "/model/graph.filter.model.js"
 import {LayoutService} from "/service/layout.service.js"
+import {NodeService} from "/service/node.service.js"
+import {DisplayService} from "/service/display.service.js"
+import {GroupStrategy} from "/model/group.strategy.model.js";
 
 export class DatasetService {
     static singleton = new DatasetService();
@@ -27,11 +30,10 @@ export class DatasetService {
         //TODO: load all projects / datasets in a directory (ask right only once)
     }
 
-
     async changeDataset(dataset) {
         this.state = dataset;
         await GraphService.singleton.rebuildGraph();
-        LayoutService.singleton.table.rebuild(this.state.nodes());
+        LayoutService.singleton.table.rebuild(dataset.nodes());
     }
 
     async load(folderName, files) {

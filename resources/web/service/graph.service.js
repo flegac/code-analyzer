@@ -5,6 +5,7 @@ import {LayoutService} from "/service/layout.service.js"
 import {CameraService} from "/service/camera.service.js"
 import {GroupStrategy} from "/model/group.strategy.model.js";
 
+
 export class GraphService {
     static singleton = new GraphService()
 
@@ -48,17 +49,13 @@ export class GraphService {
 
     async rebuildGraph() {
         this.selected = null;
-
         const relation = DatasetService.singleton.state.relation();
-
         const centrality = DatasetService.singleton.state.computeCentrality();
-
         const nodesInfos = DatasetService.singleton.state.nodes();
         const hierarchy = DatasetService.singleton.state.hierarchy();
         if (relation === null) {
             return;
         }
-
         const state = DisplayService.singleton.nodes;
 
         const nodeIds = new Set([
@@ -70,6 +67,7 @@ export class GraphService {
             ...hierarchy.links(),
             ...relation.links(),
         ];
+
         const nodes = Array.from(nodeIds).map(id => {
             const nodeInfos = {...(nodesInfos?.[id] ?? {}), group: strategy.apply(id)};
             nodeInfos['centrality'] = centrality[id];

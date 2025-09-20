@@ -7,10 +7,7 @@ export class Dataset {
         this._relation = relation;
         this._config = config;
         this._nodes = nodes;
-
-
         console.log('new Dataset()', relation, nodes, config)
-
     }
 
     config() {
@@ -49,8 +46,6 @@ export class Dataset {
 
         return computeClosenessCentrality(graphData);
     }
-
-
 }
 
 
