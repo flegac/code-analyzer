@@ -53,7 +53,7 @@ export class GraphService {
 
         const centrality = DatasetService.singleton.state.computeCentrality();
 
-        const moduleInfos = DatasetService.singleton.state.moduleInfos();
+        const nodesInfos = DatasetService.singleton.state.nodes();
         const hierarchy = DatasetService.singleton.state.hierarchy();
         if (relation === null) {
             return;
@@ -71,7 +71,7 @@ export class GraphService {
             ...relation.links(),
         ];
         const nodes = Array.from(nodeIds).map(id => {
-            const nodeInfos = {...(moduleInfos?.[id] ?? {}), group: strategy.apply(id)};
+            const nodeInfos = {...(nodesInfos?.[id] ?? {}), group: strategy.apply(id)};
             nodeInfos['centrality'] = centrality[id];
             const value = nodeInfos[state.mesh.size] ?? 1;
             return {
@@ -94,7 +94,6 @@ export class GraphService {
     }
 
     async apply() {
-        LayoutService.singleton.tree.rebuild(await DatasetService.singleton.state.hierarchy());
         await DisplayService.singleton.apply();
         await PhysicsService.singleton.apply();
         //FIXME: This should not be necessary ! (link color is wrong, relative to groupHierarchyDepth)

@@ -24,11 +24,9 @@ const LAYOUT_TEMPLATE = `
     <sl-tab-group id="right-tabs">
       <sl-tab slot="nav" panel="graph-view">Graph View</sl-tab>
       <sl-tab slot="nav" panel="table-view">Table View</sl-tab>
-      <sl-tab slot="nav" panel="tree-view">Tree View</sl-tab>
 
       <sl-tab-panel name="graph-view"></sl-tab-panel>
       <sl-tab-panel name="table-view"></sl-tab-panel>
-      <sl-tab-panel name="tree-view"></sl-tab-panel>
     </sl-tab-group>
   </div>
 </sl-split-panel>

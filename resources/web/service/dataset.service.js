@@ -23,11 +23,15 @@ export class DatasetService {
         ];
     }
 
+    async loadWorkspace(files) {
+        //TODO: load all projects / datasets in a directory (ask right only once)
+    }
+
     async load(folderName, files) {
         this.state = await Dataset.load(folderName, files);
         await GraphService.singleton.rebuildGraph();
         LayoutService.singleton.tree.rebuild(this.state.hierarchy());
-        LayoutService.singleton.table.rebuild(this.state.moduleInfos());
+        LayoutService.singleton.table.rebuild(this.state.nodes());
     }
 
 }

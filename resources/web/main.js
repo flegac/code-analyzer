@@ -22,7 +22,4 @@ export async function main() {
             controls.update();
         })
         .registerMap(keyBindings(app));
-
-
-    $(() => app.rebuildGraph());
 }

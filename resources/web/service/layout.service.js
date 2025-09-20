@@ -1,5 +1,4 @@
 import {GraphCanvasComponent} from "/component/graph.canvas.component.js"
-import {TreeComponent} from "/component/tree.component.js"
 import {TableComponent} from "/component/table.component.js"
 
 import {AppLayoutComponent} from "/component/app.layout.component.js"
@@ -11,8 +10,6 @@ import {LinksComponent} from "/component/links.component.js"
 import {PhysicsComponent} from "/component/physics.component.js"
 import {RendererDebugComponent} from "/component/renderer.debug.component.js"
 
-import {GraphModel} from "/model/graph.model.js";
-import {DatasetService} from "/service/dataset.service.js"
 import {FpsComponent} from "/component/fps.component.js"
 import {Billboard} from "/mesh/billboard.mesh.model.js"
 
@@ -24,7 +21,6 @@ export class LayoutService {
         this.layout = new AppLayoutComponent();
 
         this.graph = new GraphCanvasComponent();
-        this.tree = new TreeComponent();
         this.table = new TableComponent();
 
         this.dataset = new DatasetComponent();
@@ -67,11 +63,7 @@ export class LayoutService {
             'graph-view': () => [
                 this.graph.container
             ],
-            'tree-view': async () => {
-                return [
-                    this.tree.container
-                ];
-            },
+
             'table-view': async () => [
                 this.table.container
             ],

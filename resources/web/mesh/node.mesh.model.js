@@ -25,7 +25,9 @@ export class NodeMeshModel {
         //mesh
         const color = node.color;
         const nodeSize = node.radius * state.mesh.baseRadius;
-        const billboard = state.mesh.isVisible ? new Billboard(nodeSize, color).mesh : null;
+        const degree = node.infos.imports + node.infos.imported;
+        const meshVisible = degree > 0 && state.mesh.isVisible;
+        const billboard = meshVisible ? new Billboard(nodeSize, color).mesh : null;
 
         //text
         const parts = node.id.split('.');
@@ -33,7 +35,7 @@ export class NodeMeshModel {
         const shouldShowText = partsCount <= state.text.hiddenDepthRange;
         const textSize = 1 / Math.pow(2, parts.length);
         const text = state.text.textFormatter(parts);
-        const textMesh = state.text.isVisible && shouldShowText ? new TextSprite(text, textSize, state.text, state.mesh.isVisible).mesh : null
+        const textMesh = state.text.isVisible && shouldShowText ? new TextSprite(text, textSize, state.text, meshVisible).mesh : null
 
         node.mesh = {
             group: group,

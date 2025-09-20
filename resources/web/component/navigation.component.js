@@ -51,16 +51,16 @@ export class NavigationComponent extends BaseComponent {
 
         navigation.incoming.forEach(item => {
             const menuItem = document.createElement('sl-menu-item');
-            menuItem.value = item.value || item;
-            menuItem.textContent = item.label || item;
+            menuItem.value = item;
+            menuItem.textContent = item;
             menuItem.addEventListener('click', () => this.onClick(item));
             incomingMenu.appendChild(menuItem);
         });
 
         navigation.outgoing.forEach(item => {
             const menuItem = document.createElement('sl-menu-item');
-            menuItem.value = item.value || item;
-            menuItem.textContent = item.label || item;
+            menuItem.value = item;
+            menuItem.textContent = item.split('.').slice(-2).join('.');
             menuItem.addEventListener('click', () => this.onClick(item));
             outgoingMenu.appendChild(menuItem);
         });
