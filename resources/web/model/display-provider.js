@@ -31,8 +31,6 @@ export function defaultDisplayProvider() {
                 const centrality2 = link.target.infos.centrality;
                 return interpolateColor((centrality1 + centrality2) / 2);
             }
-
-
             return links[link.label]?.color ?? '#f00';
         },
         visibility: link => {

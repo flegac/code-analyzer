@@ -27,7 +27,8 @@ export class DatasetComponent extends BaseComponent {
             const files = event.target.files;
             if (!files || files.length === 0) return;
             const folderName = files[0].webkitRelativePath.split('/')[0];
-            await DatasetService.singleton.load(folderName, files);
+            const dataset = await DatasetService.singleton.load(folderName, files);
+            await DatasetService.singleton.changeDataset(dataset);
         });
 
 

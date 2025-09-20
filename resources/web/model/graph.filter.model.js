@@ -9,7 +9,6 @@ export class GraphFilter {
             this.matchSelected = this._prepare(config.selected);
             this.matchExcluded = this._prepare(config.excluded);
         }
-
     }
 
     apply(graph) {

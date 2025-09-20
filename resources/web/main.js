@@ -3,6 +3,7 @@ import {GraphService} from "/service/graph.service.js"
 import {LayoutService} from "/service/layout.service.js"
 import {KeyboardService} from "/service/keyboard.service.js";
 import {CameraService} from "/service/camera.service.js"
+import {DatasetService} from "/service/dataset.service.js";
 
 export async function main() {
     const layout = LayoutService.singleton;
@@ -22,4 +23,9 @@ export async function main() {
             controls.update();
         })
         .registerMap(keyBindings(app));
+
+    $(async () => {
+        const dataset = await DatasetService.singleton.loadDefault();
+        await DatasetService.singleton.changeDataset(dataset);
+    })
 }

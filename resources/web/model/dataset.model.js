@@ -1,57 +1,16 @@
 import {GraphModel} from "/model/graph.model.js"
 import {DatasetService} from "/service/dataset.service.js"
 
-async function readJson(path, fileMap) {
-    const file = fileMap[path];
-    if (!file) {
-        console.warn(`Fichier manquant : ${path}`);
-        return null;
-    }
-    try {
-        const text = await file.text();
-        return JSON.parse(text);
-    } catch (e) {
-        console.error(`Erreur de lecture JSON : ${path}`, e);
-        return null;
-    }
-}
-
 export class Dataset {
     constructor(project = 'test-project', relation, nodes, config) {
         this.project = project;
         this._relation = relation;
         this._config = config;
         this._nodes = nodes;
-    }
 
-    static async load(projectName, fileList) {
-        const files = Array.from(fileList);
-        console.log(`loading files for project ${projectName}`, files);
 
-        const fileMap = Object.fromEntries(files.map(f => [f.webkitRelativePath, f]));
+        console.log('new Dataset()', relation, nodes, config)
 
-        // 🔹 Charger tous les fichiers nodes/*.json
-        const nodes = {};
-        for (const [path, file] of Object.entries(fileMap)) {
-            const match = path.match(new RegExp(`${projectName}/nodes/(.+)\\.json`));
-            if (match) {
-                const name = match[1];
-                try {
-                    const text = await file.text();
-                    nodes[name] = JSON.parse(text);
-                } catch (e) {
-                    console.warn(`Erreur de lecture moduleInfos : ${path}`, e);
-                }
-            }
-        }
-
-        console.log(`Projet "${projectName}" chargé depuis le disque`);
-        return new Dataset(
-            projectName,
-            await readJson(`${projectName}/relation.json`, fileMap),
-            nodes,
-            await readJson(`${projectName}/config.json`, fileMap)
-        );
     }
 
     config() {
