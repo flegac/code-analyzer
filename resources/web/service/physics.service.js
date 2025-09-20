@@ -1,7 +1,6 @@
 import {forceGroupCollide} from "/lib/custom-force.js"
 import {GroupStrategy} from "/model/group.strategy.model.js"
 import {LayoutService} from "/service/layout.service.js"
-import {Physics} from "/model/physics.model.js";
 
 
 function linkValue(label, baseValue, ratio) {
@@ -11,6 +10,19 @@ function linkValue(label, baseValue, ratio) {
     return baseValue * ratio;
 }
 
+class Physics {
+    constructor() {
+        this.isActive = true;
+        this.friction = 0.1;
+        this.dimension = 3;
+        this.collapsingDepth = 1;
+        this.repulsionFactor = 0.5;
+        this.link = {
+            relationStrengthFactor: 0.15,
+            strength: 5,
+        };
+    }
+}
 
 export class PhysicsService {
     static singleton = new PhysicsService();
@@ -36,8 +48,10 @@ export class PhysicsService {
             charge.strength(-repulsionStrength);
             graph.graph.d3Force('prefixCollide', forceGroupCollide(physics));
             links.strength(link => {
-                const value = linkValue(link.label, physics.link.strength, physics.link.relationStrengthFactor);
-                return .01 * value;
+                const k = link.label === 'relation'
+                    ? physics.link.relationStrengthFactor
+                    : 1 - physics.link.relationStrengthFactor;
+                return .01 * k * physics.link.strength;
             });
             graph.graph.cooldownTicks(Infinity);
         } else {
