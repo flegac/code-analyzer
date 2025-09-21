@@ -55,11 +55,11 @@ export class BaseComponent {
 
 
     static toggleGroupVisibility(group, item) {
-        group.filter(e => e !== item).forEach((element) => element.toggleVisibility(null,false));
+        group.filter(e => e !== item).forEach((element) => element.toggleVisibility({visible: false}));
         item.toggleVisibility();
     }
 
-    toggleVisibility(name = null, visible = null) {
+    toggleVisibility({name = null, visible = null} = {}) {
         const panel = name !== null ? this.getPanel(name) : this.container;
         if (!panel) return;
 

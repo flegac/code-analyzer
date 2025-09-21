@@ -49,7 +49,9 @@ const TEMPLATE = `
 <sl-split-panel style="--max: 0px; height: 100vh;" position-in-pixels="300" primary="start">
   <!-- Panneau gauche -->
   <div slot="start">
-    <div id="left-panel"></div>
+    <div id="left-panel">
+    
+    </div>
   </div>
 
   <!-- Panneau droit -->
@@ -63,6 +65,7 @@ const TEMPLATE = `
             <div name="graph-settings"></div>
             <div name="navigation"></div>
             <div name="debug"></div>
+            <div name="graph-table"></div>
         </sl-tab-panel>
       
       <sl-tab-panel name="table-view"></sl-tab-panel>
@@ -74,7 +77,6 @@ const TEMPLATE = `
 export class AppLayoutComponent extends BaseComponent {
     constructor() {
         super({
-            id: 'app-layout',
             template: TEMPLATE,
             style: CSS,
             scripts: []

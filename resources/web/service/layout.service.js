@@ -1,6 +1,6 @@
 import {AppLayoutComponent} from "/component/app.layout.component.js"
 import {GraphCanvasComponent} from "/component/graph.canvas.component.js"
-import {TableComponent} from "/component/table.component.js"
+import {GraphTableComponent} from "/component/graph.table.component.js"
 import {SettingsComponent} from "/component/graph.settings.component.js";
 import {DatasetComponent} from "/component/dataset.component.js"
 import {NavigationComponent} from "/component/navigation.component.js"
@@ -17,13 +17,13 @@ export class LayoutService {
         this.layout = new AppLayoutComponent();
         this.dataset = new DatasetComponent();
         this.graph = new GraphCanvasComponent();
-        this.table = new TableComponent();
+        this.table = new GraphTableComponent();
 
         this.settings = new SettingsComponent();
         this.navigation = new NavigationComponent();
         this.rendererDebug = new RendererDebugComponent();
 
-         this.layout.startup({
+        this.layout.startup({
             'navigation': () => [
                 this.navigation,
             ],
@@ -36,24 +36,51 @@ export class LayoutService {
             'graph-settings': () => [
                 this.settings
             ],
-
-            'table-view': async () => [
+            'graph-table': async () => [
                 this.table
             ],
         });
 
-        const g = [this.settings, this.navigation,this.rendererDebug];
+        const g = [this.settings, this.navigation, this.rendererDebug,this.table];
 
         function groupAction(item) {
             return () => {
                 BaseComponent.toggleGroupVisibility(g, item);
             }
         }
-        this.layout.toolbox.newButton('📂', () => this.dataset.openBrowser());
-        this.layout.toolbox.newButton('🔄', () => GraphService.singleton.rebuildGraph())
-        this.layout.toolbox.newButton('⚙️', groupAction(this.settings));
-        this.layout.toolbox.newButton('🧭', groupAction(this.navigation));
-        this.layout.toolbox.newButton('🕵️', groupAction(this.rendererDebug));
+
+        this.layout.toolbox.newButton({
+            label: '📂',
+            tooltip:'Open project',
+            onClick: () => this.dataset.openBrowser()
+        });
+        this.layout.toolbox.newButton({
+            label: '🔄',
+            tooltip: 'Refresh graph data',
+            onClick: () => GraphService.singleton.rebuildGraph()
+        })
+
+        this.layout.toolbox.newButton({
+            label: '🧭',
+            tooltip: 'Navigation panel',
+            onClick: groupAction(this.navigation)
+        });
+        this.layout.toolbox.newButton({
+            label: '📊',
+            tooltip: 'Node tabular data',
+            onClick: groupAction(this.table)
+        });
+        this.layout.toolbox.newButton({
+            label: '⚙️',
+            tooltip: 'Settings panel',
+            onClick: groupAction(this.settings)
+        });
+        this.layout.toolbox.newButton({
+            label: '🕵️',
+            tooltip: 'GL Renderer panel',
+            onClick:() =>  this.rendererDebug.toggleVisibility()
+        });
+
 
         console.log('initialize', this);
     }

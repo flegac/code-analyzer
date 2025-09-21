@@ -68,7 +68,7 @@ class Nodes {
         this.text = {
             isVisible: true,
             hiddenDepthRange: 3,
-            scaling: 1.0,
+            scaling: 2.0,
             padding: 2,
             fontSize: 64,
             fontFamily: 'Arial',
@@ -89,7 +89,7 @@ class Links {
         this.relation = {
             color: '#f00',
             particles: 1,
-            width: 1.0,
+            width: 5.0,
         };
         this.hierarchy = {
             color: '#ffff00',
