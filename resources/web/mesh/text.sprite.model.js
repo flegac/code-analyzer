@@ -1,10 +1,11 @@
 export class TextSprite {
-    constructor(text, baseSize, state, meshIsVisible) {
+    constructor(text, baseSize, state, hasMesh) {
         this.state = state;
         this.baseSize = baseSize;
         [this.mesh, this.aspect] = this.createTextSprite(text, state);
         this.resize(state.scaling)
-        const offset = meshIsVisible ? this.state.textOffsetY : 0
+
+        const offset = hasMesh ? state.textOffsetY : 0
         this.mesh.position.set(0, offset, 10);
     }
 

@@ -75,14 +75,4 @@ void main() {
         geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
         return geometry;
     }
-
-    static startAutoOrientation(nodeProvider, cameraProvider) {
-        const loop = () => {
-            nodeProvider().forEach(n => n.mesh?.group.lookAt(cameraProvider().position));
-            requestAnimationFrame(loop);
-        };
-        loop();
-
-    }
-
 }

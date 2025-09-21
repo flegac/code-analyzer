@@ -2,9 +2,23 @@ import {Billboard} from "/mesh/billboard.mesh.model.js";
 import {TextSprite} from "/mesh/text.sprite.model.js";
 
 export class NodeMeshModel {
-    constructor(node, state) {
+    static fixOrientation(node, cameraProvider) {
+        node.mesh?.group.lookAt(cameraProvider().position)
+    }
+
+    static startAutoOrientation(nodeProvider, cameraProvider) {
+        const loop = () => {
+            nodeProvider().forEach(n => NodeMeshModel.fixOrientation(n, cameraProvider));
+            requestAnimationFrame(loop);
+        };
+        loop();
+    }
+
+
+    constructor(node, state, cameraProvider) {
         this.mesh = this.build(node, state);
         this.children = node.mesh;
+        NodeMeshModel.fixOrientation(node, cameraProvider);
     }
 
     resize(size) {
@@ -35,12 +49,14 @@ export class NodeMeshModel {
         const shouldShowText = partsCount <= state.text.hiddenDepthRange;
         const textSize = 1 / Math.pow(2, parts.length);
         const text = state.text.textFormatter(parts);
-        const textMesh = state.text.isVisible && shouldShowText ? new TextSprite(text, textSize, state.text, meshVisible).mesh : null
+        const textMesh = state.text.isVisible && shouldShowText
+            ? new TextSprite(text, textSize, state.text, meshVisible)
+            : null;
 
         node.mesh = {
             group: group,
             billboard: billboard,
-            text: textMesh,
+            text: textMesh === null ? null : textMesh.mesh,
         };
         // if (node.mesh.text) {
         //     node.mesh.billboard = null;

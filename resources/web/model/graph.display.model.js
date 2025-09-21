@@ -1,6 +1,5 @@
 import {NodeMeshModel} from "/mesh/node.mesh.model.js";
 import {GraphService} from "/service/graph.service.js";
-import {LayoutService} from "/service/layout.service.js";
 
 
 class NodeDisplay {
@@ -12,9 +11,15 @@ class NodeDisplay {
     async apply(graph, state) {
         const G = GraphService.singleton;
         G.updateGroup();
+        //required for nodeAutoColorBy()
+        G.nodes.forEach(node => node.color = null);
         graph.graph
             .nodeAutoColorBy('group')
-            .nodeThreeObject(node => new NodeMeshModel(node, state).mesh)
+            .nodeThreeObject(node => new NodeMeshModel(
+                node,
+                state,
+                () => graph.graph.camera()
+            ).mesh)
             .nodeLabel(node => {
                 let infos = '';
                 if (node.infos) {

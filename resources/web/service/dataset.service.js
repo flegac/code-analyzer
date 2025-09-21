@@ -8,7 +8,7 @@ export class DatasetService {
 
     constructor() {
         this.state = new Dataset();
-        this.depthCollapseLimit = 3;
+        this.depthCollapseLimit = 5;
         console.log('initialize', this);
     }
 

@@ -5,13 +5,14 @@ import {AppLayoutComponent} from "/component/app.layout.component.js"
 
 import {DatasetComponent} from "/component/dataset.component.js"
 import {NavigationComponent} from "/component/navigation.component.js"
-import {NodesComponent} from "/component/nodes.component.js"
-import {LinksComponent} from "/component/links.component.js"
+import {GraphNodeComponent} from "/component/graph.node.component.js"
+import {GraphTextComponent} from "/component/graph.text.component.js"
+import {GraphLinkComponent} from "/component/graph.link.component.js"
 import {PhysicsComponent} from "/component/physics.component.js"
 import {RendererDebugComponent} from "/component/renderer.debug.component.js"
 
 import {FpsComponent} from "/component/fps.component.js"
-import {Billboard} from "/mesh/billboard.mesh.model.js"
+import {NodeMeshModel} from "/mesh/node.mesh.model.js"
 
 
 export class LayoutService {
@@ -25,8 +26,9 @@ export class LayoutService {
 
         this.dataset = new DatasetComponent();
         this.navigation = new NavigationComponent();
-        this.nodes = new NodesComponent()
-        this.links = new LinksComponent()
+        this.nodes = new GraphNodeComponent()
+        this.texts = new GraphTextComponent()
+        this.links = new GraphLinkComponent()
         this.physics = new PhysicsComponent()
 
         this.rendererDebug = new RendererDebugComponent();
@@ -37,7 +39,10 @@ export class LayoutService {
 
     async start() {
 
-        Billboard.startAutoOrientation(() => this.graph.graph.graphData().nodes, () => this.graph.graph.camera());
+        NodeMeshModel.startAutoOrientation(
+            () => this.graph.graph.graphData().nodes,
+            () => this.graph.graph.camera()
+        );
 
         this.layout.loadComponents({
             'dataset': () => [
@@ -51,6 +56,9 @@ export class LayoutService {
             ],
             'nodes': () => [
                 this.nodes.container,
+            ],
+            'texts': () => [
+                this.texts.container,
             ],
             'links': () => [
                 this.links.container,

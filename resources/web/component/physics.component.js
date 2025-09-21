@@ -3,11 +3,10 @@ import { PhysicsService } from "/service/physics.service.js"
 import { LayoutService } from "/service/layout.service.js"
 
 const TEMPLATE = `
-  <div style="display: flex; flex-direction: column; gap: 0.75em; padding: 1em;">
+  <div style="display: flex; flex-direction: column; gap: 0.25em;">
     <sl-switch id="isActive">Running status</sl-switch>
-
     <sl-button id="simulate" variant="primary">🔥 Simulate</sl-button>
-
+    
     <sl-select id="dimension" label="Projection">
       <sl-option value="2">2D</sl-option>
       <sl-option value="3">3D</sl-option>

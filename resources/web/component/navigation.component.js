@@ -1,6 +1,5 @@
 import {BaseComponent} from "/component/base.component.js";
 import {GraphService} from "/service/graph.service.js"
-import {LayoutService} from "/service/layout.service.js"
 import {CameraService} from "/service/camera.service.js"
 
 
@@ -29,7 +28,7 @@ export class NavigationComponent extends BaseComponent {
         this.updateMenu();
 
         this.onClick = (id) => {
-            const node = LayoutService.singleton.graph.nodeById[id];
+            const node = GraphService.singleton.nodeById[id];
             CameraService.singleton.focusOn(node);
             GraphService.singleton.select(node);
         };
