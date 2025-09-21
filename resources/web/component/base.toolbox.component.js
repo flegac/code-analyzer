@@ -1,13 +1,19 @@
 import {BaseComponent} from "/component/base.component.js";
 
-const STYLE = ``;
+const STYLE = `
+[name=main-toolbar] {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 10;
+}
+`;
 
-const TEMPLATE = `<sl-button-group name="toolbar"></sl-button-group>`;
+const TEMPLATE = `<sl-button-group name="main-toolbar"></sl-button-group>`;
 
 export class ToolBox extends BaseComponent {
     constructor() {
         super({
-            id: 'toolbox',
             template: TEMPLATE,
             style: STYLE,
         });
@@ -20,7 +26,7 @@ export class ToolBox extends BaseComponent {
         button.innerHTML = label;
         button.addEventListener('click', onClick);
 
-        const container = this.getPanel('toolbar');
+        const container = this.getPanel('main-toolbar');
 
         if (tooltip) {
             const tooltipWrapper = document.createElement('sl-tooltip');

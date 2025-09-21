@@ -45,7 +45,6 @@ const TEMPLATE = `
 export class NavigationComponent extends BaseComponent {
     constructor() {
         super({
-            id: 'navigation-component',
             template: TEMPLATE,
             style: STYLE
         });

@@ -2,17 +2,15 @@ import {BaseComponent} from "/component/base.component.js";
 import {DatasetService} from "/service/dataset.service.js"
 
 const TEMPLATE = `
-<div id="dataset-controller" style="display: flex; flex-direction: column; gap: 0.5em; padding: 1em;">
-  <input type="file" name="file-browser" style="display: none;" webkitdirectory></input>
-</div>
+<input type="file" name="file-browser" webkitdirectory></input>
 `;
 
 export class DatasetComponent extends BaseComponent {
     constructor() {
         super({
-            id: "dataset-gui",
             template: TEMPLATE
         })
+        this.toggleVisibility({visible: false})
 
         // 📂 Charger un fichier
         this.fileBrowser = this.getPanel('file-browser');

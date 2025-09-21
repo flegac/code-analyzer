@@ -13,7 +13,6 @@ const TEMPLATE = `
 export class GraphTextComponent extends BaseComponent {
     constructor() {
         super({
-            id: 'graph-text-gui',
             template: TEMPLATE
         });
 

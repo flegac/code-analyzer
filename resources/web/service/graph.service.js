@@ -56,7 +56,6 @@ export class GraphService {
     updateGroup() {
         const state = DisplayService.singleton.nodes;
         const strategy = new GroupStrategy(state.mesh.colorGroupDepthRange - 1);
-
         this.nodes.forEach(node => {
             node.group = strategy.apply(node.id);
             node.infos.group = node.group;
@@ -121,8 +120,8 @@ export class GraphService {
         );
 
         this.updateGroup();
-        this.updateConnectivityStats();
         this.updateDisplayParameters();
+        this.updateConnectivityStats();
 
         const graph = LayoutService.singleton.graph;
         graph.reload(this.nodes, this.links);

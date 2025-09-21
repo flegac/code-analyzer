@@ -8,7 +8,7 @@ export class DatasetService {
 
     constructor() {
         this.state = new Dataset();
-        this.depthCollapseLimit = 5;
+        this.hierarchyPruneLevel = 4;
         console.log('initialize', this);
     }
 
@@ -18,7 +18,7 @@ export class DatasetService {
         return [
             graph => new GraphFilter(this.state.config()).apply(graph),
             GraphService.singleton.nodeReducer((node) => {
-                return node.split('.').slice(0, this.depthCollapseLimit).join('.');
+                return node.split('.').slice(0, this.hierarchyPruneLevel).join('.');
             })
         ];
     }

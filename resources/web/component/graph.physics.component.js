@@ -23,7 +23,6 @@ const TEMPLATE = `
 export class GraphPhysicsComponent extends BaseComponent {
     constructor() {
         super({
-            id: 'graph-edge-gui',
             template: TEMPLATE
         });
 

@@ -1,5 +1,6 @@
 import {NodeMeshModel} from "/mesh/node.mesh.model.js";
 import {GraphService} from "/service/graph.service.js";
+import {DisplayService} from "/service/display.service.js";
 
 
 class NodeDisplay {
@@ -8,16 +9,19 @@ class NodeDisplay {
         this.radius = node => 10.;
     }
 
-    async apply(graph, state) {
+    async apply(graph) {
+        const nodeParams = DisplayService.singleton.nodes;
+
         const G = GraphService.singleton;
         G.updateGroup();
+
         //required for nodeAutoColorBy()
         G.nodes.forEach(node => node.color = null);
         graph.graph
             .nodeAutoColorBy('group')
             .nodeThreeObject(node => new NodeMeshModel(
                 node,
-                state,
+                nodeParams,
                 () => graph.graph.camera()
             ).mesh)
             .nodeLabel(node => {
@@ -59,8 +63,8 @@ class GraphDisplay {
         this.link = new LinkDisplay();
     }
 
-    async apply(graph, state) {
-        await this.node.apply(graph, state);
+    async apply(graph) {
+        await this.node.apply(graph);
         await this.link.apply(graph);
     }
 }

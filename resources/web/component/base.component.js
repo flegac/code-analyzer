@@ -1,6 +1,7 @@
 const STYLE = `
 .hidden {
-  display: none;
+  //display: none;
+  visibility: hidden;
 }
 `;
 

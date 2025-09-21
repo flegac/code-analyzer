@@ -15,7 +15,6 @@ const STYLE = `
   height: auto;
   max-height: calc(100% - 2cm);
   
-  transform: none;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(2px);
   z-index: 1000;
@@ -43,7 +42,7 @@ const STYLE = `
 const TEMPLATE = `
 <div name="graph-settings" class="graph-settings">
   <div class="drawer-cards">
-    <sl-range name="depth-limit" label="Depth collapse limit" min="1" max="10" step="1" value="1"></sl-range>
+    <sl-range name="prune-level" label="Hierarchy prune level" min="1" max="10" step="1" value="1"></sl-range>
   
     ${['physics', 'links', 'nodes', 'texts'].map(name => `
       <sl-card class="drawer-card">
@@ -59,7 +58,8 @@ const TEMPLATE = `
 export class SettingsComponent extends BaseComponent {
     constructor() {
         super({
-            id: 'settings-component', template: TEMPLATE, style: STYLE
+            template: TEMPLATE,
+            style: STYLE
         });
         // initially hidden
         this.toggleVisibility();
@@ -70,9 +70,9 @@ export class SettingsComponent extends BaseComponent {
         this.links = this.addComponent('links', new GraphLinkComponent());
 
         // 🎚️ Profondeur de collapse
-        const depthSlider = this.getPanel('depth-limit');
+        const depthSlider = this.getPanel('prune-level');
         depthSlider.addEventListener('sl-input', async event => {
-            DatasetService.singleton.depthCollapseLimit = parseInt(event.target.value);
+            DatasetService.singleton.hierarchyPruneLevel = parseInt(event.target.value);
             await GraphService.singleton.rebuildGraph();
         });
     }

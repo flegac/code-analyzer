@@ -1,28 +1,32 @@
 import {BaseComponent} from "/component/base.component.js";
 
 const CSS = `
-#graph-view {
-    pointer-events: auto;
-    touch-action: none;
+#graph-canvas {
+position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: auto;
+  z-index: 0;
 }
-`
+`;
 
 export class GraphCanvasComponent extends BaseComponent {
     constructor() {
         super({
-            id: 'graph-view',
+            id: 'graph-canvas',
             style: CSS,
-            // scripts: [
-            //     {src: "https://unpkg.com/three@0.150.1/build/three.min.js"},
-            //     {src: "https://unpkg.com/3d-force-graph"}
-            // ]
         });
         this.graph = this.buildGraph()
         this._patchNaNPositions();
     }
 
     buildGraph() {
-        return ForceGraph3D()(this.container, {controlType: 'orbit'});
+        return ForceGraph3D()(
+            this.container,
+            // {controlType: 'trackball'}
+        );
     }
 
     startup() {

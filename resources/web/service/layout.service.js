@@ -14,9 +14,11 @@ export class LayoutService {
     static singleton = new LayoutService()
 
     constructor() {
+        this.graph = new GraphCanvasComponent();
+        this.dataset = new DatasetComponent();
+
         this.layout = new AppLayoutComponent();
         this.dataset = new DatasetComponent();
-        this.graph = new GraphCanvasComponent();
         this.table = new GraphTableComponent();
 
         this.settings = new SettingsComponent();
@@ -24,14 +26,16 @@ export class LayoutService {
         this.rendererDebug = new RendererDebugComponent();
 
         this.layout.startup({
-            'navigation': () => [
-                this.navigation,
+
+            'graph-view': () => [
+                this.graph
             ],
+
             'debug': () => [
                 this.rendererDebug,
             ],
-            'graph-view': () => [
-                this.graph
+            'navigation': () => [
+                this.navigation,
             ],
             'graph-settings': () => [
                 this.settings
@@ -41,7 +45,12 @@ export class LayoutService {
             ],
         });
 
-        const g = [this.settings, this.navigation, this.rendererDebug,this.table];
+        const g = [
+            this.settings,
+            this.navigation,
+            this.rendererDebug,
+            this.table
+        ];
 
         function groupAction(item) {
             return () => {
@@ -51,7 +60,7 @@ export class LayoutService {
 
         this.layout.toolbox.newButton({
             label: '📂',
-            tooltip:'Open project',
+            tooltip: 'Open project',
             onClick: () => this.dataset.openBrowser()
         });
         this.layout.toolbox.newButton({
@@ -78,16 +87,13 @@ export class LayoutService {
         this.layout.toolbox.newButton({
             label: '🕵️',
             tooltip: 'GL Renderer panel',
-            onClick:() =>  this.rendererDebug.toggleVisibility()
+            onClick: () => this.rendererDebug.toggleVisibility()
         });
-
 
         console.log('initialize', this);
     }
 
     async start() {
-
-
         NodeMeshModel.startAutoOrientation(
             () => this.graph.graph.graphData().nodes,
             () => this.graph.graph.camera()
