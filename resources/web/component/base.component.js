@@ -53,9 +53,26 @@ export class BaseComponent {
         return this.panelByName[name];
     }
 
-    toggleVisibility(name=null) {
+
+    static toggleGroupVisibility(group, item) {
+        group.filter(e => e !== item).forEach((element) => element.toggleVisibility(null,false));
+        item.toggleVisibility();
+    }
+
+    toggleVisibility(name = null, visible = null) {
         const panel = name !== null ? this.getPanel(name) : this.container;
-        if (panel) panel.classList.toggle('hidden');
+        if (!panel) return;
+
+        if (visible === null) {
+            panel.classList.toggle('hidden');
+        } else {
+            if (!visible) {
+                panel.classList.add('hidden');
+            } else {
+                panel.classList.remove('hidden');
+
+            }
+        }
     }
 
 

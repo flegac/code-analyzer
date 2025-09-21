@@ -23,17 +23,6 @@ const STYLE = `
   gap: 1rem;
   overflow: auto;
 }
-
-.drawer-cards {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.drawer-card {
-  min-width: 250px;
-}
-
 `;
 
 const TEMPLATE = `

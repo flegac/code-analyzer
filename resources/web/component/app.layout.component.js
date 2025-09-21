@@ -1,5 +1,5 @@
 import {BaseComponent} from "/component/base.component.js";
-import {ToolBox} from "/component/toolbox.component.js";
+import {ToolBox} from "/component/base.toolbox.component.js";
 
 
 const CSS = `
@@ -46,17 +46,10 @@ position: relative;
 `;
 
 const TEMPLATE = `
-<sl-split-panel style="--max: 300px; height: 100vh;" position-in-pixels="300" primary="start">
+<sl-split-panel style="--max: 0px; height: 100vh;" position-in-pixels="300" primary="start">
   <!-- Panneau gauche -->
   <div slot="start">
-        
-    <div id="left-panel">
-      
-        <sl-details summary="🛠 Debug" open>
-          <div name="debug"></div>
-        </sl-details>
-    </div>
-  
+    <div id="left-panel"></div>
   </div>
 
   <!-- Panneau droit -->
@@ -69,6 +62,7 @@ const TEMPLATE = `
             <div name="graph-toolbox"></div>
             <div name="graph-settings"></div>
             <div name="navigation"></div>
+            <div name="debug"></div>
         </sl-tab-panel>
       
       <sl-tab-panel name="table-view"></sl-tab-panel>

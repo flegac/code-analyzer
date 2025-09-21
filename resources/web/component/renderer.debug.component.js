@@ -1,8 +1,33 @@
 import {BaseComponent} from "/component/base.component.js";
 import {LayoutService} from "/service/layout.service.js"
+import Stats from "stats";
+
+const STYLE = `
+.graph-debug {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  width: 300px;
+  height: auto;
+  max-height: calc(100% - 2cm);
+
+  transform: none;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+  padding: 0.5rem;
+  box-shadow: var(--sl-shadow-large);
+  border-radius: var(--sl-border-radius-medium);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow: auto;
+}
+`;
 
 const TEMPLATE = `
-  <div style="display: flex; flex-direction: column; gap: 0.1em; padding: 0.1em;">
+  <div name="graph-debug" class="graph-debug" style="display: flex; flex-direction: column; gap: 0.1em; padding: 0.1em;">
+    <div name="fps"></div>
     <span><strong>Draw Calls:</strong> <span id="drawCalls">0</span></span>
     <span><strong>Geometries:</strong> <span id="geometries">0</span></span>
     <span><strong>Textures:</strong> <span id="textures">0</span></span>
@@ -14,7 +39,8 @@ export class RendererDebugComponent extends BaseComponent {
     constructor() {
         super({
             id: 'render-debug',
-            template: TEMPLATE
+            template: TEMPLATE,
+            style: STYLE,
         });
         this.state = {
             drawCalls: 0,
@@ -22,6 +48,10 @@ export class RendererDebugComponent extends BaseComponent {
             geometries: 0,
             triangles: 0,
         };
+
+        this.fps = this.addComponent('fps', new FpsComponent());
+
+
         this.spans = {
             drawCalls: this.container.querySelector('#drawCalls'),
             geometries: this.container.querySelector('#geometries'),
@@ -44,5 +74,30 @@ export class RendererDebugComponent extends BaseComponent {
         }
 
         requestAnimationFrame(() => this.start());
+    }
+}
+
+export class FpsComponent {
+    constructor() {
+        const stats = new Stats();
+        stats.showPanel(0); // 0 = FPS, 1 = MS, 2 = MB
+        this.container = stats.dom;
+
+        // Supprimer le style par défaut qui le positionne en haut à gauche
+        Object.assign(this.container.style, {
+            position: 'relative',
+            top: 'unset',
+            left: 'unset',
+            margin: '0',
+            zIndex: 'auto'
+        });
+
+        function animate() {
+            stats.begin();
+            stats.end();
+            requestAnimationFrame(animate);
+        }
+
+        requestAnimationFrame(animate);
     }
 }
