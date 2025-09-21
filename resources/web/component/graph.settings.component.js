@@ -70,11 +70,10 @@ export class SettingsComponent extends BaseComponent {
         this.links = this.addComponent('links', new GraphLinkComponent());
 
         // 🎚️ Profondeur de collapse
-        const depthSlider =this.getPanel('depth-limit');
+        const depthSlider = this.getPanel('depth-limit');
         depthSlider.addEventListener('sl-input', async event => {
             DatasetService.singleton.depthCollapseLimit = parseInt(event.target.value);
             await GraphService.singleton.rebuildGraph();
         });
     }
-
 }

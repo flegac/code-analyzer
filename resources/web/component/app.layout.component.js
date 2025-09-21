@@ -51,9 +51,7 @@ const TEMPLATE = `
   <div slot="start">
         
     <div id="left-panel">
-        <sl-details summary="🧭 Navigation" open>
-          <div name="navigation"></div>
-        </sl-details>
+      
         <sl-details summary="🛠 Debug" open>
           <div name="debug"></div>
         </sl-details>
@@ -70,6 +68,7 @@ const TEMPLATE = `
         <sl-tab-panel name="graph-view">
             <div name="graph-toolbox"></div>
             <div name="graph-settings"></div>
+            <div name="navigation"></div>
         </sl-tab-panel>
       
       <sl-tab-panel name="table-view"></sl-tab-panel>

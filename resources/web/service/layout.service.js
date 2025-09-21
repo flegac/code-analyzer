@@ -22,15 +22,16 @@ export class LayoutService {
         this.dataset = new DatasetComponent();
         this.graph = new GraphCanvasComponent();
         this.table = new TableComponent();
-        this.navigation = new NavigationComponent();
         this.rendererDebug = new RendererDebugComponent();
         this.fps = new FpsComponent();
 
         this.settings = new SettingsComponent();
+        this.navigation = new NavigationComponent();
 
         this.layout.toolbox.newButton('📂', () => this.dataset.openBrowser());
         this.layout.toolbox.newButton('🔄', () => GraphService.singleton.rebuildGraph())
         this.layout.toolbox.newButton('⚙️', () => this.settings.toggleVisibility());
+        this.layout.toolbox.newButton('🧭', () => this.navigation.toggleVisibility());
 
         console.log('initialize', this);
     }

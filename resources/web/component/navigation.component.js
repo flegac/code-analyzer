@@ -2,9 +2,42 @@ import {BaseComponent} from "/component/base.component.js";
 import {GraphService} from "/service/graph.service.js"
 import {CameraService} from "/service/camera.service.js"
 
+const STYLE = `
+.graph-navigation {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0.5rem;
+  width: 300px;
+  height: auto;
+  max-height: calc(100% - 2cm);
+  
+  transform: none;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+  padding: 0.5rem;
+  box-shadow: var(--sl-shadow-large);
+  border-radius: var(--sl-border-radius-medium);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow: auto;
+}
+
+.drawer-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.drawer-card {
+  min-width: 250px;
+}
+
+`;
 
 const TEMPLATE = `
-<div class="nav-wrapper">
+<div name="graph-navigation" class="graph-navigation">
   <h2 id="nav-title" class="nav-title">Navigation</h2>
 
   <section class="nav-section">
@@ -24,8 +57,11 @@ export class NavigationComponent extends BaseComponent {
     constructor() {
         super({
             id: 'navigation-component',
-            template: TEMPLATE
+            template: TEMPLATE,
+            style: STYLE
         });
+        // initially hidden
+        this.toggleVisibility();
 
         this.updater = () => GraphService.singleton.navigation();
         this.updateMenu();
@@ -70,5 +106,4 @@ export class NavigationComponent extends BaseComponent {
             outgoingMenu.appendChild(menuItem);
         });
     }
-
 }
