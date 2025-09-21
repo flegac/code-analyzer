@@ -22,7 +22,10 @@ const TEMPLATE = `
 
 export class NavigationComponent extends BaseComponent {
     constructor() {
-        super('navigation-component', TEMPLATE);
+        super({
+            id: 'navigation-component',
+            template: TEMPLATE
+        });
 
         this.updater = () => GraphService.singleton.navigation();
         this.updateMenu();

@@ -14,12 +14,14 @@ const TEMPLATE = `
 
 export class GraphNodeComponent extends BaseComponent {
     constructor() {
-        super('graph-node-gui', TEMPLATE);
+        super({
+            id: 'graph-node-gui',
+            template: TEMPLATE
+        });
 
         const onChange = () => DisplayService.singleton.apply();
 
         const nodes = DisplayService.singleton.nodes;
-        // 🟢 Nodes
         const nodeIsVisible = nodes.mesh.isVisible;
 
         this._bindSlider('baseRadius', nodes.mesh, 'baseRadius', onChange);
@@ -36,7 +38,6 @@ export class GraphNodeComponent extends BaseComponent {
             nodes.mesh.isVisible = nodeSwitch.checked;
             onChange();
         });
-
 
 
     }

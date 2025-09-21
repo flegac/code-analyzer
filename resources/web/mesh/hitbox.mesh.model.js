@@ -1,11 +1,19 @@
 export class Hitbox {
-    static material = new THREE.MeshBasicMaterial({
-        visible: false
-    });
+    static _material = null;
+
+    static material() {
+        if (Billboard._material === null) {
+            Billboard._material = new THREE.MeshBasicMaterial({
+                visible: false
+            });
+        }
+        return Billboard._material;
+    }
+
     constructor(size) {
         this.mesh = new THREE.Mesh(
             new THREE.PlaneGeometry(1, 1),
-            Hitbox.material
+            Hitbox.material()
         );
         this.resize(size);
     }

@@ -32,18 +32,25 @@ void main() {
   gl_FragColor = vec4(vColor * sphereGradient, 1.);
 }
 `;
-    static material = new THREE.ShaderMaterial({
-        vertexShader: Billboard.vertexShader,
-        fragmentShader: Billboard.fragmentShader,
-        transparent: true,
-        depthTest: true,
-        depthWrite: true,
-    });
+
+    static _material = null;
+    static material() {
+        if (Billboard._material === null) {
+            Billboard._material = new THREE.ShaderMaterial({
+                vertexShader: Billboard.vertexShader,
+                fragmentShader: Billboard.fragmentShader,
+                transparent: true,
+                depthTest: true,
+                depthWrite: true,
+            });
+        }
+        return Billboard._material;
+    }
 
     constructor(size, color) {
         this.mesh = new THREE.Mesh(
             this.geometry(1, color),
-            Billboard.material
+            Billboard.material()
         );
         this.mesh.userData.isBillboard = true;
         this.resize(size);

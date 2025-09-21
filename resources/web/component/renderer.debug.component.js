@@ -12,7 +12,10 @@ const TEMPLATE = `
 
 export class RendererDebugComponent extends BaseComponent {
     constructor() {
-        super('render-debug', TEMPLATE);
+        super({
+            id: 'render-debug',
+            template: TEMPLATE
+        });
         this.state = {
             drawCalls: 0,
             textures: 0,

@@ -12,7 +12,10 @@ const TEMPLATE = `
 
 export class GraphTextComponent extends BaseComponent {
     constructor() {
-        super('graph-text-gui', TEMPLATE);
+        super({
+            id: 'graph-text-gui',
+            template: TEMPLATE
+        });
 
         const onChange = () => DisplayService.singleton.apply();
 

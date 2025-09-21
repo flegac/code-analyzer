@@ -1,18 +1,17 @@
+import {AppLayoutComponent} from "/component/app.layout.component.js"
+
 import {GraphCanvasComponent} from "/component/graph.canvas.component.js"
 import {TableComponent} from "/component/table.component.js"
-
-import {AppLayoutComponent} from "/component/app.layout.component.js"
+import {SettingsComponent} from "/component/graph.settings.component.js";
 
 import {DatasetComponent} from "/component/dataset.component.js"
 import {NavigationComponent} from "/component/navigation.component.js"
-import {GraphNodeComponent} from "/component/graph.node.component.js"
-import {GraphTextComponent} from "/component/graph.text.component.js"
-import {GraphLinkComponent} from "/component/graph.link.component.js"
-import {PhysicsComponent} from "/component/physics.component.js"
 import {RendererDebugComponent} from "/component/renderer.debug.component.js"
-
 import {FpsComponent} from "/component/fps.component.js"
+
 import {NodeMeshModel} from "/mesh/node.mesh.model.js"
+
+import {GraphService} from "/service/graph.service.js"
 
 
 export class LayoutService {
@@ -20,66 +19,49 @@ export class LayoutService {
 
     constructor() {
         this.layout = new AppLayoutComponent();
-
+        this.dataset = new DatasetComponent();
         this.graph = new GraphCanvasComponent();
         this.table = new TableComponent();
-
-        this.dataset = new DatasetComponent();
         this.navigation = new NavigationComponent();
-        this.nodes = new GraphNodeComponent()
-        this.texts = new GraphTextComponent()
-        this.links = new GraphLinkComponent()
-        this.physics = new PhysicsComponent()
-
         this.rendererDebug = new RendererDebugComponent();
         this.fps = new FpsComponent();
+
+        this.settings = new SettingsComponent();
+
+        this.layout.toolbox.newButton('📂', () => this.dataset.openBrowser());
+        this.layout.toolbox.newButton('🔄', () => GraphService.singleton.rebuildGraph())
+        this.layout.toolbox.newButton('⚙️', () => this.settings.toggleVisibility());
 
         console.log('initialize', this);
     }
 
     async start() {
+        this.layout.startup({
+            'navigation': () => [
+                this.navigation,
+            ],
+            'debug': () => [
+                //TODO: only one component is enough for that
+                this.fps,
+                this.rendererDebug,
+            ],
+            'graph-view': () => [
+                this.graph
+            ],
+            'graph-settings': () => [
+                this.settings
+            ],
+
+            'table-view': async () => [
+                this.table
+            ],
+        });
 
         NodeMeshModel.startAutoOrientation(
             () => this.graph.graph.graphData().nodes,
             () => this.graph.graph.camera()
         );
-
-        this.layout.loadComponents({
-            'dataset': () => [
-                this.dataset.container,
-            ],
-            'navigation': () => [
-                this.navigation.container,
-            ],
-            'physics': () => [
-                this.physics.container,
-            ],
-            'nodes': () => [
-                this.nodes.container,
-            ],
-            'texts': () => [
-                this.texts.container,
-            ],
-            'links': () => [
-                this.links.container,
-            ],
-            'debug': () => [
-                this.fps.container,
-                this.rendererDebug.container,
-            ],
-
-            'graph-view': () => [
-                this.graph.container
-            ],
-
-            'table-view': async () => [
-                this.table.container
-            ],
-        });
-
-
         $(() => this.graph.startup());
-
         this.rendererDebug.start();
     }
 

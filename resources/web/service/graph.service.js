@@ -110,6 +110,10 @@ export class GraphService {
             return {
                 id,
                 infos: nodeInfos,
+                // better transitions with old positions
+                x: this.nodeById[id]?.x,
+                y: this.nodeById[id]?.y,
+                z: this.nodeById[id]?.z,
             };
         });
         this.nodeById = Object.fromEntries(

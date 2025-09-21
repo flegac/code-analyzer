@@ -7,9 +7,9 @@ import {DatasetService} from "/service/dataset.service.js";
 
 export async function main() {
     const layout = LayoutService.singleton;
+    const app = GraphService.singleton;
     await layout.start();
 
-    const app = GraphService.singleton;
 
     KeyboardService.singleton
         .onStart(() => {

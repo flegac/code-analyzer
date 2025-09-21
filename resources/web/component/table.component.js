@@ -1,7 +1,10 @@
-export class TableComponent {
+import {BaseComponent} from "/component/base.component.js";
+
+export class TableComponent extends BaseComponent {
     constructor(id = 'table-view') {
-        this.container = document.createElement('div');
-        this.container.id = id;
+        super({
+            id: id,
+        });
         this.container.className = 'tabulator-preload';
         this.table = null;
     }
