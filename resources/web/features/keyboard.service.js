@@ -4,13 +4,6 @@ export class KeyboardService {
     constructor() {
         this.handlers = new Map();
         this.keysPressed = new Set();
-        $(document).on('keydown', e => {
-            this.keysPressed.add(e.key.toLowerCase());
-        });
-        $(document).on('keyup', e => {
-            this.keysPressed.delete(e.key.toLowerCase());
-        });
-        this.start();
         console.log('initialize', this);
     }
 
@@ -34,7 +27,15 @@ export class KeyboardService {
 
     start() {
         if (this._listening) return;
+        console.log('KeyboardService.start()')
+        $(document).on('keydown', e => {
+            this.keysPressed.add(e.key.toLowerCase());
+        });
+        $(document).on('keyup', e => {
+            this.keysPressed.delete(e.key.toLowerCase());
+        });
         this._listening = true;
+
         this._listen();
     }
 

@@ -22,7 +22,8 @@ export async function main() {
             camera.lookAt(cam.target);
             controls.update();
         })
-        .registerMap(keyBindings(G));
+        .registerMap(keyBindings(G))
+        .start();
 
     $(async () => {
         const dataset = await DatasetService.singleton.loadDefault();

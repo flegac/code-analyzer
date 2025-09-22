@@ -46,17 +46,13 @@ const TEMPLATE = `
   <!-- Panneau droit -->
   <div slot="end">
     <div name="graph-view">
-      
         <div name="graph-canvas"></div> 
-      
-    <div name="graph-toolbox"></div>
-      <div name="graph-settings"></div>
-      <div name="navigation"></div>
-      <div name="graph-table"></div>
-      <div name="debug"></div>
-    
+        <div name="graph-toolbox"></div>
+        <div name="graph-settings"></div>
+        <div name="navigation"></div>
+        <div name="graph-table"></div>
+        <div name="debug"></div>
     </div>
-    
   </div>
 </sl-split-panel>
 `;
