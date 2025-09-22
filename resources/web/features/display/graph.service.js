@@ -1,12 +1,11 @@
-import { LayoutService } from "/core/layout.service.js"
+import {LayoutService} from "/core/layout.service.js"
 
-import { DatasetService } from "/dataset/dataset.service.js"
+import {DatasetService} from "/dataset/dataset.service.js"
 
-import { GraphStyleService } from "/display/graph.style.service.js"
-import { PhysicsService } from "/display/physics.service.js"
-import { CameraService } from "/display/camera.service.js"
-import { NodeService } from "/graph/node.service.js"
-
+import {GraphStyleService} from "/display/graph.style.service.js"
+import {PhysicsService} from "/display/physics.service.js"
+import {CameraService} from "/display/camera.service.js"
+import {NodeService} from "/graph/node.service.js"
 
 
 class GraphState {
@@ -53,6 +52,11 @@ export class GraphService {
             container,
             // {controlType: 'trackball'}
         );
+        this.state.graph.onEngineStop(() => {
+            console.log('D3 simulation stopped !');
+            PhysicsService.singleton.isActive = false;
+        });
+
         this._patchNaNPositions()
     }
 
