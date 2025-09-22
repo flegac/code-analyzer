@@ -36,6 +36,7 @@ export class ToolBox extends BaseComponent {
         } else {
             container.appendChild(button);
         }
+        return this;
     }
 
 }

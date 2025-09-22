@@ -17,8 +17,8 @@ export async function main() {
         .onStop(() => {
             const cam = CameraService.singleton;
             if (!G.getGraph()) return;
-            const camera = cam._camera();
-            const controls = cam._controls();
+            const camera = cam.camera();
+            const controls = cam.controls();
             camera.lookAt(cam.target);
             controls.update();
         })

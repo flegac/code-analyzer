@@ -1,61 +1,16 @@
-import { GraphService } from "/display/graph.service.js";
-import { LayoutService } from "/core/layout.service.js";
-import { GraphLinkStyle } from "/display/graph.style.link.model.js";
-import { GraphNodeStyle } from "/display/graph.style.node.model.js";
+import {GraphService} from "/display/graph.service.js";
+import {LayoutService} from "/core/layout.service.js";
+import {LinkStyle} from "/display/link.style.model.js";
+import {NodeStyle} from "/display/node.style.model.js";
+import {CameraService} from "/display/camera.service.js";
 
-class Nodes {
-    constructor() {
-        this.mesh = {
-            baseRadius: 12.0,
-            isVisible: true,
-            colorGroupDepthRange: 2,
-            size: 'imported',
-            color: 'group',
-        }
-        this.text = {
-            isVisible: true,
-            hiddenDepthRange: 3,
-            scaling: 2.0,
-            padding: 2,
-            fontSize: 64,
-            fontFamily: 'Arial',
-            textColor: 'white',
-            textOffsetY: 10,
-            textFormatter: (parts) => {
-                if (!Array.isArray(parts) || parts.length === 0) return '';
-                if (parts.length === 1) return parts[0];
-                // if (parts.length === 2) return parts.join('.');
-                return parts.slice(-1);
-            }
-        };
-    }
-}
-
-class Links {
-    constructor() {
-        this.relation = {
-            color: '#f00',
-            particles: 1,
-            width: 5.0,
-        };
-        this.hierarchy = {
-            color: '#ffff00',
-            particles: 0,
-            width: 10.0,
-        };
-    }
-}
 
 export class GraphStyleService {
     static singleton = new GraphStyleService();
 
     constructor() {
-        this.nodes = new Nodes();
-        this.links = new Links();
-
-        this.nodeStyle = new GraphNodeStyle();
-        this.linkStyle = new GraphLinkStyle();
-
+        this.nodes = new NodeStyle();
+        this.links = new LinkStyle();
         console.log('initialize', this);
     }
 
@@ -69,21 +24,24 @@ export class GraphStyleService {
         G.updateGroup();
         //required for nodeAutoColorBy()
         G.state.nodes.forEach(node => node.color = null);
+        const camPosition = CameraService.singleton.camera().position;
         graph
             .nodeAutoColorBy('group')
-            .nodeThreeObject(this.nodeStyle.getMesh)
-            .nodeLabel(this.nodeStyle.getLabel);
+            .nodeThreeObject((node) => this.nodes.getMesh(node, camPosition))
+            .nodeLabel(this.nodes.getLabel);
 
         // ----- LINKS ----------------------------------
         graph
             .linkCurvature(.0)
-            .linkDirectionalParticles(this.linkStyle.getParticleNumber)
-            .linkDirectionalParticleWidth(this.linkStyle.getParticleWidth)
+            .linkDirectionalParticles((link) => this.links.getParticleNumber(link))
+            .linkDirectionalParticleWidth((link) => this.links.getParticleWidth(link))
             .linkDirectionalParticleSpeed(.01)
-            .linkWidth(this.linkStyle.getWidth)
-            .linkColor(this.linkStyle.getColor)
-            .linkVisibility(this.linkStyle.getVisibility)
-            ;
+            .linkWidth((link) => this.links.getWidth(link))
+            .linkColor((link) => this.links.getColor(link))
+            .linkVisibility((link) => this.links.getVisibility(link))
+            // .linkOpacity((link) => this.links.getOpacity(link))
+
+        ;
 
     }
 }

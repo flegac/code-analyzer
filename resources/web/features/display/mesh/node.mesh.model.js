@@ -2,46 +2,25 @@ import {Billboard} from "/display/mesh/billboard.mesh.model.js";
 import {TextSprite} from "/display/mesh/text.sprite.model.js";
 
 export class NodeMeshModel {
-    static fixOrientation(node, cameraProvider) {
-        node.mesh?.group.lookAt(cameraProvider().position)
-    }
 
-    static startAutoOrientation(nodeProvider, cameraProvider) {
-        const loop = () => {
-            nodeProvider().forEach(n => NodeMeshModel.fixOrientation(n, cameraProvider));
-            requestAnimationFrame(loop);
-        };
-        loop();
-    }
-
-
-    constructor(node, state, cameraProvider) {
-        this.mesh = this.build(node, state);
-        this.children = node.mesh;
-        NodeMeshModel.fixOrientation(node, cameraProvider);
+    constructor(node, state, position) {
+        this.mesh = this.build(node, state, position);
     }
 
     resize(size) {
         this.mesh.scale.set(size, size)
     }
 
-    colorize(color) {
-        this.children.billboard.colorize(color)
-    }
 
-    build(node, state) {
+    build(node, state, position) {
         const group = new THREE.Group();
-        group.userData = {
-            _isBillboard: true,
-            nodeRef: node,
-        };
 
         //mesh
         const color = node.color;
         const nodeSize = node.radius * state.mesh.baseRadius;
         const degree = node.infos.imports + node.infos.imported;
         const meshVisible = degree > 0 && state.mesh.isVisible;
-        const billboard = meshVisible ? new Billboard(nodeSize, color).mesh : null;
+        const billboard = meshVisible ? new Billboard(nodeSize, color, position).mesh : null;
 
         //text
         const parts = node.id.split('.');

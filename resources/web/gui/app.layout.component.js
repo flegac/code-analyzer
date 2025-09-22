@@ -1,5 +1,4 @@
 import {BaseComponent} from "/gui/core/base.component.js";
-import {ToolBox} from "/gui/core/base.toolbox.component.js";
 
 
 const CSS = `
@@ -52,6 +51,7 @@ const TEMPLATE = `
         <div name="navigation"></div>
         <div name="graph-table"></div>
         <div name="debug"></div>
+        <div name="graph-toolbox"></div>
     </div>
   </div>
 </sl-split-panel>
@@ -64,13 +64,6 @@ export class AppLayoutComponent extends BaseComponent {
             style: CSS,
             scripts: []
         });
-
-        this.toolbox = this.addComponent('graph-toolbox', new ToolBox());
-
     }
 
-    async startup(providerMap) {
-        await this.load(providerMap);
-        await this.start();
-    }
 }

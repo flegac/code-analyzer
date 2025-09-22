@@ -57,8 +57,36 @@ export class GraphService {
             PhysicsService.singleton.isActive = false;
         });
 
-        this._patchNaNPositions()
+        this._patchNaNPositions();
+        this._autoResize(container);
+
     }
+
+    _autoResize(container) {
+        const resizeObserver = new ResizeObserver(() => {
+            const parent = container.parentElement;
+            const style = getComputedStyle(container);
+
+            const width = parent.clientWidth
+                - parseFloat(style.paddingLeft)
+                - parseFloat(style.paddingRight)
+                - parseFloat(style.marginLeft)
+                - parseFloat(style.marginRight)
+
+            const height = parent.clientHeight
+                - parseFloat(style.paddingTop)
+                - parseFloat(style.paddingBottom)
+                - parseFloat(style.marginTop)
+                - parseFloat(style.marginBottom)
+
+            this.getGraph().width(width);
+            this.getGraph().height(height);
+
+        });
+        const element = document.querySelector('[name="graph-view"]');
+        resizeObserver.observe(element);
+    }
+
 
     _patchNaNPositions(r = 1000) {
         if (this.getGraph() === null) return

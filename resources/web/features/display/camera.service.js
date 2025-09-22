@@ -1,5 +1,5 @@
-import { LayoutService } from "/core/layout.service.js"
-import { GraphService } from "/display/graph.service.js"
+import {LayoutService} from "/core/layout.service.js"
+import {GraphService} from "/display/graph.service.js"
 
 export class CameraService {
 
@@ -14,9 +14,16 @@ export class CameraService {
         console.log('initialize', this);
     }
 
+    camera() {
+        return this.getGraph().camera()
+    }
+
+    controls() {
+        return this.getGraph().controls()
+    }
+
     getGraph() {
-        const G = GraphService.singleton;
-        return G.getGraph();
+        return GraphService.singleton.getGraph();
     }
 
     takeControl(graph) {
@@ -34,8 +41,8 @@ export class CameraService {
     }
 
     focusOn(node) {
-        const controls = this._controls();
-        const camera = this._camera();
+        const controls = this.controls();
+        const camera = this.camera();
 
         // Nouvelle cible : le nœud cliqué
         this.target.set(node.x, node.y, node.z);
@@ -59,7 +66,7 @@ export class CameraService {
 
     rotateX(speed) {
         if (!this.getGraph()) return;
-        const camera = this._camera();
+        const camera = this.camera();
         const up = camera.up.clone().normalize();
         const front = new THREE.Vector3().subVectors(this.target, camera.position).normalize();
         const right = new THREE.Vector3().crossVectors(front, up).normalize();
@@ -68,20 +75,20 @@ export class CameraService {
 
     rotateY(speed) {
         if (!this.getGraph()) return;
-        const camera = this._camera();
+        const camera = this.camera();
         const up = camera.up.clone().normalize();
         this.rotateCameraAroundAxis(up, speed);
     }
 
     rotateZ(speed) {
         if (!this.getGraph()) return;
-        const camera = this._camera();
+        const camera = this.camera();
         const front = new THREE.Vector3().subVectors(this.target, camera.position).normalize();
         this.rotateCameraAroundAxis(front, speed);
     }
 
     rotateCameraAroundAxis(axis, angle) {
-        const camera = this._camera();
+        const camera = this.camera();
         const offset = new THREE.Vector3().subVectors(camera.position, this.target);
         const quaternion = new THREE.Quaternion().setFromAxisAngle(axis, angle);
         offset.applyQuaternion(quaternion);
@@ -92,8 +99,8 @@ export class CameraService {
 
     alignUpToAxis(axis, delay = 250) {
         setTimeout(() => {
-            const camera = this._camera();
-            const controls = this._controls();
+            const camera = this.camera();
+            const controls = this.controls();
 
             let targetUp;
             switch (axis) {
@@ -124,13 +131,6 @@ export class CameraService {
         }, delay);
     }
 
-    _camera() {
-        return this.getGraph().camera()
-    }
-
-    _controls() {
-        return this.getGraph().controls()
-    }
 
 }
 

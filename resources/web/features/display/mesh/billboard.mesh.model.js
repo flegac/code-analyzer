@@ -34,6 +34,7 @@ void main() {
 `;
 
     static _material = null;
+
     static material() {
         if (Billboard._material === null) {
             Billboard._material = new THREE.ShaderMaterial({
@@ -47,13 +48,14 @@ void main() {
         return Billboard._material;
     }
 
-    constructor(size, color) {
+    constructor(size, color, target) {
         this.mesh = new THREE.Mesh(
             this.geometry(1, color),
             Billboard.material()
         );
-        this.mesh.userData.isBillboard = true;
+        this.mesh.userData = {isBillboard: true};
         this.resize(size);
+        this.mesh.lookAt(target);
     }
 
     colorize(color) {
@@ -82,4 +84,22 @@ void main() {
         geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
         return geometry;
     }
+
+    static startAutoOrientation(sceneProvider, targetProvider) {
+        function accept(obj) {
+            return obj.visible && obj.userData.isBillboard;
+        }
+
+        const loop = () => {
+            const target = targetProvider()
+            sceneProvider().traverse(obj => {
+                if (accept(obj)) {
+                    obj.lookAt(target);
+                }
+            });
+            requestAnimationFrame(loop);
+        };
+        loop();
+    }
+
 }

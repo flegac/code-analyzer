@@ -1,56 +1,43 @@
-import { BaseComponent } from "/gui/core/base.component.js";
+import {BaseComponent} from "/gui/core/base.component.js";
 
-import { AppLayoutComponent } from "/gui/app.layout.component.js"
-import { GraphCanvasComponent } from "/gui/graph.canvas.component.js"
-import { GraphTableComponent } from "/gui/graph.table.component.js"
-import { SettingsComponent } from "/gui/settings/graph.settings.component.js";
-import { DatasetComponent } from "/gui/dataset.component.js"
-import { NavigationComponent } from "/gui/navigation.component.js"
-import { RendererDebugComponent } from "/gui/renderer.debug.component.js"
+import {AppLayoutComponent} from "/gui/app.layout.component.js"
+import {GraphCanvasComponent} from "/gui/graph.canvas.component.js"
+import {GraphTableComponent} from "/gui/graph.table.component.js"
+import {SettingsComponent} from "/gui/settings/graph.settings.component.js";
+import {DatasetComponent} from "/gui/dataset.component.js"
+import {NavigationComponent} from "/gui/navigation.component.js"
+import {RendererDebugComponent} from "/gui/renderer.debug.component.js"
+import {ToolBox} from "/gui/core/base.toolbox.component.js";
 
-import { NodeMeshModel } from "/display/mesh/node.mesh.model.js"
-import { GraphService } from "/display/graph.service.js"
-import { DatasetService } from "/dataset/dataset.service.js"
+import {Billboard} from "/display/mesh/billboard.mesh.model.js"
+import {GraphService} from "/display/graph.service.js"
+import {DatasetService} from "/dataset/dataset.service.js"
+import {CameraService} from "/display/camera.service.js"
 
 
 export class LayoutService {
     static singleton = new LayoutService()
 
     constructor() {
-        this.graph = new GraphCanvasComponent();
-        this.dataset = new DatasetComponent();
-
         this.layout = new AppLayoutComponent();
-        this.dataset = new DatasetComponent();
-        this.table = new GraphTableComponent();
 
-        this.settings = new SettingsComponent();
-        this.navigation = new NavigationComponent();
-        this.rendererDebug = new RendererDebugComponent();
+
+        this.graph = this.layout.addComponent('graph-view', new GraphCanvasComponent());
+
+        this.dataset = this.layout.addComponent('graph-view', new DatasetComponent());
+
+
+        this.dataset = new DatasetComponent();
+        this.table = this.layout.addComponent('graph-table', new GraphTableComponent());
+
+        this.settings = this.layout.addComponent('graph-settings', new SettingsComponent());
+        this.navigation = this.layout.addComponent('navigation', new NavigationComponent());
+        this.rendererDebug = this.layout.addComponent('debug', new RendererDebugComponent());
 
         //default visible panel
-        this.settings.toggleVisibility({ visibility: true });
+        this.settings.toggleVisibility({visibility: true});
 
-
-        this.layout.startup({
-
-            'graph-view': () => [
-                this.graph
-            ],
-
-            'debug': () => [
-                this.rendererDebug,
-            ],
-            'navigation': () => [
-                this.navigation,
-            ],
-            'graph-settings': () => [
-                this.settings
-            ],
-            'graph-table': async () => [
-                this.table
-            ],
-        });
+        this.layout.start();
 
         const g = [
             this.settings,
@@ -65,51 +52,53 @@ export class LayoutService {
             }
         }
 
-        this.layout.toolbox.newButton({
-            label: '📂',
-            tooltip: 'Open project',
-            onClick: () => this.dataset.openBrowser()
-        });
-        this.layout.toolbox.newButton({
-            label: '🔄',
-            tooltip: 'Refresh graph data',
-            onClick: () => GraphService.singleton.rebuildGraph()
-        })
-
-        this.layout.toolbox.newButton({
-            label: '🧭',
-            tooltip: 'Navigation panel',
-            onClick: groupAction(this.navigation)
-        });
-        this.layout.toolbox.newButton({
-            label: '📊',
-            tooltip: 'Node tabular data',
-            onClick: groupAction(this.table)
-        });
-        this.layout.toolbox.newButton({
-            label: '⚙️',
-            tooltip: 'Settings panel',
-            onClick: groupAction(this.settings)
-        });
-        this.layout.toolbox.newButton({
-            label: '🕵️',
-            tooltip: 'GL Renderer panel',
-            onClick: () => this.rendererDebug.toggleVisibility()
-        });
+        this.toolbox = this.layout.addComponent('graph-toolbox', new ToolBox())
+            .newButton({
+                label: '📂',
+                tooltip: 'Open project',
+                onClick: () => this.dataset.openBrowser()
+            })
+            .newButton({
+                label: '🔄',
+                tooltip: 'Refresh graph data',
+                onClick: () => GraphService.singleton.rebuildGraph()
+            })
+            .newButton({
+                label: '🧭',
+                tooltip: 'Navigation panel',
+                onClick: groupAction(this.navigation)
+            })
+            .newButton({
+                label: '📊',
+                tooltip: 'Node tabular data',
+                onClick: groupAction(this.table)
+            })
+            .newButton({
+                label: '⚙️',
+                tooltip: 'Settings panel',
+                onClick: groupAction(this.settings)
+            })
+            .newButton({
+                label: '🕵️',
+                tooltip: 'GL Renderer panel',
+                onClick: () => this.rendererDebug.toggleVisibility()
+            });
 
         console.log('initialize', this);
     }
 
     async start() {
         const G = GraphService.singleton;
-        NodeMeshModel.startAutoOrientation(
-            () => G.getGraph().graphData().nodes,
-            () => G.getGraph().camera()
-        );
+
         $(() => {
-            this.graph.startup();
+            G.initGraph(this.graph.container);
             const renderer = G.getGraph().renderer();
             this.rendererDebug.start(renderer);
+
+            Billboard.startAutoOrientation(
+                () => GraphService.singleton.getGraph().scene(),
+                () => CameraService.singleton.camera().position
+            );
         });
 
     }
