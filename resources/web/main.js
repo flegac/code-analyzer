@@ -1,13 +1,13 @@
 import {keyBindings} from "/config/key-bindings.js"
-import {GraphService} from "/service/graph.service.js"
-import {LayoutService} from "/service/layout.service.js"
-import {KeyboardService} from "/service/keyboard.service.js";
-import {CameraService} from "/service/camera.service.js"
-import {DatasetService} from "/service/dataset.service.js";
+import {KeyboardService} from "/core/keyboard.service.js";
+import {GraphService} from "/display/graph.service.js"
+import {LayoutService} from "/core/layout.service.js"
+import {CameraService} from "/display/camera.service.js"
+import {DatasetService} from "/dataset/dataset.service.js";
 
 export async function main() {
     const layout = LayoutService.singleton;
-    const app = GraphService.singleton;
+    const G = GraphService.singleton;
     await layout.start();
 
 
@@ -16,16 +16,16 @@ export async function main() {
         })
         .onStop(() => {
             const cam = CameraService.singleton;
-            if (!layout.graph.graph) return;
+            if (!G.getGraph()) return;
             const camera = cam._camera();
             const controls = cam._controls();
             camera.lookAt(cam.target);
             controls.update();
         })
-        .registerMap(keyBindings(app));
+        .registerMap(keyBindings(G));
 
     $(async () => {
         const dataset = await DatasetService.singleton.loadDefault();
-        await DatasetService.singleton.changeDataset(dataset);
+        await layout.changeDataset(dataset);
     })
 }

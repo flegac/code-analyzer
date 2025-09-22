@@ -1,9 +1,9 @@
-import {GroupStrategy} from "/model/group.strategy.model.js"
+import {ClusterStrategy} from "/graph/cluster.strategy.model.js"
 
 export function forceGroupCollide(state) {
     let nodes;
     const dimension = state.dimension;
-    const strategy = new GroupStrategy(state.collapsingDepth);
+    const strategy = new ClusterStrategy(state.collapsingDepth);
 
     function force(alpha) {
         if (dimension < 3) {
