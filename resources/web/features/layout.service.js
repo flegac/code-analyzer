@@ -13,6 +13,7 @@ import {Billboard} from "/display/mesh/billboard.mesh.model.js"
 import {GraphService} from "/display/graph.service.js"
 import {DatasetService} from "/dataset/dataset.service.js"
 import {CameraService} from "/display/camera.service.js"
+import {GraphFilterComponent} from "/gui/graph.filter.component.js";
 
 
 export class LayoutService {
@@ -33,6 +34,8 @@ export class LayoutService {
         this.settings = this.layout.addComponent('graph-settings', new SettingsComponent());
         this.navigation = this.layout.addComponent('navigation', new NavigationComponent());
         this.rendererDebug = this.layout.addComponent('debug', new RendererDebugComponent());
+        this.graphFilter = this.layout.addComponent('graph-filter', new GraphFilterComponent());
+
 
         //default visible panel
         this.settings.toggleVisibility({visibility: true});
@@ -42,8 +45,9 @@ export class LayoutService {
         const g = [
             this.settings,
             this.navigation,
-            this.rendererDebug,
-            this.table
+            // this.rendererDebug,
+            this.table,
+            this.graphFilter
         ];
 
         function groupAction(item) {
@@ -79,10 +83,16 @@ export class LayoutService {
                 onClick: groupAction(this.settings)
             })
             .newButton({
-                label: '🕵️',
+                label: '🏷️',
+                tooltip: 'Filter panel',
+                onClick: groupAction(this.graphFilter)
+            })
+            .newButton({
+                label: '🐞',
                 tooltip: 'GL Renderer panel',
                 onClick: () => this.rendererDebug.toggleVisibility()
-            });
+            })
+        ;
 
         console.log('initialize', this);
     }
@@ -107,5 +117,6 @@ export class LayoutService {
         DatasetService.singleton.loadDataset(dataset);
         await GraphService.singleton.rebuildGraph();
         this.table.rebuild(dataset.nodes());
+        this.graphFilter.rebuild(dataset.config())
     }
 }
