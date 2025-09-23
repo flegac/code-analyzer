@@ -33,10 +33,12 @@ const TEMPLATE = `
     <sl-switch id="isActive">Running status</sl-switch>
     <sl-button id="simulate" variant="primary">🔥 Simulate</sl-button>
 
-    <sl-select id="dimension" label="Projection">
-      <sl-option value="2">2D</sl-option>
-      <sl-option value="3">3D</sl-option>
-    </sl-select>
+    <div class="slider-row">
+      <label>Fix axes</label>
+      <sl-checkbox id="fixX">X</sl-checkbox>
+      <sl-checkbox id="fixY">Y</sl-checkbox>
+      <sl-checkbox id="fixZ">Z</sl-checkbox>
+    </div>
 
     <div class="slider-row">
       <label for="collapsingDepth">Collapsing depth</label>
@@ -85,13 +87,16 @@ export class GraphPhysicsComponent extends BaseComponent {
             LayoutService.singleton.graph.getGraph().d3ReheatSimulation();
         });
 
-        // 🧭 Projection
-        const dimension = this.container.querySelector('#dimension');
-        dimension.value = String(state.dimension);
-        dimension.addEventListener('sl-change', () => {
-            state.dimension = parseInt(dimension.value);
-            onChange();
+        // 🧭 Fix axes
+        ['fixX', 'fixY', 'fixZ'].forEach(axis => {
+            const el = this.container.querySelector(`#${axis}`);
+            el.checked = state[axis];
+            el.addEventListener('sl-change', () => {
+                state[axis] = el.checked;
+                onChange();
+            });
         });
+
 
         // 🧩 Sliders
         const sliders = [
