@@ -1,12 +1,10 @@
-import {LayoutService} from "/core/layout.service.js"
-
 import {clusterForce} from "/lib/cluster-force.js"
 import {ClusterStrategy} from "/graph/cluster.strategy.model.js"
 import {GraphService} from "/display/graph.service.js";
 
 class Physics {
     constructor() {
-        this.remainingTicks = 0;
+        this.camAutoFit=false;
         this.isActive = true;
         this.friction = 0.1;
         this.fixX = false;
@@ -36,7 +34,7 @@ export class PhysicsService {
 
 
     async apply() {
-        const graph = LayoutService.singleton.graph.getGraph();
+        const graph = GraphService.singleton.getGraph();
         const state = this.state;
 
         graph.d3VelocityDecay(state.friction);
@@ -63,7 +61,7 @@ export class PhysicsService {
                 return .01 * k * state.link.strength;
             });
 
-            graph.cooldownTicks(300);
+            graph.cooldownTicks(500);
             graph.d3ReheatSimulation();
         } else {
             graph.cooldownTicks(0);

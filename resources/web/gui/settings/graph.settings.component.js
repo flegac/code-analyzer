@@ -46,7 +46,6 @@ const TEMPLATE = `
   
     ${['physics', 'links', 'nodes', 'texts'].map(name => `
       <sl-card class="drawer-card">
-        <h3 slot="header">${name.charAt(0).toUpperCase() + name.slice(1)}</h3>
         <div name="${name}"></div>
       </sl-card>
     `).join('')}

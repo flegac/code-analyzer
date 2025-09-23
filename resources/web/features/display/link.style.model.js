@@ -6,8 +6,8 @@ export class LinkStyle {
         this.relation = {
             color: '#f00',
             opacity: .01,
-            colorLow: '#f00',
-            colorHigh: '#0f0',
+            colorLow: '#0f0',
+            colorHigh: '#f00',
             particles: 1,
             width: 2.0,
         };

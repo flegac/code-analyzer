@@ -1,7 +1,5 @@
 import {BaseComponent} from "/gui/core/base.component.js";
 
-import {LayoutService} from "/core/layout.service.js"
-
 import {PhysicsService} from "/display/physics.service.js"
 
 const STYLE = `
@@ -30,8 +28,14 @@ const STYLE = `
 
 const TEMPLATE = `
   <div class="panel">
-    <sl-switch id="isActive">Running status</sl-switch>
-    <sl-button id="simulate" variant="primary">🔥 Simulate</sl-button>
+    <div class="slider-row">
+      <sl-switch id="isActive">Running status</sl-switch>
+      <sl-button id="simulate" variant="primary">🔥 Simulate</sl-button>
+    </div>
+
+    <div class="slider-row">
+      <sl-switch id="camAutoFit">Auto-fit camera</sl-switch>
+    </div>
 
     <div class="slider-row">
       <label>Fix axes</label>
@@ -41,7 +45,7 @@ const TEMPLATE = `
     </div>
 
     <div class="slider-row">
-      <label for="collapsingDepth">Collapsing depth</label>
+      <label for="collapsingDepth">Cluster depth</label>
       <sl-range id="collapsingDepth" min="0" max="5" step="1"></sl-range>
     </div>
 
@@ -51,7 +55,7 @@ const TEMPLATE = `
     </div>
 
     <div class="slider-row">
-      <label for="strength">Link strength</label>
+      <label for="strength">Attraction</label>
       <sl-range id="strength" min="0" max="25" step="0.01"></sl-range>
     </div>
 
@@ -84,7 +88,7 @@ export class GraphPhysicsComponent extends BaseComponent {
         // 🔥 Simulate
         const simulate = this.container.querySelector('#simulate');
         simulate.addEventListener('click', () => {
-            LayoutService.singleton.graph.getGraph().d3ReheatSimulation();
+            onChange();
         });
 
         // 🧭 Fix axes
@@ -97,6 +101,13 @@ export class GraphPhysicsComponent extends BaseComponent {
             });
         });
 
+        // 🎯 Auto-fit camera
+        const camAutoFit = this.container.querySelector('#camAutoFit');
+        camAutoFit.checked = state.camAutoFit;
+        camAutoFit.addEventListener('sl-change', () => {
+            state.camAutoFit = camAutoFit.checked;
+            onChange();
+        });
 
         // 🧩 Sliders
         const sliders = [

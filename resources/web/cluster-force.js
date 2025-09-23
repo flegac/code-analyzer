@@ -1,4 +1,5 @@
 import {PhysicsService} from "/display/physics.service.js";
+import {CameraService} from "/display/camera.service.js";
 
 export function clusterForce() {
     let nodes;
@@ -30,6 +31,11 @@ export function clusterForce() {
                 }
             }
         }
+
+        if (PhysicsService.singleton.state.camAutoFit) {
+            CameraService.singleton.zoomToFit()
+        }
+
     }
 
     force.initialize = _ => {

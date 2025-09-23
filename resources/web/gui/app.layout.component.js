@@ -28,11 +28,38 @@ sl-split-panel > [slot="end"] {
 }
 
 [name=graph-view] {
-  flex: 1;
   display: flex;
-  flex-direction: column;
-  overflow: auto;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 }
+
+/* Panneaux latéraux */
+.side-panel {
+  width: 300px;
+  min-width: 200px;
+  max-width: 400px;
+  transition: width 0.3s ease, opacity 0.3s ease;
+  overflow-y: auto;
+}
+
+/* Masquage fluide */
+.side-panel.hidden {
+  width: 0;
+  min-width: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Canvas : prend tout l’espace restant */
+[name=graph-canvas] {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+
 `;
 
 const TEMPLATE = `
@@ -46,7 +73,6 @@ const TEMPLATE = `
   <div slot="end">
     <div name="graph-view">
         <div name="graph-canvas"></div> 
-        <div name="graph-toolbox"></div>
         <div name="graph-settings"></div>
         <div name="navigation"></div>
         <div name="graph-table"></div>

@@ -7,6 +7,12 @@ const STYLE = `
     flex-direction: column;
     gap: 0.5em;
   }
+    
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+  }
 
   .slider-row {
     display: flex;
@@ -15,19 +21,26 @@ const STYLE = `
   }
 
   .slider-row label {
-    width: 160px;
-    margin: 0;
+    width: 80px;
   }
 
   sl-range {
     flex: 1;
+    --track-color-active: var(--sl-color-primary-600);
+    --track-color-inactive: var(--sl-color-primary-100);
+  }
+
+  h3 {
+    margin: 0;
   }
 `;
 
-
 const TEMPLATE = `
   <div class="panel">
-    <sl-switch id="textVisibility">Visible</sl-switch>
+      <div class="section-header">
+        <sl-switch id="textVisibility"></sl-switch>
+        <h3>Texts</h3>
+      </div>  
 
     <div class="slider-row">
       <label for="scaling">Scaling</label>
@@ -35,7 +48,7 @@ const TEMPLATE = `
     </div>
 
     <div class="slider-row">
-      <label for="hiddenDepthRange">Hidden depth range</label>
+      <label for="hiddenDepthRange">Show depth</label>
       <sl-range id="hiddenDepthRange" min="0" max="5" step="1"></sl-range>
     </div>
   </div>
@@ -77,15 +90,5 @@ export class GraphTextComponent extends BaseComponent {
             onChange();
         });
     }
-
-    _bindSelect(id, target, key, onChange) {
-        const el = this.container.querySelector(`#${id}`);
-        el.value = target[key];
-        el.addEventListener('sl-change', () => {
-            target[key] = el.value;
-            onChange();
-        });
-    }
-
 
 }

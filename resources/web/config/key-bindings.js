@@ -3,7 +3,6 @@ import { CameraService } from "/display/camera.service.js"
 
 export function keyBindings(app) {
     const cam = CameraService.singleton;
-
     return {
         // rotate camera X
         'z': () => cam.rotateX(-cam.rotationSpeed),

@@ -36,22 +36,32 @@ const STYLE = `
 `;
 
 const TEMPLATE = `
-  <div class="panel">
-    <sl-switch id="nodeVisibility">Visible</sl-switch>
+    <div class="panel">
+      <div class="section-header">
+        <sl-switch id="nodeVisibility"></sl-switch>
+        <h3>Nodes</h3>
+      </div>
 
-    <div class="slider-row">
-      <label for="baseRadius">Radius</label>
-      <sl-range id="baseRadius" min="0" max="200" step="0.01"></sl-range>
+      <div class="slider-row">
+        <label for="baseRadius">Scaling</label>
+        <sl-range id="baseRadius" min="0" max="200" step="0.01"></sl-range>
+      </div>
+
+      <div class="slider-row">
+        <label for="color">Color</label>
+        <sl-select id="color"></sl-select>
+      </div>
+
+      <div class="slider-row">
+        <label for="size">Size</label>
+        <sl-select id="size"></sl-select>
+      </div>
+
+      <div class="slider-row">
+        <label for="colorGroupDepthRange">Color depth</label>
+        <sl-range id="colorGroupDepthRange" min="1" max="10" step="1"></sl-range>
+      </div>
     </div>
-
-    <div class="slider-row">
-      <label for="colorGroupDepthRange">Color group depth range</label>
-      <sl-range id="colorGroupDepthRange" min="1" max="10" step="1"></sl-range>
-    </div>
-
-    <sl-select id="color" label="Color"></sl-select>
-    <sl-select id="size" label="Size"></sl-select>
-  </div>
 `;
 
 
