@@ -1,16 +1,17 @@
-import {GraphService} from "/display/graph.service.js";
-import {LayoutService} from "/core/layout.service.js";
-import {LinkStyle} from "/display/link.style.model.js";
-import {NodeStyle} from "/display/node.style.model.js";
-import {CameraService} from "/display/camera.service.js";
+import { GraphService } from "/display/graph.service.js";
+import { LayoutService } from "/core/layout.service.js";
+import { LinkStyle } from "/display/link.style.model.js";
+import { NodeStyle } from "/display/node.style.model.js";
+import { CameraService } from "/display/camera.service.js";
+import { StoreService } from "/core/store.service.js";
 
 
 export class GraphStyleService {
     static singleton = new GraphStyleService();
 
     constructor() {
-        this.nodes = new NodeStyle();
-        this.links = new LinkStyle();
+        this.nodes = StoreService.singleton.store('nodes', new NodeStyle());
+        this.links = StoreService.singleton.store('links', new LinkStyle());
         console.log('initialize', this);
     }
 
@@ -41,7 +42,7 @@ export class GraphStyleService {
             .linkVisibility((link) => this.links.getVisibility(link))
             // .linkOpacity((link) => this.links.getOpacity(link))
 
-        ;
+            ;
 
     }
 }

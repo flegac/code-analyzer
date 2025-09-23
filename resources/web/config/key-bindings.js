@@ -5,21 +5,21 @@ export function keyBindings(app) {
     const cam = CameraService.singleton;
     return {
         // rotate camera X
-        'z': () => cam.rotateX(-cam.rotationSpeed),
-        's': () => cam.rotateX(cam.rotationSpeed),
+        'z': () => cam.rotateX(-cam.state.rotationSpeed),
+        's': () => cam.rotateX(cam.state.rotationSpeed),
 
         // rotate camera Y
-        'q': () => cam.rotateY(-cam.rotationSpeed),
-        'd': () => cam.rotateY(cam.rotationSpeed),
+        'q': () => cam.rotateY(-cam.state.rotationSpeed),
+        'd': () => cam.rotateY(cam.state.rotationSpeed),
 
         // rotate camera Z
-        'a': () => cam.rotateZ(cam.rotationSpeed),
-        'e': () => cam.rotateZ(-cam.rotationSpeed),
+        'a': () => cam.rotateZ(cam.state.rotationSpeed),
+        'e': () => cam.rotateZ(-cam.state.rotationSpeed),
 
         // others
-        'w': () => cam.alignUpToAxis('x'),
-        'x': () => cam.alignUpToAxis('y'),
-        'c': () => cam.alignUpToAxis('z'),
+        'w': () => cam.alignFrontToAxis('x'),
+        'x': () => cam.alignFrontToAxis('y'),
+        'c': () => cam.alignFrontToAxis('z'),
 
         ' ': () => cam.zoomToFit(),
 

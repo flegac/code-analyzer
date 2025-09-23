@@ -2,14 +2,31 @@ import {BaseComponent} from "/gui/core/base.component.js";
 
 const STYLE = `
 [name=main-toolbar] {
-  position: absolute;
-  top: 0.5rem;
-  left: 0.5rem;
+  position: relative;
+  top: 0;
+  left: auto;
+  right:auto;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 1px; 
+  height: 100%;
+}
+
+sl-button {
+  width: .8cm;
+  height: .8cm;
+  padding: 0;
+  margin:0;
+  text-align: center;
+}
+sl-tooltip {
   z-index: 2000;
 }
 `;
 
-const TEMPLATE = `<sl-button-group name="main-toolbar"></sl-button-group>`;
+
+const TEMPLATE = `<div name="main-toolbar"></div>`;
 
 export class ToolBox extends BaseComponent {
     constructor() {
@@ -31,6 +48,7 @@ export class ToolBox extends BaseComponent {
         if (tooltip) {
             const tooltipWrapper = document.createElement('sl-tooltip');
             tooltipWrapper.setAttribute('content', tooltip);
+            tooltipWrapper.setAttribute('placement', 'right');
             tooltipWrapper.appendChild(button);
             container.appendChild(tooltipWrapper);
         } else {

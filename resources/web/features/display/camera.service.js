@@ -1,14 +1,16 @@
 import {LayoutService} from "/core/layout.service.js"
 import {GraphService} from "/display/graph.service.js"
+import {StoreService} from "/core/store.service.js"
 
 export class CameraService {
-
     static singleton = new CameraService();
-
     constructor() {
-        this.rotationSpeed = 3.5 * Math.PI / 180; // 3.5° par frame
-        this.target = new THREE.Vector3(0, 0, 0); // point central
-        this.alignUpToAxis = throttle(this.alignUpToAxis.bind(this), 200);
+        this.state = StoreService.singleton.store('camera', {
+            rotationSpeed: 3.5 * Math.PI / 180, // 3.5° par frame
+        });
+        this.target= new THREE.Vector3(0, 0, 0); // point central
+
+        this.alignFrontToAxis = throttle(this.alignFrontToAxis.bind(this), 200);
         this.zoomToFit = throttle(this.zoomToFit.bind(this), 200);
         this.takeControl(LayoutService.singleton.graph)
         console.log('initialize', this);
@@ -97,35 +99,36 @@ export class CameraService {
         camera.up.applyQuaternion(quaternion);
     }
 
-    alignUpToAxis(axis, delay = 250) {
+    alignFrontToAxis(axis, delay = 250) {
         setTimeout(() => {
             const camera = this.camera();
             const controls = this.controls();
 
-            let targetUp;
+            let direction, up;
             switch (axis) {
                 case 'x':
-                    targetUp = new THREE.Vector3(1, 0, 0);
+                    direction = new THREE.Vector3(1, 0, 0);
+                    up = new THREE.Vector3(0, 1, 0);
                     break;
                 case 'y':
-                    targetUp = new THREE.Vector3(0, 1, 0);
+                    direction = new THREE.Vector3(0, 1, 0);
+                    up = new THREE.Vector3(0, 0, 1); // évite le conflit avec front
                     break;
                 case 'z':
-                    targetUp = new THREE.Vector3(0, 0, 1);
+                    direction = new THREE.Vector3(0, 0, 1);
+                    up = new THREE.Vector3(0, 1, 0);
                     break;
                 default:
                     return;
             }
 
-            const currentUp = camera.up.clone().normalize();
-            const dot = currentUp.dot(targetUp);
+            const distance = camera.position.distanceTo(this.target);
+            const newPosition = this.target.clone().sub(direction.clone().normalize().multiplyScalar(distance));
 
-            if (dot > 0.99) {
-                targetUp.negate();
-            }
-
-            camera.up.copy(targetUp);
+            camera.position.copy(newPosition);
+            camera.up.copy(up);
             camera.lookAt(this.target);
+
             controls.target.copy(this.target);
             controls.update();
         }, delay);

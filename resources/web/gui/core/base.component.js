@@ -1,8 +1,8 @@
 import {Injector} from "/gui/core/injector.js";
 
+//display: none;
 const STYLE = `
 .hidden {
-  //display: none;
   visibility: hidden;
 }
 `;
@@ -12,18 +12,22 @@ Injector.injectStyle(STYLE);
 
 export class BaseComponent {
     constructor({
+                    state = {},
                     template = null,
                     style = null,
                     links = [],
                     scripts = []
                 }) {
         Injector.injectAll(style, links, scripts);
+        this.panelByName = {};
 
+        const {createApp, reactive} = PetiteVue;
         this.container = document.createElement("div");
         if (template !== null) {
+            this.state = reactive(state);
             this.container.innerHTML = template;
+            createApp(this.state).mount(this.container.firstElementChild);
         }
-        this.panelByName = {};
     }
 
     async start() {

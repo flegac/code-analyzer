@@ -5,23 +5,22 @@ import {CameraService} from "/display/camera.service.js"
 const STYLE = `
 .graph-navigation {
   position: absolute;
-  bottom: 0.5rem;
-  left: 0.5rem;
   width: 300px;
-  height: auto;
-  max-height: calc(100% - 2cm);
+  height: 100%;
   
-  transform: none;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(2px);
   z-index: 1000;
-  padding: 0.5rem;
   box-shadow: var(--sl-shadow-large);
   border-radius: var(--sl-border-radius-medium);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
   overflow: auto;
+}
+.drawer-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 `;
 

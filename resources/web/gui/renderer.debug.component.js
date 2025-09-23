@@ -28,10 +28,10 @@ const STYLE = `
 const TEMPLATE = `
   <div name="graph-debug" class="graph-debug" style="display: flex; flex-direction: column; gap: 0.1em; padding: 0.1em;">
     <div name="fps"></div>
-    <span><strong>Draw Calls:</strong> <span id="drawCalls">0</span></span>
-    <span><strong>Geometries:</strong> <span id="geometries">0</span></span>
-    <span><strong>Textures:</strong> <span id="textures">0</span></span>
-    <span><strong>Triangles:</strong> <span id="triangles">0</span></span>
+    <span><strong>Draw Calls:</strong> <span>{{drawCalls}}</span></span>
+    <span><strong>Geometries:</strong> <span>{{geometries}}</span></span>
+    <span><strong>Textures:</strong> <span>{{textures}}</span></span>
+    <span><strong>Triangles:</strong> <span>{{triangles}}</span></span>
   </div>
 `;
 
@@ -41,42 +41,26 @@ export class RendererDebugComponent extends BaseComponent {
             id: 'render-debug',
             template: TEMPLATE,
             style: STYLE,
+            state: {
+                drawCalls: 0,
+                textures: 0,
+                geometries: 0,
+                triangles: 0,
+            }
         });
-        this.state = {
-            drawCalls: 0,
-            textures: 0,
-            geometries: 0,
-            triangles: 0,
-        };
 
         this.fps = this.addComponent('fps', new FpsComponent());
-
-
-        this.spans = {
-            drawCalls: this.container.querySelector('#drawCalls'),
-            geometries: this.container.querySelector('#geometries'),
-            textures: this.container.querySelector('#textures'),
-            triangles: this.container.querySelector('#triangles'),
-        };
     }
 
     start(renderer) {
-        const state = this.state;
-        const spans = this.spans;
-
-        function update() {
-            state.geometries = renderer.info.memory.geometries;
-            state.textures = renderer.info.memory.textures;
-            state.drawCalls = renderer.info.render.calls;
-            state.triangles = renderer.info.render.triangles;
-            for (const key in state) {
-                if (spans[key]) {
-                    spans[key].textContent = String(state[key]);
-                }
-            }
-            requestAnimationFrame(() => update());
-        }
-        update()
+        const loop = () => {
+            this.state.geometries = renderer.info.memory.geometries;
+            this.state.textures = renderer.info.memory.textures;
+            this.state.drawCalls = renderer.info.render.calls;
+            this.state.triangles = renderer.info.render.triangles;
+            requestAnimationFrame(() => loop());
+        };
+        loop()
     }
 }
 

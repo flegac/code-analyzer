@@ -37,25 +37,6 @@ export class LayoutService {
         this.graphFilter = this.layout.addComponent('graph-filter', new GraphFilterComponent());
 
 
-        //default visible panel
-        this.settings.toggleVisibility({visibility: true});
-
-        this.layout.start();
-
-        const g = [
-            this.settings,
-            this.navigation,
-            // this.rendererDebug,
-            this.table,
-            this.graphFilter
-        ];
-
-        function groupAction(item) {
-            return () => {
-                BaseComponent.toggleGroupVisibility(g, item);
-            }
-        }
-
         this.toolbox = this.layout.addComponent('graph-toolbox', new ToolBox())
             .newButton({
                 label: '📂',
@@ -68,24 +49,24 @@ export class LayoutService {
                 onClick: () => GraphService.singleton.rebuildGraph()
             })
             .newButton({
-                label: '🧭',
-                tooltip: 'Navigation panel',
-                onClick: groupAction(this.navigation)
-            })
-            .newButton({
                 label: '📊',
                 tooltip: 'Node tabular data',
-                onClick: groupAction(this.table)
+                onClick: this.groupAction(this.table)
+            })
+            .newButton({
+                label: '🧭',
+                tooltip: 'Navigation panel',
+                onClick: this.groupAction(this.navigation)
             })
             .newButton({
                 label: '⚙️',
                 tooltip: 'Settings panel',
-                onClick: groupAction(this.settings)
+                onClick: this.groupAction(this.settings)
             })
             .newButton({
                 label: '🏷️',
                 tooltip: 'Filter panel',
-                onClick: groupAction(this.graphFilter)
+                onClick: this.groupAction(this.graphFilter)
             })
             .newButton({
                 label: '🐞',
@@ -93,8 +74,25 @@ export class LayoutService {
                 onClick: () => this.rendererDebug.toggleVisibility()
             })
         ;
+        this.layout.start();
 
         console.log('initialize', this);
+    }
+
+    groupAction(item) {
+        const ll = this.layout;
+
+        const g = [
+            this.settings,
+            this.navigation,
+            // this.rendererDebug,
+            this.table,
+            this.graphFilter
+        ];
+        return () => {
+            BaseComponent.toggleGroupVisibility(g, item);
+            ll.updateSplitPanelVisibility();
+        };
     }
 
     async start() {
@@ -109,6 +107,7 @@ export class LayoutService {
                 () => GraphService.singleton.getGraph().scene(),
                 () => CameraService.singleton.camera().position
             );
+
         });
 
     }

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Petite-Vue Component</title>
+  <script src="https://unpkg.com/petite-vue" defer></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+
+      const cities = ["Paris", "Lyon", "Marseille", "Bordeaux", "Toulouse"];
+      let index = 0;
+
+      // ✅ Mise à jour réactive via timer
+      setInterval(() => {
+        index = (index + 1) % cities.length;
+        comp.state.name = cities[index]; // 👈 fonctionne maintenant
+      }, 1000);
+      
+      class Component {
+        constructor(template, state) {
+          const { createApp, reactive } = PetiteVue;
+          this.state = reactive(state);
+          this.container = document.createElement("div");
+          this.container.innerHTML = template;
+          createApp(this.state).mount(this.container.firstElementChild);
+        }
+      }
+
+      const template = `
+        <div>
+          <input v-model="name" />
+          <p>Bonjour {{ name }}</p>
+        </div>
+      `;
+
+      const comp = new Component(template, { name: "Toulouse" });
+      document.getElementById("root").appendChild(comp.container);
+
+    });
+  </script>
+</body>
+</html>

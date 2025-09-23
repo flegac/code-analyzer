@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>React + Shoelace + Configurable Component</title>
+
+  <!-- Shoelace UI -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/themes/light.css" />
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/shoelace-autoloader.js"></script>
+
+  <!-- React + ReactDOM -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+
+  <!-- htm (JSX-like syntax) -->
+  <script src="https://unpkg.com/htm@3.1.1/dist/htm.umd.js"></script>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2em;
+      max-width: 500px;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script>
+    const html = htm.bind(React.createElement);
+    const { useState, useEffect, useRef } = React;
+
+    const STYLE = `
+      sl-input, sl-range, sl-switch {
+        margin-bottom: 1em;
+        display: block;
+      }
+
+      sl-tag {
+        margin-right: 0.5em;
+      }
+
+      .panel {
+        padding: 1em;
+        border-radius: 8px;
+        background: rgba(240, 240, 240, 0.6);
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      }
+    `;
+
+    const TEMPLATE = (state, setState) => html`
+      <div class="panel">
+        <sl-input
+          label="Name"
+          value=${state.name}
+          onInput=${e => setState({ ...state, name: e.target.value })}
+        ></sl-input>
+
+        <sl-input
+          label="Name"
+          value=${state.name}
+          onInput=${e => setState({ ...state, name: e.target.value })}
+        ></sl-input>
+
+        <sl-range
+          label="Volume"
+          min="0"
+          max="100"
+          value=${state.volume}
+          onInput=${e => setState({ ...state, volume: parseInt(e.target.value) })}
+        ></sl-range>
+
+        <sl-range
+          label="Volume"
+          min="0"
+          max="100"
+          value=${state.volume}
+          onInput=${e => setState({ ...state, volume: parseInt(e.target.value) })}
+        ></sl-range>
+      </div>
+    `;
+
+    // ✅ Base Component class with configurable template, style, and state
+    class Component {
+      constructor(template, style = '', state = {}) {
+        this.template = template;
+        this.style = style;
+        this.state = state;
+        this.container = document.createElement('div');
+
+        if (style) {
+          const styleTag = document.createElement('style');
+          styleTag.textContent = style;
+          this.container.appendChild(styleTag);
+        }
+      }
+
+      mount(target) {
+        ReactDOM.createRoot(target).render(html`<${this.render.bind(this)} />`);
+      }
+
+      render() {
+        return html`<div>Base component</div>`;
+      }
+    }
+
+    // ✅ App component with injected template, style, and initial state
+    class App extends Component {
+      constructor() {
+        super(
+          TEMPLATE,
+          STYLE,
+          {
+            name: 'Alice',
+            volume: 50,
+            enabled: true
+          }
+        );
+      }
+
+      render() {
+        const [state, setState] = useState(this.state);
+
+        const switchRef1 = useRef();
+        const switchRef2 = useRef();
+
+        useEffect(() => {
+          [switchRef1.current, switchRef2.current].forEach(ref => {
+            if (ref) {
+              ref.checked = state.enabled;
+              if (!ref._bound) {
+                ref.addEventListener('sl-change', e => {
+                  setState(prev => ({ ...prev, enabled: e.target.checked }));
+                });
+                ref._bound = true;
+              }
+            }
+          });
+        }, [state.enabled]);
+
+        return html`
+          <div>
+            ${this.template(state, setState)}
+
+            <sl-switch ref=${switchRef1}>Enabled</sl-switch>
+            <sl-switch ref=${switchRef2}>Enabled</sl-switch>
+
+            <sl-tag variant="primary">Name: ${state.name}</sl-tag>
+            <sl-tag variant="success">Volume: ${state.volume}</sl-tag>
+            <sl-tag variant=${state.enabled ? "success" : "danger"}>
+              Status: ${state.enabled ? "ON" : "OFF"}
+            </sl-tag>
+          </div>
+        `;
+      }
+    }
+
+    const app = new App();
+    app.mount(document.getElementById("app"));
+  </script>
+</body>
+</html>

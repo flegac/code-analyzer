@@ -1,29 +1,27 @@
-import {clusterForce} from "/lib/cluster-force.js"
-import {ClusterStrategy} from "/graph/cluster.strategy.model.js"
-import {GraphService} from "/display/graph.service.js";
-
-class Physics {
-    constructor() {
-        this.camAutoFit=false;
-        this.isActive = true;
-        this.friction = 0.1;
-        this.fixX = false;
-        this.fixY = false;
-        this.fixZ = false;
-        this.collapsingDepth = 1;
-        this.repulsionFactor = 0.5;
-        this.link = {
-            relationStrengthFactor: 0.15,
-            strength: 5,
-        };
-    }
-}
+import { clusterForce } from "/lib/cluster-force.js"
+import { ClusterStrategy } from "/graph/cluster.strategy.model.js"
+import { GraphService } from "/display/graph.service.js";
+import { StoreService } from "/core/store.service.js";
 
 export class PhysicsService {
     static singleton = new PhysicsService();
 
     constructor() {
-        this.state = new Physics();
+        this.state = StoreService.singleton.store('physics', {
+            "camAutoFit": false,
+            "isActive": true,
+            "friction": 0.1,
+            "fixX": false,
+            "fixY": false,
+            "fixZ": false,
+            "collapsingDepth": 1,
+            "repulsionFactor": 0.5,
+            "link": {
+                "relationStrengthFactor": 0.15,
+                "strength": 5
+            }
+        }
+        );
         console.log('initialize', this);
     }
 

@@ -1,6 +1,5 @@
-import {BaseComponent} from "/gui/core/base.component.js";
-
-import {PhysicsService} from "/display/physics.service.js"
+import { BaseComponent } from "/gui/core/base.component.js";
+import { PhysicsService } from "/display/physics.service.js";
 
 const STYLE = `
   .panel {
@@ -29,101 +28,53 @@ const STYLE = `
 const TEMPLATE = `
   <div class="panel">
     <div class="slider-row">
-      <sl-switch id="isActive">Running status</sl-switch>
-      <sl-button id="simulate" variant="primary">🔥 Simulate</sl-button>
+      <sl-switch v-model="state.isActive" @sl-change="apply">Running status</sl-switch>
+      <sl-button @click="apply" variant="primary">🔥 Simulate</sl-button>
     </div>
 
     <div class="slider-row">
-      <sl-switch id="camAutoFit">Auto-fit camera</sl-switch>
+      <sl-switch v-model="state.camAutoFit" @sl-change="apply">Auto-fit camera</sl-switch>
     </div>
 
     <div class="slider-row">
       <label>Fix axes</label>
-      <sl-checkbox id="fixX">X</sl-checkbox>
-      <sl-checkbox id="fixY">Y</sl-checkbox>
-      <sl-checkbox id="fixZ">Z</sl-checkbox>
+      <sl-checkbox :checked="state.fixX" @sl-change="state.fixX = $event.target.checked; apply()">X</sl-checkbox>
+      <sl-checkbox :checked="state.fixY" @sl-change="state.fixY = $event.target.checked; apply()">Y</sl-checkbox>
+      <sl-checkbox :checked="state.fixZ" @sl-change="state.fixZ = $event.target.checked; apply()">Z</sl-checkbox>
     </div>
 
     <div class="slider-row">
       <label for="collapsingDepth">Cluster depth</label>
-      <sl-range id="collapsingDepth" min="0" max="5" step="1"></sl-range>
+      <sl-range v-model="state.collapsingDepth" min="0" max="5" step="1" @sl-input="apply"></sl-range>
     </div>
 
     <div class="slider-row">
       <label for="repulsionFactor">Repulsion</label>
-      <sl-range id="repulsionFactor" min="0" max="1" step="0.01"></sl-range>
+      <sl-range v-model="state.repulsionFactor" min="0" max="1" step="0.01" @sl-input="apply"></sl-range>
     </div>
 
     <div class="slider-row">
       <label for="strength">Attraction</label>
-      <sl-range id="strength" min="0" max="25" step="0.01"></sl-range>
+      <sl-range v-model="state.link.strength" min="0" max="25" step="0.01" @sl-input="apply"></sl-range>
     </div>
 
     <div class="slider-row">
       <label for="relationStrengthFactor">Hierarchy ⟷ Relation</label>
-      <sl-range id="relationStrengthFactor" min="0" max="1" step="0.01"></sl-range>
+      <sl-range v-model="state.link.relationStrengthFactor" min="0" max="1" step="0.01" @sl-input="apply"></sl-range>
     </div>
   </div>
 `;
 
-
 export class GraphPhysicsComponent extends BaseComponent {
-    constructor() {
-        super({
-            template: TEMPLATE,
-            style: STYLE,
-        });
+  constructor() {
+    super({
+      template: TEMPLATE,
+      style: STYLE,
+      state: {
+        state: PhysicsService.singleton.state,
+        apply: PhysicsService.singleton.apply
+      }
+    });
+  }
 
-        const state = PhysicsService.singleton.state;
-        const onChange = () => PhysicsService.singleton.apply();
-
-        // 🟢 Running status
-        const isActive = this.container.querySelector('#isActive');
-        isActive.checked = state.isActive;
-        isActive.addEventListener('sl-change', () => {
-            state.isActive = isActive.checked;
-            onChange();
-        });
-
-        // 🔥 Simulate
-        const simulate = this.container.querySelector('#simulate');
-        simulate.addEventListener('click', () => {
-            onChange();
-        });
-
-        // 🧭 Fix axes
-        ['fixX', 'fixY', 'fixZ'].forEach(axis => {
-            const el = this.container.querySelector(`#${axis}`);
-            el.checked = state[axis];
-            el.addEventListener('sl-change', () => {
-                state[axis] = el.checked;
-                onChange();
-            });
-        });
-
-        // 🎯 Auto-fit camera
-        const camAutoFit = this.container.querySelector('#camAutoFit');
-        camAutoFit.checked = state.camAutoFit;
-        camAutoFit.addEventListener('sl-change', () => {
-            state.camAutoFit = camAutoFit.checked;
-            onChange();
-        });
-
-        // 🧩 Sliders
-        const sliders = [
-            ['collapsingDepth', state, 'collapsingDepth'],
-            ['repulsionFactor', state, 'repulsionFactor'],
-            ['strength', state.link, 'strength'],
-            ['relationStrengthFactor', state.link, 'relationStrengthFactor']
-        ];
-
-        sliders.forEach(([id, target, key]) => {
-            const el = this.container.querySelector(`#${id}`);
-            el.value = target[key];
-            el.addEventListener('sl-input', () => {
-                target[key] = parseFloat(el.value);
-                onChange();
-            });
-        });
-    }
 }
