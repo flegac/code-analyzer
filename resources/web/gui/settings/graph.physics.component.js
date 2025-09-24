@@ -5,7 +5,7 @@ const STYLE = `
   .panel {
     display: flex;
     flex-direction: column;
-    gap: 0.5em;
+    gap: 0.1cm;
   }
 
   .slider-row {
@@ -38,9 +38,9 @@ const TEMPLATE = `
 
     <div class="slider-row">
       <label>Fix axes</label>
-      <sl-checkbox :checked="state.fixX" @sl-change="state.fixX = $event.target.checked; apply()">X</sl-checkbox>
-      <sl-checkbox :checked="state.fixY" @sl-change="state.fixY = $event.target.checked; apply()">Y</sl-checkbox>
-      <sl-checkbox :checked="state.fixZ" @sl-change="state.fixZ = $event.target.checked; apply()">Z</sl-checkbox>
+      <sl-checkbox @sl-change="state.fixX = $event.target.checked; apply()">X</sl-checkbox>
+      <sl-checkbox @sl-change="state.fixY = $event.target.checked; apply()">Y</sl-checkbox>
+      <sl-checkbox @sl-change="state.fixZ = $event.target.checked; apply()">Z</sl-checkbox>
     </div>
 
     <div class="slider-row">

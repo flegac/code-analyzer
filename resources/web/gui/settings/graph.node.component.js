@@ -1,5 +1,6 @@
 import { BaseComponent } from "/gui/core/base.component.js";
 import { GraphStyleService } from "/display/graph.style.service.js"
+import { DatasetService } from "/dataset/dataset.service.js"
 
 const STYLE = `
   .panel {
@@ -67,79 +68,66 @@ const TEMPLATE = `
 
 
 export class GraphNodeComponent extends BaseComponent {
-    constructor() {
-        super({
-            template: TEMPLATE,
-            style: STYLE,
-        });
+  constructor() {
+    super({
+      template: TEMPLATE,
+      style: STYLE,
+    });
+    this.updateGui()
+  }
 
-        const onChange = () => GraphStyleService.singleton.apply();
+  updateGui() {
 
-        const nodes = GraphStyleService.singleton.nodes;
-        const nodeIsVisible = nodes.mesh.isVisible;
+    const onChange = () => GraphStyleService.singleton.apply();
 
-        this._bindSlider('baseRadius', nodes.mesh, 'baseRadius', onChange);
-        this._bindSlider('colorGroupDepthRange', nodes.mesh, 'colorGroupDepthRange', onChange);
+    const nodes = GraphStyleService.singleton.nodes;
+    const nodeIsVisible = nodes.mesh.isVisible;
 
-        this._populateSelect('color', COLOR_ATTRIBUTES);
-        this._bindSelect('color', nodes.mesh, 'color', onChange);
+    this._bindSlider('baseRadius', nodes.mesh, 'baseRadius', onChange);
+    this._bindSlider('colorGroupDepthRange', nodes.mesh, 'colorGroupDepthRange', onChange);
 
-        this._populateSelect('size', SIZE_ATTRIBUTES);
-        this._bindSelect('size', nodes.mesh, 'size', onChange);
-        const nodeSwitch = this.container.querySelector('#nodeVisibility');
-        nodeSwitch.checked = nodeIsVisible;
-        nodeSwitch.addEventListener('sl-change', () => {
-            nodes.mesh.isVisible = nodeSwitch.checked;
-            onChange();
-        });
+    this._populateSelect('color', ['group']);
+    this._bindSelect('color', nodes.mesh, 'color', onChange);
 
+    const labels = DatasetService.singleton.state.labels;
 
-    }
+    this._populateSelect('size', labels);
+    this._bindSelect('size', nodes.mesh, 'size', onChange);
+    const nodeSwitch = this.container.querySelector('#nodeVisibility');
+    nodeSwitch.checked = nodeIsVisible;
+    nodeSwitch.addEventListener('sl-change', () => {
+      nodes.mesh.isVisible = nodeSwitch.checked;
+      onChange();
+    });
+  }
 
-    _bindSlider(id, target, key, onChange) {
-        const el = this.container.querySelector(`#${id}`);
-        el.value = target[key];
-        el.addEventListener('sl-input', () => {
-            target[key] = parseFloat(el.value);
-            onChange();
-        });
-    }
+  _bindSlider(id, target, key, onChange) {
+    const el = this.container.querySelector(`#${id}`);
+    el.value = target[key];
+    el.addEventListener('sl-input', () => {
+      target[key] = parseFloat(el.value);
+      onChange();
+    });
+  }
 
-    _bindSelect(id, target, key, onChange) {
-        const el = this.container.querySelector(`#${id}`);
-        el.value = target[key];
-        el.addEventListener('sl-change', () => {
-            target[key] = el.value;
-            onChange();
-        });
-    }
+  _bindSelect(id, target, key, onChange) {
+    const el = this.container.querySelector(`#${id}`);
+    el.value = target[key];
+    el.addEventListener('sl-change', () => {
+      target[key] = el.value;
+      onChange();
+    });
+  }
 
-    _populateSelect(id, options) {
-        const select = this.container.querySelector(`#${id}`);
-        select.innerHTML = ''; // clear previous
-        options.forEach(opt => {
-            const option = document.createElement('sl-option');
-            option.value = typeof opt === 'string' ? opt : opt.value;
-            option.textContent = typeof opt === 'string' ? opt : opt.label;
-            select.appendChild(option);
-        });
-    }
+  _populateSelect(id, options) {
+    const select = this.container.querySelector(`#${id}`);
+    select.innerHTML = ''; // clear previous
+    options.forEach(opt => {
+      const option = document.createElement('sl-option');
+      option.value = typeof opt === 'string' ? opt : opt.value;
+      option.textContent = typeof opt === 'string' ? opt : opt.label;
+      select.appendChild(option);
+    });
+  }
 
 }
-
-
-//TODO make that automatic (from module infos)
-const SIZE_ATTRIBUTES = [
-    'lines',
-    'imported',
-    'imports',
-    'class_count',
-    'method_count',
-    'function_count',
-    'loops',
-    'branches'
-];
-const COLOR_ATTRIBUTES = [
-    'group',
-    'category',
-];

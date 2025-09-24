@@ -1,5 +1,7 @@
 import {BaseComponent} from "/gui/core/base.component.js";
 
+import {GraphStyleService} from "/display/graph.style.service.js"
+
 import {AppLayoutComponent} from "/gui/app.layout.component.js"
 import {GraphCanvasComponent} from "/gui/graph.canvas.component.js"
 import {GraphTableComponent} from "/gui/graph.table.component.js"
@@ -13,8 +15,7 @@ import {Billboard} from "/display/mesh/billboard.mesh.model.js"
 import {GraphService} from "/display/graph.service.js"
 import {DatasetService} from "/dataset/dataset.service.js"
 import {CameraService} from "/display/camera.service.js"
-import {GraphFilterComponent} from "/gui/graph.filter.component.js";
-
+import {GraphFilterComponent} from "/gui/graph.filter.component.js"
 
 export class LayoutService {
     static singleton = new LayoutService()
@@ -22,13 +23,8 @@ export class LayoutService {
     constructor() {
         this.layout = new AppLayoutComponent();
 
-
         this.graph = this.layout.addComponent('graph-view', new GraphCanvasComponent());
-
         this.dataset = this.layout.addComponent('graph-view', new DatasetComponent());
-
-
-        this.dataset = new DatasetComponent();
         this.table = this.layout.addComponent('graph-table', new GraphTableComponent());
 
         this.settings = this.layout.addComponent('graph-settings', new SettingsComponent());
@@ -97,7 +93,7 @@ export class LayoutService {
 
     async start() {
         const G = GraphService.singleton;
-
+        const target = this.settings;
         $(() => {
             G.initGraph(this.graph.container);
             const renderer = G.getGraph().renderer();
@@ -107,6 +103,7 @@ export class LayoutService {
                 () => GraphService.singleton.getGraph().scene(),
                 () => CameraService.singleton.camera().position
             );
+            this.groupAction(target)();
 
         });
 
@@ -116,6 +113,12 @@ export class LayoutService {
         DatasetService.singleton.loadDataset(dataset);
         await GraphService.singleton.rebuildGraph();
         this.table.rebuild(dataset.nodes());
-        this.graphFilter.rebuild(dataset.config())
+        this.graphFilter.rebuild(dataset.config());
+
+        GraphStyleService.singleton.nodes.mesh.size = DatasetService.singleton.state.labels[0]
+        this.settings.nodes.updateGui();
+        GraphStyleService.singleton.apply();
+
+
     }
 }

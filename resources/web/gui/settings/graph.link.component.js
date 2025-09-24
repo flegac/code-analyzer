@@ -110,20 +110,3 @@ export class GraphLinkComponent extends BaseComponent {
         });
     }
 }
-
-
-//TODO make that automatic (from module infos)
-const SIZE_ATTRIBUTES = [
-    'lines',
-    'imported',
-    'imports',
-    'class_count',
-    'method_count',
-    'function_count',
-    'loops',
-    'branches'
-];
-const COLOR_ATTRIBUTES = [
-    'group',
-    'category',
-];

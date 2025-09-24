@@ -13,14 +13,14 @@ const STYLE = `
   height: 100%;
 }
 
-sl-button {
+[name=main-toolbar] sl-button {
   width: .8cm;
   height: .8cm;
   padding: 0;
   margin:0;
   text-align: center;
 }
-sl-tooltip {
+[name=main-toolbar] sl-tooltip {
   z-index: 2000;
 }
 `;

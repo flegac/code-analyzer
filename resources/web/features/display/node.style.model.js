@@ -6,13 +6,13 @@ export class NodeStyle {
             baseRadius: 12.0,
             isVisible: true,
             colorGroupDepthRange: 2,
-            size: 'imported',
+            size: null,
             color: 'group',
         }
         this.text = {
             isVisible: true,
             hiddenDepthRange: 3,
-            scaling: 2.0,
+            scaling: 1.0,
             padding: 2,
             fontSize: 64,
             fontFamily: 'Arial',
@@ -21,11 +21,15 @@ export class NodeStyle {
             textFormatter: (parts) => {
                 if (!Array.isArray(parts) || parts.length === 0) return '';
                 if (parts.length === 1) return parts[0];
+                if (parts[parts.length - 1].includes('::')) {
+                    return '::' + parts[parts.length - 1].split('::').slice(-1)
+                }
                 // if (parts.length === 2) return parts.join('.');
                 return parts.slice(-1);
             }
         };
     }
+
 
     getMesh(node, position) {
         return new NodeMeshModel(node, this, position).mesh;

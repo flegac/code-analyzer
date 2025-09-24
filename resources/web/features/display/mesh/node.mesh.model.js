@@ -18,15 +18,17 @@ export class NodeMeshModel {
         //mesh
         const color = node.color;
         const nodeSize = node.radius * state.mesh.baseRadius;
-        const degree = node.infos.imports + node.infos.imported;
+        const degree = node.outgoing.length + node.incoming.length;
         const meshVisible = degree > 0 && state.mesh.isVisible;
         const billboard = meshVisible ? new Billboard(nodeSize, color, position).mesh : null;
 
         //text
+        const isClass = node.id.includes('::');
         const parts = node.id.split('.');
         const partsCount = parts.length;
-        const shouldShowText = partsCount <= state.text.hiddenDepthRange;
-        const textSize = 1 / Math.pow(2, parts.length);
+        const shouldShowText = partsCount <= state.text.hiddenDepthRange || isClass;
+        const textSize = isClass ? .25 : 1 / Math.pow(2, parts.length);
+
         const text = state.text.textFormatter(parts);
         const textMesh = state.text.isVisible && shouldShowText
             ? new TextSprite(text, textSize, state.text, meshVisible)

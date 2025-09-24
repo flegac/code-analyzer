@@ -23,7 +23,6 @@ export class LinkStyle {
 
     getOpacity(link) {
         const links = GraphStyleService.singleton.links;
-        console.log(links[link.label]?.opacity)
         return links[link.label]?.opacity;
     }
 

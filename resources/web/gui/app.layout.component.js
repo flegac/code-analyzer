@@ -132,7 +132,6 @@ export class AppLayoutComponent extends BaseComponent {
         const visibleChild = Array.from(leftPanel.children).find(child => {
             return !child.firstChild.classList.contains('hidden');
         });
-console.log(visibleChild);
 
         if (visibleChild) {
             const width = visibleChild.scrollWidth;

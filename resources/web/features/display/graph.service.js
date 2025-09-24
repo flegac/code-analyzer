@@ -125,7 +125,7 @@ export class GraphService {
 
     updateGroup() {
         const tagger = NodeService.singleton.hierarchicDepthTagger(
-            GraphStyleService.singleton.nodes.mesh.colorGroupDepthRange - 1
+            GraphStyleService.singleton.nodes.mesh.colorGroupDepthRange
         );
         this.state.nodes.forEach(node => {
             node.group = node.infos.group = tagger(node);

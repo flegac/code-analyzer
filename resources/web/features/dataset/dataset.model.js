@@ -1,13 +1,24 @@
-import {GraphModel} from "/graph/graph.model.js"
-import {DatasetService} from "/dataset/dataset.service.js"
-import {NodeService} from "/graph/node.service.js"
+import { GraphModel } from "/graph/graph.model.js"
+import { DatasetService } from "/dataset/dataset.service.js"
 
 export class Dataset {
-    constructor(project = 'test-project', relation, nodes, config) {
+    constructor(project = 'test-project', relation, nodes = {}, config = {}) {
         this.project = project;
         this._relation = relation;
-        this._config = config;
         this._nodes = nodes;
+        this._config = config;
+
+        const labels = new Set();
+        Object.values(nodes).forEach(dat => {
+            Object.values(dat).forEach(values => {
+                for (const key of Object.keys(values)) {
+                    labels.add(key);
+                }
+            });
+        })
+
+        this.labels = [...labels];
+
         console.log('new Dataset()', relation, nodes, config)
     }
 
@@ -33,7 +44,7 @@ export class Dataset {
     }
 
     nodes(name = 'stats') {
-        if (this._nodes === null) return null;
+        if (!this._nodes) return null;
         return this._nodes[name];
     }
 

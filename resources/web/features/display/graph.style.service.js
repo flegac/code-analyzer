@@ -4,6 +4,7 @@ import { LinkStyle } from "/display/link.style.model.js";
 import { NodeStyle } from "/display/node.style.model.js";
 import { CameraService } from "/display/camera.service.js";
 import { StoreService } from "/core/store.service.js";
+import { DatasetService } from "/dataset/dataset.service.js"
 
 
 export class GraphStyleService {
@@ -16,6 +17,7 @@ export class GraphStyleService {
     }
 
     async apply() {
+        console.log('GraphStyleService.singleton.apply()');
         const graph = LayoutService.singleton.graph.getGraph();
 
         // ----- NODES ---------------------------------
@@ -27,7 +29,7 @@ export class GraphStyleService {
         G.state.nodes.forEach(node => node.color = null);
         const camPosition = CameraService.singleton.camera().position;
         graph
-            .nodeAutoColorBy('group')
+            .nodeAutoColorBy(this.nodes.mesh.color)
             .nodeThreeObject((node) => this.nodes.getMesh(node, camPosition))
             .nodeLabel(this.nodes.getLabel);
 
@@ -41,8 +43,6 @@ export class GraphStyleService {
             .linkColor((link) => this.links.getColor(link))
             .linkVisibility((link) => this.links.getVisibility(link))
             // .linkOpacity((link) => this.links.getOpacity(link))
-
             ;
-
     }
 }
