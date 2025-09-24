@@ -11,7 +11,7 @@
 - `<my-project>/links/<metadata>.json`: (unavailable) attach metadata to links too (?)
 
 
-2) Open the viewer (requires a simple server to fetch data on disk)
+2) Open the viewer (requires a simple server to allow fetching files on disk)
 
 - [viewer](./resources/code-viz.html)
 
