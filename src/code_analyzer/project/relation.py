@@ -39,8 +39,10 @@ class Relation:
             for k, v in self.graph.items()
         }
 
-    def dump(self, path: Path):
-        full_path = path / f'{self.name}.json'
+    def dump(self, path: Path, name:str=None):
+        name = name or self.name
+        full_path = path / f'{name}.json'
+        full_path.parent.mkdir(parents=True, exist_ok=True)
         with full_path.open('w') as _:
             json.dump(self.to_json(), _, sort_keys=True, indent=4)
 

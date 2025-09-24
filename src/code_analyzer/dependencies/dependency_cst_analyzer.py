@@ -20,13 +20,11 @@ class DependencyCstAnalyzer:
             for _ in visited:
                 graph[_].update({})
             graph[a.ref.ref_id].update({_ for _ in visited})
-
         return Relation(
-            name=self.name,
+            name=f'{self.name}',
             graph=dict(graph),
         )
 
-    @time_func
     def parse(self, module: ModuleCache):
         module.update(CST_PARSER)
         visitor = DependencyVisitor()

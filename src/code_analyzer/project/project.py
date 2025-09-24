@@ -2,23 +2,29 @@ from pathlib import Path
 
 from code_analyzer.project.module_cache import ModuleCache
 from code_analyzer.project.relation import Relation
-from code_analyzer.scope.config import PYTHON_MODULE_PATTERN
+from code_analyzer.scope.config import PYTHON_FILE_RGLOB, PYTHON_FILE_REGEX
 
 ModuleId = str
 
 
 class Project:
-    def __init__(self, root: Path | str) -> None:
+    def __init__(self, name: str, root: Path | str) -> None:
+        self.name = name
         self.root = Path(root).absolute()
         self.modules: dict[ModuleId, ModuleCache] = {}
 
     def iter_files(self):
-        return set(self.root.rglob(PYTHON_MODULE_PATTERN))
+        return {
+            path for path in self.root.rglob(PYTHON_FILE_RGLOB)
+            if PYTHON_FILE_REGEX.match(path.name)
+        }
 
     def iter_modules(self):
         return [_ for _ in self.modules.values()]
 
-    def update(self):
+    def parse(self):
+        print(f'project [{self.name}]: parsing ...')
+
         modules = [
             ModuleCache.from_path(self.root, _)
             for _ in self.iter_files()

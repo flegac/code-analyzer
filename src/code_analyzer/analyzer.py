@@ -71,7 +71,7 @@ def analyze_project(project: Project, output_dir: Path) -> None:
     pprint(aggregate_stats)
 
     infos = analyzer.infos()
-    (output_dir / 'nodes/stats.json').write_text(json.dumps(infos, indent=2))
+    (node_path / 'stats.json').write_text(json.dumps(infos, indent=2))
 
     # final_stats, import_graph = aggregate_stats(stats)
     # (output_dir / "stats.json").write_text(json.dumps(final_stats, indent=2, ensure_ascii=False), encoding="utf-8")

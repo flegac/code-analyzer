@@ -10,8 +10,6 @@ from tabulate import tabulate
 class CodeStats:
     node: CSTNode = None
     lines: int = 0
-    imports: int = 0
-    imported: int = 0
     classes: int = 0
     functions: int = 0
     methods: int = 0
@@ -21,8 +19,6 @@ class CodeStats:
     def update(self, other: Self, ignore_lines: bool = True):
         if not ignore_lines:
             self.lines += other.lines
-        self.imports += other.imports
-        self.imported += other.imported
         self.classes += other.classes
         self.functions += other.functions
         self.methods += other.methods
@@ -32,8 +28,6 @@ class CodeStats:
     def to_dict(self):
         return {
             'lines': self.lines,
-            'imports': self.imports,
-            'imported': self.imported,
             'classes': self.classes,
             'functions': self.functions,
             'methods': self.methods,
@@ -77,8 +71,6 @@ class AggregatedStats:
 class AggregatedCodeStats:
     count: int
     lines: AggregatedStats
-    imports: AggregatedStats
-    imported: AggregatedStats
     class_count: AggregatedStats
     function_count: AggregatedStats
     method_count: AggregatedStats
@@ -90,8 +82,6 @@ class AggregatedCodeStats:
         return AggregatedCodeStats(
             count=len(values),
             lines=AggregatedStats.aggregate([_.lines for _ in values]),
-            imports=AggregatedStats.aggregate([_.imports for _ in values]),
-            imported=AggregatedStats.aggregate([_.imported for _ in values]),
             class_count=AggregatedStats.aggregate([_.classes for _ in values]),
             function_count=AggregatedStats.aggregate([_.functions for _ in values]),
             method_count=AggregatedStats.aggregate([_.methods for _ in values]),
