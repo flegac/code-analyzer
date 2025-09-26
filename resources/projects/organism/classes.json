@@ -1,0 +1,1338 @@
+{
+    "organism.core.color::Color": [
+        "organism.core.color::Color/interpolate",
+        "organism.core.color::Color/randomize"
+    ],
+    "organism.core.data::Data": [],
+    "organism.core.fast_rand::FastRandService": [
+        "organism.core.fast_rand::FastRandService/__init__",
+        "organism.core.fast_rand::FastRandService/_update_float",
+        "organism.core.fast_rand::FastRandService/_update_uint8",
+        "organism.core.fast_rand::FastRandService/float_color",
+        "organism.core.fast_rand::FastRandService/normalvariate",
+        "organism.core.fast_rand::FastRandService/rand_uint8",
+        "organism.core.fast_rand::FastRandService/random",
+        "organism.core.fast_rand::FastRandService/random_check",
+        "organism.core.fast_rand::FastRandService/uint8_color",
+        "organism.core.fast_rand::FastRandService/uniform_dispersion"
+    ],
+    "organism.core.model.bool_model::Bool": [
+        "organism.core.model.bool_model::Bool/__call__",
+        "organism.core.model.bool_model::Bool/read",
+        "organism.core.model.bool_model::Bool/switch",
+        "organism.core.model.bool_model::Bool/write"
+    ],
+    "organism.core.model.field_model::FieldModel": [
+        "organism.core.model.field_model::FieldModel/read",
+        "organism.core.model.field_model::FieldModel/write"
+    ],
+    "organism.core.model.list_model::ListModel": [
+        "organism.core.model.list_model::ListModel/current",
+        "organism.core.model.list_model::ListModel/iter",
+        "organism.core.model.list_model::ListModel/iter_with_selected",
+        "organism.core.model.list_model::ListModel/on_select"
+    ],
+    "organism.core.model.selector::Selector": [
+        "organism.core.model.selector::Selector/choices",
+        "organism.core.model.selector::Selector/next",
+        "organism.core.model.selector::Selector/previous",
+        "organism.core.model.selector::Selector/random",
+        "organism.core.model.selector::Selector/select",
+        "organism.core.model.selector::Selector/select_item"
+    ],
+    "organism.core.model.tab_model::TabModel": [],
+    "organism.core.model.table_model::TableModel": [],
+    "organism.core.model.value_model::ValueModel": [
+        "organism.core.model.value_model::ValueModel/current_value",
+        "organism.core.model.value_model::ValueModel/update"
+    ],
+    "organism.core.vec2::Vec2": [
+        "organism.core.vec2::Vec2/__add__",
+        "organism.core.vec2::Vec2/__eq__",
+        "organism.core.vec2::Vec2/__mul__",
+        "organism.core.vec2::Vec2/__neg__",
+        "organism.core.vec2::Vec2/__repr__",
+        "organism.core.vec2::Vec2/__rmul__",
+        "organism.core.vec2::Vec2/__sub__",
+        "organism.core.vec2::Vec2/__truediv__",
+        "organism.core.vec2::Vec2/angle_to",
+        "organism.core.vec2::Vec2/cross",
+        "organism.core.vec2::Vec2/direction",
+        "organism.core.vec2::Vec2/distance",
+        "organism.core.vec2::Vec2/dot",
+        "organism.core.vec2::Vec2/format",
+        "organism.core.vec2::Vec2/normal",
+        "organism.core.vec2::Vec2/orthogonal",
+        "organism.core.vec2::Vec2/projection",
+        "organism.core.vec2::Vec2/projection_norm",
+        "organism.core.vec2::Vec2/rotated",
+        "organism.core.vec2::Vec2/swap",
+        "organism.core.vec2::Vec2/to_grid"
+    ],
+    "organism.engine.app::App": [],
+    "organism.engine.camera.camera::Camera": [
+        "organism.engine.camera.camera::Camera/__str__",
+        "organism.engine.camera.camera::Camera/_is_update_required",
+        "organism.engine.camera.camera::Camera/get_projection_matrix_ptr",
+        "organism.engine.camera.camera::Camera/get_view_matrix_ptr",
+        "organism.engine.camera.camera::Camera/is_on_screen",
+        "organism.engine.camera.camera::Camera/move_to",
+        "organism.engine.camera.camera::Camera/screen_to_world",
+        "organism.engine.camera.camera::Camera/update",
+        "organism.engine.camera.camera::Camera/update_ortho",
+        "organism.engine.camera.camera::Camera/update_perspective",
+        "organism.engine.camera.camera::Camera/world_to_screen"
+    ],
+    "organism.engine.camera.camera_service::CameraService": [
+        "organism.engine.camera.camera_service::CameraService/camera_target",
+        "organism.engine.camera.camera_service::CameraService/filter_visible",
+        "organism.engine.camera.camera_service::CameraService/is_on_screen",
+        "organism.engine.camera.camera_service::CameraService/move",
+        "organism.engine.camera.camera_service::CameraService/screen_world",
+        "organism.engine.camera.camera_service::CameraService/select_visible",
+        "organism.engine.camera.camera_service::CameraService/zoom"
+    ],
+    "organism.engine.camera.camera_tracking::CameraTracking": [
+        "organism.engine.camera.camera_tracking::CameraTracking/instant_apply",
+        "organism.engine.camera.camera_tracking::CameraTracking/set_pos",
+        "organism.engine.camera.camera_tracking::CameraTracking/update",
+        "organism.engine.camera.camera_tracking::CameraTracking/zoom"
+    ],
+    "organism.engine.devices.audio_service::AudioService": [],
+    "organism.engine.devices.glfw.glfw_mouse_service::GlfwMouseService": [],
+    "organism.engine.devices.glfw.glfw_screen_service::GlfwScreenService": [],
+    "organism.engine.devices.glfw.glfw_system_service::GlfwSystemService": [],
+    "organism.engine.devices.mouse_service::MouseService": [],
+    "organism.engine.devices.screen_service::ScreenService": [
+        "organism.engine.devices.screen_service::ScreenService/screen_size_float"
+    ],
+    "organism.engine.devices.sdl.audio_chunk::AudioChunk": [
+        "organism.engine.devices.sdl.audio_chunk::AudioChunk/__del__",
+        "organism.engine.devices.sdl.audio_chunk::AudioChunk/__init__",
+        "organism.engine.devices.sdl.audio_chunk::AudioChunk/play"
+    ],
+    "organism.engine.devices.sdl.audio_loader::AudioLoader": [
+        "organism.engine.devices.sdl.audio_loader::AudioLoader/__del__",
+        "organism.engine.devices.sdl.audio_loader::AudioLoader/__init__",
+        "organism.engine.devices.sdl.audio_loader::AudioLoader/get_chunk",
+        "organism.engine.devices.sdl.audio_loader::AudioLoader/get_music"
+    ],
+    "organism.engine.devices.sdl.music::Music": [
+        "organism.engine.devices.sdl.music::Music/__del__",
+        "organism.engine.devices.sdl.music::Music/__init__",
+        "organism.engine.devices.sdl.music::Music/play"
+    ],
+    "organism.engine.devices.sdl.sdl_audio_service::SdlAudioService": [
+        "organism.engine.devices.sdl.sdl_audio_service::SdlAudioService/__init__"
+    ],
+    "organism.engine.devices.system_service::SystemService": [],
+    "organism.engine.events.core.event_handler::EventHandler": [
+        "organism.engine.events.core.event_handler::EventHandler/execute",
+        "organism.engine.events.core.event_handler::EventHandler/handle_event"
+    ],
+    "organism.engine.events.core.event_manager::EventManager": [
+        "organism.engine.events.core.event_manager::EventManager/__init__",
+        "organism.engine.events.core.event_manager::EventManager/_handle_joystick_button_event",
+        "organism.engine.events.core.event_manager::EventManager/_handle_joystick_events",
+        "organism.engine.events.core.event_manager::EventManager/_handle_key_event",
+        "organism.engine.events.core.event_manager::EventManager/_handle_mouse_button_event",
+        "organism.engine.events.core.event_manager::EventManager/_handle_mouse_move_event",
+        "organism.engine.events.core.event_manager::EventManager/_handle_scroll_event",
+        "organism.engine.events.core.event_manager::EventManager/_joystick_callback",
+        "organism.engine.events.core.event_manager::EventManager/add_events",
+        "organism.engine.events.core.event_manager::EventManager/define_actions",
+        "organism.engine.events.core.event_manager::EventManager/execute",
+        "organism.engine.events.core.event_manager::EventManager/handle_events",
+        "organism.engine.events.core.event_manager::EventManager/init_glfw",
+        "organism.engine.events.core.event_manager::EventManager/remove_events"
+    ],
+    "organism.engine.events.core.joystick_handler::JoystickHandler": [],
+    "organism.engine.events.model.action_mapping::ActionMapping": [
+        "organism.engine.events.model.action_mapping::ActionMapping/add_action",
+        "organism.engine.events.model.action_mapping::ActionMapping/execute_action",
+        "organism.engine.events.model.action_mapping::ActionMapping/load"
+    ],
+    "organism.engine.events.model.event::Event": [
+        "organism.engine.events.model.event::Event/__str__"
+    ],
+    "organism.engine.events.model.event_binding::EventBinding": [
+        "organism.engine.events.model.event_binding::EventBinding/add_events",
+        "organism.engine.events.model.event_binding::EventBinding/remove_events",
+        "organism.engine.events.model.event_binding::EventBinding/to_path",
+        "organism.engine.events.model.event_binding::EventBinding/to_raw",
+        "organism.engine.events.model.event_binding::EventBinding/update"
+    ],
+    "organism.engine.fps::FPS": [
+        "organism.engine.fps::FPS/reset_worst",
+        "organism.engine.fps::FPS/to_str",
+        "organism.engine.fps::FPS/update"
+    ],
+    "organism.engine.gl_diagnostic.gl_diagnostic::GlDiagnostic": [],
+    "organism.engine.gl_diagnostic.gl_limits::GlLimits": [
+        "organism.engine.gl_diagnostic.gl_limits::GlLimits/__repr__"
+    ],
+    "organism.engine.gl_diagnostic.gl_material::GlMaterial": [
+        "organism.engine.gl_diagnostic.gl_material::GlMaterial/__repr__"
+    ],
+    "organism.engine.gl_diagnostic.gl_textures::GlTextures": [
+        "organism.engine.gl_diagnostic.gl_textures::GlTextures/__repr__"
+    ],
+    "organism.engine.gl_diagnostic.gl_values::GlValues": [
+        "organism.engine.gl_diagnostic.gl_values::GlValues/__repr__"
+    ],
+    "organism.engine.glfw_app::GlfwApp": [
+        "organism.engine.glfw_app::GlfwApp/on_start",
+        "organism.engine.glfw_app::GlfwApp/on_stop",
+        "organism.engine.glfw_app::GlfwApp/run"
+    ],
+    "organism.engine.graphics.blocks.camera_painter::CameraPainter": [],
+    "organism.engine.graphics.blocks.disc.circle_painter::CirclePainter": [],
+    "organism.engine.graphics.blocks.disc.metaball_painter::MetaballFirstPainter": [],
+    "organism.engine.graphics.blocks.disc.painter_config::MetaballConfig": [],
+    "organism.engine.graphics.blocks.disc.painter_config::PainterConfig": [],
+    "organism.engine.graphics.blocks.disc.painter_config::PointConfig": [],
+    "organism.engine.graphics.blocks.disc.point_buffer::PointBuffer": [],
+    "organism.engine.graphics.blocks.disc.point_updater::PointUpdater": [
+        "organism.engine.graphics.blocks.disc.point_updater::PointUpdater/__init__"
+    ],
+    "organism.engine.graphics.blocks.dist_field.dist_field_buffer::DistFieldBuffer": [],
+    "organism.engine.graphics.blocks.dist_field.dist_field_buffer::PointDF": [],
+    "organism.engine.graphics.blocks.dist_field.dist_field_painter::DistanceFieldBlock": [],
+    "organism.engine.graphics.blocks.links.link_buffer::LinkBuffer": [],
+    "organism.engine.graphics.blocks.links.link_model::Link": [],
+    "organism.engine.graphics.blocks.links.link_painter::LinkPainter": [],
+    "organism.engine.graphics.blocks.polys.poly_buffer::PolyBuffer": [],
+    "organism.engine.graphics.blocks.polys.poly_model::PolyPoint": [],
+    "organism.engine.graphics.blocks.polys.poly_model::Polygon": [],
+    "organism.engine.graphics.blocks.polys.poly_painter::PolyPainter": [
+        "organism.engine.graphics.blocks.polys.poly_painter::PolyPainter/is_hidden"
+    ],
+    "organism.engine.graphics.blocks.quads.quad_buffer::QuadBuffer": [],
+    "organism.engine.graphics.blocks.quads.quad_model::Quad": [],
+    "organism.engine.graphics.blocks.quads.quad_painter::QuadPainter": [],
+    "organism.engine.graphics.blocks.sequence_gl::SequenceGl": [],
+    "organism.engine.graphics.buffer.buffer_allocator::BufferAllocator": [
+        "organism.engine.graphics.buffer.buffer_allocator::BufferAllocator/allocate",
+        "organism.engine.graphics.buffer.buffer_allocator::BufferAllocator/count_allocated",
+        "organism.engine.graphics.buffer.buffer_allocator::BufferAllocator/count_free",
+        "organism.engine.graphics.buffer.buffer_allocator::BufferAllocator/release",
+        "organism.engine.graphics.buffer.buffer_allocator::BufferAllocator/release_others",
+        "organism.engine.graphics.buffer.buffer_allocator::BufferAllocator/stats"
+    ],
+    "organism.engine.graphics.buffer.buffer_pointer::BufferPointer": [
+        "organism.engine.graphics.buffer.buffer_pointer::BufferPointer/__getattr__",
+        "organism.engine.graphics.buffer.buffer_pointer::BufferPointer/__setattr__",
+        "organism.engine.graphics.buffer.buffer_pointer::BufferPointer/__str__"
+    ],
+    "organism.engine.graphics.core.block_gl::BlockGl": [
+        "organism.engine.graphics.core.block_gl::BlockGl/cleanup",
+        "organism.engine.graphics.core.block_gl::BlockGl/init_gl",
+        "organism.engine.graphics.core.block_gl::BlockGl/render",
+        "organism.engine.graphics.core.block_gl::BlockGl/update",
+        "organism.engine.graphics.core.block_gl::BlockGl/viewport"
+    ],
+    "organism.engine.graphics.core.composer_painter::BranchConfig": [],
+    "organism.engine.graphics.core.composer_painter::ComposerConfig": [
+        "organism.engine.graphics.core.composer_painter::ComposerConfig/apply"
+    ],
+    "organism.engine.graphics.core.composer_painter::ComposerPainter": [],
+    "organism.engine.graphics.core.graph_gl::GraphGl": [],
+    "organism.engine.graphics.core.graphic_buffer::GraphicBuffer": [
+        "organism.engine.graphics.core.graphic_buffer::GraphicBuffer/cleanup",
+        "organism.engine.graphics.core.graphic_buffer::GraphicBuffer/init_gl",
+        "organism.engine.graphics.core.graphic_buffer::GraphicBuffer/send_gl",
+        "organism.engine.graphics.core.graphic_buffer::GraphicBuffer/update_gl"
+    ],
+    "organism.engine.graphics.core.shader::Shader": [
+        "organism.engine.graphics.core.shader::Shader/__post_init__",
+        "organism.engine.graphics.core.shader::Shader/cleanup",
+        "organism.engine.graphics.core.shader::Shader/init_gl",
+        "organism.engine.graphics.core.shader::Shader/set_uniform_bool",
+        "organism.engine.graphics.core.shader::Shader/set_uniform_float",
+        "organism.engine.graphics.core.shader::Shader/set_uniform_mat4",
+        "organism.engine.graphics.core.shader::Shader/set_uniform_texture",
+        "organism.engine.graphics.core.shader::Shader/set_uniform_vec",
+        "organism.engine.graphics.core.shader::Shader/use"
+    ],
+    "organism.engine.graphics.core.shader::Uniforms": [
+        "organism.engine.graphics.core.shader::Uniforms/apply_all"
+    ],
+    "organism.engine.graphics.core.single_quad_buffer::SingleQuadBuffer": [],
+    "organism.engine.graphics.core.surface::Surface": [
+        "organism.engine.graphics.core.surface::Surface/__init__",
+        "organism.engine.graphics.core.surface::Surface/_init_texture",
+        "organism.engine.graphics.core.surface::Surface/dump_to_image",
+        "organism.engine.graphics.core.surface::Surface/init_gl",
+        "organism.engine.graphics.core.surface::Surface/use_texture_2d"
+    ],
+    "organism.engine.graphics.core.vertex_buffer::VertexBuffer": [
+        "organism.engine.graphics.core.vertex_buffer::VertexBuffer/cleanup",
+        "organism.engine.graphics.core.vertex_buffer::VertexBuffer/init_gl",
+        "organism.engine.graphics.core.vertex_buffer::VertexBuffer/send_gl",
+        "organism.engine.graphics.core.vertex_buffer::VertexBuffer/update_gl"
+    ],
+    "organism.engine.graphics.core.vertex_model::VertexAttrib": [],
+    "organism.engine.graphics.core.vertex_model::VertexModel": [
+        "organism.engine.graphics.core.vertex_model::VertexModel/init_gl",
+        "organism.engine.graphics.core.vertex_model::VertexModel/with_attr"
+    ],
+    "organism.engine.graphics.viewport::Viewport": [
+        "organism.engine.graphics.viewport::Viewport/scale"
+    ],
+    "organism.engine.gui.core.auto_widget::AutoCollapse": [
+        "organism.engine.gui.core.auto_widget::AutoCollapse/render"
+    ],
+    "organism.engine.gui.core.auto_widget::AutoWidget": [
+        "organism.engine.gui.core.auto_widget::AutoWidget/_dataclass_widget",
+        "organism.engine.gui.core.auto_widget::AutoWidget/_dict_widget",
+        "organism.engine.gui.core.auto_widget::AutoWidget/get_model",
+        "organism.engine.gui.core.auto_widget::AutoWidget/get_widget",
+        "organism.engine.gui.core.auto_widget::AutoWidget/render"
+    ],
+    "organism.engine.gui.core.box::Box": [
+        "organism.engine.gui.core.box::Box/absolute"
+    ],
+    "organism.engine.gui.core.gui_painter::CustomWidget": [],
+    "organism.engine.gui.core.gui_painter::GuiPainter": [
+        "organism.engine.gui.core.gui_painter::GuiPainter/lifetime",
+        "organism.engine.gui.core.gui_painter::GuiPainter/sub_window",
+        "organism.engine.gui.core.gui_painter::GuiPainter/tooltip"
+    ],
+    "organism.engine.gui.core.gui_painter::WidgetBuilder": [
+        "organism.engine.gui.core.gui_painter::WidgetBuilder/__call__"
+    ],
+    "organism.engine.gui.core.style_editor::StyleEditor": [
+        "organism.engine.gui.core.style_editor::StyleEditor/render"
+    ],
+    "organism.engine.gui.features.timed::Timed": [
+        "organism.engine.gui.features.timed::Timed/render"
+    ],
+    "organism.engine.gui.features.tooltip::Tooltip": [
+        "organism.engine.gui.features.tooltip::Tooltip/render"
+    ],
+    "organism.engine.gui.features.window::Window": [
+        "organism.engine.gui.features.window::Window/fixed",
+        "organism.engine.gui.features.window::Window/minimal",
+        "organism.engine.gui.features.window::Window/no_background",
+        "organism.engine.gui.features.window::Window/no_scroll",
+        "organism.engine.gui.features.window::Window/no_title_bar",
+        "organism.engine.gui.features.window::Window/with_background",
+        "organism.engine.gui.features.window::Window/with_h_scroll",
+        "organism.engine.gui.features.window::Window/with_scroll",
+        "organism.engine.gui.features.window::Window/with_v_scroll"
+    ],
+    "organism.engine.gui.widgets.button::Button": [
+        "organism.engine.gui.widgets.button::Button/__post_init__",
+        "organism.engine.gui.widgets.button::Button/h_fill",
+        "organism.engine.gui.widgets.button::Button/render"
+    ],
+    "organism.engine.gui.widgets.button::ColorButton": [
+        "organism.engine.gui.widgets.button::ColorButton/h_fill",
+        "organism.engine.gui.widgets.button::ColorButton/render"
+    ],
+    "organism.engine.gui.widgets.checkbox::Checkbox": [
+        "organism.engine.gui.widgets.checkbox::Checkbox/render"
+    ],
+    "organism.engine.gui.widgets.combo::ComboBox": [
+        "organism.engine.gui.widgets.combo::ComboBox/render"
+    ],
+    "organism.engine.gui.widgets.group::Group": [
+        "organism.engine.gui.widgets.group::Group/render"
+    ],
+    "organism.engine.gui.widgets.horizontal::Horizontal": [],
+    "organism.engine.gui.widgets.list_box::ListBox": [
+        "organism.engine.gui.widgets.list_box::ListBox/render"
+    ],
+    "organism.engine.gui.widgets.progress_bar::ProgressBar": [
+        "organism.engine.gui.widgets.progress_bar::ProgressBar/progress_bar_with_left_aligned_text",
+        "organism.engine.gui.widgets.progress_bar::ProgressBar/render",
+        "organism.engine.gui.widgets.progress_bar::ProgressBar/vertical_bar"
+    ],
+    "organism.engine.gui.widgets.progress_bar::ProgressModel": [],
+    "organism.engine.gui.widgets.slider::SliderFloat": [
+        "organism.engine.gui.widgets.slider::SliderFloat/render"
+    ],
+    "organism.engine.gui.widgets.slider::SliderInt": [
+        "organism.engine.gui.widgets.slider::SliderInt/render"
+    ],
+    "organism.engine.gui.widgets.sub_window::SubWindow": [
+        "organism.engine.gui.widgets.sub_window::SubWindow/render"
+    ],
+    "organism.engine.gui.widgets.tab_widget::TabWidget": [
+        "organism.engine.gui.widgets.tab_widget::TabWidget/render"
+    ],
+    "organism.engine.gui.widgets.table_widget::TableWidget": [
+        "organism.engine.gui.widgets.table_widget::TableWidget/render"
+    ],
+    "organism.engine.gui.widgets.text::Text": [
+        "organism.engine.gui.widgets.text::Text/periodic",
+        "organism.engine.gui.widgets.text::Text/render"
+    ],
+    "organism.engine.gui.widgets.vertical::Vertical": [],
+    "organism.engine.profiler_service::ProfilerService": [
+        "organism.engine.profiler_service::ProfilerService/record"
+    ],
+    "organism.engine.services.event_service::EventService": [
+        "organism.engine.services.event_service::EventService/action_mapping",
+        "organism.engine.services.event_service::EventService/add_events",
+        "organism.engine.services.event_service::EventService/define_actions",
+        "organism.engine.services.event_service::EventService/event_binding",
+        "organism.engine.services.event_service::EventService/execute",
+        "organism.engine.services.event_service::EventService/remove_events"
+    ],
+    "organism.engine.services.game_logic_service::GameLogicService": [
+        "organism.engine.services.game_logic_service::GameLogicService/__init__",
+        "organism.engine.services.game_logic_service::GameLogicService/exit",
+        "organism.engine.services.game_logic_service::GameLogicService/new_game",
+        "organism.engine.services.game_logic_service::GameLogicService/option_menu",
+        "organism.engine.services.game_logic_service::GameLogicService/pause",
+        "organism.engine.services.game_logic_service::GameLogicService/resume",
+        "organism.engine.services.game_logic_service::GameLogicService/set_sim_status",
+        "organism.engine.services.game_logic_service::GameLogicService/switch_help"
+    ],
+    "organism.engine.services.game_state_service::GameStateService": [
+        "organism.engine.services.game_state_service::GameStateService/action_mapping",
+        "organism.engine.services.game_state_service::GameStateService/action_wrapper",
+        "organism.engine.services.game_state_service::GameStateService/configure",
+        "organism.engine.services.game_state_service::GameStateService/get_state",
+        "organism.engine.services.game_state_service::GameStateService/is_on_state",
+        "organism.engine.services.game_state_service::GameStateService/pop_state",
+        "organism.engine.services.game_state_service::GameStateService/push_state",
+        "organism.engine.services.game_state_service::GameStateService/switch_state"
+    ],
+    "organism.engine.services.gui_api::Gui": [
+        "organism.engine.services.gui_api::Gui/button",
+        "organism.engine.services.gui_api::Gui/checkbox",
+        "organism.engine.services.gui_api::Gui/group",
+        "organism.engine.services.gui_api::Gui/horizontal",
+        "organism.engine.services.gui_api::Gui/progress",
+        "organism.engine.services.gui_api::Gui/slider_float",
+        "organism.engine.services.gui_api::Gui/slider_int",
+        "organism.engine.services.gui_api::Gui/text"
+    ],
+    "organism.engine.services.gui_service::GuiService": [
+        "organism.engine.services.gui_service::GuiService/active_widgets",
+        "organism.engine.services.gui_service::GuiService/add_widget",
+        "organism.engine.services.gui_service::GuiService/popup",
+        "organism.engine.services.gui_service::GuiService/remove_widget"
+    ],
+    "organism.engine.services.text_service::TextService": [
+        "organism.engine.services.text_service::TextService/load",
+        "organism.engine.services.text_service::TextService/text"
+    ],
+    "organism.engine.shader_service::ShaderService": [
+        "organism.engine.shader_service::ShaderService/__init__",
+        "organism.engine.shader_service::ShaderService/load"
+    ],
+    "organism.engine.state.game_graph::GameGraph": [
+        "organism.engine.state.game_graph::GameGraph/__hash__"
+    ],
+    "organism.engine.state.game_state::GameState": [
+        "organism.engine.state.game_state::GameState/__init__",
+        "organism.engine.state.game_state::GameState/on_create",
+        "organism.engine.state.game_state::GameState/on_destroy",
+        "organism.engine.state.game_state::GameState/on_start",
+        "organism.engine.state.game_state::GameState/on_stop"
+    ],
+    "organism.engine.state.game_state_manager::GameStateManager": [
+        "organism.engine.state.game_state_manager::GameStateManager/__init__",
+        "organism.engine.state.game_state_manager::GameStateManager/_change_state",
+        "organism.engine.state.game_state_manager::GameStateManager/configure",
+        "organism.engine.state.game_state_manager::GameStateManager/get_state",
+        "organism.engine.state.game_state_manager::GameStateManager/is_on_state",
+        "organism.engine.state.game_state_manager::GameStateManager/pop_state",
+        "organism.engine.state.game_state_manager::GameStateManager/push_state",
+        "organism.engine.state.game_state_manager::GameStateManager/switch_state"
+    ],
+    "organism.engine.state.state_painter::StatePainter": [],
+    "organism.engine.window_manager::WindowManager": [],
+    "organism.game_content.config.biome_config::BiomeConfig": [],
+    "organism.game_content.config.config::MyConfig": [],
+    "organism.game_content.config.editor::Editor": [],
+    "organism.game_content.config.fluid_config::FluidConfig": [
+        "organism.game_content.config.fluid_config::FluidConfig/get_radius"
+    ],
+    "organism.game_content.config.gameplay::Gameplay": [],
+    "organism.game_content.config.graphic_config::GraphicConfig": [],
+    "organism.game_content.config.inputs::Inputs": [],
+    "organism.game_content.config.organism_config::OrganismConfig": [
+        "organism.game_content.config.organism_config::OrganismConfig/get_config"
+    ],
+    "organism.game_content.config.paths::Paths": [],
+    "organism.game_content.config.physic_config::PhysicConfig": [
+        "organism.game_content.config.physic_config::PhysicConfig/get_fluid_density"
+    ],
+    "organism.game_content.config.window_config::WindowConfig": [],
+    "organism.game_content.painters.ingame_datasource::IngameDatasource": [
+        "organism.game_content.painters.ingame_datasource::IngameDatasource/update"
+    ],
+    "organism.game_content.painters.painter_service::PainterService": [],
+    "organism.game_content.painters.painter_state::CustomPainterConfig": [],
+    "organism.game_content.painters.painter_state::PainterState": [],
+    "organism.game_content.sfx.sfx_library::SfxLibrary": [
+        "organism.game_content.sfx.sfx_library::SfxLibrary/__init__",
+        "organism.game_content.sfx.sfx_library::SfxLibrary/_on_shoot",
+        "organism.game_content.sfx.sfx_library::SfxLibrary/_on_toxin_collision",
+        "organism.game_content.sfx.sfx_library::SfxLibrary/shoot",
+        "organism.game_content.sfx.sfx_library::SfxLibrary/toxin_collision"
+    ],
+    "organism.game_content.sfx.sfx_service::SfxService": [
+        "organism.game_content.sfx.sfx_service::SfxService/__init__",
+        "organism.game_content.sfx.sfx_service::SfxService/apply",
+        "organism.game_content.sfx.sfx_service::SfxService/on_shoot",
+        "organism.game_content.sfx.sfx_service::SfxService/on_toxin_collision"
+    ],
+    "organism.gameplay.behaviors.action::Action": [],
+    "organism.gameplay.behaviors.action_service::ActionService": [
+        "organism.gameplay.behaviors.action_service::ActionService/auto_run",
+        "organism.gameplay.behaviors.action_service::ActionService/follow",
+        "organism.gameplay.behaviors.action_service::ActionService/move",
+        "organism.gameplay.behaviors.action_service::ActionService/rotate",
+        "organism.gameplay.behaviors.action_service::ActionService/sprint",
+        "organism.gameplay.behaviors.action_service::ActionService/tentacle_spawn",
+        "organism.gameplay.behaviors.action_service::ActionService/throw_fluid"
+    ],
+    "organism.gameplay.behaviors.behavior::Behavior": [],
+    "organism.gameplay.behaviors.behavior_service::BehaviorService": [
+        "organism.gameplay.behaviors.behavior_service::BehaviorService/compute_attractiveness",
+        "organism.gameplay.behaviors.behavior_service::BehaviorService/food_level",
+        "organism.gameplay.behaviors.behavior_service::BehaviorService/threat_level"
+    ],
+    "organism.gameplay.behaviors.brain.action_state::ActionState": [
+        "organism.gameplay.behaviors.brain.action_state::ActionState/activate",
+        "organism.gameplay.behaviors.brain.action_state::ActionState/get_power",
+        "organism.gameplay.behaviors.brain.action_state::ActionState/is_active",
+        "organism.gameplay.behaviors.brain.action_state::ActionState/throttle"
+    ],
+    "organism.gameplay.behaviors.brain.brain_state::BrainState": [],
+    "organism.gameplay.behaviors.brain.perception_state::PerceptionState": [
+        "organism.gameplay.behaviors.brain.perception_state::PerceptionState/__hash__",
+        "organism.gameplay.behaviors.brain.perception_state::PerceptionState/_on_begin",
+        "organism.gameplay.behaviors.brain.perception_state::PerceptionState/_on_separate",
+        "organism.gameplay.behaviors.brain.perception_state::PerceptionState/new_sensor",
+        "organism.gameplay.behaviors.brain.perception_state::PerceptionState/update"
+    ],
+    "organism.gameplay.behaviors.functions.auto_destroy::AutoDestroy": [],
+    "organism.gameplay.behaviors.functions.follow_target::FollowTarget": [],
+    "organism.gameplay.behaviors.functions.move::MoveAction": [],
+    "organism.gameplay.behaviors.functions.reservoir::Reservoir": [
+        "organism.gameplay.behaviors.functions.reservoir::Reservoir/__post_init__",
+        "organism.gameplay.behaviors.functions.reservoir::Reservoir/__repr__",
+        "organism.gameplay.behaviors.functions.reservoir::Reservoir/__str__",
+        "organism.gameplay.behaviors.functions.reservoir::Reservoir/add",
+        "organism.gameplay.behaviors.functions.reservoir::Reservoir/apply_regen",
+        "organism.gameplay.behaviors.functions.reservoir::Reservoir/consume_upto",
+        "organism.gameplay.behaviors.functions.reservoir::Reservoir/fill",
+        "organism.gameplay.behaviors.functions.reservoir::Reservoir/reset",
+        "organism.gameplay.behaviors.functions.reservoir::Reservoir/scale",
+        "organism.gameplay.behaviors.functions.reservoir::Reservoir/try_consume",
+        "organism.gameplay.behaviors.functions.reservoir::Reservoir/update_value"
+    ],
+    "organism.gameplay.behaviors.functions.rotate::RotateAction": [],
+    "organism.gameplay.behaviors.functions.shoot_action::ShootAction": [],
+    "organism.gameplay.behaviors.functions.sprint::Sprint": [],
+    "organism.gameplay.behaviors.functions.stock::Stock": [
+        "organism.gameplay.behaviors.functions.stock::Stock/refresh",
+        "organism.gameplay.behaviors.functions.stock::Stock/update_time"
+    ],
+    "organism.gameplay.behaviors.functions.utils::ShotConfig": [],
+    "organism.gameplay.behaviors.functions.utils::SourceSelector": [],
+    "organism.gameplay.behaviors.target.direction_target::DirectionTarget": [
+        "organism.gameplay.behaviors.target.direction_target::DirectionTarget/__post_init__"
+    ],
+    "organism.gameplay.behaviors.target.mouse_target::MouseTarget": [],
+    "organism.gameplay.behaviors.target.organism_target::OrganismTarget": [],
+    "organism.gameplay.behaviors.target.position_target::PositionTarget": [],
+    "organism.gameplay.behaviors.target.target::Target": [
+        "organism.gameplay.behaviors.target.target::Target/compute_direction",
+        "organism.gameplay.behaviors.target.target::Target/get_direction",
+        "organism.gameplay.behaviors.target.target::Target/get_target"
+    ],
+    "organism.gameplay.dna.dna_catalog_service::DnaCatalog": [],
+    "organism.gameplay.dna.dna_catalog_service::DnaCatalogService": [
+        "organism.gameplay.dna.dna_catalog_service::DnaCatalogService/__init__",
+        "organism.gameplay.dna.dna_catalog_service::DnaCatalogService/change_target",
+        "organism.gameplay.dna.dna_catalog_service::DnaCatalogService/delete",
+        "organism.gameplay.dna.dna_catalog_service::DnaCatalogService/iter_all",
+        "organism.gameplay.dna.dna_catalog_service::DnaCatalogService/iter_catalog",
+        "organism.gameplay.dna.dna_catalog_service::DnaCatalogService/iter_from_path",
+        "organism.gameplay.dna.dna_catalog_service::DnaCatalogService/iter_target",
+        "organism.gameplay.dna.dna_catalog_service::DnaCatalogService/load",
+        "organism.gameplay.dna.dna_catalog_service::DnaCatalogService/patch_all",
+        "organism.gameplay.dna.dna_catalog_service::DnaCatalogService/reload_last",
+        "organism.gameplay.dna.dna_catalog_service::DnaCatalogService/save"
+    ],
+    "organism.gameplay.dna.dna_editor_service::DnaEditorService": [
+        "organism.gameplay.dna.dna_editor_service::DnaEditorService/erase",
+        "organism.gameplay.dna.dna_editor_service::DnaEditorService/paint"
+    ],
+    "organism.gameplay.dna.dna_provider::DNAProvider": [
+        "organism.gameplay.dna.dna_provider::DNAProvider/__call__",
+        "organism.gameplay.dna.dna_provider::DNAProvider/__init__",
+        "organism.gameplay.dna.dna_provider::DNAProvider/from_criteria",
+        "organism.gameplay.dna.dna_provider::DNAProvider/with_radius"
+    ],
+    "organism.gameplay.dna.dna_service::DnaService": [
+        "organism.gameplay.dna.dna_service::DnaService/cluster_size",
+        "organism.gameplay.dna.dna_service::DnaService/fix_structure",
+        "organism.gameplay.dna.dna_service::DnaService/random_catalog",
+        "organism.gameplay.dna.dna_service::DnaService/random_external",
+        "organism.gameplay.dna.dna_service::DnaService/random_func",
+        "organism.gameplay.dna.dna_service::DnaService/randomize",
+        "organism.gameplay.dna.dna_service::DnaService/randomize_color",
+        "organism.gameplay.dna.dna_service::DnaService/randomize_simple"
+    ],
+    "organism.gameplay.dna.editor.dna_brush::DnaBrush": [
+        "organism.gameplay.dna.editor.dna_brush::DnaBrush/cycle_size",
+        "organism.gameplay.dna.editor.dna_brush::DnaBrush/cycle_tags"
+    ],
+    "organism.gameplay.dna.editor.tools.dna_multi_tool::DnaMultiTool": [
+        "organism.gameplay.dna.editor.tools.dna_multi_tool::DnaMultiTool/__post_init__",
+        "organism.gameplay.dna.editor.tools.dna_multi_tool::DnaMultiTool/dna_erase",
+        "organism.gameplay.dna.editor.tools.dna_multi_tool::DnaMultiTool/dna_paint"
+    ],
+    "organism.gameplay.dna.editor.tools.dna_tool::DnaTool": [
+        "organism.gameplay.dna.editor.tools.dna_tool::DnaTool/_edit",
+        "organism.gameplay.dna.editor.tools.dna_tool::DnaTool/get_brush_area",
+        "organism.gameplay.dna.editor.tools.dna_tool::DnaTool/target_dna",
+        "organism.gameplay.dna.editor.tools.dna_tool::DnaTool/try_consume"
+    ],
+    "organism.gameplay.dna.editor.tools.sculpting_tool::SculptingTool": [
+        "organism.gameplay.dna.editor.tools.sculpting_tool::SculptingTool/_erase_action"
+    ],
+    "organism.gameplay.dna.editor.tools.tag_tool::ColorTool": [],
+    "organism.gameplay.dna.editor.tools.tag_tool::TagTool": [],
+    "organism.gameplay.dna.graph.data_graph::DataGraph": [
+        "organism.gameplay.dna.graph.data_graph::DataGraph/__init__",
+        "organism.gameplay.dna.graph.data_graph::DataGraph/_new_node",
+        "organism.gameplay.dna.graph.data_graph::DataGraph/get_data",
+        "organism.gameplay.dna.graph.data_graph::DataGraph/group_by_cluster",
+        "organism.gameplay.dna.graph.data_graph::DataGraph/iter_data",
+        "organism.gameplay.dna.graph.data_graph::DataGraph/new_node",
+        "organism.gameplay.dna.graph.data_graph::DataGraph/new_node_with_value",
+        "organism.gameplay.dna.graph.data_graph::DataGraph/remove_node",
+        "organism.gameplay.dna.graph.data_graph::DataGraph/replace_cluster_with_atoms"
+    ],
+    "organism.gameplay.dna.graph.graph::Graph": [
+        "organism.gameplay.dna.graph.graph::Graph/__contains__",
+        "organism.gameplay.dna.graph.graph::Graph/__init__",
+        "organism.gameplay.dna.graph.graph::Graph/__repr__",
+        "organism.gameplay.dna.graph.graph::Graph/border_clusters",
+        "organism.gameplay.dna.graph.graph::Graph/cluster_number",
+        "organism.gameplay.dna.graph.graph::Graph/clusters_at",
+        "organism.gameplay.dna.graph.graph::Graph/connected",
+        "organism.gameplay.dna.graph.graph::Graph/edge_number",
+        "organism.gameplay.dna.graph.graph::Graph/get_intersecting_nodes",
+        "organism.gameplay.dna.graph.graph::Graph/new_edge",
+        "organism.gameplay.dna.graph.graph::Graph/new_node",
+        "organism.gameplay.dna.graph.graph::Graph/new_nodes",
+        "organism.gameplay.dna.graph.graph::Graph/remove_edge",
+        "organism.gameplay.dna.graph.graph::Graph/remove_node",
+        "organism.gameplay.dna.graph.graph::Graph/remove_nodes"
+    ],
+    "organism.gameplay.dna.graph.graph_algo::GraphAlgo": [],
+    "organism.gameplay.dna.graph.graph_editor::GraphEditor": [
+        "organism.gameplay.dna.graph.graph_editor::GraphEditor/__init__",
+        "organism.gameplay.dna.graph.graph_editor::GraphEditor/at",
+        "organism.gameplay.dna.graph.graph_editor::GraphEditor/at_closest",
+        "organism.gameplay.dna.graph.graph_editor::GraphEditor/dilate",
+        "organism.gameplay.dna.graph.graph_editor::GraphEditor/dilate_many",
+        "organism.gameplay.dna.graph.graph_editor::GraphEditor/erode",
+        "organism.gameplay.dna.graph.graph_editor::GraphEditor/fill",
+        "organism.gameplay.dna.graph.graph_editor::GraphEditor/fill_perimeter",
+        "organism.gameplay.dna.graph.graph_editor::GraphEditor/fill_radial",
+        "organism.gameplay.dna.graph.graph_editor::GraphEditor/matrix_shape",
+        "organism.gameplay.dna.graph.graph_editor::GraphEditor/move",
+        "organism.gameplay.dna.graph.graph_editor::GraphEditor/move_0",
+        "organism.gameplay.dna.graph.graph_editor::GraphEditor/move_1",
+        "organism.gameplay.dna.graph.graph_editor::GraphEditor/move_2",
+        "organism.gameplay.dna.graph.graph_editor::GraphEditor/pop",
+        "organism.gameplay.dna.graph.graph_editor::GraphEditor/push",
+        "organism.gameplay.dna.graph.graph_editor::GraphEditor/with_color",
+        "organism.gameplay.dna.graph.graph_editor::GraphEditor/write",
+        "organism.gameplay.dna.graph.graph_editor::GraphEditor/write_border",
+        "organism.gameplay.dna.graph.graph_editor::GraphEditor/write_path",
+        "organism.gameplay.dna.graph.graph_editor::GraphEditor/write_path_closest",
+        "organism.gameplay.dna.graph.graph_editor::GraphEditor/write_shape"
+    ],
+    "organism.gameplay.dna.graph.graph_editor::PainterContext": [],
+    "organism.gameplay.dna.graph.hex::Hex": [
+        "organism.gameplay.dna.graph.hex::Hex/__add__",
+        "organism.gameplay.dna.graph.hex::Hex/__eq__",
+        "organism.gameplay.dna.graph.hex::Hex/__mul__",
+        "organism.gameplay.dna.graph.hex::Hex/__repr__",
+        "organism.gameplay.dna.graph.hex::Hex/__sub__",
+        "organism.gameplay.dna.graph.hex::Hex/__truediv__",
+        "organism.gameplay.dna.graph.hex::Hex/cluster",
+        "organism.gameplay.dna.graph.hex::Hex/cluster_size",
+        "organism.gameplay.dna.graph.hex::Hex/euclidian_dist",
+        "organism.gameplay.dna.graph.hex::Hex/euclidian_dist1",
+        "organism.gameplay.dna.graph.hex::Hex/euclidian_dist2",
+        "organism.gameplay.dna.graph.hex::Hex/flood",
+        "organism.gameplay.dna.graph.hex::Hex/get_radius",
+        "organism.gameplay.dna.graph.hex::Hex/hex_closest",
+        "organism.gameplay.dna.graph.hex::Hex/hex_distance",
+        "organism.gameplay.dna.graph.hex::Hex/in_hex_range",
+        "organism.gameplay.dna.graph.hex::Hex/interpolate",
+        "organism.gameplay.dna.graph.hex::Hex/is_adjacent",
+        "organism.gameplay.dna.graph.hex::Hex/is_at_origin",
+        "organism.gameplay.dna.graph.hex::Hex/is_cluster_connected",
+        "organism.gameplay.dna.graph.hex::Hex/is_in_cluster",
+        "organism.gameplay.dna.graph.hex::Hex/mirror_x",
+        "organism.gameplay.dna.graph.hex::Hex/mirror_y",
+        "organism.gameplay.dna.graph.hex::Hex/same_center",
+        "organism.gameplay.dna.graph.hex::Hex/to_grid",
+        "organism.gameplay.dna.graph.hex::Hex/to_vec",
+        "organism.gameplay.dna.graph.hex::Hex/with_size"
+    ],
+    "organism.gameplay.dna.graph.hex_link::HexLink": [],
+    "organism.gameplay.dna.graph.plugins.autolink::AutoLink": [
+        "organism.gameplay.dna.graph.plugins.autolink::AutoLink/__init__",
+        "organism.gameplay.dna.graph.plugins.autolink::AutoLink/select"
+    ],
+    "organism.gameplay.dna.graph.plugins.edge_manager::EdgeManager": [
+        "organism.gameplay.dna.graph.plugins.edge_manager::EdgeManager/__init__",
+        "organism.gameplay.dna.graph.plugins.edge_manager::EdgeManager/connected",
+        "organism.gameplay.dna.graph.plugins.edge_manager::EdgeManager/edge_number",
+        "organism.gameplay.dna.graph.plugins.edge_manager::EdgeManager/new_edge",
+        "organism.gameplay.dna.graph.plugins.edge_manager::EdgeManager/remove_edge"
+    ],
+    "organism.gameplay.dna.graph.plugins.graph_plugin::GraphPlugin": [],
+    "organism.gameplay.dna.graph.plugins.topology::Topology": [
+        "organism.gameplay.dna.graph.plugins.topology::Topology/__init__",
+        "organism.gameplay.dna.graph.plugins.topology::Topology/_is_border",
+        "organism.gameplay.dna.graph.plugins.topology::Topology/_is_external",
+        "organism.gameplay.dna.graph.plugins.topology::Topology/_on_add_update",
+        "organism.gameplay.dna.graph.plugins.topology::Topology/_on_remove_update",
+        "organism.gameplay.dna.graph.plugins.topology::Topology/_update_node"
+    ],
+    "organism.gameplay.dna.model.body_dna::DamageDNA": [],
+    "organism.gameplay.dna.model.body_dna::EnergyDNA": [],
+    "organism.gameplay.dna.model.body_dna::IntegrityDNA": [],
+    "organism.gameplay.dna.model.body_dna::PhysicsDNA": [],
+    "organism.gameplay.dna.model.body_dna::ShooterDNA": [],
+    "organism.gameplay.dna.model.cell_dna::CellDna": [
+        "organism.gameplay.dna.model.cell_dna::CellDna/__post_init__",
+        "organism.gameplay.dna.model.cell_dna::CellDna/set_tag"
+    ],
+    "organism.gameplay.dna.model.cell_dna_stats::CellDnaStats": [
+        "organism.gameplay.dna.model.cell_dna_stats::CellDnaStats/final_color",
+        "organism.gameplay.dna.model.cell_dna_stats::CellDnaStats/random_color"
+    ],
+    "organism.gameplay.dna.model.color_dna::ColorDNA": [
+        "organism.gameplay.dna.model.color_dna::ColorDNA/cell_color",
+        "organism.gameplay.dna.model.color_dna::ColorDNA/fluid_color"
+    ],
+    "organism.gameplay.dna.model.computed_dna_stats::ComputedDnaStats": [],
+    "organism.gameplay.dna.model.helix_dna::Bases": [],
+    "organism.gameplay.dna.model.helix_dna::DNASequence": [
+        "organism.gameplay.dna.model.helix_dna::DNASequence/__len__",
+        "organism.gameplay.dna.model.helix_dna::DNASequence/__repr__",
+        "organism.gameplay.dna.model.helix_dna::DNASequence/mutate"
+    ],
+    "organism.gameplay.dna.model.helix_dna::DnaHelix": [
+        "organism.gameplay.dna.model.helix_dna::DnaHelix/__post_init__",
+        "organism.gameplay.dna.model.helix_dna::DnaHelix/__repr__"
+    ],
+    "organism.gameplay.dna.model.organism_dna::OrganismDNA": [
+        "organism.gameplay.dna.model.organism_dna::OrganismDNA/__eq__",
+        "organism.gameplay.dna.model.organism_dna::OrganismDNA/__hash__",
+        "organism.gameplay.dna.model.organism_dna::OrganismDNA/clone",
+        "organism.gameplay.dna.model.organism_dna::OrganismDNA/count",
+        "organism.gameplay.dna.model.organism_dna::OrganismDNA/create_at",
+        "organism.gameplay.dna.model.organism_dna::OrganismDNA/dna_at",
+        "organism.gameplay.dna.model.organism_dna::OrganismDNA/expected_distance",
+        "organism.gameplay.dna.model.organism_dna::OrganismDNA/expected_pos",
+        "organism.gameplay.dna.model.organism_dna::OrganismDNA/expected_radius",
+        "organism.gameplay.dna.model.organism_dna::OrganismDNA/find",
+        "organism.gameplay.dna.model.organism_dna::OrganismDNA/remove_at",
+        "organism.gameplay.dna.model.organism_dna::OrganismDNA/reset",
+        "organism.gameplay.dna.model.organism_dna::OrganismDNA/signature"
+    ],
+    "organism.gameplay.dna.serializer.dna_patch::DNAPatch": [],
+    "organism.gameplay.dna.serializer.dna_serializer::DNASerializer": [
+        "organism.gameplay.dna.serializer.dna_serializer::DNASerializer/check_dna",
+        "organism.gameplay.dna.serializer.dna_serializer::DNASerializer/decode",
+        "organism.gameplay.dna.serializer.dna_serializer::DNASerializer/encode"
+    ],
+    "organism.gameplay.dna.serializer.graph_serializer::GraphSerializer": [
+        "organism.gameplay.dna.serializer.graph_serializer::GraphSerializer/graph_decode",
+        "organism.gameplay.dna.serializer.graph_serializer::GraphSerializer/graph_encode"
+    ],
+    "organism.gameplay.gaia.biomes.biome::Biome": [
+        "organism.gameplay.gaia.biomes.biome::Biome/__eq__",
+        "organism.gameplay.gaia.biomes.biome::Biome/__hash__",
+        "organism.gameplay.gaia.biomes.biome::Biome/__repr__",
+        "organism.gameplay.gaia.biomes.biome::Biome/__str__",
+        "organism.gameplay.gaia.biomes.biome::Biome/save",
+        "organism.gameplay.gaia.biomes.biome::Biome/spawn_hostile",
+        "organism.gameplay.gaia.biomes.biome::Biome/spawn_neutral"
+    ],
+    "organism.gameplay.gaia.biomes.biome::BiomeConfig": [],
+    "organism.gameplay.gaia.biomes.biome::BiomeStats": [],
+    "organism.gameplay.gaia.biomes.biome_service::BiomeService": [
+        "organism.gameplay.gaia.biomes.biome_service::BiomeService/__init__",
+        "organism.gameplay.gaia.biomes.biome_service::BiomeService/_get_slots",
+        "organism.gameplay.gaia.biomes.biome_service::BiomeService/clear_current_slots",
+        "organism.gameplay.gaia.biomes.biome_service::BiomeService/configure",
+        "organism.gameplay.gaia.biomes.biome_service::BiomeService/get_biome_at",
+        "organism.gameplay.gaia.biomes.biome_service::BiomeService/get_biome_coord",
+        "organism.gameplay.gaia.biomes.biome_service::BiomeService/get_current_biome",
+        "organism.gameplay.gaia.biomes.biome_service::BiomeService/get_current_stats",
+        "organism.gameplay.gaia.biomes.biome_service::BiomeService/slot_position",
+        "organism.gameplay.gaia.biomes.biome_service::BiomeService/slot_random_position",
+        "organism.gameplay.gaia.biomes.biome_service::BiomeService/update_biome"
+    ],
+    "organism.gameplay.gaia.biomes.biome_update::BiomeUpdate": [
+        "organism.gameplay.gaia.biomes.biome_update::BiomeUpdate/__repr__",
+        "organism.gameplay.gaia.biomes.biome_update::BiomeUpdate/__str__",
+        "organism.gameplay.gaia.biomes.biome_update::BiomeUpdate/update_with"
+    ],
+    "organism.gameplay.gaia.biomes.spawner::Spawner": [
+        "organism.gameplay.gaia.biomes.spawner::Spawner/random_position",
+        "organism.gameplay.gaia.biomes.spawner::Spawner/size_variation",
+        "organism.gameplay.gaia.biomes.spawner::Spawner/target_size"
+    ],
+    "organism.gameplay.gaia.cell.cell::Cell": [
+        "organism.gameplay.gaia.cell.cell::Cell/__eq__",
+        "organism.gameplay.gaia.cell.cell::Cell/__hash__",
+        "organism.gameplay.gaia.cell.cell::Cell/__post_init__",
+        "organism.gameplay.gaia.cell.cell::Cell/__repr__",
+        "organism.gameplay.gaia.cell.cell::Cell/kill"
+    ],
+    "organism.gameplay.gaia.cell.cell_service::CellService": [
+        "organism.gameplay.gaia.cell.cell_service::CellService/connect",
+        "organism.gameplay.gaia.cell.cell_service::CellService/delete_cell",
+        "organism.gameplay.gaia.cell.cell_service::CellService/new_bone",
+        "organism.gameplay.gaia.cell.cell_service::CellService/new_cell",
+        "organism.gameplay.gaia.cell.cell_service::CellService/update_connections"
+    ],
+    "organism.gameplay.gaia.cell.cell_tag::CellTag": [
+        "organism.gameplay.gaia.cell.cell_tag::CellTag/__repr__",
+        "organism.gameplay.gaia.cell.cell_tag::CellTag/translate"
+    ],
+    "organism.gameplay.gaia.collision_service::CollisionService": [
+        "organism.gameplay.gaia.collision_service::CollisionService/__init__",
+        "organism.gameplay.gaia.collision_service::CollisionService/new_contact",
+        "organism.gameplay.gaia.collision_service::CollisionService/register_handler",
+        "organism.gameplay.gaia.collision_service::CollisionService/register_sensor",
+        "organism.gameplay.gaia.collision_service::CollisionService/resolve_all"
+    ],
+    "organism.gameplay.gaia.collision_service::CollisionStats": [
+        "organism.gameplay.gaia.collision_service::CollisionStats/__repr__",
+        "organism.gameplay.gaia.collision_service::CollisionStats/clear",
+        "organism.gameplay.gaia.collision_service::CollisionStats/copy_from"
+    ],
+    "organism.gameplay.gaia.core.collision.collision_groups::GroupService": [
+        "organism.gameplay.gaia.core.collision.collision_groups::GroupService/__init__",
+        "organism.gameplay.gaia.core.collision.collision_groups::GroupService/all_categories",
+        "organism.gameplay.gaia.core.collision.collision_groups::GroupService/all_groups",
+        "organism.gameplay.gaia.core.collision.collision_groups::GroupService/all_masks",
+        "organism.gameplay.gaia.core.collision.collision_groups::GroupService/collision_type",
+        "organism.gameplay.gaia.core.collision.collision_groups::GroupService/other_group",
+        "organism.gameplay.gaia.core.collision.collision_groups::GroupService/tag_group",
+        "organism.gameplay.gaia.core.collision.collision_groups::GroupService/tags_group"
+    ],
+    "organism.gameplay.gaia.core.collision.collision_handler::CollisionHandler": [
+        "organism.gameplay.gaia.core.collision.collision_handler::CollisionHandler/with_groups"
+    ],
+    "organism.gameplay.gaia.core.collision.collision_handler::GroupMatching": [],
+    "organism.gameplay.gaia.core.collision.tags::Tags": [],
+    "organism.gameplay.gaia.core.gaia::Gaia": [
+        "organism.gameplay.gaia.core.gaia::Gaia/__init__",
+        "organism.gameplay.gaia.core.gaia::Gaia/reset"
+    ],
+    "organism.gameplay.gaia.core.grid_area::GArea": [
+        "organism.gameplay.gaia.core.grid_area::GArea/__eq__",
+        "organism.gameplay.gaia.core.grid_area::GArea/draw_circle",
+        "organism.gameplay.gaia.core.grid_area::GArea/synchronize",
+        "organism.gameplay.gaia.core.grid_area::GArea/synchronize_area"
+    ],
+    "organism.gameplay.gaia.core.grid_cell::GCell": [
+        "organism.gameplay.gaia.core.grid_cell::GCell/areas_in_range",
+        "organism.gameplay.gaia.core.grid_cell::GCell/pos_area_to_world",
+        "organism.gameplay.gaia.core.grid_cell::GCell/pos_world_to_area",
+        "organism.gameplay.gaia.core.grid_cell::GCell/size_area_to_world",
+        "organism.gameplay.gaia.core.grid_cell::GCell/size_world_to_area",
+        "organism.gameplay.gaia.core.grid_cell::GCell/translate"
+    ],
+    "organism.gameplay.gaia.core.grid_content::GContent": [
+        "organism.gameplay.gaia.core.grid_content::GContent/create_handler",
+        "organism.gameplay.gaia.core.grid_content::GContent/destroy",
+        "organism.gameplay.gaia.core.grid_content::GContent/destroy_handler",
+        "organism.gameplay.gaia.core.grid_content::GContent/full_shape",
+        "organism.gameplay.gaia.core.grid_content::GContent/is_empty_terrain",
+        "organism.gameplay.gaia.core.grid_content::GContent/register",
+        "organism.gameplay.gaia.core.grid_content::GContent/synchronize_area",
+        "organism.gameplay.gaia.core.grid_content::GContent/update_buffer",
+        "organism.gameplay.gaia.core.grid_content::GContent/update_terrain"
+    ],
+    "organism.gameplay.gaia.core.grid_gaia::GridGaia": [
+        "organism.gameplay.gaia.core.grid_gaia::GridGaia/area_at",
+        "organism.gameplay.gaia.core.grid_gaia::GridGaia/area_at_pos",
+        "organism.gameplay.gaia.core.grid_gaia::GridGaia/area_id_at",
+        "organism.gameplay.gaia.core.grid_gaia::GridGaia/del_item",
+        "organism.gameplay.gaia.core.grid_gaia::GridGaia/draw_circle",
+        "organism.gameplay.gaia.core.grid_gaia::GridGaia/find_at",
+        "organism.gameplay.gaia.core.grid_gaia::GridGaia/iter_items",
+        "organism.gameplay.gaia.core.grid_gaia::GridGaia/new_item",
+        "organism.gameplay.gaia.core.grid_gaia::GridGaia/signature",
+        "organism.gameplay.gaia.core.grid_gaia::GridGaia/update_shapes"
+    ],
+    "organism.gameplay.gaia.editor.gaia_brush::GaiaBrush": [
+        "organism.gameplay.gaia.editor.gaia_brush::GaiaBrush/cycle_size",
+        "organism.gameplay.gaia.editor.gaia_brush::GaiaBrush/cycle_tags"
+    ],
+    "organism.gameplay.gaia.editor.tools.gaia_item_tool::GaiaItemTool": [
+        "organism.gameplay.gaia.editor.tools.gaia_item_tool::GaiaItemTool/erase",
+        "organism.gameplay.gaia.editor.tools.gaia_item_tool::GaiaItemTool/paint"
+    ],
+    "organism.gameplay.gaia.editor.tools.gaia_multi_tool::GaiaMultiTool": [
+        "organism.gameplay.gaia.editor.tools.gaia_multi_tool::GaiaMultiTool/__post_init__"
+    ],
+    "organism.gameplay.gaia.editor.tools.gaia_tool::GaiaTool": [
+        "organism.gameplay.gaia.editor.tools.gaia_tool::GaiaTool/erase",
+        "organism.gameplay.gaia.editor.tools.gaia_tool::GaiaTool/paint",
+        "organism.gameplay.gaia.editor.tools.gaia_tool::GaiaTool/target_gaia"
+    ],
+    "organism.gameplay.gaia.editor.tools.terrain_tool::TerrainTool": [
+        "organism.gameplay.gaia.editor.tools.terrain_tool::TerrainTool/erase",
+        "organism.gameplay.gaia.editor.tools.terrain_tool::TerrainTool/paint"
+    ],
+    "organism.gameplay.gaia.fluid.fluid::Fluid": [
+        "organism.gameplay.gaia.fluid.fluid::Fluid/__eq__",
+        "organism.gameplay.gaia.fluid.fluid::Fluid/__hash__",
+        "organism.gameplay.gaia.fluid.fluid::Fluid/__post_init__",
+        "organism.gameplay.gaia.fluid.fluid::Fluid/__repr__",
+        "organism.gameplay.gaia.fluid.fluid::Fluid/remove_lifetime"
+    ],
+    "organism.gameplay.gaia.fluid.fluid_service::FluidService": [
+        "organism.gameplay.gaia.fluid.fluid_service::FluidService/destroy_it",
+        "organism.gameplay.gaia.fluid.fluid_service::FluidService/new_blood",
+        "organism.gameplay.gaia.fluid.fluid_service::FluidService/new_fluid"
+    ],
+    "organism.gameplay.gaia.fluid.fluid_tag::FluidTag": [
+        "organism.gameplay.gaia.fluid.fluid_tag::FluidTag/color",
+        "organism.gameplay.gaia.fluid.fluid_tag::FluidTag/translate"
+    ],
+    "organism.gameplay.gaia.fluid.lifetime_2::Lifetime2": [
+        "organism.gameplay.gaia.fluid.lifetime_2::Lifetime2/__post_init__",
+        "organism.gameplay.gaia.fluid.lifetime_2::Lifetime2/remove_lifetime"
+    ],
+    "organism.gameplay.gaia.gaia_catalog_service::GaiaCatalogService": [
+        "organism.gameplay.gaia.gaia_catalog_service::GaiaCatalogService/__init__",
+        "organism.gameplay.gaia.gaia_catalog_service::GaiaCatalogService/delete",
+        "organism.gameplay.gaia.gaia_catalog_service::GaiaCatalogService/iter_all",
+        "organism.gameplay.gaia.gaia_catalog_service::GaiaCatalogService/iter_from_path",
+        "organism.gameplay.gaia.gaia_catalog_service::GaiaCatalogService/iter_target",
+        "organism.gameplay.gaia.gaia_catalog_service::GaiaCatalogService/load",
+        "organism.gameplay.gaia.gaia_catalog_service::GaiaCatalogService/patch_all",
+        "organism.gameplay.gaia.gaia_catalog_service::GaiaCatalogService/reload",
+        "organism.gameplay.gaia.gaia_catalog_service::GaiaCatalogService/save",
+        "organism.gameplay.gaia.gaia_catalog_service::GaiaCatalogService/save_current"
+    ],
+    "organism.gameplay.gaia.gaia_editor_service::GaiaEditorService": [
+        "organism.gameplay.gaia.gaia_editor_service::GaiaEditorService/erase",
+        "organism.gameplay.gaia.gaia_editor_service::GaiaEditorService/paint"
+    ],
+    "organism.gameplay.gaia.gaia_item.gaia_item::GaiaItem": [
+        "organism.gameplay.gaia.gaia_item.gaia_item::GaiaItem/__post_init__"
+    ],
+    "organism.gameplay.gaia.gaia_item.gaia_item_service::GaiaItemService": [
+        "organism.gameplay.gaia.gaia_item.gaia_item_service::GaiaItemService/destroy_it",
+        "organism.gameplay.gaia.gaia_item.gaia_item_service::GaiaItemService/spawn_item"
+    ],
+    "organism.gameplay.gaia.gaia_item.item_tag::ItemTag": [
+        "organism.gameplay.gaia.gaia_item.item_tag::ItemTag/color",
+        "organism.gameplay.gaia.gaia_item.item_tag::ItemTag/translate"
+    ],
+    "organism.gameplay.gaia.gaia_service::GaiaService": [
+        "organism.gameplay.gaia.gaia_service::GaiaService/__init__",
+        "organism.gameplay.gaia.gaia_service::GaiaService/destroy_organism",
+        "organism.gameplay.gaia.gaia_service::GaiaService/invalidate",
+        "organism.gameplay.gaia.gaia_service::GaiaService/iter_items",
+        "organism.gameplay.gaia.gaia_service::GaiaService/iter_organisms",
+        "organism.gameplay.gaia.gaia_service::GaiaService/iter_terrain",
+        "organism.gameplay.gaia.gaia_service::GaiaService/new_organism",
+        "organism.gameplay.gaia.gaia_service::GaiaService/reset",
+        "organism.gameplay.gaia.gaia_service::GaiaService/update",
+        "organism.gameplay.gaia.gaia_service::GaiaService/update_shapes"
+    ],
+    "organism.gameplay.gaia.particle.particle::Particle": [
+        "organism.gameplay.gaia.particle.particle::Particle/__post_init__",
+        "organism.gameplay.gaia.particle.particle::Particle/remove_lifetime"
+    ],
+    "organism.gameplay.gaia.particle.particle_service::ParticleService": [
+        "organism.gameplay.gaia.particle.particle_service::ParticleService/destroy_it",
+        "organism.gameplay.gaia.particle.particle_service::ParticleService/spawn_item"
+    ],
+    "organism.gameplay.gaia.powerup.powerup::Powerup": [
+        "organism.gameplay.gaia.powerup.powerup::Powerup/__eq__",
+        "organism.gameplay.gaia.powerup.powerup::Powerup/__hash__",
+        "organism.gameplay.gaia.powerup.powerup::Powerup/__post_init__",
+        "organism.gameplay.gaia.powerup.powerup::Powerup/__repr__",
+        "organism.gameplay.gaia.powerup.powerup::Powerup/remove_lifetime"
+    ],
+    "organism.gameplay.gaia.powerup.powerup_service::PowerupService": [
+        "organism.gameplay.gaia.powerup.powerup_service::PowerupService/destroy_it",
+        "organism.gameplay.gaia.powerup.powerup_service::PowerupService/new_powerup"
+    ],
+    "organism.gameplay.gaia.powerup.powerup_tag::PowerupTag": [
+        "organism.gameplay.gaia.powerup.powerup_tag::PowerupTag/get_color",
+        "organism.gameplay.gaia.powerup.powerup_tag::PowerupTag/translate"
+    ],
+    "organism.gameplay.gaia.serializer.area_serializer::AreaSerializer": [
+        "organism.gameplay.gaia.serializer.area_serializer::AreaSerializer/decode",
+        "organism.gameplay.gaia.serializer.area_serializer::AreaSerializer/encode"
+    ],
+    "organism.gameplay.gaia.serializer.gaia_item_serializer::GaiaItemSerializer": [
+        "organism.gameplay.gaia.serializer.gaia_item_serializer::GaiaItemSerializer/decode",
+        "organism.gameplay.gaia.serializer.gaia_item_serializer::GaiaItemSerializer/encode"
+    ],
+    "organism.gameplay.gaia.serializer.gaia_serializer::GaiaSerializer": [
+        "organism.gameplay.gaia.serializer.gaia_serializer::GaiaSerializer/decode",
+        "organism.gameplay.gaia.serializer.gaia_serializer::GaiaSerializer/encode"
+    ],
+    "organism.gameplay.gaia.serializer.terrain_serializer::TerrainSerializer": [
+        "organism.gameplay.gaia.serializer.terrain_serializer::TerrainSerializer/decode",
+        "organism.gameplay.gaia.serializer.terrain_serializer::TerrainSerializer/encode"
+    ],
+    "organism.gameplay.gaia.terrain.terrain_service::TerrainService": [
+        "organism.gameplay.gaia.terrain.terrain_service::TerrainService/destroy_it",
+        "organism.gameplay.gaia.terrain.terrain_service::TerrainService/spawn_item"
+    ],
+    "organism.gameplay.organism.creatures::Creatures": [],
+    "organism.gameplay.organism.metabolim_service::MetabolismService": [
+        "organism.gameplay.organism.metabolim_service::MetabolismService/on_cell_destruction",
+        "organism.gameplay.organism.metabolim_service::MetabolismService/on_integrity_change",
+        "organism.gameplay.organism.metabolim_service::MetabolismService/on_link_destruction"
+    ],
+    "organism.gameplay.organism.model.cell_index::CellIndex": [
+        "organism.gameplay.organism.model.cell_index::CellIndex/add_cell",
+        "organism.gameplay.organism.model.cell_index::CellIndex/all_cells",
+        "organism.gameplay.organism.model.cell_index::CellIndex/discard_cell",
+        "organism.gameplay.organism.model.cell_index::CellIndex/get_cells",
+        "organism.gameplay.organism.model.cell_index::CellIndex/is_empty"
+    ],
+    "organism.gameplay.organism.model.faction::Faction": [],
+    "organism.gameplay.organism.model.organism::Organism": [
+        "organism.gameplay.organism.model.organism::Organism/__hash__",
+        "organism.gameplay.organism.model.organism::Organism/__post_init__",
+        "organism.gameplay.organism.model.organism::Organism/_invalidate",
+        "organism.gameplay.organism.model.organism::Organism/cell_at",
+        "organism.gameplay.organism.model.organism::Organism/count_cells",
+        "organism.gameplay.organism.model.organism::Organism/expected_pos",
+        "organism.gameplay.organism.model.organism::Organism/get_cells",
+        "organism.gameplay.organism.model.organism::Organism/is_ready_to_be_removed",
+        "organism.gameplay.organism.model.organism::Organism/kill",
+        "organism.gameplay.organism.model.organism::Organism/move_to",
+        "organism.gameplay.organism.model.organism::Organism/on_new_cell",
+        "organism.gameplay.organism.model.organism::Organism/on_remove_cell",
+        "organism.gameplay.organism.model.organism::Organism/refresh",
+        "organism.gameplay.organism.model.organism::Organism/rotate",
+        "organism.gameplay.organism.model.organism::Organism/translate"
+    ],
+    "organism.gameplay.organism.model.organism_stats::OrganismStats": [
+        "organism.gameplay.organism.model.organism_stats::OrganismStats/age",
+        "organism.gameplay.organism.model.organism_stats::OrganismStats/mark_as_dead_part"
+    ],
+    "organism.gameplay.organism.organism_service::OrganismService": [
+        "organism.gameplay.organism.organism_service::OrganismService/random_rotation",
+        "organism.gameplay.organism.organism_service::OrganismService/regrow",
+        "organism.gameplay.organism.organism_service::OrganismService/spawn_from_dna",
+        "organism.gameplay.organism.organism_service::OrganismService/spawn_from_spore"
+    ],
+    "organism.gameplay.organism.organism_stat_service::OrganismStatService": [
+        "organism.gameplay.organism.organism_stat_service::OrganismStatService/angle_average",
+        "organism.gameplay.organism.organism_stat_service::OrganismStatService/compute_direction"
+    ],
+    "organism.gameplay.organism.position_finder::PositionFinder": [
+        "organism.gameplay.organism.position_finder::PositionFinder/__init__",
+        "organism.gameplay.organism.position_finder::PositionFinder/expected_pos",
+        "organism.gameplay.organism.position_finder::PositionFinder/expected_triangle",
+        "organism.gameplay.organism.position_finder::PositionFinder/find_adjacents",
+        "organism.gameplay.organism.position_finder::PositionFinder/find_triangles",
+        "organism.gameplay.organism.position_finder::PositionFinder/real_pos",
+        "organism.gameplay.organism.position_finder::PositionFinder/real_triangle"
+    ],
+    "organism.gameplay.organism.transform_service::TransformService": [
+        "organism.gameplay.organism.transform_service::TransformService/fix_cells",
+        "organism.gameplay.organism.transform_service::TransformService/fix_cells_absolute",
+        "organism.gameplay.organism.transform_service::TransformService/split_components"
+    ],
+    "organism.gameplay.rules.behaviors.avatar_behavior::AvatarBehavior": [
+        "organism.gameplay.rules.behaviors.avatar_behavior::AvatarBehavior/update"
+    ],
+    "organism.gameplay.rules.behaviors.blocks.attack_behavior::AttackBehavior": [],
+    "organism.gameplay.rules.behaviors.blocks.move_behavior::MoveBehavior": [],
+    "organism.gameplay.rules.behaviors.default_attack_target::DefaultAttackTarget": [
+        "organism.gameplay.rules.behaviors.default_attack_target::DefaultAttackTarget/get_target"
+    ],
+    "organism.gameplay.rules.behaviors.default_behavior::DefaultBehavior": [],
+    "organism.gameplay.rules.behaviors.default_move_target::DefaultMoveTarget": [
+        "organism.gameplay.rules.behaviors.default_move_target::DefaultMoveTarget/get_target"
+    ],
+    "organism.gameplay.rules.behaviors.target_provider::TargetProvider": [],
+    "organism.gameplay.rules.damages.damage::Damage": [],
+    "organism.gameplay.rules.damages.damage_service::DamageService": [
+        "organism.gameplay.rules.damages.damage_service::DamageService/apply",
+        "organism.gameplay.rules.damages.damage_service::DamageService/eater_damage",
+        "organism.gameplay.rules.damages.damage_service::DamageService/projectile_damage",
+        "organism.gameplay.rules.damages.damage_service::DamageService/update_player_stat"
+    ],
+    "organism.gameplay.rules.physics.body.body_config::BodyConfig": [],
+    "organism.gameplay.rules.physics.body.body_config::BodyType": [],
+    "organism.gameplay.rules.physics.body.body_config::CollisionMask": [],
+    "organism.gameplay.rules.physics.body.body_wrap::BodyWrap": [
+        "organism.gameplay.rules.physics.body.body_wrap::BodyWrap/__eq__",
+        "organism.gameplay.rules.physics.body.body_wrap::BodyWrap/__hash__",
+        "organism.gameplay.rules.physics.body.body_wrap::BodyWrap/__post_init__",
+        "organism.gameplay.rules.physics.body.body_wrap::BodyWrap/attach",
+        "organism.gameplay.rules.physics.body.body_wrap::BodyWrap/cast_as",
+        "organism.gameplay.rules.physics.body.body_wrap::BodyWrap/has_data",
+        "organism.gameplay.rules.physics.body.body_wrap::BodyWrap/set_radius",
+        "organism.gameplay.rules.physics.body.body_wrap::BodyWrap/translate",
+        "organism.gameplay.rules.physics.body.body_wrap::BodyWrap/update_body",
+        "organism.gameplay.rules.physics.body.body_wrap::BodyWrap/update_pos",
+        "organism.gameplay.rules.physics.body.body_wrap::BodyWrap/update_speed",
+        "organism.gameplay.rules.physics.body.body_wrap::BodyWrap/with_physics"
+    ],
+    "organism.gameplay.rules.physics.body.constraint_type::ConstraintType": [
+        "organism.gameplay.rules.physics.body.constraint_type::ConstraintType/build",
+        "organism.gameplay.rules.physics.body.constraint_type::ConstraintType/compute_softness",
+        "organism.gameplay.rules.physics.body.constraint_type::ConstraintType/compute_stiffness"
+    ],
+    "organism.gameplay.rules.physics.body_service::BodyService": [
+        "organism.gameplay.rules.physics.body_service::BodyService/setup_shape_collisions"
+    ],
+    "organism.gameplay.rules.physics.physic_service::PhysicService": [
+        "organism.gameplay.rules.physics.physic_service::PhysicService/__init__",
+        "organism.gameplay.rules.physics.physic_service::PhysicService/configure_world",
+        "organism.gameplay.rules.physics.physic_service::PhysicService/get_world",
+        "organism.gameplay.rules.physics.physic_service::PhysicService/select_all",
+        "organism.gameplay.rules.physics.physic_service::PhysicService/select_box",
+        "organism.gameplay.rules.physics.physic_service::PhysicService/update_cache"
+    ],
+    "organism.gameplay.rules.physics.world::World": [
+        "organism.gameplay.rules.physics.world::World/__post_init__",
+        "organism.gameplay.rules.physics.world::World/_create",
+        "organism.gameplay.rules.physics.world::World/_destroy",
+        "organism.gameplay.rules.physics.world::World/_switch",
+        "organism.gameplay.rules.physics.world::World/cleanup",
+        "organism.gameplay.rules.physics.world::World/create_constraint",
+        "organism.gameplay.rules.physics.world::World/destroy_constraints",
+        "organism.gameplay.rules.physics.world::World/new_sensor",
+        "organism.gameplay.rules.physics.world::World/register_create",
+        "organism.gameplay.rules.physics.world::World/register_destroy",
+        "organism.gameplay.rules.physics.world::World/register_switch"
+    ],
+    "organism.gameplay.rules.rules_service::RulesService": [
+        "organism.gameplay.rules.rules_service::RulesService/compute_stats"
+    ],
+    "organism.gameplay.tool::Edit": [],
+    "organism.gameplay.tool::Tool": [
+        "organism.gameplay.tool::Tool/__repr__",
+        "organism.gameplay.tool::Tool/__str__"
+    ],
+    "organism.player.player::Player": [],
+    "organism.player.player_service::PlayerService": [
+        "organism.player.player_service::PlayerService/auto_break",
+        "organism.player.player_service::PlayerService/auto_fix",
+        "organism.player.player_service::PlayerService/auto_kill",
+        "organism.player.player_service::PlayerService/get_dna",
+        "organism.player.player_service::PlayerService/get_integrity",
+        "organism.player.player_service::PlayerService/get_organism",
+        "organism.player.player_service::PlayerService/get_player",
+        "organism.player.player_service::PlayerService/get_player_pos",
+        "organism.player.player_service::PlayerService/get_stock",
+        "organism.player.player_service::PlayerService/reload",
+        "organism.player.player_service::PlayerService/respawn",
+        "organism.player.player_service::PlayerService/save_player",
+        "organism.player.player_service::PlayerService/try_consume_dna"
+    ],
+    "organism.player.quest::KillTask": [],
+    "organism.player.quest::Quest": [],
+    "organism.player.quest::QuestStatus": [],
+    "organism.player.quest::Task": [],
+    "organism.player.quest_service::QuestService": [
+        "organism.player.quest_service::QuestService/fail",
+        "organism.player.quest_service::QuestService/new_quest",
+        "organism.player.quest_service::QuestService/success"
+    ],
+    "organism.scenes.common.common_state::CommonState": [
+        "organism.scenes.common.common_state::CommonState/__init__"
+    ],
+    "organism.scenes.common.widgets.creature_widget::CreatureWidget": [],
+    "organism.scenes.common.widgets.dna_catalog_widget::DNACatalogWidget": [
+        "organism.scenes.common.widgets.dna_catalog_widget::DNACatalogWidget/__init__"
+    ],
+    "organism.scenes.common.widgets.gaia_catalog_widget::GaiaCatalogWidget": [
+        "organism.scenes.common.widgets.gaia_catalog_widget::GaiaCatalogWidget/__init__"
+    ],
+    "organism.scenes.common.widgets.helper.debug_widget::DebugWidget": [],
+    "organism.scenes.common.widgets.helper.helper_widget::HelperWidget": [
+        "organism.scenes.common.widgets.helper.helper_widget::HelperWidget/build"
+    ],
+    "organism.scenes.common.widgets.helper.painter_widget::PainterWidget": [],
+    "organism.scenes.common.widgets.helper.status_widget::StatusWidget": [],
+    "organism.scenes.common.widgets.player_widget::PlayerWidget": [],
+    "organism.scenes.common.widgets.reload_dna_widget::ReloadDnaWidget": [],
+    "organism.scenes.common.widgets.top_menu_widget::TopMenuWidget": [],
+    "organism.scenes.dna_editor.dna_editor_state::DnaEditorState": [
+        "organism.scenes.dna_editor.dna_editor_state::DnaEditorState/__init__",
+        "organism.scenes.dna_editor.dna_editor_state::DnaEditorState/on_start",
+        "organism.scenes.dna_editor.dna_editor_state::DnaEditorState/on_stop"
+    ],
+    "organism.scenes.dna_editor.widgets.dna_editor_widget::DnaEditorWidget": [],
+    "organism.scenes.dna_editor.widgets.dna_stat_widget::DnaStatWidget": [],
+    "organism.scenes.dna_editor.widgets.dna_widget::DnaColorWidget": [
+        "organism.scenes.dna_editor.widgets.dna_widget::DnaColorWidget/build"
+    ],
+    "organism.scenes.dna_editor.widgets.dna_widget::DnaDamageWidget": [
+        "organism.scenes.dna_editor.widgets.dna_widget::DnaDamageWidget/build"
+    ],
+    "organism.scenes.dna_editor.widgets.dna_widget::DnaWidget": [
+        "organism.scenes.dna_editor.widgets.dna_widget::DnaWidget/build"
+    ],
+    "organism.scenes.dna_editor.widgets.editor_config_widget::EditorConfigWidget": [],
+    "organism.scenes.gaia_editor.gaia_editor_state::GaiaEditorState": [
+        "organism.scenes.gaia_editor.gaia_editor_state::GaiaEditorState/__init__",
+        "organism.scenes.gaia_editor.gaia_editor_state::GaiaEditorState/on_start",
+        "organism.scenes.gaia_editor.gaia_editor_state::GaiaEditorState/on_stop"
+    ],
+    "organism.scenes.gaia_editor.gaia_editor_widget::GaiaEditorWidget": [],
+    "organism.scenes.in_game.in_game_state::InGameState": [
+        "organism.scenes.in_game.in_game_state::InGameState/__init__",
+        "organism.scenes.in_game.in_game_state::InGameState/on_start",
+        "organism.scenes.in_game.in_game_state::InGameState/on_stop"
+    ],
+    "organism.scenes.in_game.systems.audio_system::AudioSystem": [],
+    "organism.scenes.in_game.systems.behavior_system::ActionSystem": [
+        "organism.scenes.in_game.systems.behavior_system::ActionSystem/update"
+    ],
+    "organism.scenes.in_game.systems.biome_system::BiomeSystem": [
+        "organism.scenes.in_game.systems.biome_system::BiomeSystem/get_organism"
+    ],
+    "organism.scenes.in_game.systems.economy_system::EconomySystem": [
+        "organism.scenes.in_game.systems.economy_system::EconomySystem/update_single"
+    ],
+    "organism.scenes.in_game.systems.fluid_system::BlowerSystem": [
+        "organism.scenes.in_game.systems.fluid_system::BlowerSystem/update"
+    ],
+    "organism.scenes.in_game.systems.fluid_system::FluidSystem": [
+        "organism.scenes.in_game.systems.fluid_system::FluidSystem/update"
+    ],
+    "organism.scenes.in_game.systems.fluid_system::ParticleSystem": [
+        "organism.scenes.in_game.systems.fluid_system::ParticleSystem/update"
+    ],
+    "organism.scenes.in_game.systems.fluid_system::PowerUpSystem": [
+        "organism.scenes.in_game.systems.fluid_system::PowerUpSystem/update"
+    ],
+    "organism.scenes.in_game.systems.gaia_system::GaiaSystem": [],
+    "organism.scenes.in_game.systems.metabolism_system::MetabolismSystem": [
+        "organism.scenes.in_game.systems.metabolism_system::MetabolismSystem/update_single"
+    ],
+    "organism.scenes.in_game.systems.organism_system::OrganismSystem": [
+        "organism.scenes.in_game.systems.organism_system::OrganismSystem/update_single"
+    ],
+    "organism.scenes.in_game.systems.physic_system::PhysicSystem": [],
+    "organism.scenes.in_game.systems.player_system::PlayerSystem": [],
+    "organism.scenes.in_game.systems.spawn_system::SpawnSystem": [
+        "organism.scenes.in_game.systems.spawn_system::SpawnSystem/remove_out_of_range_hostiles"
+    ],
+    "organism.scenes.in_game.widgets.biome_widget::BiomeWidget": [],
+    "organism.scenes.in_game.widgets.gaming_widget::GamingWidget": [
+        "organism.scenes.in_game.widgets.gaming_widget::GamingWidget/build"
+    ],
+    "organism.scenes.in_game.widgets.metabolism_widget::MetabolismWidget": [],
+    "organism.scenes.in_game.widgets.quest_widget::QuestLogWidget": [
+        "organism.scenes.in_game.widgets.quest_widget::QuestLogWidget/build"
+    ],
+    "organism.scenes.in_game.widgets.quest_widget::QuestWidget": [
+        "organism.scenes.in_game.widgets.quest_widget::QuestWidget/build"
+    ],
+    "organism.scenes.in_game.widgets.resources_widget::ResourcesWidget": [],
+    "organism.scenes.load_dna.load_dna_state::LoadDnaState": [
+        "organism.scenes.load_dna.load_dna_state::LoadDnaState/__init__",
+        "organism.scenes.load_dna.load_dna_state::LoadDnaState/on_start"
+    ],
+    "organism.scenes.menus.main_menu.main_menu_state::MainMenuState": [
+        "organism.scenes.menus.main_menu.main_menu_state::MainMenuState/__init__",
+        "organism.scenes.menus.main_menu.main_menu_state::MainMenuState/on_start"
+    ],
+    "organism.scenes.menus.main_menu.widgets.main_menu_widget::MainMenuWidget": [],
+    "organism.scenes.menus.option_menu.option_menu_state::OptionMenuState": [
+        "organism.scenes.menus.option_menu.option_menu_state::OptionMenuState/__init__"
+    ],
+    "organism.scenes.menus.option_menu.widgets.controller_widget::ControllerWidget": [],
+    "organism.scenes.menus.option_menu.widgets.controller_widget::GameStateControllerWidget": [
+        "organism.scenes.menus.option_menu.widgets.controller_widget::GameStateControllerWidget/__init__"
+    ],
+    "organism.scenes.menus.option_menu.widgets.graphic_widget::GraphicsWidget": [],
+    "organism.scenes.menus.option_menu.widgets.option_menu_widget::OptionMenuWidget": [],
+    "organism.scenes.menus.option_menu.widgets.physic_widget::PhysicWidget": [],
+    "organism.scenes.menus.option_menu.widgets.sound_widget::SoundWidget": [],
+    "organism.scenes.scenes::Scenes": [
+        "organism.scenes.scenes::Scenes/get_state"
+    ],
+    "organism.utils.allocator::Allocator": [
+        "organism.utils.allocator::Allocator/__post_init__",
+        "organism.utils.allocator::Allocator/allocate",
+        "organism.utils.allocator::Allocator/compute_diff",
+        "organism.utils.allocator::Allocator/get_stats",
+        "organism.utils.allocator::Allocator/is_allocated",
+        "organism.utils.allocator::Allocator/release"
+    ],
+    "organism.utils.allocator::AllocatorStats": [
+        "organism.utils.allocator::AllocatorStats/__add__"
+    ],
+    "organism.utils.graph_test_case::GraphTestCase": [
+        "organism.utils.graph_test_case::GraphTestCase/simple_check"
+    ],
+    "organism.utils.periodic_provider::Periodic": [
+        "organism.utils.periodic_provider::Periodic/__post_init__",
+        "organism.utils.periodic_provider::Periodic/check_activation",
+        "organism.utils.periodic_provider::Periodic/get_phase"
+    ],
+    "organism.utils.periodic_provider::PeriodicFunc": [
+        "organism.utils.periodic_provider::PeriodicFunc/__call__"
+    ],
+    "organism.utils.periodic_provider::PeriodicProvider": [
+        "organism.utils.periodic_provider::PeriodicProvider/__call__"
+    ],
+    "organism.utils.profiler::Profiler": [
+        "organism.utils.profiler::Profiler/_create_record_process",
+        "organism.utils.profiler::Profiler/on_stop",
+        "organism.utils.profiler::Profiler/record"
+    ],
+    "organism.utils.serializer.json_encoder::EnhancedJSONEncoder": [
+        "organism.utils.serializer.json_encoder::EnhancedJSONEncoder/default"
+    ],
+    "organism.utils.serializer.report::Report": [
+        "organism.utils.serializer.report::Report/append",
+        "organism.utils.serializer.report::Report/show"
+    ],
+    "organism.utils.shapes::Shapes": [
+        "organism.utils.shapes::Shapes/__init__",
+        "organism.utils.shapes::Shapes/__repr__",
+        "organism.utils.shapes::Shapes/clear",
+        "organism.utils.shapes::Shapes/convex_shapes",
+        "organism.utils.shapes::Shapes/dump_png",
+        "organism.utils.shapes::Shapes/from_wkb",
+        "organism.utils.shapes::Shapes/load",
+        "organism.utils.shapes::Shapes/load_buffer",
+        "organism.utils.shapes::Shapes/load_image",
+        "organism.utils.shapes::Shapes/load_wkb",
+        "organism.utils.shapes::Shapes/save_wkb",
+        "organism.utils.shapes::Shapes/scale",
+        "organism.utils.shapes::Shapes/to_wkb",
+        "organism.utils.shapes::Shapes/translate"
+    ],
+    "organism.utils.task_manager::TaskManager": [
+        "organism.utils.task_manager::TaskManager/__init__",
+        "organism.utils.task_manager::TaskManager/_task",
+        "organism.utils.task_manager::TaskManager/allocate",
+        "organism.utils.task_manager::TaskManager/execute",
+        "organism.utils.task_manager::TaskManager/release"
+    ]
+}
