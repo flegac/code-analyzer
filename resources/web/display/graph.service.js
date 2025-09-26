@@ -1,11 +1,9 @@
-
 import { DatasetService } from "/dataset/dataset.service.js"
-
 import { StyleService } from "/display/style.service.js"
 import { PhysicsService } from "/display/physics.service.js"
 import { CameraService } from "/display/camera.service.js"
-import { MetadataService } from "/metadata/metadata.service.js"
-import { LayoutService } from "/core/layout.service.js"
+import { MetadataService } from "/display/metadata.service.js"
+import { LayoutService } from "/lib/layout.service.js"
 
 import { ClosenessCentrality } from "/metrics/closeness.centrality.metrics.js"
 
@@ -105,6 +103,7 @@ export class GraphService {
         this.state.listeners.add(cb);
     }
 
+
     async rebuildGraph() {
         const M = MetadataService.singleton;
         const D = DatasetService.singleton.state;
@@ -168,8 +167,9 @@ export class GraphService {
         S.rebuildMeshes();
 
         await PhysicsService.singleton.apply();
-        LayoutService.singleton.table.rebuild()
         S.apply();
+
+        LayoutService.singleton.table.rebuild();
 
     }
 

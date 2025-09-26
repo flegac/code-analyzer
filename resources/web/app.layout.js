@@ -119,7 +119,7 @@ const TEMPLATE = `
 </div>
 `;
 
-export class AppLayoutComponent extends BaseComponent {
+export class AppLayout extends BaseComponent {
     constructor() {
         super({
             template: TEMPLATE,

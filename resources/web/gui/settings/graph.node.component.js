@@ -1,6 +1,5 @@
-import { BaseComponent } from "/gui/core/base.component.js";
-import { StyleService } from "/display/style.service.js"
-import { DatasetService } from "/dataset/dataset.service.js"
+import {BaseComponent} from "/gui/core/base.component.js";
+import {StyleService} from "/display/style.service.js"
 
 const STYLE = `
   .panel {
@@ -39,91 +38,57 @@ const STYLE = `
 const TEMPLATE = `
     <div class="panel">
       <div class="section-header">
-        <sl-switch id="nodeVisibility"></sl-switch>
+        <sl-checkbox v-model="mesh.isVisible" @sl-change="meshVisibility" checked></sl-checkbox>
         <h3>Nodes</h3>
+        <sl-range v-model="mesh.scaling" min="0" max="50" step="0.1" @sl-input="scaling"></sl-range>
       </div>
 
-      <div class="slider-row">
-        <label >Scaling</label>
-        <sl-range id="scaling" min="0" max="50" step="0.1"></sl-range>
-      </div>
-
-      <div class="slider-row">
-        <label for="color">Color</label>
-        <sl-select id="color"></sl-select>
-      </div>
-
-      <div class="slider-row">
-        <label for="size">Size</label>
-        <sl-select id="size"></sl-select>
-      </div>
+      <div class="section-header">
+        <sl-checkbox v-model="text.isVisible" @sl-change="textVisibility" checked></sl-checkbox>
+        <h3>Texts</h3>
+        <sl-range v-model="text.hiddenDepthRange" min="0" max="5" step="1" @sl-input="textHiddenDepth"></sl-range>
+      </div>  
 
     </div>
 `;
 
 
-
 export class GraphNodeComponent extends BaseComponent {
-  constructor() {
-    super({
-      template: TEMPLATE,
-      style: STYLE,
-    });
-    this.updateGui()
-  }
+    constructor() {
+        super({
+            template: TEMPLATE,
+            style: STYLE,
+            state: {
+                mesh: StyleService.singleton.mesh,
+                meshVisibility: (e) => this.meshVisibility(e.target.checked),
+                scaling: _.throttle((e) => this.scaling(e.target.value), 100),
 
-  updateGui() {
+                text: StyleService.singleton.text,
+                textVisibility: (e) => this.textVisibility(e.target.checked),
+                textHiddenDepth: _.throttle((e) => this.textHiddenDepth(e.target.value), 100),
 
-    const onChange = () => StyleService.singleton.apply();
+            }
+        });
+    }
 
-    const nodes = StyleService.singleton.nodes;
-    const nodeIsVisible = nodes.mesh.isVisible;
+    meshVisibility(value) {
+        StyleService.singleton.mesh.isVisible = value;
+        StyleService.singleton.apply()
+    }
 
-    this._bindSlider('scaling', nodes.mesh, 'scaling', onChange);
+    scaling(value) {
+        StyleService.singleton.mesh.scaling = value;
+        StyleService.singleton.updateNodeSizes()
+        // StyleService.singleton.apply()
+    }
 
-    const numerics = ['none', ...DatasetService.singleton.state.numerics()];
-    const categories = ['group', ...DatasetService.singleton.state.categories()];
+    textVisibility(value) {
+        StyleService.singleton.text.isVisible = value;
+        StyleService.singleton.apply()
+    }
 
-    this._populateSelect('color', categories);
-    this._bindSelect('color', nodes.mesh, 'color', onChange);
-    this._populateSelect('size', numerics);
-    this._bindSelect('size', nodes.mesh, 'size', onChange);
-
-    const nodeSwitch = this.container.querySelector('#nodeVisibility');
-    nodeSwitch.checked = nodeIsVisible;
-    nodeSwitch.addEventListener('sl-change', () => {
-      nodes.mesh.isVisible = nodeSwitch.checked;
-      onChange();
-    });
-  }
-
-  _bindSlider(id, target, key, onChange) {
-    const el = this.container.querySelector(`#${id}`);
-    el.value = target[key];
-    el.addEventListener('sl-input', () => {
-      target[key] = parseFloat(el.value);
-      onChange();
-    });
-  }
-
-  _bindSelect(id, target, key, onChange) {
-    const el = this.container.querySelector(`#${id}`);
-    el.value = target[key];
-    el.addEventListener('sl-change', () => {
-      target[key] = el.value;
-      onChange();
-    });
-  }
-
-  _populateSelect(id, options) {
-    const select = this.container.querySelector(`#${id}`);
-    select.innerHTML = ''; // clear previous
-    options.forEach(opt => {
-      const option = document.createElement('sl-option');
-      option.value = typeof opt === 'string' ? opt : opt.value;
-      option.textContent = typeof opt === 'string' ? opt : opt.label;
-      select.appendChild(option);
-    });
-  }
-
+    textHiddenDepth(value) {
+        StyleService.singleton.text.hiddenDepthRange = value;
+        StyleService.singleton.apply()
+    }
 }

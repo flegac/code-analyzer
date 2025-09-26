@@ -1,6 +1,5 @@
 import { StyleService } from "/display/style.service.js";
 import { GraphService } from "/display/graph.service.js";
-import { MetadataService } from "/metadata/metadata.service.js";
 
 export class LinkStyle {
     constructor() {
@@ -35,7 +34,6 @@ export class LinkStyle {
     getColor(link) {
         const links = StyleService.singleton.links;
         const G = GraphService.singleton;
-        const M = MetadataService.singleton;
 
         if (link.label === 'hierarchy') {
             return links[link.label]?.color ?? '#f00';

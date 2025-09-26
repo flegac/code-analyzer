@@ -1,7 +1,6 @@
 import {BaseComponent} from "/gui/core/base.component.js";
 import {ClusterComponent} from "/gui/settings/cluster.component.js"
 import {GraphNodeComponent} from "/gui/settings/graph.node.component.js"
-import {GraphTextComponent} from "/gui/settings/graph.text.component.js"
 import {GraphLinkComponent} from "/gui/settings/graph.link.component.js"
 import {GraphPhysicsComponent} from "/gui/settings/graph.physics.component.js"
 import {FilterService} from "/filter/filter.service.js"
@@ -34,7 +33,7 @@ const TEMPLATE = `
   <div class="drawer-cards">
     <sl-range name="prune-level" label="Hierarchy prune level" min="1" max="10" step="1" value="1"></sl-range>
   
-    ${['cluster', 'physics', 'nodes', 'texts', 'links', ].map(name => `
+    ${['cluster', 'physics', 'nodes', 'links',].map(name => `
       <sl-card class="drawer-card">
         <div name="${name}"></div>
       </sl-card>
@@ -56,7 +55,6 @@ export class SettingsComponent extends BaseComponent {
         this.cluster = this.addComponent('cluster', new ClusterComponent());
         this.physics = this.addComponent('physics', new GraphPhysicsComponent());
         this.nodes = this.addComponent('nodes', new GraphNodeComponent());
-        this.texts = this.addComponent('texts', new GraphTextComponent());
         this.links = this.addComponent('links', new GraphLinkComponent());
 
         // 🎚️ Profondeur de collapse

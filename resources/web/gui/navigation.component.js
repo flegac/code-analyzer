@@ -1,7 +1,6 @@
-import { BaseComponent } from "/gui/core/base.component.js"
-import { GraphService } from "/display/graph.service.js"
-import { CameraService } from "/display/camera.service.js"
-import { MetadataService } from "/metadata/metadata.service.js"
+import {BaseComponent} from "/gui/core/base.component.js"
+import {GraphService} from "/display/graph.service.js"
+import {CameraService} from "/display/camera.service.js"
 
 const STYLE = `
 .graph-navigation {
@@ -43,61 +42,59 @@ const TEMPLATE = `
 
 
 export class NavigationComponent extends BaseComponent {
-  constructor() {
-    super({
-      template: TEMPLATE,
-      style: STYLE
-    });
-    this.updateMenu();
+    constructor() {
+        super({
+            template: TEMPLATE,
+            style: STYLE
+        });
+        this.updateMenu();
 
-    this.onClick = (id) => {
-      const node = GraphService.singleton.findNodeById(id);
-      CameraService.singleton.focusOn(node);
-      GraphService.singleton.select(node);
-    };
-
-
-    this.boundUpdate = this.updateMenu.bind(this);
-    GraphService.singleton.onSelectionChange(this.boundUpdate);
-  }
-
-  updateMenu() {
-    const M = MetadataService.singleton;
-
-    const incomingMenu = this.container.querySelector('#nav-incoming');
-    const outgoingMenu = this.container.querySelector('#nav-outgoing');
-    const title = this.container.querySelector('#nav-title');
+        this.onClick = (id) => {
+            const node = GraphService.singleton.findNodeById(id);
+            CameraService.singleton.focusOn(node);
+            GraphService.singleton.select(node);
+        };
 
 
-    incomingMenu.innerHTML = '';
-    outgoingMenu.innerHTML = '';
+        this.boundUpdate = this.updateMenu.bind(this);
+        GraphService.singleton.onSelectionChange(this.boundUpdate);
+    }
 
 
+    updateMenu() {
+        const incomingMenu = this.container.querySelector('#nav-incoming');
+        const outgoingMenu = this.container.querySelector('#nav-outgoing');
+        const title = this.container.querySelector('#nav-title');
 
-    const selected = GraphService.singleton.state.selected;
-    if (selected === null) return;
 
-    const incoming = M.read('incoming', selected.id);
-    const outgoing = M.read('outgoing', selected.id);
+        incomingMenu.innerHTML = '';
+        outgoingMenu.innerHTML = '';
 
-    const nodeName = selected?.label || selected?.id || 'Navigation';
 
-    title.textContent = `${nodeName}`;
+        const selected = GraphService.singleton.state.selected;
+        if (selected === null) return;
 
-    incoming.forEach(item => {
-      const menuItem = document.createElement('sl-menu-item');
-      menuItem.value = item;
-      menuItem.textContent = item;
-      menuItem.addEventListener('click', () => this.onClick(item));
-      incomingMenu.appendChild(menuItem);
-    });
+        const incoming = selected.read('incoming');
+        const outgoing = selected.read('outgoing');
 
-    outgoing.forEach(item => {
-      const menuItem = document.createElement('sl-menu-item');
-      menuItem.value = item;
-      menuItem.textContent = item.split('.').slice(-2).join('.');
-      menuItem.addEventListener('click', () => this.onClick(item));
-      outgoingMenu.appendChild(menuItem);
-    });
-  }
+        const nodeName = selected?.label || selected?.id || 'Navigation';
+
+        title.textContent = `${nodeName}`;
+
+        incoming.forEach(item => {
+            const menuItem = document.createElement('sl-menu-item');
+            menuItem.value = item;
+            menuItem.textContent = item;
+            menuItem.addEventListener('click', () => this.onClick(item));
+            incomingMenu.appendChild(menuItem);
+        });
+
+        outgoing.forEach(item => {
+            const menuItem = document.createElement('sl-menu-item');
+            menuItem.value = item;
+            menuItem.textContent = item.split('.').slice(-2).join('.');
+            menuItem.addEventListener('click', () => this.onClick(item));
+            outgoingMenu.appendChild(menuItem);
+        });
+    }
 }

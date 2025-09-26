@@ -1,7 +1,7 @@
+import {KeyboardService} from "/lib/keyboard.service.js";
+import {LayoutService} from "/lib/layout.service.js"
 import {keyBindings} from "/config/key-bindings.js"
-import {KeyboardService} from "/core/keyboard.service.js";
 import {GraphService} from "/display/graph.service.js"
-import {LayoutService} from "/core/layout.service.js"
 import {CameraService} from "/display/camera.service.js"
 import {DatasetService} from "/dataset/dataset.service.js";
 

@@ -28,12 +28,8 @@ const STYLE = `
 const TEMPLATE = `
   <div class="panel">
     <div class="slider-row">
-      <sl-switch v-model="state.isActive" @sl-change="apply">Running status</sl-switch>
+      <sl-switch v-model="state.isActive" @sl-change="apply" checked>Running status</sl-switch>
       <sl-button @click="apply" variant="primary">🔥 Simulate</sl-button>
-    </div>
-
-    <div class="slider-row">
-      <sl-switch v-model="state.camAutoFit" @sl-change="apply">Auto-fit camera</sl-switch>
     </div>
 
     <div class="slider-row">

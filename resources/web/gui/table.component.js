@@ -1,6 +1,4 @@
-import { MetadataService } from "/metadata/metadata.service.js";
 import { BaseComponent } from "/gui/core/base.component.js";
-import { GraphService } from "/display/graph.service.js";
 import { DatasetService } from "/dataset/dataset.service.js";
 
 const STYLE = `
@@ -34,8 +32,6 @@ export class TableComponent extends BaseComponent {
     }
 
     async rebuild() {
-        const M = MetadataService.singleton;
-        const G = GraphService.singleton;
         const D = DatasetService.singleton;
 
         const labels = D.state.labels();

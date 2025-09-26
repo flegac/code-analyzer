@@ -2,7 +2,7 @@ import { BaseComponent } from "/gui/core/base.component.js";
 
 import { StyleService } from "/display/style.service.js"
 
-import { AppLayoutComponent } from "/gui/app.layout.component.js"
+import { AppLayout } from "/lib/app.layout.js"
 import { GraphCanvasComponent } from "/gui/graph.canvas.component.js"
 import { TableComponent } from "/gui/table.component.js"
 import { SettingsComponent } from "/gui/settings/graph.settings.component.js";
@@ -11,7 +11,7 @@ import { NavigationComponent } from "/gui/navigation.component.js"
 import { RendererDebugComponent } from "/gui/renderer.debug.component.js"
 import { ToolBox } from "/gui/core/base.toolbox.component.js";
 
-import { Billboard } from "/display/mesh/billboard.mesh.model.js"
+import { Billboard } from "/mesh/billboard.mesh.model.js"
 import { GraphService } from "/display/graph.service.js"
 import { DatasetService } from "/dataset/dataset.service.js"
 import { CameraService } from "/display/camera.service.js"
@@ -21,7 +21,7 @@ export class LayoutService {
     static singleton = new LayoutService()
 
     constructor() {
-        this.layout = new AppLayoutComponent();
+        this.layout = new AppLayout();
 
         this.graph = this.layout.addComponent('graph-view', new GraphCanvasComponent());
         this.dataset = this.layout.addComponent('graph-view', new DatasetComponent());
@@ -125,10 +125,9 @@ export class LayoutService {
 
         const S = StyleService.singleton;
 
-        S.nodes.mesh.size =null;// DatasetService.singleton.state.numerics()[0];
-        S.nodes.mesh.color = DatasetService.singleton.state.categories()[0];
+        S.mesh.size =null;// DatasetService.singleton.state.numerics()[0];
+        S.mesh.color = DatasetService.singleton.state.categories()[0];
 
-        this.settings.nodes.updateGui();
         this.settings.cluster.updateGui();
         S.apply();
     }

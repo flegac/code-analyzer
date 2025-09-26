@@ -1,6 +1,6 @@
 import { BaseComponent } from "/gui/core/base.component.js";
 import { DatasetService } from "/dataset/dataset.service.js"
-import { LayoutService } from "/core/layout.service.js"
+import { LayoutService } from "/lib/layout.service.js"
 
 export class DatasetComponent extends BaseComponent {
     constructor() {

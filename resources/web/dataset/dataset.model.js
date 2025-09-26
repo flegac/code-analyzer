@@ -1,4 +1,4 @@
-import { GraphModel } from "/graph/graph.model.js"
+import { GraphModel } from "/dataset/graph.model.js"
 import { FilterService } from "/filter/filter.service.js"
 
 export class Dataset {

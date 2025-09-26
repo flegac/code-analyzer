@@ -1,7 +1,6 @@
+import { StoreService } from "/lib/store.service.js";
 import { clusterForce } from "/lib/cluster-force.js"
-import { ModuleDepthClusterStrategy } from "/cluster/cluster.strategy.model.js"
 import { GraphService } from "/display/graph.service.js";
-import { StoreService } from "/core/store.service.js";
 
 export class PhysicsService {
     static singleton = new PhysicsService();

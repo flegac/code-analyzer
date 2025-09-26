@@ -1,4 +1,3 @@
-import { DatasetService } from "/dataset/dataset.service.js"
 import { GraphService } from "/display/graph.service.js"
 import { StyleService } from "/display/style.service.js"
 import { ClusterService } from "/cluster/cluster.service.js"
@@ -48,11 +47,8 @@ export class MetadataService {
     }
 
     updateGroup() {
-
         const G = GraphService.singleton;
         const C = ClusterService.singleton;
-        console.log('updateGroup', C.groupStrategy);
-
 
         G.state.nodes.forEach(node => {
             const group = C.groupStrategy.apply(node);
@@ -63,12 +59,13 @@ export class MetadataService {
     updateRadius() {
         const G = GraphService.singleton;
         const S = StyleService.singleton;
-        const sizeLabel = S.nodes.mesh.size;
+        const sizeLabel = S.mesh.size;
+        const scaling = S.mesh.scaling;
 
         G.state.nodes.forEach(node => {
             const value = node.read(sizeLabel) ?? 1;
             const radius = Math.max(1, Math.cbrt(1 + value));
-            node.write('radius', radius);
+            node.write('radius', radius * scaling);
         });
     }
 

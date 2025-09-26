@@ -48,12 +48,15 @@ void main() {
         return Billboard._material;
     }
 
-    constructor(size, color, target) {
+    constructor(node, target) {
+        const color = node.read('color');
+        const size = node.read('radius');
+
         this.mesh = new THREE.Mesh(
             this.geometry(1),
             Billboard.material()
         );
-        this.mesh.userData = { isBillboard: true };
+        this.mesh.userData = {isBillboard: true};
         this.mesh.lookAt(target);
         this.redraw(size, color);
     }

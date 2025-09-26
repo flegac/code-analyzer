@@ -1,38 +1,46 @@
-export class TextSprite {
-    constructor(text, baseSize, state, hasMesh) {
-        this.state = state;
-        this.baseSize = baseSize;
-        [this.mesh, this.aspect] = this.createTextSprite(text, state);
-        this.resize(state.scaling)
+import {StyleService} from "/display/style.service.js";
 
-        const offset = hasMesh ? state.textOffsetY : 0
+export class TextSprite {
+    constructor(node, baseSize, hasMesh) {
+        this.baseSize = baseSize;
+        [this.mesh, this.aspect] = this.createTextSprite(node);
+
+        const offset = hasMesh ? StyleService.singleton.mesh.scaling : 0
         this.mesh.position.set(0, offset, 10);
+
+        this.resize(StyleService.singleton.mesh.scaling)
     }
 
     resize(size) {
-        const scaling = size * this.baseSize * this.state.fontSize * this.state.scaling;
+        const S = StyleService.singleton;
+
+        const scaling = size * this.baseSize;
         this.mesh.scale.set(this.aspect * scaling, scaling);
         return this;
     }
 
-    createTextSprite(text, state) {
+    createTextSprite(node) {
+        const S = StyleService.singleton;
+
+        const text = S.textFormatter(node.id.split('.'));
+
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
         context.clearRect(0, 0, canvas.width, canvas.height);
 
-        const fontSize = state.fontSize;
+        const fontSize = S.text.fontSize;
 
-        context.font = `${fontSize}px ${state.fontFamily}`;
+        context.font = `${fontSize}px ${S.text.fontFamily}`;
         const textWidth = context.measureText(text).width;
-        const textHeight = fontSize + 2 * state.padding;
+        const textHeight = fontSize + 2 * S.text.padding;
 
         const aspect = textWidth / textHeight;
 
         canvas.width = textWidth;
         canvas.height = textHeight;
 
-        context.font = `${fontSize}px ${state.fontFamily}`;
-        context.fillStyle = state.textColor;
+        context.font = `${fontSize}px ${S.text.fontFamily}`;
+        context.fillStyle = S.text.textColor;
         context.textBaseline = 'top';
         context.fillText(text, 0, 0);
         const texture = new THREE.CanvasTexture(canvas);
@@ -41,7 +49,7 @@ export class TextSprite {
             transparent: true,
         });
         const mesh = new THREE.Sprite(material);
-        mesh.position.set(0, state.textOffsetY, 1);
+        mesh.position.set(0, S.text.textOffsetY, 1);
         return [mesh, aspect];
     }
 }
