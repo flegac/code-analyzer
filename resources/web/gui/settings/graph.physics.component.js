@@ -44,11 +44,6 @@ const TEMPLATE = `
     </div>
 
     <div class="slider-row">
-      <label for="collapsingDepth">Cluster depth</label>
-      <sl-range v-model="state.collapsingDepth" min="0" max="5" step="1" @sl-input="apply"></sl-range>
-    </div>
-
-    <div class="slider-row">
       <label for="repulsionFactor">Repulsion</label>
       <sl-range v-model="state.repulsionFactor" min="0" max="1" step="0.01" @sl-input="apply"></sl-range>
     </div>
@@ -72,7 +67,7 @@ export class GraphPhysicsComponent extends BaseComponent {
       style: STYLE,
       state: {
         state: PhysicsService.singleton.state,
-        apply: PhysicsService.singleton.apply
+        apply: PhysicsService.singleton.apply,
       }
     });
   }

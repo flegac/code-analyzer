@@ -1,5 +1,6 @@
-import {GraphStyleService} from "/display/graph.style.service.js";
-import {GraphService} from "/display/graph.service.js";
+import { StyleService } from "/display/style.service.js";
+import { GraphService } from "/display/graph.service.js";
+import { MetadataService } from "/metadata/metadata.service.js";
 
 export class LinkStyle {
     constructor() {
@@ -8,7 +9,7 @@ export class LinkStyle {
             opacity: .01,
             colorLow: '#0f0',
             colorHigh: '#f00',
-            particles: 1,
+            particles: 0,
             width: 2.0,
         };
         this.hierarchy = {
@@ -22,18 +23,19 @@ export class LinkStyle {
     }
 
     getOpacity(link) {
-        const links = GraphStyleService.singleton.links;
+        const links = StyleService.singleton.links;
         return links[link.label]?.opacity;
     }
 
     getWidth(link) {
-        const links = GraphStyleService.singleton.links;
+        const links = StyleService.singleton.links;
         return links[link.label]?.width;
     }
 
     getColor(link) {
-        const links = GraphStyleService.singleton.links;
+        const links = StyleService.singleton.links;
         const G = GraphService.singleton;
+        const M = MetadataService.singleton;
 
         if (link.label === 'hierarchy') {
             return links[link.label]?.color ?? '#f00';
@@ -44,12 +46,12 @@ export class LinkStyle {
             const source = G.findNodeById(link.source.id || link.source);
             const target = G.findNodeById(link.target.id || link.target);
 
-            if (source.group === target.group) {
+            if (source.read('group') === target.read('group')) {
                 return '#ccc';
             }
 
-            const centrality1 = source.infos.centrality;
-            const centrality2 = target.infos.centrality;
+            const centrality1 = source.read('centrality');
+            const centrality2 = target.read('centrality');
             const c1 = this.relation.colorLow;
             const c2 = this.relation.colorHigh;
             return interpolateColor(c1, c2, (centrality1 + centrality2) / 2);
@@ -58,22 +60,26 @@ export class LinkStyle {
     }
 
     getParticleNumber(link) {
-        const links = GraphStyleService.singleton.links;
+        const G = GraphService.singleton;
+        const S = StyleService.singleton;
+        const source = G.findNodeById(link.source.id || link.source);
+        const target = G.findNodeById(link.target.id || link.target);
 
-        if (link.label !== 'hierarchy' && link.source.group === link.target.group) {
+
+        if (link.label !== 'hierarchy' && source.read('group') === target.read('group')) {
             return 0;
         }
-        return links[link.label]?.particles ?? 0;
+        return S.links[link.label]?.particles ?? 0;
     }
 
     getParticleWidth(link) {
-        const links = GraphStyleService.singleton.links;
+        const links = StyleService.singleton.links;
 
         return 2 * links[link.label]?.width ?? 0;
     }
 
     getVisibility(link) {
-        const links = GraphStyleService.singleton.links;
+        const links = StyleService.singleton.links;
         const width = links[link.label]?.width;
         return width > 0;
     }

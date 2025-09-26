@@ -48,7 +48,6 @@ export class RendererDebugComponent extends BaseComponent {
                 triangles: 0,
             }
         });
-
         this.fps = this.addComponent('fps', new FpsComponent());
     }
 

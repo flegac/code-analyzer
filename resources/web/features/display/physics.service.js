@@ -1,5 +1,5 @@
 import { clusterForce } from "/lib/cluster-force.js"
-import { ClusterStrategy } from "/graph/cluster.strategy.model.js"
+import { ModuleDepthClusterStrategy } from "/cluster/cluster.strategy.model.js"
 import { GraphService } from "/display/graph.service.js";
 import { StoreService } from "/core/store.service.js";
 
@@ -14,7 +14,6 @@ export class PhysicsService {
             "fixX": false,
             "fixY": false,
             "fixZ": false,
-            "collapsingDepth": 1,
             "repulsionFactor": 0.5,
             "link": {
                 "relationStrengthFactor": 0.15,
@@ -25,20 +24,15 @@ export class PhysicsService {
         console.log('initialize', this);
     }
 
-    getClusterMap(nodes) {
-        const strategy = new ClusterStrategy(this.state.collapsingDepth);
-        return strategy.computeGroupMap(nodes);
-    }
-
-
     async apply() {
-        const graph = GraphService.singleton.getGraph();
+        const G = GraphService.singleton;
+        const graph = G.getGraph();
         const state = this.state;
 
         graph.d3VelocityDecay(state.friction);
 
         // projection X/Y/Z
-        GraphService.singleton.state.nodes.forEach((node) => {
+        G.state.nodes.forEach((node) => {
             node.fx = state.fixX ? 0 : null;
             node.fy = state.fixY ? 0 : null;
             node.fz = state.fixZ ? 0 : null;

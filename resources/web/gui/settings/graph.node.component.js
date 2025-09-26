@@ -1,5 +1,5 @@
 import { BaseComponent } from "/gui/core/base.component.js";
-import { GraphStyleService } from "/display/graph.style.service.js"
+import { StyleService } from "/display/style.service.js"
 import { DatasetService } from "/dataset/dataset.service.js"
 
 const STYLE = `
@@ -44,8 +44,8 @@ const TEMPLATE = `
       </div>
 
       <div class="slider-row">
-        <label for="baseRadius">Scaling</label>
-        <sl-range id="baseRadius" min="0" max="200" step="0.01"></sl-range>
+        <label >Scaling</label>
+        <sl-range id="scaling" min="0" max="50" step="0.1"></sl-range>
       </div>
 
       <div class="slider-row">
@@ -58,10 +58,6 @@ const TEMPLATE = `
         <sl-select id="size"></sl-select>
       </div>
 
-      <div class="slider-row">
-        <label for="colorGroupDepthRange">Color depth</label>
-        <sl-range id="colorGroupDepthRange" min="1" max="10" step="1"></sl-range>
-      </div>
     </div>
 `;
 
@@ -78,21 +74,21 @@ export class GraphNodeComponent extends BaseComponent {
 
   updateGui() {
 
-    const onChange = () => GraphStyleService.singleton.apply();
+    const onChange = () => StyleService.singleton.apply();
 
-    const nodes = GraphStyleService.singleton.nodes;
+    const nodes = StyleService.singleton.nodes;
     const nodeIsVisible = nodes.mesh.isVisible;
 
-    this._bindSlider('baseRadius', nodes.mesh, 'baseRadius', onChange);
-    this._bindSlider('colorGroupDepthRange', nodes.mesh, 'colorGroupDepthRange', onChange);
+    this._bindSlider('scaling', nodes.mesh, 'scaling', onChange);
 
-    this._populateSelect('color', ['group']);
+    const numerics = ['none', ...DatasetService.singleton.state.numerics()];
+    const categories = ['group', ...DatasetService.singleton.state.categories()];
+
+    this._populateSelect('color', categories);
     this._bindSelect('color', nodes.mesh, 'color', onChange);
-
-    const labels = DatasetService.singleton.state.labels;
-
-    this._populateSelect('size', labels);
+    this._populateSelect('size', numerics);
     this._bindSelect('size', nodes.mesh, 'size', onChange);
+
     const nodeSwitch = this.container.querySelector('#nodeVisibility');
     nodeSwitch.checked = nodeIsVisible;
     nodeSwitch.addEventListener('sl-change', () => {

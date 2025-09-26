@@ -1,5 +1,5 @@
 import { BaseComponent } from "/gui/core/base.component.js";
-import { GraphStyleService } from "/display/graph.style.service.js"
+import { StyleService } from "/display/style.service.js"
 
 const STYLE = `
   .panel {
@@ -44,7 +44,7 @@ const TEMPLATE = `
 
     <div class="slider-row">
       <label for="scaling">Scaling</label>
-      <sl-range id="scaling" min="0" max="5" step="0.01"></sl-range>
+      <sl-range id="scaling" min="0" max="50" step="0.1"></sl-range>
     </div>
 
     <div class="slider-row">
@@ -63,9 +63,9 @@ export class GraphTextComponent extends BaseComponent {
             style: STYLE,
         });
 
-        const onChange = () => GraphStyleService.singleton.apply();
+        const onChange = () => StyleService.singleton.apply();
 
-        const params = GraphStyleService.singleton.nodes.text;
+        const params = StyleService.singleton.nodes.text;
 
         // 🔤 Text
         const textIsVisible = params.isVisible;

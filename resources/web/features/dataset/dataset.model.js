@@ -1,5 +1,5 @@
 import { GraphModel } from "/graph/graph.model.js"
-import { DatasetService } from "/dataset/dataset.service.js"
+import { FilterService } from "/filter/filter.service.js"
 
 export class Dataset {
     constructor(project = 'test-project', relation, nodes = {}, config = {}) {
@@ -7,19 +7,19 @@ export class Dataset {
         this._relation = relation;
         this._nodes = nodes;
         this._config = config;
+        console.log('new Dataset()', this);
+    }
 
-        const labels = new Set();
-        Object.values(nodes).forEach(dat => {
-            Object.values(dat).forEach(values => {
-                for (const key of Object.keys(values)) {
-                    labels.add(key);
-                }
-            });
-        })
+    labels() {
+        return this._config?.labels?.visible ?? [];
+    }
 
-        this.labels = [...labels];
+    numerics() {
+        return this._config?.labels?.numeric ?? [];
+    }
 
-        console.log('new Dataset()', relation, nodes, config)
+    categories() {
+        return this._config?.labels?.category ?? [];
     }
 
     config() {
@@ -31,7 +31,7 @@ export class Dataset {
             return null;
         }
 
-        const pipeline = DatasetService.singleton.pipeline();
+        const pipeline = FilterService.singleton.pipeline();
 
         const graph = pipeline.reduce((acc, mapper) => mapper(acc), this._relation);
         return new GraphModel('relation', graph);
@@ -43,9 +43,8 @@ export class Dataset {
         return GraphModel.hierarchy(graph);
     }
 
-    nodes(name = 'stats') {
-        if (!this._nodes) return null;
-        return this._nodes[name];
+    read(label, id) {
+        return this._nodes?.[label]?.[id] ?? null;
     }
 
 }

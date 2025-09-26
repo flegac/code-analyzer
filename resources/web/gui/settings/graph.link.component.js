@@ -1,5 +1,5 @@
 import { BaseComponent } from "/gui/core/base.component.js";
-import { GraphStyleService } from "/display/graph.style.service.js"
+import { StyleService } from "/display/style.service.js"
 
 const STYLE = `
   .panel {
@@ -76,9 +76,9 @@ export class GraphLinkComponent extends BaseComponent {
             template: TEMPLATE,
             style: STYLE,
         });
-        const onChange = () => GraphStyleService.singleton.apply();
+        const onChange = () => StyleService.singleton.apply();
 
-        const links = GraphStyleService.singleton.links;
+        const links = StyleService.singleton.links;
 
         // 🔗 Links
         this._bindLinkControls('hierarchy', links.hierarchy, onChange);

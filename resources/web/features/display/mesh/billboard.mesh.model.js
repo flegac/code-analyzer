@@ -50,12 +50,21 @@ void main() {
 
     constructor(size, color, target) {
         this.mesh = new THREE.Mesh(
-            this.geometry(1, color),
+            this.geometry(1),
             Billboard.material()
         );
-        this.mesh.userData = {isBillboard: true};
-        this.resize(size);
+        this.mesh.userData = { isBillboard: true };
         this.mesh.lookAt(target);
+        this.redraw(size, color);
+    }
+
+    redraw(size = null, color = null) {
+        if (size !== null) {
+            this.resize(size);
+        }
+        if (color !== null) {
+            this.colorize(color);
+        }
     }
 
     colorize(color) {
@@ -72,16 +81,8 @@ void main() {
         this.mesh.scale.set(size, size);
     }
 
-    geometry(size, color) {
-        const c = new THREE.Color(color || '#fff');
+    geometry(size) {
         const geometry = new THREE.PlaneGeometry(size, size);
-        const rgb = [color.r, color.g, color.b];
-        const colors = new Float32Array([
-            c.r, c.g, c.b,
-            c.r, c.g, c.b,
-            c.r, c.g, c.b
-        ]);
-        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
         return geometry;
     }
 

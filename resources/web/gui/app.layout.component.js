@@ -7,27 +7,6 @@ html, body {
   height: 100%;
 }
 
-/* Toolbox : bande verticale fixe à gauche */
-[name=graph-toolbox] {
-  width: .8cm;
-  background: var(--sl-panel-background-color);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0.1cm;
-  box-shadow: inset -1px 0 0 rgba(0,0,0,0.1);
-  z-index: 1000;
-}
-
-[name=graph-layout] {
-  display: flex;
-  flex-direction: row;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-}
-
-
 /* Split entre panneau central et panneau principal */
 sl-split-panel {
   flex: 1;
@@ -52,14 +31,6 @@ sl-split-panel > [slot="end"] {
   flex-direction: column;
 }
 
-/* Vue principale */
-[name=graph-view] {
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-}
 
 /* Panneaux latéraux conditionnels */
 .side-panel {
@@ -75,6 +46,38 @@ sl-split-panel > [slot="end"] {
   min-width: 0;
   opacity: 0;
   pointer-events: none;
+}
+
+/****** PANEL SPECIFIC **************************/
+
+/* Toolbox : bande verticale fixe à gauche */
+[name=graph-toolbox] {
+  width: .8cm;
+  background: var(--sl-panel-background-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.1cm;
+  box-shadow: inset -1px 0 0 rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+[name=graph-layout] {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+
+/* Vue principale */
+[name=graph-view] {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 }
 
 /* Canvas */

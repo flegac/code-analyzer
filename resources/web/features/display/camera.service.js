@@ -12,7 +12,6 @@ export class CameraService {
 
         this.alignFrontToAxis = throttle(this.alignFrontToAxis.bind(this), 200);
         this.zoomToFit = throttle(this.zoomToFit.bind(this), 200);
-        this.takeControl(LayoutService.singleton.graph)
         console.log('initialize', this);
     }
 
@@ -29,6 +28,8 @@ export class CameraService {
     }
 
     takeControl(graph) {
+        console.log('camera.takeControl', graph, this.getGraph());
+
         if (this.getGraph() === null) return;
         graph.cam = this;
         this.getGraph().onNodeClick(node => {
@@ -64,7 +65,6 @@ export class CameraService {
         controls.target.copy(this.target);
         controls.update();
     }
-
 
     rotateX(speed) {
         if (!this.getGraph()) return;

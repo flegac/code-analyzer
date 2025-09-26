@@ -1,11 +1,13 @@
-import {LayoutService} from "/core/layout.service.js"
 
-import {DatasetService} from "/dataset/dataset.service.js"
+import { DatasetService } from "/dataset/dataset.service.js"
 
-import {GraphStyleService} from "/display/graph.style.service.js"
-import {PhysicsService} from "/display/physics.service.js"
-import {CameraService} from "/display/camera.service.js"
-import {NodeService} from "/graph/node.service.js"
+import { StyleService } from "/display/style.service.js"
+import { PhysicsService } from "/display/physics.service.js"
+import { CameraService } from "/display/camera.service.js"
+import { MetadataService } from "/metadata/metadata.service.js"
+import { LayoutService } from "/core/layout.service.js"
+
+import { ClosenessCentrality } from "/metrics/closeness.centrality.metrics.js"
 
 
 class GraphState {
@@ -15,27 +17,12 @@ class GraphState {
         this.nodes = [];
         this.links = [];
         this.selected = null
-        this._navigation = {
-            node: null,
-            incoming: [],
-            outgoing: []
-        };
         this.listeners = new Set();
     }
 
     select(node) {
         this.selected = node;
-        if (node === null) this._navigation = {
-            selected: null,
-            incoming: [],
-            outgoing: []
-        };
-        this._navigation = {
-            selected: node,
-            incoming: node.incoming,
-            outgoing: node.outgoing,
-        };
-        this.listeners.forEach(cb => cb(this._navigation));
+        this.listeners.forEach(cb => cb(this.selected));
     }
 }
 
@@ -48,6 +35,8 @@ export class GraphService {
     }
 
     initGraph(container) {
+        console.log('GraphService.initGraph', container);
+
         this.state.graph = ForceGraph3D()(
             container,
             // {controlType: 'trackball'}
@@ -59,6 +48,7 @@ export class GraphService {
 
         this._patchNaNPositions();
         this._autoResize(container);
+        CameraService.singleton.takeControl(container);
 
     }
 
@@ -107,70 +97,27 @@ export class GraphService {
         return this.state.nodeById[id];
     }
 
-    navigation() {
-        return this.state._navigation;
-    }
-
     select(node) {
         this.state.select(node);
     }
 
-    onNavigationChange(cb) {
+    onSelectionChange(cb) {
         this.state.listeners.add(cb);
     }
 
-    offNavigationChange(cb) {
-        this.state.listeners.delete(cb);
-    }
-
-    updateGroup() {
-        const tagger = NodeService.singleton.hierarchicDepthTagger(
-            GraphStyleService.singleton.nodes.mesh.colorGroupDepthRange
-        );
-        this.state.nodes.forEach(node => {
-            node.group = node.infos.group = tagger(node);
-        });
-    }
-
-
-    updateConnectivityStats() {
-
-        // connectivity stats
-        this.state.nodes.forEach(node => {
-            node.outgoing = [];
-            node.incoming = [];
-        });
-        this.state.links.forEach(link => {
-            this.findNodeById(link.source).outgoing.push(link.target);
-            this.findNodeById(link.target).outgoing.push(link.source);
-        });
-
-        // centrality
-        const relation = DatasetService.singleton.state.relation();
-        const centrality = NodeService.singleton.computeClosenessCentrality(relation);
-
-        // node update
-        this.state.nodes.forEach(node => {
-            node.centrality = node.infos.centrality = centrality[node.id];
-        });
-    }
-
-    updateDisplayParameters() {
-        this.state.nodes.forEach(node => {
-            const value = node.infos[GraphStyleService.singleton.nodes.mesh.size] ?? 1;
-            node.radius = Math.max(1, Math.cbrt(1 + value));
-        });
-    }
-
     async rebuildGraph() {
+        const M = MetadataService.singleton;
+        const D = DatasetService.singleton.state;
+        const S = StyleService.singleton;
+
         this.state.selected = null;
 
-        const relation = DatasetService.singleton.state.relation();
-        const nodesInfos = DatasetService.singleton.state.nodes();
-        const hierarchy = DatasetService.singleton.state.hierarchy();
+        const relation = D.relation();
         if (relation === null) {
             return;
         }
+
+        const hierarchy = D.hierarchy();
 
         const nodeIds = new Set([
             ...relation.nodes(),
@@ -182,39 +129,49 @@ export class GraphService {
             ...relation.links(),
         ];
         this.state.nodes = Array.from(nodeIds).map(id => {
-            const nodeInfos = nodesInfos?.[id] ?? {};
-
             const old = this.findNodeById(id);
-            return {
+            const node = {
                 id,
-                infos: nodeInfos,
-                // better transitions with old positions
                 x: old?.x,
                 y: old?.y,
                 z: old?.z,
+                read: label => M.read(label, id),
+                readAll: () => M.readAll(id),
+                write: (label, value) => M.write(label, id, value),
             };
+            // copy dataset values in node
+            // TODO: remove that ?
+            D.labels().forEach(label => {
+                const value = D.read(label, id);
+                if (value !== null) {
+                    M.write(label, id, value)
+                }
+            });
+
+            return node;
         });
         this.state.nodeById = Object.fromEntries(
             this.state.nodes.map(n => [n.id, n])
         );
 
-        this.updateGroup();
-        this.updateDisplayParameters();
-        this.updateConnectivityStats();
+        this.getGraph().graphData({
+            nodes: this.state.nodes,
+            links: this.state.links
+        });
 
-        // TODO: remove this dependency (LayoutService / graphComponent)
-        const graphComponent = LayoutService.singleton.graph;
-        graphComponent.reload(this.state.nodes, this.state.links);
-        CameraService.singleton.takeControl(graphComponent);
+        M.updateGroup();
+        M.updateRadius();
+        M.updateColor();
+        M.updateNavigation();
+        M.updateMetrics(new ClosenessCentrality(relation));
 
-        await this.apply();
-    }
+        S.rebuildMeshes();
 
-    async apply() {
         await PhysicsService.singleton.apply();
-        await GraphStyleService.singleton.apply();
-    }
+        LayoutService.singleton.table.rebuild()
+        S.apply();
 
+    }
 
 }
 

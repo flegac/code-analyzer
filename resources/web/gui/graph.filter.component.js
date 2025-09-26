@@ -1,5 +1,5 @@
 import {BaseComponent} from "/gui/core/base.component.js";
-import {GraphStyleService} from "/display/graph.style.service.js";
+import {StyleService} from "/display/style.service.js";
 
 const STYLE = `
   .graph-filter {
@@ -69,14 +69,13 @@ export class GraphFilterComponent extends BaseComponent {
       template: TEMPLATE,
       style: STYLE,
     });
-    this.toggleVisibility({ visible: false });
   }
 
   rebuild(data) {
     const selected = new Set(data.selected);
     const excluded = new Set(data.excluded);
     const groups = data.groups;
-    const onChange = () => GraphStyleService.singleton.apply();
+    const onChange = () => StyleService.singleton.apply();
 
     // Clear previous content
     this.container.querySelector('#selected-list').innerHTML = '';
