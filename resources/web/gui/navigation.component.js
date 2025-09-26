@@ -1,6 +1,6 @@
-import {BaseComponent} from "/gui/core/base.component.js";
+import {BaseComponent} from "/gui/core/base.component.js"
 import {GraphService} from "/display/graph.service.js"
-import {CameraService} from "/display/camera.service.js"
+import {CameraService} from "/lib/camera.service.js"
 
 const STYLE = `
 .graph-navigation {
@@ -47,10 +47,6 @@ export class NavigationComponent extends BaseComponent {
             template: TEMPLATE,
             style: STYLE
         });
-        // initially hidden
-        this.toggleVisibility();
-
-        this.updater = () => GraphService.singleton.navigation();
         this.updateMenu();
 
         this.onClick = (id) => {
@@ -61,34 +57,43 @@ export class NavigationComponent extends BaseComponent {
 
 
         this.boundUpdate = this.updateMenu.bind(this);
-        GraphService.singleton.onNavigationChange(this.boundUpdate);
+        GraphService.singleton.onSelectionChange(this.boundUpdate);
     }
+
 
     updateMenu() {
         const incomingMenu = this.container.querySelector('#nav-incoming');
         const outgoingMenu = this.container.querySelector('#nav-outgoing');
         const title = this.container.querySelector('#nav-title');
-        const navigation = this.updater();
 
-        const nodeName = navigation.selected?.label || navigation.selected?.id || 'Navigation';
-
-        title.textContent = `${nodeName}`;
 
         incomingMenu.innerHTML = '';
         outgoingMenu.innerHTML = '';
 
-        navigation.incoming.forEach(item => {
+
+        const selected = GraphService.singleton.state.selected;
+        if (selected === null) return;
+
+        const incoming = selected.read('incoming');
+        const outgoing = selected.read('outgoing');
+
+        const nodeName = selected?.id || 'Navigation';
+
+
+        title.textContent = nodeName.split('.').slice(-1).join('.');
+
+        incoming.forEach(item => {
             const menuItem = document.createElement('sl-menu-item');
             menuItem.value = item;
-            menuItem.textContent = item;
+            menuItem.textContent = item.split('.').slice(-1).join('.');
             menuItem.addEventListener('click', () => this.onClick(item));
             incomingMenu.appendChild(menuItem);
         });
 
-        navigation.outgoing.forEach(item => {
+        outgoing.forEach(item => {
             const menuItem = document.createElement('sl-menu-item');
             menuItem.value = item;
-            menuItem.textContent = item.split('.').slice(-2).join('.');
+            menuItem.textContent = item.split('.').slice(-1).join('.');
             menuItem.addEventListener('click', () => this.onClick(item));
             outgoingMenu.appendChild(menuItem);
         });

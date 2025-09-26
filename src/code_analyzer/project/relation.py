@@ -43,6 +43,7 @@ class Relation:
         name = name or self.name
         full_path = path / f'{name}.json'
         full_path.parent.mkdir(parents=True, exist_ok=True)
+        print(f'saving {name} at {path.absolute()}')
         with full_path.open('w') as _:
             json.dump(self.to_json(), _, sort_keys=True, indent=4)
 

@@ -11,19 +11,26 @@
 
                 "/config/": "./web/config/",
                 "/lib/": "./web/",
-                
+
                 "/gui/": "./web/gui/",
-                "/core/": "./web/features/",
-                "/graph/": "./web/features/graph/",
-                "/dataset/": "./web/features/dataset/",
-                "/display/": "./web/features/display/"
+                "/mesh/": "./web/mesh/",
+                
+                "/cluster/": "./web/display/cluster/",
+                "/filter/": "./web/display/filter/",
+                "/metrics/": "./web/display/metrics/",
+
+                "/project/": "./web/project/",
+                "/display/": "./web/display/"
             }
         }
     </script>
 
-  <script src="https://unpkg.com/petite-vue" defer init></script>
+    <script src="https://unpkg.com/petite-vue" defer init></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.1.2/chroma.min.js"></script>
 
-<!-- jquery alternative -->
+
+    <!-- jquery alternative -->
     <script src="https://unpkg.com/cash-dom"></script>
 
     <!-- tabulator -->
