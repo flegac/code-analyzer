@@ -56,7 +56,7 @@ const TEMPLATE = `
   </div>
 `;
 
-export class GraphPhysicsComponent extends BaseComponent {
+export class PhysicsComponent extends BaseComponent {
   constructor() {
     super({
       template: TEMPLATE,

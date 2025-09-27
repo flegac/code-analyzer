@@ -1,99 +1,10 @@
 import {StoreService} from "/lib/store.service.js"
 import {CameraService} from "/lib/camera.service.js"
 
-import {MetadataService} from "/display/metadata.service.js"
-import { GraphService } from "/display/graph.service.js";
+import {NodeService} from "/display/node.service.js"
+import {GraphService} from "/display/graph.service.js";
 
 import {NodeMeshModel} from "/mesh/node.mesh.model.js";
-
-class LinkStyle {
-    constructor() {
-        this.relation = {
-            color: '#f00',
-            opacity: .01,
-            colorLow: '#0f0',
-            colorHigh: '#f00',
-            particles: 0,
-            width: 2.0,
-        };
-        this.hierarchy = {
-            color: '#fff',
-            opacity: .01,
-            colorLow: '#fff',
-            colorHigh: '#fff',
-            particles: 0,
-            width: 10.0,
-        };
-    }
-
-
-    getColor(link) {
-        const links = StyleService.singleton.links;
-        const G = GraphService.singleton;
-
-        if (link.label === 'hierarchy') {
-            return links[link.label]?.color ?? '#f00';
-        }
-
-        if (link.label === 'relation') {
-            //TODO: fix that shit !! strange behavior on links ...
-            const source = G.findNodeById(link.source.id || link.source);
-            const target = G.findNodeById(link.target.id || link.target);
-
-            if (source.read('group') === target.read('group')) {
-                return '#ccc';
-            }
-
-            const centrality1 = source.read('centrality');
-            const centrality2 = target.read('centrality');
-            const c1 = this.relation.colorLow;
-            const c2 = this.relation.colorHigh;
-            return interpolateColor(c1, c2, (centrality1 + centrality2) / 2);
-        }
-        return links[link.label]?.color ?? '#f00';
-    }
-
-    getParticleNumber(link) {
-        const G = GraphService.singleton;
-        const S = StyleService.singleton;
-        const source = G.findNodeById(link.source.id || link.source);
-        const target = G.findNodeById(link.target.id || link.target);
-
-
-        if (link.label !== 'hierarchy' && source.read('group') === target.read('group')) {
-            return 0;
-        }
-        return S.links[link.label]?.particles ?? 0;
-    }
-
-    getVisibility(link) {
-        const links = StyleService.singleton.links;
-        const width = links[link.label]?.width;
-        return width > 0;
-    }
-}
-
-function interpolateColor(c1, c2, value, min = 0, max = 1) {
-    const ratio = Math.max(0, Math.min(1, (value - min) / (max - min)));
-
-    // Convertir #rgb en [r, g, b]
-    const hexToRGB = hex => {
-        const r = parseInt(hex[1] + hex[1], 16);
-        const g = parseInt(hex[2] + hex[2], 16);
-        const b = parseInt(hex[3] + hex[3], 16);
-        return [r, g, b];
-    };
-
-    const [r1, g1, b1] = hexToRGB(c1);
-    const [r2, g2, b2] = hexToRGB(c2);
-
-    // Interpolation linéaire
-    const r = Math.round(r1 + (r2 - r1) * ratio);
-    const g = Math.round(g1 + (g2 - g1) * ratio);
-    const b = Math.round(b1 + (b2 - b1) * ratio);
-
-    return `rgb(${r},${g},${b})`;
-}
 
 
 export class StyleService {
@@ -115,7 +26,24 @@ export class StyleService {
             textColor: 'white',
             textOffsetY: 20,
         });
-        this.links = StoreService.singleton.store('links', new LinkStyle());
+        this.links = StoreService.singleton.store('links', {
+            relation: {
+                color: '#f00',
+                opacity: .01,
+                colorLow: '#0f0',
+                colorHigh: '#f00',
+                particles: 0,
+                width: 2.0,
+            },
+            hierarchy: {
+                color: '#fff',
+                opacity: .01,
+                colorLow: '#fff',
+                colorHigh: '#fff',
+                particles: 0,
+                width: 10.0,
+            }
+        });
         console.log('initialize', this);
     }
 
@@ -189,10 +117,10 @@ export class StyleService {
 
     updateNodeSizes() {
         const G = GraphService.singleton;
-        const M = MetadataService.singleton;
+        const N = NodeService.singleton;
         const S = StyleService.singleton;
 
-        M.nodes.updateRadius();
+        N.updateRadius();
 
         G.state.nodes.forEach(node => {
             const meshes = node.read('_meshes');
@@ -201,14 +129,50 @@ export class StyleService {
         });
     }
 
+    getParticleNumber(link) {
+        const G = GraphService.singleton;
+        const source = G.findNodeById(link.source.id || link.source);
+        const target = G.findNodeById(link.target.id || link.target);
+
+        if (link.label !== 'hierarchy' && source.read('group') === target.read('group')) {
+            return 0;
+        }
+        return this.links[link.label]?.particles ?? 0;
+    }
+
+    getLinkColor(link) {
+        const G = GraphService.singleton;
+
+        if (link.label === 'hierarchy') {
+            return this.links[link.label]?.color ?? '#f00';
+        }
+
+        if (link.label === 'relation') {
+            //TODO: fix that shit !! strange behavior on links ...
+            const source = G.findNodeById(link.source.id || link.source);
+            const target = G.findNodeById(link.target.id || link.target);
+
+            if (source.read('group') === target.read('group')) {
+                return '#ccc';
+            }
+
+            const centrality1 = source.read('centrality');
+            const centrality2 = target.read('centrality');
+            const c1 = this.links.relation.colorLow;
+            const c2 = this.links.relation.colorHigh;
+            return interpolateColor(c1, c2, (centrality1 + centrality2) / 2);
+        }
+        return this.links[link.label]?.color ?? '#f00';
+    }
+
     apply() {
         const G = GraphService.singleton;
-        const M = MetadataService.singleton;
+        const N = NodeService.singleton;
 
         // ----- NODES ---------------------------------
-        M.nodes.updateGroup();
-        M.nodes.updateRadius();
-        M.nodes.updateColor();
+        N.updateGroup();
+        N.updateRadius();
+        N.updateColor();
 
         //TODO: just modify color/scale of geometries
         this.rebuildMeshes()
@@ -220,13 +184,36 @@ export class StyleService {
         // ----- LINKS ----------------------------------
         graph
             .linkCurvature(.0)
-            .linkDirectionalParticles((link) => this.links.getParticleNumber(link))
+            .linkDirectionalParticles((link) => this.getParticleNumber(link))
             .linkDirectionalParticleWidth((link) => 2 * this.links[link.label]?.width ?? 0)
             .linkDirectionalParticleSpeed(.01)
             .linkWidth((link) => this.links[link.label]?.width)
-            .linkColor((link) => this.links.getColor(link))
-            .linkVisibility((link) => this.links.getVisibility(link))
+            .linkColor((link) => this.getLinkColor(link))
+            .linkVisibility((link) => this.links[link.label]?.width > 0)
         // .linkOpacity((link) => this.links.getOpacity(link))
         ;
     }
 }
+
+function interpolateColor(c1, c2, value, min = 0, max = 1) {
+    const ratio = Math.max(0, Math.min(1, (value - min) / (max - min)));
+
+    // Convertir #rgb en [r, g, b]
+    const hexToRGB = hex => {
+        const r = parseInt(hex[1] + hex[1], 16);
+        const g = parseInt(hex[2] + hex[2], 16);
+        const b = parseInt(hex[3] + hex[3], 16);
+        return [r, g, b];
+    };
+
+    const [r1, g1, b1] = hexToRGB(c1);
+    const [r2, g2, b2] = hexToRGB(c2);
+
+    // Interpolation linéaire
+    const r = Math.round(r1 + (r2 - r1) * ratio);
+    const g = Math.round(g1 + (g2 - g1) * ratio);
+    const b = Math.round(b1 + (b2 - b1) * ratio);
+
+    return `rgb(${r},${g},${b})`;
+}
+

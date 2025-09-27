@@ -8,12 +8,12 @@ import {DatasetService} from "/dataset/dataset.service.js"
 import {BaseComponent} from "/gui/core/base.component.js";
 import {GraphCanvasComponent} from "/gui/graph.canvas.component.js"
 import {TableComponent} from "/gui/table.component.js"
-import {SettingsComponent} from "/gui/settings/graph.settings.component.js";
+import {SettingsComponent} from "/gui/settings/settings.component.js";
 import {DatasetComponent} from "/gui/dataset.component.js"
 import {NavigationComponent} from "/gui/navigation.component.js"
 import {RendererDebugComponent} from "/gui/renderer.debug.component.js"
 import {ToolBox} from "/gui/core/base.toolbox.component.js";
-import {GraphFilterComponent} from "/gui/graph.filter.component.js"
+import {ConfigComponent} from "/gui/config.component.js"
 
 import {Billboard} from "/mesh/billboard.mesh.model.js"
 
@@ -31,7 +31,7 @@ export class LayoutService {
         this.settings = this.layout.addComponent('graph-settings', new SettingsComponent());
         this.navigation = this.layout.addComponent('navigation', new NavigationComponent());
         this.rendererDebug = this.layout.addComponent('debug', new RendererDebugComponent());
-        this.graphFilter = this.layout.addComponent('graph-filter', new GraphFilterComponent());
+        this.graphFilter = this.layout.addComponent('graph-filter', new ConfigComponent());
         this.toolbox = this.layout.addComponent('graph-toolbox', this.createToolbar());
 
         this.layout.start();
@@ -120,6 +120,8 @@ export class LayoutService {
             this.rendererDebug.toggleVisibility({visibility: false});
             this.rendererDebug.start(renderer);
             this.groupAction(target)();
+
+            target.toggleVisibility();
 
         });
 

@@ -1,43 +1,10 @@
-import {GraphService} from "/display/graph.service.js"
-import {StyleService} from "/display/style.service.js"
-import {ClusterService} from "/cluster/cluster.service.js"
+import {Metadata} from "/dataset/metadata.model.js";
+import {ClusterService} from "/cluster/cluster.service.js";
+import { GraphService } from "/display/graph.service.js";
+import { StyleService } from "/display/style.service.js";
 
-
-class Metadata {
-    constructor() {
-        this._data = {
-            // key => itemId => value
-        }
-    }
-
-    labels() {
-        return [...Object.keys(this._data)];
-    }
-
-    write(key, id, value) {
-        this._data ??= {};
-        this._data[key] ??= {};
-        this._data[key][id] = value;
-    }
-
-    read(key, id) {
-        return this._data?.[key]?.[id] ?? null;
-    }
-
-    readAll(id) {
-        const result = {};
-        if (!this._data) return result;
-
-        for (const key of Object.keys(this._data)) {
-            result[key] = this.read(key, id);
-        }
-
-        return result;
-    }
-
-}
-
-class MetadataNodes extends Metadata {
+export class NodeService extends Metadata {
+    static singleton = new NodeService();
 
     updateMetrics(metrics) {
         const G = GraphService.singleton;
@@ -102,17 +69,4 @@ class MetadataNodes extends Metadata {
             target.read('incoming').push(source.id);
         });
     }
-}
-
-class MetadataLinks extends Metadata {
-}
-
-export class MetadataService {
-    static singleton = new MetadataService()
-
-    constructor() {
-        this.nodes = new MetadataNodes();
-        this.links = new MetadataLinks();
-    }
-
 }

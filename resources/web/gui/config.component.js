@@ -63,7 +63,7 @@ const TEMPLATE = `
   </div>
 `;
 
-export class GraphFilterComponent extends BaseComponent {
+export class ConfigComponent extends BaseComponent {
   constructor() {
     super({
       template: TEMPLATE,

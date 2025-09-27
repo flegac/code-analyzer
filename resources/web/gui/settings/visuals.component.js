@@ -7,7 +7,7 @@ const STYLE = `
     flex-direction: column;
     gap: 0.5em;
   }
-    
+
   .section-header {
     display: flex;
     align-items: center;
@@ -49,11 +49,39 @@ const TEMPLATE = `
         <sl-range v-model="text.hiddenDepthRange" min="0" max="5" step="1" @sl-input="textHiddenDepth"></sl-range>
       </div>  
 
+
+      <div class="section-header">
+        <sl-color-picker v-model="links.relation.color" size="small" @sl-change="applyLinks"></sl-color-picker>
+        <h3>Relation</h3>
+      </div>
+      <div class="slider-row">
+        <label>Particles</label>
+        <sl-range v-model="links.relation.particles" min="0" max="10" step="1" @sl-input="applyLinks"></sl-range>
+      </div>
+      <div class="slider-row">
+        <label>Width</label>
+        <sl-range v-model="links.relation.width" min="0" max="30" step="0.1" @sl-input="applyLinks"></sl-range>
+      </div>
+
+      <div class="section-header">
+        <sl-color-picker v-model="links.hierarchy.color" size="small" @sl-change="applyLinks"></sl-color-picker>
+        <h3>Hierarchy</h3>
+      </div>
+      <div class="slider-row">
+        <label>Particles</label>
+        <sl-range v-model="links.hierarchy.particles" min="0" max="10" step="1" @sl-input="applyLinks"></sl-range>
+      </div>
+      <div class="slider-row">
+        <label>Width</label>
+        <sl-range v-model="links.hierarchy.width" min="0" max="30" step="0.1" @sl-input="applyLinks"></sl-range>
+      </div>
+
+
     </div>
 `;
 
 
-export class GraphNodeComponent extends BaseComponent {
+export class VisualsComponent extends BaseComponent {
     constructor() {
         super({
             template: TEMPLATE,
@@ -67,8 +95,15 @@ export class GraphNodeComponent extends BaseComponent {
                 textVisibility: (e) => this.textVisibility(e.target.checked),
                 textHiddenDepth: _.throttle((e) => this.textHiddenDepth(e.target.value), 100),
 
+                links: StyleService.singleton.links,
+                applyLinks: (e) => this.applyLinks(e.target.value),
+
             }
         });
+    }
+
+    applyLinks(e) {
+        StyleService.singleton.apply();
     }
 
     meshVisibility(value) {

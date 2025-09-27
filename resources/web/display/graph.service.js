@@ -1,12 +1,12 @@
-import { LayoutService } from "/lib/layout.service.js"
-import { CameraService } from "/lib/camera.service.js"
+import {LayoutService} from "/lib/layout.service.js"
+import {CameraService} from "/lib/camera.service.js"
 
-import { DatasetService } from "/dataset/dataset.service.js"
-import { StyleService } from "/display/style.service.js"
-import { PhysicsService } from "/display/physics.service.js"
-import { MetadataService } from "/display/metadata.service.js"
+import {DatasetService} from "/dataset/dataset.service.js"
+import {StyleService} from "/display/style.service.js"
+import {PhysicsService} from "/display/physics.service.js"
+import {NodeService} from "/display/node.service.js"
 
-import { ClosenessCentrality } from "/metrics/closeness.centrality.metrics.js"
+import {ClosenessCentrality} from "/metrics/closeness.centrality.metrics.js"
 
 
 class GraphState {
@@ -106,7 +106,7 @@ export class GraphService {
 
 
     async rebuildGraph() {
-        const M = MetadataService.singleton;
+        const N = NodeService.singleton;
         const D = DatasetService.singleton.state;
         const S = StyleService.singleton;
 
@@ -124,6 +124,7 @@ export class GraphService {
             ...hierarchy.nodes()
         ]);
 
+        // TODO: customize links with read/write for metadata ?
         this.state.links = [
             ...hierarchy.links(),
             ...relation.links(),
@@ -135,16 +136,16 @@ export class GraphService {
                 x: old?.x,
                 y: old?.y,
                 z: old?.z,
-                read: label => M.nodes.read(label, id),
-                readAll: () => M.nodes.readAll(id),
-                write: (label, value) => M.nodes.write(label, id, value),
+                read: label => N.read(label, id),
+                readAll: () => N.readAll(id),
+                write: (label, value) => N.write(label, id, value),
             };
             // copy dataset values in node
             // TODO: remove that ?
             D.labels().forEach(label => {
                 const value = D.read(label, id);
                 if (value !== null) {
-                    M.nodes.write(label, id, value)
+                    N.write(label, id, value)
                 }
             });
 
@@ -159,11 +160,11 @@ export class GraphService {
             links: this.state.links
         });
 
-        M.nodes.updateGroup();
-        M.nodes.updateRadius();
-        M.nodes.updateColor();
-        M.nodes.updateNavigation();
-        M.nodes.updateMetrics(new ClosenessCentrality(relation));
+        N.updateGroup();
+        N.updateRadius();
+        N.updateColor();
+        N.updateNavigation();
+        N.updateMetrics(new ClosenessCentrality(relation));
 
         S.rebuildMeshes();
 

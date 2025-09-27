@@ -1,14 +1,18 @@
 import { DatasetService } from "/dataset/dataset.service.js"
 import { GraphFilter } from "/filter/graph.filter.model.js"
+import {GraphService} from "/display/graph.service.js";
 
 
 export class FilterService {
     static singleton = new FilterService();
 
-
     constructor() {
         this.hierarchyPruneLevel = 4;
 
+    }
+
+    async apply( ) {
+         await GraphService.singleton.rebuildGraph();
     }
 
     pipeline() {

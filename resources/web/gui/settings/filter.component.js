@@ -3,6 +3,7 @@ import {DatasetService} from "/dataset/dataset.service.js"
 import {ClusterService} from "/cluster/cluster.service.js"
 import {StyleService} from "/display/style.service.js";
 import {PhysicsService} from "/display/physics.service.js";
+import {FilterService} from "/filter/filter.service.js"
 
 
 const STYLE = `
@@ -28,10 +29,15 @@ const STYLE = `
     width: 80px;
   }
 
-  sl-range {
+  sl-input, sl-range {
     flex: 1;
     --track-color-active: var(--sl-color-primary-600);
     --track-color-inactive: var(--sl-color-primary-100);
+  }
+  .slider-row sl-input {
+    flex: 1;
+    min-width: 0;
+    max-width: 100%;
   }
 
   h3 {
@@ -43,46 +49,40 @@ const TEMPLATE = `
     <div class="panel">
       <div class="section-header">
          <sl-switch v-model="isActive" @sl-change="apply" checked disabled></sl-switch>
-        <h3>Cluster</h3>
+        <h3>Filter</h3>
+      </div>
+      
+      <div class="slider-row">
+        <label>By depth</label>
+        <sl-range v-model="filterState.hierarchyPruneLevel"  min="1" max="10" step="1" value="1" @sl-change="applyPruning"></sl-range>
       </div>
 
       <div class="slider-row">
-        <label>Group by</label>
-         <sl-checkbox v-model="isActive" @sl-change="colorByGroup" checked disabled></sl-checkbox>
-         <sl-select v-model="attribute" id="clusterAttribute" @sl-input="colorByGroup"></sl-select>
+        <label>Search</label>
+        <sl-input v-model="nodeName" @sl-input="apply" disabled></sl-input>
       </div>
-
-      <div class="slider-row">
-        <label>Color depth </label>
-        <sl-range v-model="colorDepth" min="1" max="5" step="1" @sl-input="colorByDepth"></sl-range>
-      </div>
-
-    <div class="slider-row">
-      <label>Collapse depth</label>
-      <sl-range v-model="collapseDepth" min="1" max="5" step="1" @sl-input="collapseByDepth"></sl-range>
-    </div>
-
     </div>
 `;
 
-export class ClusterComponent extends BaseComponent {
+export class FilterComponent extends BaseComponent {
     constructor() {
         super({
             template: TEMPLATE,
             style: STYLE,
             state: {
                 isActive: true,
-                collapseDepth: 2,
-                colorDepth: 2,
-                attribute: 'group',
-
-                state: ClusterService.singleton.state,
-                colorByGroup: (event) => this.colorByGroup(event.target.value),
-                colorByDepth: (event) => this.colorByDepth(event.target.value),
-                collapseByDepth: (event) => this.collapseByDepth(event.target.value),
+                nodeName: null,
+                filterState: FilterService.singleton,
+                apply: (event) => console.log(event.target.value),
+                applyPruning: (event) => this.applyPruning(event.target.value)
             }
         });
-        // this.updateGui()
+    }
+
+
+    async applyPruning(value) {
+        FilterService.singleton.hierarchyPruneLevel = parseInt(value);
+        await FilterService.singleton.apply();
     }
 
     colorByDepth(depth) {
