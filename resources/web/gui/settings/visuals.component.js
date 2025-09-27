@@ -1,5 +1,5 @@
-import {BaseComponent} from "/gui/core/base.component.js";
-import {StyleService} from "/display/style.service.js"
+import {BaseComponent} from "../core/base.component.js";
+import {StyleService} from "../../display/style.service.js"
 
 const STYLE = `
   .panel {

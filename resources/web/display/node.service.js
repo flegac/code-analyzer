@@ -1,7 +1,7 @@
-import {Metadata} from "/project/metadata.model.js";
-import {ClusterService} from "/cluster/cluster.service.js";
-import { GraphService } from "/display/graph.service.js";
-import { StyleService } from "/display/style.service.js";
+import {Metadata} from "../project/metadata.model.js";
+import {ClusterService} from "./cluster/cluster.service.js";
+import { GraphService } from "./graph.service.js";
+import { StyleService } from "./style.service.js";
 
 export class NodeService extends Metadata {
     static singleton = new NodeService();

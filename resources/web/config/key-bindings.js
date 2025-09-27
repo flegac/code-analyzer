@@ -1,4 +1,4 @@
-import { CameraService } from "/lib/camera.service.js"
+import { CameraService } from "../camera.service.js"
 
 
 export function keyBindings(app) {

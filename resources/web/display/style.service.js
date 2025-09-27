@@ -1,10 +1,10 @@
-import {StoreService} from "/lib/store.service.js"
-import {CameraService} from "/lib/camera.service.js"
+import {StoreService} from "../store.service.js"
+import {CameraService} from "../camera.service.js"
 
-import {NodeService} from "/display/node.service.js"
-import {GraphService} from "/display/graph.service.js";
+import {NodeService} from "./node.service.js"
+import {GraphService} from "./graph.service.js";
 
-import {NodeMeshModel} from "/mesh/node.mesh.model.js";
+import {NodeMeshModel} from "../mesh/node.mesh.model.js";
 
 
 export class StyleService {

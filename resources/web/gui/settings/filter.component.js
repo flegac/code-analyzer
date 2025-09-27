@@ -1,9 +1,9 @@
-import {BaseComponent} from "/gui/core/base.component.js";
-import {ProjectService} from "/project/project.service.js"
-import {ClusterService} from "/cluster/cluster.service.js"
-import {StyleService} from "/display/style.service.js";
-import {PhysicsService} from "/display/physics.service.js";
-import {FilterService} from "/filter/filter.service.js"
+import {BaseComponent} from "../core/base.component.js";
+import {ProjectService} from "../../project/project.service.js"
+import {ClusterService} from "../../display/cluster/cluster.service.js"
+import {StyleService} from "../../display/style.service.js";
+import {PhysicsService} from "../../display/physics.service.js";
+import {FilterService} from "../../display/filter/filter.service.js"
 
 
 const STYLE = `

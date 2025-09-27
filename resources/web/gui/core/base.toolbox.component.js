@@ -1,4 +1,4 @@
-import {BaseComponent} from "/gui/core/base.component.js";
+import {BaseComponent} from "./base.component.js";
 
 const STYLE = `
 [name=main-toolbar] {

@@ -1,6 +1,6 @@
-import {Billboard} from "/mesh/billboard.mesh.model.js";
-import {TextSprite} from "/mesh/text.sprite.model.js";
-import {StyleService} from "/display/style.service.js";
+import {Billboard} from "./billboard.mesh.model.js";
+import {TextSprite} from "./text.sprite.model.js";
+import {StyleService} from "../display/style.service.js";
 
 export class NodeMeshModel {
 

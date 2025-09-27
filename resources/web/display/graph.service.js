@@ -1,12 +1,12 @@
-import {LayoutService} from "/lib/layout.service.js"
-import {CameraService} from "/lib/camera.service.js"
+import {LayoutService} from "../layout.service.js"
+import {CameraService} from "../camera.service.js"
 
-import {ProjectService} from "/project/project.service.js"
-import {StyleService} from "/display/style.service.js"
-import {PhysicsService} from "/display/physics.service.js"
-import {NodeService} from "/display/node.service.js"
+import {ProjectService} from "../project/project.service.js"
+import {StyleService} from "./style.service.js"
+import {PhysicsService} from "./physics.service.js"
+import {NodeService} from "./node.service.js"
 
-import {ClosenessCentrality} from "/metrics/closeness.centrality.metrics.js"
+import {ClosenessCentrality} from "./metrics/closeness.centrality.metrics.js"
 
 
 class GraphState {

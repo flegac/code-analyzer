@@ -1,4 +1,4 @@
-import { NodeMetrics } from "/metrics/node.metrics.js";
+import { NodeMetrics } from "./node.metrics.js";
 
 
 export class ClosenessCentrality extends NodeMetrics {

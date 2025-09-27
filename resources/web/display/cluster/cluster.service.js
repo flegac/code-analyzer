@@ -1,4 +1,4 @@
-import {AttributeClusterStrategy, ModuleDepthClusterStrategy} from "/cluster/cluster.strategy.model.js"
+import {AttributeClusterStrategy, ModuleDepthClusterStrategy} from "./cluster.strategy.model.js"
 
 export class ClusterService {
     static singleton = new ClusterService();

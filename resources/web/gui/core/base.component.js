@@ -1,4 +1,4 @@
-import {Injector} from "/gui/core/injector.js";
+import {Injector} from "./injector.js";
 
 //display: none;
 const STYLE = `

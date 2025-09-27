@@ -1,8 +1,8 @@
-import {BaseComponent} from "/gui/core/base.component.js";
-import {ClusterComponent} from "/gui/settings/cluster.component.js"
-import {VisualsComponent} from "/gui/settings/visuals.component.js"
-import {PhysicsComponent} from "/gui/settings/physics.component.js"
-import {FilterComponent} from "/gui/settings/filter.component.js"
+import {BaseComponent} from "../core/base.component.js";
+import {ClusterComponent} from "./cluster.component.js"
+import {VisualsComponent} from "./visuals.component.js"
+import {PhysicsComponent} from "./physics.component.js"
+import {FilterComponent} from "./filter.component.js"
 
 const STYLE = `
 .graph-settings {

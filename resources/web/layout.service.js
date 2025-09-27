@@ -1,21 +1,21 @@
-import {AppLayout} from "/lib/app.layout.js"
-import {CameraService} from "/lib/camera.service.js"
+import {AppLayout} from "./app.layout.js"
+import {CameraService} from "./camera.service.js"
 
-import {GraphService} from "/display/graph.service.js"
-import {StyleService} from "/display/style.service.js"
-import {ProjectService} from "/project/project.service.js"
+import {GraphService} from "./display/graph.service.js"
+import {StyleService} from "./display/style.service.js"
+import {ProjectService} from "./project/project.service.js"
 
-import {BaseComponent} from "/gui/core/base.component.js";
-import {GraphCanvasComponent} from "/gui/graph.canvas.component.js"
-import {TableComponent} from "/gui/table.component.js"
-import {SettingsComponent} from "/gui/settings/settings.component.js";
-import {ProjectComponent} from "/gui/project.component.js"
-import {NavigationComponent} from "/gui/navigation.component.js"
-import {RendererDebugComponent} from "/gui/renderer.debug.component.js"
-import {ToolBox} from "/gui/core/base.toolbox.component.js";
-import {ConfigComponent} from "/gui/config.component.js"
+import {BaseComponent} from "./gui/core/base.component.js";
+import {GraphCanvasComponent} from "./gui/graph.canvas.component.js"
+import {TableComponent} from "./gui/table.component.js"
+import {SettingsComponent} from "./gui/settings/settings.component.js";
+import {ProjectComponent} from "./gui/project.component.js"
+import {NavigationComponent} from "./gui/navigation.component.js"
+import {RendererDebugComponent} from "./gui/renderer.debug.component.js"
+import {ToolBox} from "./gui/core/base.toolbox.component.js";
+import {ConfigComponent} from "./gui/config.component.js"
 
-import {Billboard} from "/mesh/billboard.mesh.model.js"
+import {Billboard} from "./mesh/billboard.mesh.model.js"
 
 
 export class LayoutService {

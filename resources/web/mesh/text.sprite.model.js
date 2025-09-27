@@ -1,4 +1,4 @@
-import {StyleService} from "/display/style.service.js";
+import {StyleService} from "../display/style.service.js";
 
 export class TextSprite {
     constructor(node, baseSize) {

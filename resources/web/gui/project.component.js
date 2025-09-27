@@ -1,13 +1,13 @@
-import { BaseComponent } from "/gui/core/base.component.js";
-import { ProjectService } from "/project/project.service.js"
-import { LayoutService } from "/lib/layout.service.js"
+import {BaseComponent} from "./core/base.component.js";
+import {ProjectService} from "../project/project.service.js"
+import {LayoutService} from "../layout.service.js"
 
 export class ProjectComponent extends BaseComponent {
     constructor() {
         super({
             template: `<input type="file" name="file-browser" webkitdirectory></input>`,
         })
-        this.toggleVisibility({ visible: false })
+        this.toggleVisibility({visible: false})
 
         // 📂 Charger un fichier
         this.fileBrowser = this.getPanel('file-browser');

@@ -1,6 +1,6 @@
-import {BaseComponent} from "/gui/core/base.component.js"
-import {GraphService} from "/display/graph.service.js"
-import {CameraService} from "/lib/camera.service.js"
+import {BaseComponent} from "./core/base.component.js"
+import {GraphService} from "../display/graph.service.js"
+import {CameraService} from "../camera.service.js"
 
 const STYLE = `
 .graph-navigation {

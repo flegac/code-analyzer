@@ -1,4 +1,4 @@
-import { Project } from "/project/project.model.js"
+import { Project } from "./project.model.js"
 
 
 export class ProjectService {

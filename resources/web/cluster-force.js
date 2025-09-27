@@ -1,4 +1,4 @@
-import {ClusterService} from "/cluster/cluster.service.js";
+import {ClusterService} from "./display/cluster/cluster.service.js";
 
 export function clusterForce() {
     let nodes;

@@ -1,6 +1,6 @@
-import {ProjectService} from "/project/project.service.js"
-import {GraphFilter} from "/filter/graph.filter.model.js"
-import {GraphService} from "/display/graph.service.js";
+import {ProjectService} from "../../project/project.service.js"
+import {GraphFilter} from "./graph.filter.model.js"
+import {GraphService} from "../graph.service.js";
 
 
 export class FilterService {

@@ -1,4 +1,4 @@
-import { BaseComponent } from "/gui/core/base.component.js";
+import {BaseComponent} from "./core/base.component.js";
 
 import Stats from "stats";
 

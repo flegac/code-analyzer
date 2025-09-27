@@ -1,5 +1,5 @@
-import { BaseComponent } from "/gui/core/base.component.js";
-import { ProjectService } from "/project/project.service.js";
+import {BaseComponent} from "./core/base.component.js";
+import {ProjectService} from "../project/project.service.js";
 
 const STYLE = `
 [name=table-internal] {
@@ -42,7 +42,7 @@ export class TableComponent extends BaseComponent {
                 // row[label] = M.read(label, id);
                 row[label] = D.project.read(label, id);
                 return row;
-            }, { module: id })
+            }, {module: id})
         );
 
         this.table.setColumns(columns);

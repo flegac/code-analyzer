@@ -1,5 +1,5 @@
-import {GraphService} from "/display/graph.service.js"
-import {StoreService} from "/lib/store.service.js"
+import {GraphService} from "./display/graph.service.js"
+import {StoreService} from "./store.service.js"
 
 export class CameraService {
     static singleton = new CameraService();

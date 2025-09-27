@@ -1,10 +1,10 @@
-import {KeyboardService} from "/lib/keyboard.service.js";
-import {LayoutService} from "/lib/layout.service.js"
-import {CameraService} from "/lib/camera.service.js"
+import {KeyboardService} from "./keyboard.service.js";
+import {LayoutService} from "./layout.service.js"
+import {CameraService} from "./camera.service.js"
 
-import {keyBindings} from "/config/key-bindings.js"
-import {GraphService} from "/display/graph.service.js"
-import {ProjectService} from "/project/project.service.js"
+import {keyBindings} from "./config/key-bindings.js"
+import {GraphService} from "./display/graph.service.js"
+import {ProjectService} from "./project/project.service.js"
 
 export async function main() {
     const layout = LayoutService.singleton;

@@ -1,5 +1,5 @@
-import { GraphModel } from "/project/graph.model.js"
-import { FilterService } from "/filter/filter.service.js"
+import { GraphModel } from "./graph.model.js"
+import { FilterService } from "../display/filter/filter.service.js"
 
 
 export class Project {
