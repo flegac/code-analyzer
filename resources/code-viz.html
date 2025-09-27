@@ -7,20 +7,7 @@
     <script type="importmap">
         {
             "imports": {
-                "stats": "https://esm.sh/stats.js",
-
-                "/config/": "./web/config/",
-                "/lib/": "./web/",
-
-                "/gui/": "./web/gui/",
-                "/mesh/": "./web/mesh/",
-                
-                "/cluster/": "./web/display/cluster/",
-                "/filter/": "./web/display/filter/",
-                "/metrics/": "./web/display/metrics/",
-
-                "/project/": "./web/project/",
-                "/display/": "./web/display/"
+                "stats": "https://esm.sh/stats.js"
             }
         }
     </script>
@@ -54,7 +41,7 @@
 
 <body>
 <script type="module">
-    import {main} from "/lib/main.js"
+    import {main} from "./web/main.js"
 
     (async () => {
         await main();

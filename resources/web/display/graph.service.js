@@ -160,11 +160,11 @@ export class GraphService {
             links: this.state.links
         });
 
+        N.updateMetrics(new ClosenessCentrality(relation));
         N.updateGroup();
         N.updateRadius();
         N.updateColor();
         N.updateNavigation();
-        N.updateMetrics(new ClosenessCentrality(relation));
 
         S.rebuildMeshes();
 
