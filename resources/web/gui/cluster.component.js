@@ -115,7 +115,6 @@ export class ClusterComponent extends BaseComponent {
         options.forEach(opt => {
             const value = typeof opt === 'string' ? opt : opt.value;
             const label = typeof opt === 'string' ? opt : opt.label;
-
             const option = document.createElement('sl-option');
             option.value = value;
             option.textContent = label;

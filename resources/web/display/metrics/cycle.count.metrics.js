@@ -8,20 +8,10 @@ export class CycleCounter extends NodeMetrics {
         this.graph = graph;
         this.nodes = Object.keys(graph);
         this.cycles = [];
-        this.blocked = new Set();
-        this.blockMap = new Map();
-        this.stack = [];
-
-        // Calcul des cycles
-        this._computeCycles();
-
-        // Comptage des participations
         this.cycleCount = Object.fromEntries(this.nodes.map(n => [n, 0]));
-        for (const cycle of this.cycles) {
-            for (const node of cycle) {
-                this.cycleCount[node]++;
-            }
-        }
+        this.seenCycles = new Set();
+
+        this._computeCycles();
     }
 
     getValue(node) {
@@ -29,56 +19,89 @@ export class CycleCounter extends NodeMetrics {
     }
 
     _computeCycles() {
-        for (let i = 0; i < this.nodes.length; i++) {
-            const start = this.nodes[i];
-            const subgraph = this._buildSubgraph(start);
-            this._circuit(start, start, subgraph);
-            this._resetState();
+        const sccs = _tarjanSCC(this.graph);
+        for (const scc of sccs) {
+            const subgraph = {};
+            for (const node of scc) {
+                subgraph[node] = this.graph[node].filter(n => scc.includes(n));
+            }
+            for (const start of scc) {
+                this._circuit(start, start, subgraph, [], new Set(), 0, 10);
+            }
         }
     }
 
-    _circuit(v, start, graph) {
-        this.stack.push(v);
-        this.blocked.add(v);
+    _circuit(v, start, graph, path, visited, depth, maxDepth) {
+        if (depth > maxDepth) return;
+
+        path.push(v);
+        visited.add(v);
 
         for (const w of graph[v] || []) {
-            if (w === start) {
-                this.cycles.push([...this.stack]);
-            } else if (!this.blocked.has(w)) {
-                this._circuit(w, start, graph);
+            if (w === start && path.length > 1) {
+                const key = _canonicalCycle(path);
+                if (!this.seenCycles.has(key)) {
+                    this.seenCycles.add(key);
+                    this.cycles.push([...path]);
+                    for (const node of path) {
+                        this.cycleCount[node]++;
+                    }
+                }
+            } else if (!visited.has(w)) {
+                this._circuit(w, start, graph, path, visited, depth + 1, maxDepth);
             }
         }
 
-        this.stack.pop();
-        this._unblock(v);
+        path.pop();
+        visited.delete(v);
     }
+}
+function _canonicalCycle(path) {
+    const minIndex = path.reduce((minIdx, val, idx) =>
+        val < path[minIdx] ? idx : minIdx, 0);
+    const rotated = path.slice(minIndex).concat(path.slice(0, minIndex));
+    return rotated.join(',');
+}
 
-    _unblock(node) {
-        this.blocked.delete(node);
-        const blockedNodes = this.blockMap.get(node) || [];
-        for (const n of blockedNodes) {
-            if (this.blocked.has(n)) {
-                this._unblock(n);
+function _tarjanSCC(graph) {
+    let index = 0;
+    const indices = {};
+    const lowlink = {};
+    const stack = [];
+    const onStack = new Set();
+    const result = [];
+
+    function strongConnect(v) {
+        indices[v] = index;
+        lowlink[v] = index;
+        index++;
+        stack.push(v);
+        onStack.add(v);
+
+        for (const w of graph[v] || []) {
+            if (!(w in indices)) {
+                strongConnect(w);
+                lowlink[v] = Math.min(lowlink[v], lowlink[w]);
+            } else if (onStack.has(w)) {
+                lowlink[v] = Math.min(lowlink[v], indices[w]);
             }
         }
-        this.blockMap.set(node, []);
-    }
 
-    _resetState() {
-        this.blocked.clear();
-        this.blockMap.clear();
-        this.stack = [];
-    }
-
-    _buildSubgraph(start) {
-        const subgraph = {};
-        const index = this.nodes.indexOf(start);
-        const subNodes = this.nodes.slice(index);
-
-        for (const node of subNodes) {
-            subgraph[node] = (this.graph[node] || []).filter(n => subNodes.includes(n));
+        if (lowlink[v] === indices[v]) {
+            const scc = [];
+            let w;
+            do {
+                w = stack.pop();
+                onStack.delete(w);
+                scc.push(w);
+            } while (w !== v);
+            if (scc.length > 1) result.push(scc);
         }
-
-        return subgraph;
     }
+
+    for (const v of Object.keys(graph)) {
+        if (!(v in indices)) strongConnect(v);
+    }
+
+    return result;
 }

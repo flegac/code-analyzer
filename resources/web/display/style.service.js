@@ -28,8 +28,10 @@ export class StyleService {
             textOffsetY: 20,
         });
         this.links = StoreService.singleton.store('links', {
-            opacity: 1.,
-            particles: 0,
+            opacity: .5,
+            metrics: 'cycles',
+            particles: 1,
+            particleWidthMultiplier: 2.,
             width: 2.0,
             relation: {
                 isVisible: true,
@@ -146,13 +148,11 @@ export class StyleService {
             const source = G.findNodeById(link.source.id || link.source);
             const target = G.findNodeById(link.target.id || link.target);
 
-
-            // const metrics = 'centrality';
-            const metrics = 'cycles';
+            const metrics = this.links.metrics;
 
             const value1 = source.read(metrics);
             const value2 = target.read(metrics);
-            const value = Math.min(value1, value2);
+            const value = (value1 + value2) * .5;
 
             const c1 = this.links.relation.colorLow;
             const c2 = this.links.relation.colorHigh;
@@ -180,16 +180,16 @@ export class StyleService {
         // ----- LINKS ----------------------------------
         graph
             .linkCurvature(.0)
-            .linkDirectionalParticles((link) => this.links.particles)
-            .linkDirectionalParticleWidth(2. * this.links.width)
+            .linkDirectionalParticles((link) => 1 + this.links.particles)
+            .linkDirectionalParticleWidth(this.links.particleWidthMultiplier * this.links.width)
             .linkDirectionalParticleSpeed(.01)
-            .linkWidth((link) => this.links.width)
+            .linkWidth((link) => link.label === 'hierarchy' ? 10 : this.links.width)
             .linkColor((link) => this.getLinkColor(link))
             .linkVisibility((link) => {
                 const hasWidth = this.links.width > 0;
                 return hasWidth && this.links[link.label]?.isVisible;
             })
-            .linkOpacity(1.)
+            .linkOpacity(this.links.opacity)
         ;
     }
 }

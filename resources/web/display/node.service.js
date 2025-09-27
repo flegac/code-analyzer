@@ -1,12 +1,27 @@
 import {Metadata} from "../project/metadata.model.js";
 import {ClusterService} from "./cluster/cluster.service.js";
-import { GraphService } from "./graph.service.js";
-import { StyleService } from "./style.service.js";
+import {GraphService} from "./graph.service.js";
+import {StyleService} from "./style.service.js";
+import {ProjectService} from "../project/project.service.js";
+import {ClosenessCentrality} from "./metrics/closeness.centrality.metrics.js";
+import {CycleCounter} from "./metrics/cycle.count.metrics.js";
 
 export class NodeService extends Metadata {
     static singleton = new NodeService();
 
-    updateMetrics(metrics) {
+    updateMetrics(metrics = null) {
+        const P = ProjectService.singleton;
+        const S = StyleService.singleton;
+        if (metrics === null) {
+            const relation = P.project.relation();
+            if (S.links.metrics === 'centrality') {
+                metrics = new ClosenessCentrality(relation)
+            } else if (S.links.metrics === 'cycles') {
+                metrics = new CycleCounter(relation);
+            }
+        }
+
+
         const G = GraphService.singleton;
         G.state.nodes.forEach(node => {
             const value = metrics.getValue(node);

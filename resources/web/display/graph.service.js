@@ -161,11 +161,7 @@ export class GraphService {
             links: this.state.links
         });
 
-        N.updateMetrics(new ClosenessCentrality(relation));
-
-        //TODO: too slow
-        // N.updateMetrics(new CycleCounter(relation));
-
+        N.updateMetrics();
         N.updateGroup();
         N.updateRadius();
         N.updateColor();
