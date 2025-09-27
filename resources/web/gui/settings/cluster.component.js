@@ -1,8 +1,8 @@
-import { BaseComponent } from "/gui/core/base.component.js";
-import { DatasetService } from "/dataset/dataset.service.js"
-import { ClusterService } from "/cluster/cluster.service.js"
-import { StyleService } from "/display/style.service.js";
-import { PhysicsService } from "/display/physics.service.js";
+import {BaseComponent} from "/gui/core/base.component.js";
+import {DatasetService} from "/dataset/dataset.service.js"
+import {ClusterService} from "/cluster/cluster.service.js"
+import {StyleService} from "/display/style.service.js";
+import {PhysicsService} from "/display/physics.service.js";
 
 
 const STYLE = `
@@ -65,57 +65,67 @@ const TEMPLATE = `
 `;
 
 export class ClusterComponent extends BaseComponent {
-  constructor() {
-    super({
-      template: TEMPLATE,
-      style: STYLE,
-      state: {
-        isActive: true,
-        collapseDepth: 2,
-        colorDepth: 2,
-        attribute: 'group',
+    constructor() {
+        super({
+            template: TEMPLATE,
+            style: STYLE,
+            state: {
+                isActive: true,
+                collapseDepth: 2,
+                colorDepth: 2,
+                attribute: 'group',
 
-        state: ClusterService.singleton.state,
-        colorByGroup: (event) => this.colorByGroup(event.target.value),
-        colorByDepth: (event) => this.colorByDepth(event.target.value),
-        collapseByDepth: (event) => this.collapseByDepth(event.target.value),
-      }
-    });
-    this.updateGui()
-  }
+                state: ClusterService.singleton.state,
+                colorByGroup: (event) => this.colorByGroup(event.target.value),
+                colorByDepth: (event) => this.colorByDepth(event.target.value),
+                collapseByDepth: (event) => this.collapseByDepth(event.target.value),
+            }
+        });
+        // this.updateGui()
+    }
 
-  colorByDepth(depth) {
-    const C = ClusterService.singleton;
-    C.setGroupByDepth(depth);
-    StyleService.singleton.apply()
-  }
+    colorByDepth(depth) {
+        const C = ClusterService.singleton;
+        C.setGroupByDepth(depth);
+        StyleService.singleton.apply()
+    }
 
-  colorByGroup(attribute) {
-    const C = ClusterService.singleton;
-    C.setGroupByLabel(attribute);
-    StyleService.singleton.apply()
-  }
+    colorByGroup(attribute) {
+        const C = ClusterService.singleton;
+        C.setGroupByLabel(attribute);
+        StyleService.singleton.apply()
+    }
 
-  async collapseByDepth(depth) {
-    const C = ClusterService.singleton;
-    C.setCollapseByDepth(depth)
-    await PhysicsService.singleton.apply();
-  }
+    async collapseByDepth(depth) {
+        const C = ClusterService.singleton;
+        C.setCollapseByDepth(depth)
+        await PhysicsService.singleton.apply();
+    }
 
-  updateGui() {
-    const categories = ['group', ...DatasetService.singleton.state.categories()];
-    this._populateSelect('clusterAttribute', categories);
-  }
+    updateGui() {
+        const categories = ['group', ...DatasetService.singleton.state.categories()];
+        this._populateSelect('clusterAttribute', categories);
+    }
 
-  _populateSelect(id, options) {
-    const select = this.container.querySelector(`#${id}`);
-    select.innerHTML = ''; // clear previous
-    options.forEach(opt => {
-      const option = document.createElement('sl-option');
-      option.value = typeof opt === 'string' ? opt : opt.value;
-      option.textContent = typeof opt === 'string' ? opt : opt.label;
-      select.appendChild(option);
-    });
-  }
+    _populateSelect(id, options) {
+        const select = this.container.querySelector(`#${id}`);
+        select.innerHTML = ''; // clear previous
+
+        options.forEach(opt => {
+            const value = typeof opt === 'string' ? opt : opt.value;
+            const label = typeof opt === 'string' ? opt : opt.label;
+
+            const option = document.createElement('sl-option');
+            option.value = value;
+            option.textContent = label;
+
+            if (value === this.state.attribute) {
+                option.setAttribute('selected', '');
+            }
+
+            select.appendChild(option);
+        });
+    }
+
 
 }

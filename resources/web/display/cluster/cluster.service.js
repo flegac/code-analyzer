@@ -1,11 +1,10 @@
-import { GraphService } from "/display/graph.service.js";
-import { ModuleDepthClusterStrategy, AttributeClusterStrategy } from "/cluster/cluster.strategy.model.js"
+import {AttributeClusterStrategy, ModuleDepthClusterStrategy} from "/cluster/cluster.strategy.model.js"
 
 export class ClusterService {
     static singleton = new ClusterService();
 
     constructor() {
-        this.groupStrategy = new AttributeClusterStrategy('category');
+        this.groupStrategy = new ModuleDepthClusterStrategy(2);
         this.collapseStrategy = new ModuleDepthClusterStrategy(2);
     }
 

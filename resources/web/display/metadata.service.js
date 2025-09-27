@@ -1,42 +1,43 @@
-import { GraphService } from "/display/graph.service.js"
-import { StyleService } from "/display/style.service.js"
-import { ClusterService } from "/cluster/cluster.service.js"
-
-export class MetadataService {
-    static singleton = new MetadataService()
+import {GraphService} from "/display/graph.service.js"
+import {StyleService} from "/display/style.service.js"
+import {ClusterService} from "/cluster/cluster.service.js"
 
 
+class Metadata {
     constructor() {
-        this._metadata = {
-            // key => nodeId => value
+        this._data = {
+            // key => itemId => value
         }
     }
 
     labels() {
-        return [...Object.keys(this._metadata)];
+        return [...Object.keys(this._data)];
     }
 
     write(key, id, value) {
-        this._metadata ??= {};
-        this._metadata[key] ??= {};
-        this._metadata[key][id] = value;
+        this._data ??= {};
+        this._data[key] ??= {};
+        this._data[key][id] = value;
     }
 
     read(key, id) {
-        return this._metadata?.[key]?.[id] ?? null;
+        return this._data?.[key]?.[id] ?? null;
     }
 
     readAll(id) {
         const result = {};
-        if (!this._metadata) return result;
+        if (!this._data) return result;
 
-        for (const key of Object.keys(this._metadata)) {
+        for (const key of Object.keys(this._data)) {
             result[key] = this.read(key, id);
         }
 
         return result;
     }
 
+}
+
+class MetadataNodes extends Metadata {
 
     updateMetrics(metrics) {
         const G = GraphService.singleton;
@@ -86,20 +87,32 @@ export class MetadataService {
         });
     }
 
-
     updateNavigation() {
         const G = GraphService.singleton;
         // connectivity stats
         G.state.nodes.forEach(node => {
-            this.write('outgoing', node.id, [])
-            this.write('incoming', node.id, [])
+            node.write('outgoing', []);
+            node.write('incoming', []);
         });
         G.state.links.forEach(link => {
-            this.read('outgoing', link.source).push(link.target);
-            this.read('incoming', link.target).push(link.source);
+            const source = G.findNodeById(link.source.id || link.source);
+            const target = G.findNodeById(link.target.id || link.target);
+
+            source.read('outgoing').push(target.id);
+            target.read('incoming').push(source.id);
         });
     }
+}
 
+class MetadataLinks extends Metadata {
+}
 
+export class MetadataService {
+    static singleton = new MetadataService()
+
+    constructor() {
+        this.nodes = new MetadataNodes();
+        this.links = new MetadataLinks();
+    }
 
 }

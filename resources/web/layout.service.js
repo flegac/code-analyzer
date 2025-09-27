@@ -1,21 +1,22 @@
-import { BaseComponent } from "/gui/core/base.component.js";
+import {AppLayout} from "/lib/app.layout.js"
+import {CameraService} from "/lib/camera.service.js"
 
-import { StyleService } from "/display/style.service.js"
+import {GraphService} from "/display/graph.service.js"
+import {StyleService} from "/display/style.service.js"
+import {DatasetService} from "/dataset/dataset.service.js"
 
-import { AppLayout } from "/lib/app.layout.js"
-import { GraphCanvasComponent } from "/gui/graph.canvas.component.js"
-import { TableComponent } from "/gui/table.component.js"
-import { SettingsComponent } from "/gui/settings/graph.settings.component.js";
-import { DatasetComponent } from "/gui/dataset.component.js"
-import { NavigationComponent } from "/gui/navigation.component.js"
-import { RendererDebugComponent } from "/gui/renderer.debug.component.js"
-import { ToolBox } from "/gui/core/base.toolbox.component.js";
+import {BaseComponent} from "/gui/core/base.component.js";
+import {GraphCanvasComponent} from "/gui/graph.canvas.component.js"
+import {TableComponent} from "/gui/table.component.js"
+import {SettingsComponent} from "/gui/settings/graph.settings.component.js";
+import {DatasetComponent} from "/gui/dataset.component.js"
+import {NavigationComponent} from "/gui/navigation.component.js"
+import {RendererDebugComponent} from "/gui/renderer.debug.component.js"
+import {ToolBox} from "/gui/core/base.toolbox.component.js";
+import {GraphFilterComponent} from "/gui/graph.filter.component.js"
 
-import { Billboard } from "/mesh/billboard.mesh.model.js"
-import { GraphService } from "/display/graph.service.js"
-import { DatasetService } from "/dataset/dataset.service.js"
-import { CameraService } from "/display/camera.service.js"
-import { GraphFilterComponent } from "/gui/graph.filter.component.js"
+import {Billboard} from "/mesh/billboard.mesh.model.js"
+
 
 export class LayoutService {
     static singleton = new LayoutService()
@@ -31,48 +32,61 @@ export class LayoutService {
         this.navigation = this.layout.addComponent('navigation', new NavigationComponent());
         this.rendererDebug = this.layout.addComponent('debug', new RendererDebugComponent());
         this.graphFilter = this.layout.addComponent('graph-filter', new GraphFilterComponent());
+        this.toolbox = this.layout.addComponent('graph-toolbox', this.createToolbar());
+
+        this.layout.start();
+        console.log('initialize', this);
+    }
 
 
-        this.toolbox = this.layout.addComponent('graph-toolbox', new ToolBox())
-            .newButton({
+    createToolbar() {
+        const toolBox = new ToolBox();
+
+        toolBox.newGroup([
+            {
                 label: '📂',
                 tooltip: 'Open project',
-                onClick: () => this.dataset.openBrowser()
-            })
-            .newButton({
+                onClick: () => this.dataset.openBrowser(),
+            },
+            {
                 label: '🔄',
                 tooltip: 'Refresh graph data',
-                onClick: () => GraphService.singleton.rebuildGraph()
-            })
-            .newButton({
+                onClick: () => GraphService.singleton.rebuildGraph(),
+            },
+            {
                 label: '📊',
                 tooltip: 'Node tabular data',
-                onClick: this.groupAction(this.table)
-            })
-            .newButton({
+                onClick: this.groupAction(this.table),
+            }
+        ]);
+
+        toolBox.newGroup([
+            {
                 label: '🧭',
                 tooltip: 'Navigation panel',
-                onClick: this.groupAction(this.navigation)
-            })
-            .newButton({
+                onClick: this.groupAction(this.navigation),
+            },
+            {
                 label: '⚙️',
                 tooltip: 'Settings panel',
-                onClick: this.groupAction(this.settings)
-            })
-            .newButton({
+                onClick: this.groupAction(this.settings),
+            },
+            {
                 label: '🏷️',
                 tooltip: 'Filter panel',
-                onClick: this.groupAction(this.graphFilter)
-            })
-            .newButton({
+                onClick: this.groupAction(this.graphFilter),
+            },
+        ]);
+
+        toolBox.newGroup([
+            {
                 label: '🐞',
                 tooltip: 'GL Renderer panel',
-                onClick: () => this.rendererDebug.toggleVisibility()
-            })
-            ;
-        this.layout.start();
+                onClick: () => this.rendererDebug.toggleVisibility(),
+            }
+        ]);
 
-        console.log('initialize', this);
+        return toolBox;
     }
 
 
@@ -82,7 +96,6 @@ export class LayoutService {
         const g = [
             this.settings,
             this.navigation,
-            // this.rendererDebug,
             this.table,
             this.graphFilter
         ];
@@ -98,14 +111,15 @@ export class LayoutService {
         $(() => {
             G.initGraph(this.graphPanel());
             const renderer = G.getGraph().renderer();
-            this.rendererDebug.start(renderer);
 
             Billboard.startAutoOrientation(
                 () => G.getGraph().scene(),
                 () => CameraService.singleton.camera().position
             );
+
+            this.rendererDebug.toggleVisibility({visibility: false});
+            this.rendererDebug.start(renderer);
             this.groupAction(target)();
-            this.rendererDebug.toggleVisibility({visibility:false});
 
         });
 
@@ -125,10 +139,10 @@ export class LayoutService {
 
         const S = StyleService.singleton;
 
-        S.mesh.size =null;// DatasetService.singleton.state.numerics()[0];
+        S.mesh.size = null;// DatasetService.singleton.state.numerics()[0];
         S.mesh.color = DatasetService.singleton.state.categories()[0];
 
-        this.settings.cluster.updateGui();
+        this.settings.updateGui();
         S.apply();
     }
 }

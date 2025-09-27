@@ -1,8 +1,9 @@
 import {KeyboardService} from "/lib/keyboard.service.js";
 import {LayoutService} from "/lib/layout.service.js"
+import {CameraService} from "/lib/camera.service.js"
+
 import {keyBindings} from "/config/key-bindings.js"
 import {GraphService} from "/display/graph.service.js"
-import {CameraService} from "/display/camera.service.js"
 import {DatasetService} from "/dataset/dataset.service.js";
 
 export async function main() {

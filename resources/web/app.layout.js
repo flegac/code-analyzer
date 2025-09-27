@@ -137,8 +137,9 @@ export class AppLayout extends BaseComponent {
         });
 
         if (visibleChild) {
+            console.log('updateSplitPanelVisibility', visibleChild);
             const width = visibleChild.scrollWidth;
-            splitPanel.position = 300; // bornes de sécurité
+            splitPanel.position = 1000;
         } else {
             splitPanel.position = 0;
         }

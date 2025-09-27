@@ -64,4 +64,9 @@ export class SettingsComponent extends BaseComponent {
             await GraphService.singleton.rebuildGraph();
         });
     }
+
+    updateGui( ) {
+        this.cluster.updateGui();
+    }
+
 }

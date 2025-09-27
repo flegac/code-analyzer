@@ -1,9 +1,10 @@
+import { LayoutService } from "/lib/layout.service.js"
+import { CameraService } from "/lib/camera.service.js"
+
 import { DatasetService } from "/dataset/dataset.service.js"
 import { StyleService } from "/display/style.service.js"
 import { PhysicsService } from "/display/physics.service.js"
-import { CameraService } from "/display/camera.service.js"
 import { MetadataService } from "/display/metadata.service.js"
-import { LayoutService } from "/lib/layout.service.js"
 
 import { ClosenessCentrality } from "/metrics/closeness.centrality.metrics.js"
 
@@ -134,16 +135,16 @@ export class GraphService {
                 x: old?.x,
                 y: old?.y,
                 z: old?.z,
-                read: label => M.read(label, id),
-                readAll: () => M.readAll(id),
-                write: (label, value) => M.write(label, id, value),
+                read: label => M.nodes.read(label, id),
+                readAll: () => M.nodes.readAll(id),
+                write: (label, value) => M.nodes.write(label, id, value),
             };
             // copy dataset values in node
             // TODO: remove that ?
             D.labels().forEach(label => {
                 const value = D.read(label, id);
                 if (value !== null) {
-                    M.write(label, id, value)
+                    M.nodes.write(label, id, value)
                 }
             });
 
@@ -158,11 +159,11 @@ export class GraphService {
             links: this.state.links
         });
 
-        M.updateGroup();
-        M.updateRadius();
-        M.updateColor();
-        M.updateNavigation();
-        M.updateMetrics(new ClosenessCentrality(relation));
+        M.nodes.updateGroup();
+        M.nodes.updateRadius();
+        M.nodes.updateColor();
+        M.nodes.updateNavigation();
+        M.nodes.updateMetrics(new ClosenessCentrality(relation));
 
         S.rebuildMeshes();
 
