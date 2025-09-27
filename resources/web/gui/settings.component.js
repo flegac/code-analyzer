@@ -1,4 +1,4 @@
-import {BaseComponent} from "../core/base.component.js";
+import {BaseComponent} from "./core/base.component.js";
 import {ClusterComponent} from "./cluster.component.js"
 import {VisualsComponent} from "./visuals.component.js"
 import {PhysicsComponent} from "./physics.component.js"

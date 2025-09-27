@@ -1,5 +1,5 @@
-import {BaseComponent} from "../core/base.component.js";
-import {StyleService} from "../../display/style.service.js"
+import {BaseComponent} from "./core/base.component.js";
+import {StyleService} from "../display/style.service.js"
 
 const STYLE = `
   .panel {
@@ -37,12 +37,15 @@ const STYLE = `
 
 const TEMPLATE = `
     <div class="panel">
+    
+      <!-- Nodes -->
       <div class="section-header">
         <sl-checkbox v-model="mesh.isVisible" @sl-change="meshVisibility" checked></sl-checkbox>
         <h3>Nodes</h3>
         <sl-range v-model="mesh.scaling" min="0" max="50" step="0.1" @sl-input="scaling"></sl-range>
       </div>
 
+      <!-- Texts -->
       <div class="section-header">
         <sl-checkbox v-model="text.isVisible" @sl-change="textVisibility" checked></sl-checkbox>
         <h3>Texts</h3>
@@ -50,33 +53,30 @@ const TEMPLATE = `
         <sl-checkbox v-model="text.showClass" help-text="class" @sl-input="textShowClass" checked></sl-checkbox>
       </div>  
 
+      <!-- Links -->
+      <div class="slider-row">
+        <label>Particles</label>
+        <sl-range v-model="links.particles" min="0" max="10" step="1" @sl-input="applyLinks"></sl-range>
+      </div>
+      <div class="slider-row">
+        <label>Width</label>
+        <sl-range v-model="links.width" min="0" max="30" step="0.1" @sl-input="applyLinks"></sl-range>
+      </div>
+
+      <!-- Relation -->
       <div class="section-header">
-        <sl-color-picker v-model="links.relation.color" size="small" @sl-change="applyLinks"></sl-color-picker>
+        <sl-checkbox v-model="links.relation.isVisible" @sl-change="relationIsVisible" checked></sl-checkbox>
         <h3>Relation</h3>
-      </div>
-      <div class="slider-row">
-        <label>Particles</label>
-        <sl-range v-model="links.relation.particles" min="0" max="10" step="1" @sl-input="applyLinks"></sl-range>
-      </div>
-      <div class="slider-row">
-        <label>Width</label>
-        <sl-range v-model="links.relation.width" min="0" max="30" step="0.1" @sl-input="applyLinks"></sl-range>
+        <sl-color-picker v-model="links.relation.color" size="small" @sl-change="applyLinks"></sl-color-picker>
       </div>
 
+      <!-- Hierarchy -->
       <div class="section-header">
-        <sl-color-picker v-model="links.hierarchy.color" size="small" @sl-change="applyLinks"></sl-color-picker>
+        <sl-checkbox v-model="links.hierarchy.isVisible" @sl-change="hierarchyIsVisible" checked></sl-checkbox>
         <h3>Hierarchy</h3>
+        <sl-color-picker v-model="links.hierarchy.color" size="small" @sl-change="applyLinks"></sl-color-picker>
       </div>
-      <div class="slider-row">
-        <label>Particles</label>
-        <sl-range v-model="links.hierarchy.particles" min="0" max="10" step="1" @sl-input="applyLinks"></sl-range>
-      </div>
-      <div class="slider-row">
-        <label>Width</label>
-        <sl-range v-model="links.hierarchy.width" min="0" max="30" step="0.1" @sl-input="applyLinks"></sl-range>
-      </div>
-
-
+      
     </div>
 `;
 
@@ -98,7 +98,8 @@ export class VisualsComponent extends BaseComponent {
 
                 links: StyleService.singleton.links,
                 applyLinks: (e) => this.applyLinks(e.target.value),
-
+                hierarchyIsVisible: (e) => this.hierarchyIsVisible(e.target.checked),
+                relationIsVisible: (e) => this.relationIsVisible(e.target.checked),
             }
         });
     }
@@ -131,6 +132,18 @@ export class VisualsComponent extends BaseComponent {
 
     textShowClass(value) {
         StyleService.singleton.text.showClass = value;
+        StyleService.singleton.apply()
+    }
+
+
+    hierarchyIsVisible(value) {
+        StyleService.singleton.links.hierarchy.isVisible = value;
+        console.log('hierarchy.isVisible', value)
+        StyleService.singleton.apply()
+    }
+
+    relationIsVisible(value) {
+        StyleService.singleton.links.relation.isVisible = value;
         StyleService.singleton.apply()
     }
 

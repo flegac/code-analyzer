@@ -7,6 +7,7 @@ import {PhysicsService} from "./physics.service.js"
 import {NodeService} from "./node.service.js"
 
 import {ClosenessCentrality} from "./metrics/closeness.centrality.metrics.js"
+import {CycleCounter} from "./metrics/cycle.count.metrics.js";
 
 
 class GraphState {
@@ -161,6 +162,10 @@ export class GraphService {
         });
 
         N.updateMetrics(new ClosenessCentrality(relation));
+
+        //TODO: too slow
+        // N.updateMetrics(new CycleCounter(relation));
+
         N.updateGroup();
         N.updateRadius();
         N.updateColor();

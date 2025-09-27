@@ -28,24 +28,24 @@ export class StyleService {
             textOffsetY: 20,
         });
         this.links = StoreService.singleton.store('links', {
+            opacity: 1.,
+            particles: 0,
+            width: 2.0,
             relation: {
+                isVisible: true,
                 color: '#f00',
                 colorLow: '#0f0',
                 colorHigh: '#f00',
-                particles: 0,
-                width: 2.0,
             },
             hierarchy: {
+                isVisible: true,
                 color: '#fff',
                 colorLow: '#fff',
                 colorHigh: '#fff',
-                particles: 0,
-                width: 10.0,
             }
         });
         console.log('initialize', this);
     }
-
 
     visibleText(node) {
         const category = node.read('category');
@@ -71,8 +71,8 @@ export class StyleService {
     }
 
 
-    getMesh(node, position) {
-        return new NodeMeshModel(node, this, position).mesh;
+    getMesh(node, camPosition) {
+        return new NodeMeshModel(node, this, camPosition).mesh;
     }
 
     getLabel(node) {
@@ -135,38 +135,28 @@ export class StyleService {
         });
     }
 
-    getParticleNumber(link) {
-        const G = GraphService.singleton;
-        const source = G.findNodeById(link.source.id || link.source);
-        const target = G.findNodeById(link.target.id || link.target);
-
-        if (link.label !== 'hierarchy' && source.read('group') === target.read('group')) {
-            return 0;
-        }
-        return this.links[link.label]?.particles ?? 0;
-    }
-
     getLinkColor(link) {
         const G = GraphService.singleton;
 
         if (link.label === 'hierarchy') {
-            return this.links[link.label]?.color ?? '#f00';
+            return this.links[link.label]?.color;
         }
 
         if (link.label === 'relation') {
-            //TODO: fix that shit !! strange behavior on links ...
             const source = G.findNodeById(link.source.id || link.source);
             const target = G.findNodeById(link.target.id || link.target);
 
-            if (source.read('group') === target.read('group')) {
-                return '#ccc';
-            }
 
-            const centrality1 = source.read('centrality');
-            const centrality2 = target.read('centrality');
+            // const metrics = 'centrality';
+            const metrics = 'cycles';
+
+            const value1 = source.read(metrics);
+            const value2 = target.read(metrics);
+            const value = Math.min(value1, value2);
+
             const c1 = this.links.relation.colorLow;
             const c2 = this.links.relation.colorHigh;
-            return interpolateColor(c1, c2, (centrality1 + centrality2) / 2);
+            return interpolateColor(c1, c2, value);
         }
         return this.links[link.label]?.color ?? '#f00';
     }
@@ -190,13 +180,16 @@ export class StyleService {
         // ----- LINKS ----------------------------------
         graph
             .linkCurvature(.0)
-            .linkDirectionalParticles((link) => this.getParticleNumber(link))
-            .linkDirectionalParticleWidth((link) => 2 * this.links[link.label]?.width ?? 0)
+            .linkDirectionalParticles((link) => this.links.particles)
+            .linkDirectionalParticleWidth(2. * this.links.width)
             .linkDirectionalParticleSpeed(.01)
-            .linkWidth((link) => this.links[link.label]?.width)
+            .linkWidth((link) => this.links.width)
             .linkColor((link) => this.getLinkColor(link))
-            .linkVisibility((link) => this.links[link.label]?.width > 0)
-        // .linkOpacity((link) => this.links.getOpacity(link))
+            .linkVisibility((link) => {
+                const hasWidth = this.links.width > 0;
+                return hasWidth && this.links[link.label]?.isVisible;
+            })
+            .linkOpacity(1.)
         ;
     }
 }

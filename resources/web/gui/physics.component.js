@@ -1,5 +1,5 @@
-import { BaseComponent } from "../core/base.component.js";
-import { PhysicsService } from "../../display/physics.service.js";
+import { BaseComponent } from "./core/base.component.js";
+import { PhysicsService } from "../display/physics.service.js";
 
 const STYLE = `
   .panel {

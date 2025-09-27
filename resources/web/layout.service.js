@@ -8,7 +8,7 @@ import {ProjectService} from "./project/project.service.js"
 import {BaseComponent} from "./gui/core/base.component.js";
 import {GraphCanvasComponent} from "./gui/graph.canvas.component.js"
 import {TableComponent} from "./gui/table.component.js"
-import {SettingsComponent} from "./gui/settings/settings.component.js";
+import {SettingsComponent} from "./gui/settings.component.js";
 import {ProjectComponent} from "./gui/project.component.js"
 import {NavigationComponent} from "./gui/navigation.component.js"
 import {RendererDebugComponent} from "./gui/renderer.debug.component.js"

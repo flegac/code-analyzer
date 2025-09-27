@@ -18,7 +18,7 @@ export class ClosenessCentrality extends NodeMetrics {
     }
 
     getValue(node) {
-        return self.visits?.[node.id];
+        return this.visits?.[node.id];
     }
 }
 
