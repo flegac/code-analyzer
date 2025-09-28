@@ -72,7 +72,7 @@ export class ClusterComponent extends BaseComponent {
             style: STYLE,
             state: {
                 isActive: true,
-                collapseDepth: 2,
+                collapseDepth: 5,
                 colorDepth: 2,
                 attribute: 'group',
 

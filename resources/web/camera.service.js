@@ -1,11 +1,13 @@
 import {GraphService} from "./display/graph.service.js"
 import {StoreService} from "./store.service.js"
 
+const DEG_TO_RAD= Math.PI / 180;
+
 export class CameraService {
     static singleton = new CameraService();
     constructor() {
         this.state = StoreService.singleton.store('camera', {
-            rotationSpeed: 3.5 * Math.PI / 180, // 3.5° par frame
+            rotationSpeed: 3.5 * DEG_TO_RAD, // 3.5° par frame
         });
         this.target= new THREE.Vector3(0, 0, 0); // point central
 

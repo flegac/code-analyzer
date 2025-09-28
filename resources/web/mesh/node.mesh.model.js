@@ -35,7 +35,7 @@ export class NodeMeshModel {
 
         //text
         const isModule = node.read('category') === 'Module';
-        const textSize = isModule ? 20 / Math.pow(2, node.id.split('.').length) : 1.;
+        const textSize = isModule ? 10 / Math.pow(2, node.id.split('.').length) : 1.;
 
         const textMesh = S.visibleText(node)
             ? new TextSprite(node, textSize)

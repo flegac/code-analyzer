@@ -28,7 +28,7 @@ export class StyleService {
             textOffsetY: 20,
         });
         this.links = StoreService.singleton.store('links', {
-            opacity: .5,
+            opacity: .2,
             metrics: 'cycles',
             particles: 1,
             particleWidthMultiplier: 2.,

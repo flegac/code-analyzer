@@ -5,7 +5,7 @@ export class ClusterService {
 
     constructor() {
         this.groupStrategy = new ModuleDepthClusterStrategy(2);
-        this.collapseStrategy = new ModuleDepthClusterStrategy(2);
+        this.collapseStrategy = new ModuleDepthClusterStrategy(5);
     }
 
     setGroupByDepth(depth) {

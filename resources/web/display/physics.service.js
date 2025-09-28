@@ -1,5 +1,6 @@
 import { StoreService } from "../store.service.js";
-import { clusterForce } from "../cluster-force.js"
+import { clusterForce } from "./forces/cluster.force.js"
+import { sphericalConstraint } from "./forces/spherical.constraint.force.js"
 import { GraphService } from "./graph.service.js";
 
 export class PhysicsService {
@@ -7,16 +8,20 @@ export class PhysicsService {
 
     constructor() {
         this.state = StoreService.singleton.store('physics', {
-            "camAutoFit": false,
-            "isActive": true,
-            "friction": 0.1,
-            "fixX": false,
-            "fixY": false,
-            "fixZ": false,
-            "repulsionFactor": 0.5,
-            "link": {
-                "relationStrengthFactor": 0.15,
-                "strength": 5
+            camAutoFit: false,
+            isActive: true,
+            friction: 0.1,
+            constraints: {
+                fixX: false,
+                fixY: false,
+                fixZ: false,
+                spherical: false,
+            },
+
+            repulsionFactor: 0.5,
+            link: {
+                relationStrengthFactor: 0.15,
+                strength: 5
             }
         }
         );
@@ -32,9 +37,9 @@ export class PhysicsService {
 
         // projection X/Y/Z
         G.state.nodes.forEach((node) => {
-            node.fx = state.fixX ? 0 : null;
-            node.fy = state.fixY ? 0 : null;
-            node.fz = state.fixZ ? 0 : null;
+            node.fx = state.constraints.fixX ? 0 : null;
+            node.fy = state.constraints.fixY ? 0 : null;
+            node.fz = state.constraints.fixZ ? 0 : null;
         });
 
         // forces
@@ -45,6 +50,7 @@ export class PhysicsService {
             const repulsionStrength = Math.pow(10, 4 * state.repulsionFactor);
             charge.strength(-repulsionStrength);
             graph.d3Force('cluster', clusterForce());
+            graph.d3Force('spherical', sphericalConstraint());
             links.strength(link => {
                 const k = link.label === 'relation'
                     ? state.link.relationStrengthFactor
