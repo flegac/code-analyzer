@@ -1,9 +1,9 @@
 import {LayoutService} from "../layout.service.js"
 import {CameraService} from "../camera.service.js"
 
-import {ProjectService} from "../project/project.service.js"
-import {StyleService} from "./style.service.js"
-import {PhysicsService} from "./physics.service.js"
+import {P} from "../project/project.service.js"
+import {V} from "./visual.service.js"
+import {PP} from "./physics.service.js"
 import {NodeService} from "./node.service.js"
 
 import {ClosenessCentrality} from "./metrics/closeness.centrality.metrics.js"
@@ -35,7 +35,7 @@ export class GraphService {
     }
 
     initGraph(container) {
-        console.log('GraphService.initGraph', container);
+        console.log('G.initGraph', container);
 
         this.state.graph = ForceGraph3D()(
             container,
@@ -43,7 +43,7 @@ export class GraphService {
         );
         this.state.graph.onEngineStop(() => {
             console.log('D3 simulation stopped !');
-            PhysicsService.singleton.isActive = false;
+            PP.isActive = false;
         });
 
         this._patchNaNPositions();
@@ -108,17 +108,16 @@ export class GraphService {
 
     async rebuildGraph() {
         const N = NodeService.singleton;
-        const D = ProjectService.singleton.project;
-        const S = StyleService.singleton;
+        const project = P.project;
 
         this.state.selected = null;
 
-        const relation = D.relation();
+        const relation = project.relation();
         if (relation === null) {
             return;
         }
 
-        const hierarchy = D.hierarchy();
+        const hierarchy = project.hierarchy();
 
         const nodeIds = new Set([
             ...relation.nodes(),
@@ -143,8 +142,8 @@ export class GraphService {
             };
             // copy project values in node
             // TODO: remove that ?
-            D.labels().forEach(label => {
-                const value = D.read(label, id);
+            project.labels().forEach(label => {
+                const value = project.read(label, id);
                 if (value !== null) {
                     N.write(label, id, value)
                 }
@@ -167,15 +166,15 @@ export class GraphService {
         N.updateColor();
         N.updateNavigation();
 
-        S.rebuildMeshes();
+        V.rebuildMeshes();
 
-        await PhysicsService.singleton.apply();
-        S.apply();
+        await PP.apply();
+        V.apply();
 
         LayoutService.singleton.table.rebuild();
 
     }
 
 }
-
+export const G = GraphService.singleton;
 

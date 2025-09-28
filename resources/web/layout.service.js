@@ -1,21 +1,21 @@
-import {AppLayout} from "./app.layout.js"
-import {CameraService} from "./camera.service.js"
+import { AppLayout } from "./app.layout.js"
+import { CameraService } from "./camera.service.js"
 
-import {GraphService} from "./display/graph.service.js"
-import {StyleService} from "./display/style.service.js"
-import {ProjectService} from "./project/project.service.js"
+import { G } from "./display/graph.service.js"
+import { V } from "./display/visual.service.js"
+import { P } from "./project/project.service.js"
 
-import {BaseComponent} from "./gui/core/base.component.js";
-import {GraphCanvasComponent} from "./gui/graph.canvas.component.js"
-import {TableComponent} from "./gui/table.component.js"
-import {SettingsComponent} from "./gui/settings.component.js";
-import {ProjectComponent} from "./gui/project.component.js"
-import {NavigationComponent} from "./gui/navigation.component.js"
-import {RendererDebugComponent} from "./gui/renderer.debug.component.js"
-import {ToolBox} from "./gui/core/base.toolbox.component.js";
-import {ConfigComponent} from "./gui/config.component.js"
+import { BaseComponent } from "./gui/core/base.component.js";
+import { GraphCanvasComponent } from "./gui/graph.canvas.component.js"
+import { TableComponent } from "./gui/table.component.js"
+import { SettingsComponent } from "./gui/settings.component.js";
+import { ProjectComponent } from "./gui/project.component.js"
+import { NavigationComponent } from "./gui/navigation.component.js"
+import { RendererDebugComponent } from "./gui/renderer.debug.component.js"
+import { ToolBox } from "./gui/core/base.toolbox.component.js";
+import { ConfigComponent } from "./gui/config.component.js"
 
-import {Billboard} from "./mesh/billboard.mesh.model.js"
+import { Billboard } from "./mesh/billboard.mesh.model.js"
 
 
 export class LayoutService {
@@ -51,7 +51,7 @@ export class LayoutService {
             {
                 label: '🔄',
                 tooltip: 'Refresh graph data',
-                onClick: () => GraphService.singleton.rebuildGraph(),
+                onClick: () => G.rebuildGraph(),
             },
             {
                 label: '📊',
@@ -106,7 +106,6 @@ export class LayoutService {
     }
 
     async start() {
-        const G = GraphService.singleton;
         const target = this.settings;
         $(() => {
             G.initGraph(this.graphPanel());
@@ -117,7 +116,7 @@ export class LayoutService {
                 () => CameraService.singleton.camera().position
             );
 
-            this.rendererDebug.toggleVisibility({visibility: false});
+            this.rendererDebug.toggleVisibility({ visibility: false });
             this.rendererDebug.start(renderer);
             this.groupAction(target)();
 
@@ -133,18 +132,17 @@ export class LayoutService {
     }
 
     async changeProject(project) {
-        ProjectService.singleton.loadProject(project);
-        await GraphService.singleton.rebuildGraph();
+        P.loadProject(project);
+        await G.rebuildGraph();
 
         this.table.rebuild();
         this.graphFilter.rebuild(project.config());
 
-        const S = StyleService.singleton;
 
-        S.mesh.size = null;// ProjectService.singleton.state.numerics()[0];
-        S.mesh.color = ProjectService.singleton.project.categories()[0];
+        V.mesh.size = null;// P.state.numerics()[0];
+        V.mesh.color = P.project.categories()[0];
 
         this.settings.updateGui();
-        S.apply();
+        V.apply();
     }
 }

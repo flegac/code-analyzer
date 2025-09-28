@@ -1,6 +1,6 @@
 import {Billboard} from "./billboard.mesh.model.js";
 import {TextSprite} from "./text.sprite.model.js";
-import {StyleService} from "../display/style.service.js";
+import {V} from "../display/visual.service.js";
 
 export class NodeMeshModel {
 
@@ -13,7 +13,6 @@ export class NodeMeshModel {
         if (meshes.billboard?.mesh) {
             meshes.billboard.resize(size);
         }
-
     }
 
     resizeText(size) {
@@ -25,19 +24,16 @@ export class NodeMeshModel {
     }
 
     build(node, position) {
-        const S = StyleService.singleton;
-
         const group = new THREE.Group();
 
-
         //mesh
-        const billboard = S.visibleMesh(node) ? new Billboard(node, position) : null;
+        const billboard = V.visibleMesh(node) ? new Billboard(node, position) : null;
 
         //text
         const isModule = node.read('category') === 'Module';
         const textSize = isModule ? 10 / Math.pow(2, node.id.split('.').length) : 1.;
 
-        const textMesh = S.visibleText(node)
+        const textMesh = V.visibleText(node)
             ? new TextSprite(node, textSize)
             : null;
 

@@ -1,6 +1,7 @@
-import {BaseComponent} from "./core/base.component.js";
-import {StyleService} from "../display/style.service.js"
-import {ProjectService} from "../project/project.service.js";
+import { BaseComponent } from "./core/base.component.js";
+import { V } from "../display/visual.service.js"
+import { NodeService } from "../display/node.service.js";
+import {P } from "../project/project.service.js";
 
 const STYLE = `
   .panel {
@@ -44,6 +45,12 @@ const TEMPLATE = `
         <sl-checkbox v-model="mesh.isVisible" @sl-change="meshVisibility" checked></sl-checkbox>
         <h3>Nodes</h3>
         <sl-range v-model="mesh.scaling" min="0" max="50" step="0.1" @sl-input="scaling"></sl-range>
+      
+      </div>
+      
+      <div class="slider-row">
+        <label>Radius</label>
+        <sl-select v-model="mesh.size" id="nodeRadius" @sl-input="selectNodeRadius"></sl-select>
       </div>
 
       <!-- Texts -->
@@ -93,101 +100,114 @@ const TEMPLATE = `
 
 
 export class VisualsComponent extends BaseComponent {
-    constructor() {
-        super({
-            template: TEMPLATE,
-            style: STYLE,
-            state: {
-                mesh: StyleService.singleton.mesh,
-                meshVisibility: (e) => this.meshVisibility(e.target.checked),
-                scaling: _.throttle((e) => this.scaling(e.target.value), 100),
+  constructor() {
+    super({
+      template: TEMPLATE,
+      style: STYLE,
+      state: {
+        mesh: V.mesh,
+        meshVisibility: (e) => this.meshVisibility(e.target.checked),
+        scaling: _.throttle((e) => this.scaling(e.target.value), 100),
 
-                text: StyleService.singleton.text,
-                textVisibility: (e) => this.textVisibility(e.target.checked),
-                textShowModule: (e) => this.textShowModule(e.target.checked),
-                textShowClass: (e) => this.textShowClass(e.target.checked),
+        selectNodeRadius: (e) => this.selectNodeRadius(e.target.value),
 
-                links: StyleService.singleton.links,
-                applyLinks: (e) => this.applyLinks(e.target.value),
-                hierarchyIsVisible: (e) => this.hierarchyIsVisible(e.target.checked),
-                relationIsVisible: (e) => this.relationIsVisible(e.target.checked),
-                selectMetrics: (e) => this.selectMetrics(e.target.value),
-            }
-        });
-        this.updateGui();
-    }
+        text: V.text,
+        textVisibility: (e) => this.textVisibility(e.target.checked),
+        textShowModule: (e) => this.textShowModule(e.target.checked),
+        textShowClass: (e) => this.textShowClass(e.target.checked),
 
-    applyLinks(e) {
-        StyleService.singleton.apply();
-    }
+        links: V.links,
+        applyLinks: (e) => this.applyLinks(e.target.value),
+        hierarchyIsVisible: (e) => this.hierarchyIsVisible(e.target.checked),
+        relationIsVisible: (e) => this.relationIsVisible(e.target.checked),
+        selectMetrics: (e) => this.selectMetrics(e.target.value),
+      }
+    });
+  }
 
-    meshVisibility(value) {
-        StyleService.singleton.mesh.isVisible = value;
-        StyleService.singleton.apply()
-    }
+  applyLinks(e) {
+    V.apply();
+  }
 
-    scaling(value) {
-        StyleService.singleton.mesh.scaling = value;
-        StyleService.singleton.updateNodeSizes()
-        // StyleService.singleton.apply()
-    }
+  meshVisibility(value) {
+    V.mesh.isVisible = value;
+    V.apply()
+  }
 
-    textVisibility(value) {
-        StyleService.singleton.text.isVisible = value;
-        StyleService.singleton.apply()
-    }
+  scaling(value) {
+    V.mesh.scaling = value;
+    V.updateNodeSizes()
+    // StyleService.singleton.apply()
+  }
 
-    textShowModule(value) {
-        StyleService.singleton.text.showModule = value;
-        StyleService.singleton.apply()
-    }
+  textVisibility(value) {
+    V.text.isVisible = value;
+    V.apply()
+  }
 
-
-    textShowClass(value) {
-        StyleService.singleton.text.showClass = value;
-        StyleService.singleton.apply()
-    }
+  textShowModule(value) {
+    V.text.showModule = value;
+    V.apply()
+  }
 
 
-    hierarchyIsVisible(value) {
-        StyleService.singleton.links.hierarchy.isVisible = value;
-        console.log('hierarchy.isVisible', value)
-        StyleService.singleton.apply()
-    }
+  textShowClass(value) {
+    V.text.showClass = value;
+    V.apply()
+  }
 
-    relationIsVisible(value) {
-        StyleService.singleton.links.relation.isVisible = value;
-        StyleService.singleton.apply()
-    }
 
-    selectMetrics(value) {
-        StyleService.singleton.links.metrics = value;
-        StyleService.singleton.apply()
+  hierarchyIsVisible(value) {
+    V.links.hierarchy.isVisible = value;
+    console.log('hierarchy.isVisible', value)
+    V.apply()
+  }
 
-    }
+  relationIsVisible(value) {
+    V.links.relation.isVisible = value;
+    V.apply()
+  }
 
-    updateGui() {
-        const metrics = ['cycles', 'centrality'];
-        this._populateSelect('metrics', metrics);
-    }
+  selectMetrics(value) {
+    V.links.metrics = value;
+    NodeService.singleton.updateMetrics();
+    V.apply();
 
-    _populateSelect(id, options) {
-        const select = this.container.querySelector(`#${id}`);
-        select.innerHTML = ''; // clear previous
+  }
 
-        options.forEach(opt => {
-            const value = typeof opt === 'string' ? opt : opt.value;
-            const label = typeof opt === 'string' ? opt : opt.label;
-            const option = document.createElement('sl-option');
-            option.value = value;
-            option.textContent = label;
+  selectNodeRadius(value) {
+    V.mesh.size = value;
+    V.apply();
+  }
 
-            if (value === this.state.attribute) {
-                option.setAttribute('selected', '');
-            }
+  updateGui() {
+    const metrics = ['cycles', 'centrality'];
+    this._populateSelect('metrics', metrics);
 
-            select.appendChild(option);
-        });
-    }
+    const numerics = P.project.numerics();
+    console.log('updateGui', numerics)
+
+    const nodeSizes = [...metrics, ...P.project.numerics()];
+    this._populateSelect('nodeRadius', nodeSizes);
+  }
+
+  _populateSelect(id, options) {
+    const select = this.container.querySelector(`#${id}`);
+    select.innerHTML = ''; // clear previous
+
+    options.forEach(opt => {
+      const value = typeof opt === 'string' ? opt : opt.value;
+      const label = typeof opt === 'string' ? opt : opt.label;
+      const option = document.createElement('sl-option');
+      option.value = value;
+      option.textContent = label;
+
+      if (value === this.state.attribute) {
+        option.setAttribute('selected', '');
+      }
+
+      select.appendChild(option);
+    });
+  }
 
 }

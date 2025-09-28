@@ -1,5 +1,5 @@
 import {BaseComponent} from "./core/base.component.js";
-import {ProjectService} from "../project/project.service.js"
+import {P} from "../project/project.service.js"
 import {LayoutService} from "../layout.service.js"
 
 export class ProjectComponent extends BaseComponent {
@@ -15,7 +15,7 @@ export class ProjectComponent extends BaseComponent {
             const files = event.target.files;
             if (!files || files.length === 0) return;
             const folderName = files[0].webkitRelativePath.split('/')[0];
-            const project = await ProjectService.singleton.loadFolder(folderName, files);
+            const project = await P.loadFolder(folderName, files);
             await LayoutService.singleton.changeProject(project);
         });
     }

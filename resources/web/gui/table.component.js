@@ -1,5 +1,5 @@
 import {BaseComponent} from "./core/base.component.js";
-import {ProjectService} from "../project/project.service.js";
+import {P} from "../project/project.service.js";
 
 const STYLE = `
 [name=table-internal] {
@@ -32,15 +32,13 @@ export class TableComponent extends BaseComponent {
     }
 
     async rebuild() {
-        const D = ProjectService.singleton;
-
-        const labels = D.project.labels();
+        const labels = P.project.labels();
         console.log(`table.rebuild: ${labels}`)
         const columns = this.generateColumnDefs(labels);
-        const rowData = D.project.relation().nodes().map(id =>
+        const rowData = P.project.relation().nodes().map(id =>
             labels.reduce((row, label) => {
                 // row[label] = M.read(label, id);
-                row[label] = D.project.read(label, id);
+                row[label] = P.project.read(label, id);
                 return row;
             }, {module: id})
         );

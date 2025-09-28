@@ -1,5 +1,5 @@
 import {BaseComponent} from "./core/base.component.js"
-import {GraphService} from "../display/graph.service.js"
+import {G} from "../display/graph.service.js"
 import {CameraService} from "../camera.service.js"
 
 const STYLE = `
@@ -50,14 +50,14 @@ export class NavigationComponent extends BaseComponent {
         this.updateMenu();
 
         this.onClick = (id) => {
-            const node = GraphService.singleton.findNodeById(id);
+            const node = G.findNodeById(id);
             CameraService.singleton.focusOn(node);
-            GraphService.singleton.select(node);
+            G.select(node);
         };
 
 
         this.boundUpdate = this.updateMenu.bind(this);
-        GraphService.singleton.onSelectionChange(this.boundUpdate);
+        G.onSelectionChange(this.boundUpdate);
     }
 
 
@@ -71,7 +71,7 @@ export class NavigationComponent extends BaseComponent {
         outgoingMenu.innerHTML = '';
 
 
-        const selected = GraphService.singleton.state.selected;
+        const selected = G.state.selected;
         if (selected === null) return;
 
         const incoming = selected.read('incoming');

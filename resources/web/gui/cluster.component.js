@@ -1,8 +1,8 @@
 import {BaseComponent} from "./core/base.component.js";
-import {ProjectService} from "../project/project.service.js"
+import {P} from "../project/project.service.js"
 import {ClusterService} from "../display/cluster/cluster.service.js"
-import {StyleService} from "../display/style.service.js";
-import {PhysicsService} from "../display/physics.service.js";
+import {V} from "../display/visual.service.js";
+import {PP} from "../display/physics.service.js";
 
 
 const STYLE = `
@@ -72,7 +72,7 @@ export class ClusterComponent extends BaseComponent {
             style: STYLE,
             state: {
                 isActive: true,
-                collapseDepth: 5,
+                collapseDepth: 3,
                 colorDepth: 2,
                 attribute: 'group',
 
@@ -82,29 +82,28 @@ export class ClusterComponent extends BaseComponent {
                 collapseByDepth: (event) => this.collapseByDepth(event.target.value),
             }
         });
-        // this.updateGui()
     }
 
     colorByDepth(depth) {
         const C = ClusterService.singleton;
         C.setGroupByDepth(depth);
-        StyleService.singleton.apply()
+        V.apply()
     }
 
     colorByGroup(attribute) {
         const C = ClusterService.singleton;
         C.setGroupByLabel(attribute);
-        StyleService.singleton.apply()
+        V.apply()
     }
 
     async collapseByDepth(depth) {
         const C = ClusterService.singleton;
         C.setCollapseByDepth(depth)
-        await PhysicsService.singleton.apply();
+        await PP.apply();
     }
 
     updateGui() {
-        const categories = ['group', ...ProjectService.singleton.project.categories()];
+        const categories = ['group', ...P.project.categories()];
         this._populateSelect('clusterAttribute', categories);
     }
 

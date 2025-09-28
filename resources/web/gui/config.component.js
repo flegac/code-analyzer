@@ -1,5 +1,5 @@
 import {BaseComponent} from "./core/base.component.js";
-import {StyleService} from "../display/style.service.js";
+import {V} from "../display/visual.service.js";
 
 const STYLE = `
   .graph-filter {
@@ -75,7 +75,7 @@ export class ConfigComponent extends BaseComponent {
     const selected = new Set(data.selected);
     const excluded = new Set(data.excluded);
     const groups = data.groups;
-    const onChange = () => StyleService.singleton.apply();
+    const onChange = () => V.apply();
 
     // Clear previous content
     this.container.querySelector('#selected-list').innerHTML = '';

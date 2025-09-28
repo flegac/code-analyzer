@@ -1,33 +1,96 @@
-export function sphericalConstraint(R = 2000, power = 1.) {
+
+export const Fixer = {
+    soft: (node, current, target, strength) => {
+        const delta = target - current;
+        const factor = strength * delta / current;
+        node.x += node.x * factor;
+        node.y += node.y * factor;
+        node.z += node.z * factor;
+    },
+
+    hard: (node, current, target, strength) => {
+        const scale = target / current;
+        node.x *= scale;
+        node.y *= scale;
+        node.z *= scale;
+    }
+};
+
+const DEFAULT_OPTIONS = {
+    R: [2000, 500],
+    power: 1.,
+    fixer: Fixer.soft
+};
+
+export function sphericalConstraint(options = {}) {
+    const { R, power, fixer } = { ...DEFAULT_OPTIONS, ...options };
+
     let nodes;
+    let assignedRadii;
 
     function force(alpha) {
-        for (const node of nodes) {
-            const dx = node.x;
-            const dy = node.y;
-            const dz = node.z;
+        for (let i = 0; i < nodes.length; i++) {
+            const node = nodes[i];
 
-            const dist = Math.hypot(dx, dy, dz);
-            if (dist === 0) {
+            const radius = Math.hypot(node.x, node.y, node.z);
+            if (radius === 0) {
                 node.x = Math.random();
                 node.y = Math.random();
                 node.z = Math.random();
-                continue
+                continue;
             }
 
-            const desiredDist = R;
-            const delta = desiredDist - dist;
-            const strength = alpha * power * delta / dist;
+            const targetRadius = assignedRadii[i];
 
-            node.x += dx * strength;
-            node.y += dy * strength;
-            node.z += dz * strength;
+            fixer(node, radius, targetRadius, power * alpha);
         }
     }
 
     force.initialize = inputNodes => {
         nodes = inputNodes;
+        assignedRadii = assignRadii(nodes, R);
     };
 
     return force;
+}
+
+function assignRadii(nodes, R) {
+    // const values = nodes.map(n => Math.hypot(n.x, n.y, n.z));
+    const values = nodes.map(n => n.read('incoming').length + n.read('outgoing').length);
+    console.log(values);
+
+    const sortedIndices = values
+        .map((d, i) => ({ index: i, value: d }))
+        .sort((a, b) => a.value - b.value)
+        .map(obj => obj.index);
+
+    // 🧠 Calcul des surfaces sphériques (4πr², mais on ignore 4π car c’est constant)
+    const surfaces = R.map(r => r * r);
+    const totalSurface = surfaces.reduce((sum, s) => sum + s, 0);
+
+    // 📊 Calcul du nombre de sommets par couche selon le ratio de surface
+    const layerCounts = surfaces.map(s => Math.round((s / totalSurface) * nodes.length));
+
+    // 🔁 Ajustement pour que la somme soit exactement égale à nodes.length
+    let totalAssigned = layerCounts.reduce((sum, c) => sum + c, 0);
+    while (totalAssigned !== nodes.length) {
+        const delta = nodes.length - totalAssigned;
+        const index = surfaces.indexOf(Math.max(...surfaces));
+        layerCounts[index] += delta;
+        totalAssigned = layerCounts.reduce((sum, c) => sum + c, 0);
+    }
+
+    // 🎯 Assignation des rayons selon les indices triés
+    const radii = new Array(nodes.length);
+    let current = 0;
+    for (let layerIndex = 0; layerIndex < R.length; layerIndex++) {
+        const count = layerCounts[layerIndex];
+        const radius = R[layerIndex];
+        for (let i = 0; i < count && current < sortedIndices.length; i++, current++) {
+            const nodeIndex = sortedIndices[current];
+            radii[nodeIndex] = radius;
+        }
+    }
+
+    return radii;
 }

@@ -1,7 +1,7 @@
 import { StoreService } from "../store.service.js";
 import { clusterForce } from "./forces/cluster.force.js"
-import { sphericalConstraint } from "./forces/spherical.constraint.force.js"
-import { GraphService } from "./graph.service.js";
+import { sphericalConstraint, Fixer } from "./forces/spherical.constraint.force.js"
+import { G } from "./graph.service.js";
 
 export class PhysicsService {
     static singleton = new PhysicsService();
@@ -12,16 +12,14 @@ export class PhysicsService {
             isActive: true,
             friction: 0.1,
             constraints: {
-                fixX: false,
-                fixY: false,
-                fixZ: false,
-                spherical: false,
+                planar: false,
+                spherical: true,
             },
 
-            repulsionFactor: 0.5,
+            repulsionFactor: 0.25,
+            attractionFactor: .5,
             link: {
-                relationStrengthFactor: 0.15,
-                strength: 5
+                relationStrengthFactor: .1,
             }
         }
         );
@@ -29,42 +27,66 @@ export class PhysicsService {
     }
 
     async apply() {
-        const G = GraphService.singleton;
         const graph = G.getGraph();
         const state = this.state;
 
         graph.d3VelocityDecay(state.friction);
 
-        // projection X/Y/Z
+        // planar constraint
         G.state.nodes.forEach((node) => {
-            node.fx = state.constraints.fixX ? 0 : null;
-            node.fy = state.constraints.fixY ? 0 : null;
-            node.fz = state.constraints.fixZ ? 0 : null;
+            node.fz = state.constraints.planar ? 0 : null;
         });
 
         // forces
         const links = graph.d3Force('link');
         const charge = graph.d3Force('charge');
 
+        const isActive = state.isActive;
+
+
+
+        //repulsion
+        const maxPower = 5;
+        const repulsionStrength = isActive
+            ? Math.pow(10, maxPower * state.repulsionFactor)
+            : 0;
+        charge.strength(-repulsionStrength);
+
+        //attraction
+        const curvePower = 4;
+        const attractionStrength = isActive
+            ? Math.pow(state.attractionFactor, curvePower)
+            : 0;
+        links.strength(link => {
+            const k = link.label === 'relation'
+                ? state.link.relationStrengthFactor
+                : 1 - state.link.relationStrengthFactor;
+            return k * attractionStrength;
+        });
+
+        //cluster
+        const cluster = isActive ? clusterForce() : null;
+        graph.d3Force('cluster', cluster);
+
         if (state.isActive) {
-            const repulsionStrength = Math.pow(10, 4 * state.repulsionFactor);
-            charge.strength(-repulsionStrength);
-            graph.d3Force('cluster', clusterForce());
-            graph.d3Force('spherical', sphericalConstraint());
-            links.strength(link => {
-                const k = link.label === 'relation'
-                    ? state.link.relationStrengthFactor
-                    : 1 - state.link.relationStrengthFactor;
-                return .01 * k * state.link.strength;
-            });
+
+            // constraints (spherical, planar)
+            if (this.state.constraints.spherical) {
+                graph.d3Force('spherical', sphericalConstraint({
+                    power: state.repulsionFactor,
+                    // fixer: Fixer.soft,
+                    fixer: Fixer.hard,
+                }));
+            } else {
+                graph.d3Force('spherical', null);
+            }
 
             graph.cooldownTicks(500);
             graph.d3ReheatSimulation();
         } else {
             graph.cooldownTicks(0);
-            links.strength(0);
-            charge.strength(0);
-            graph.d3Force('cluster');
+            graph.d3Force('spherical');
         }
     }
 }
+export const PP = PhysicsService.singleton;

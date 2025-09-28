@@ -1,14 +1,15 @@
-import {StoreService} from "../store.service.js"
-import {CameraService} from "../camera.service.js"
+import { StoreService } from "../store.service.js"
+import { CameraService } from "../camera.service.js"
 
-import {NodeService} from "./node.service.js"
-import {GraphService} from "./graph.service.js";
+import { NodeService } from "./node.service.js"
+import { G } from "./graph.service.js";
 
-import {NodeMeshModel} from "../mesh/node.mesh.model.js";
+import { NodeMeshModel } from "../mesh/node.mesh.model.js";
 
 
-export class StyleService {
-    static singleton = new StyleService();
+
+export class VisualService {
+    static singleton = new VisualService();
 
     constructor() {
         this.mesh = StoreService.singleton.store('mesh', {
@@ -28,22 +29,20 @@ export class StyleService {
             textOffsetY: 20,
         });
         this.links = StoreService.singleton.store('links', {
-            opacity: .2,
+            opacity: .35,
             metrics: 'cycles',
             particles: 1,
             particleWidthMultiplier: 2.,
             width: 2.0,
+            colorLow: '#0f0',
+            colorHigh: '#f00',
             relation: {
                 isVisible: true,
                 color: '#f00',
-                colorLow: '#0f0',
-                colorHigh: '#f00',
             },
             hierarchy: {
                 isVisible: true,
                 color: '#fff',
-                colorLow: '#fff',
-                colorHigh: '#fff',
             }
         });
         console.log('initialize', this);
@@ -103,8 +102,7 @@ export class StyleService {
     }
 
     rebuildMeshes() {
-        console.log('StyleService.rebuildMeshes()');
-        const G = GraphService.singleton;
+        console.log('VisualService.rebuildMeshes()');
         const camPosition = CameraService.singleton.camera().position;
         G.getGraph().nodeThreeObject((node) => this.getMesh(node, camPosition));
 
@@ -124,22 +122,18 @@ export class StyleService {
     }
 
     updateNodeSizes() {
-        const G = GraphService.singleton;
         const N = NodeService.singleton;
-        const S = StyleService.singleton;
 
         N.updateRadius();
 
         G.state.nodes.forEach(node => {
             const meshes = node.read('_meshes');
             meshes.group.resizeBillboard(node.read('radius'))
-            meshes.group.resizeText(S.mesh.scaling)
+            meshes.group.resizeText(V.mesh.scaling)
         });
     }
 
     getLinkColor(link) {
-        const G = GraphService.singleton;
-
         if (link.label === 'hierarchy') {
             return this.links[link.label]?.color;
         }
@@ -154,15 +148,14 @@ export class StyleService {
             const value2 = target.read(metrics);
             const value = (value1 + value2) * .5;
 
-            const c1 = this.links.relation.colorLow;
-            const c2 = this.links.relation.colorHigh;
+            const c1 = this.links.colorLow;
+            const c2 = this.links.colorHigh;
             return interpolateColor(c1, c2, value);
         }
         return this.links[link.label]?.color ?? '#f00';
     }
 
     apply() {
-        const G = GraphService.singleton;
         const N = NodeService.singleton;
 
         // ----- NODES ---------------------------------
@@ -190,9 +183,11 @@ export class StyleService {
                 return hasWidth && this.links[link.label]?.isVisible;
             })
             .linkOpacity(this.links.opacity)
-        ;
+            ;
     }
 }
+export const V = VisualService.singleton;
+
 
 function interpolateColor(c1, c2, value, min = 0, max = 1) {
     const ratio = Math.max(0, Math.min(1, (value - min) / (max - min)));

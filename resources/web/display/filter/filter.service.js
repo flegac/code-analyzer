@@ -1,6 +1,6 @@
-import {ProjectService} from "../../project/project.service.js"
+import {P} from "../../project/project.service.js"
 import {GraphFilter} from "./graph.filter.model.js"
-import {GraphService} from "../graph.service.js";
+import {G} from "../graph.service.js";
 
 
 export class FilterService {
@@ -11,12 +11,12 @@ export class FilterService {
     }
 
     async apply() {
-        await GraphService.singleton.rebuildGraph();
+        await G.rebuildGraph();
     }
 
     pipeline() {
         return [
-            graph => new GraphFilter(ProjectService.singleton.project.config()).apply(graph),
+            graph => new GraphFilter(P.project.config()).apply(graph),
             this.nodeReducer((node) => {
                 return node.split('.').slice(0, this.hierarchyPruneLevel).join('.');
             })

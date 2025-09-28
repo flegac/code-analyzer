@@ -1,5 +1,5 @@
 import { BaseComponent } from "./core/base.component.js";
-import { PhysicsService } from "../display/physics.service.js";
+import { PP } from "../display/physics.service.js";
 
 const STYLE = `
   .panel {
@@ -33,20 +33,18 @@ const TEMPLATE = `
     </div>
 
     <div class="slider-row">
-      <label>Fix axes</label>
-      <sl-checkbox @sl-change="state.fixX = $event.target.checked; apply()">X</sl-checkbox>
-      <sl-checkbox @sl-change="state.fixY = $event.target.checked; apply()">Y</sl-checkbox>
-      <sl-checkbox @sl-change="state.fixZ = $event.target.checked; apply()">Z</sl-checkbox>
+      <sl-checkbox @sl-change="state.constraints.planar = $event.target.checked; apply()">Planar</sl-checkbox>
+      <sl-checkbox @sl-change="state.constraints.spherical = $event.target.checked; apply()" checked>Spherical</sl-checkbox>
     </div>
 
     <div class="slider-row">
       <label for="repulsionFactor">Repulsion</label>
-      <sl-range v-model="state.repulsionFactor" min="0" max="1" step="0.01" @sl-input="apply"></sl-range>
+      <sl-range v-model="state.repulsionFactor" min="0" max="1" step="0.001" @sl-input="apply"></sl-range>
     </div>
 
     <div class="slider-row">
       <label for="strength">Attraction</label>
-      <sl-range v-model="state.link.strength" min="0" max="25" step="0.01" @sl-input="apply"></sl-range>
+      <sl-range v-model="state.attractionFactor" min="0" max="1" step="0.001" @sl-input="apply"></sl-range>
     </div>
 
     <div class="slider-row">
@@ -62,8 +60,8 @@ export class PhysicsComponent extends BaseComponent {
       template: TEMPLATE,
       style: STYLE,
       state: {
-        state: PhysicsService.singleton.state,
-        apply: PhysicsService.singleton.apply,
+        state: PP.state,
+        apply: PP.apply,
       }
     });
   }

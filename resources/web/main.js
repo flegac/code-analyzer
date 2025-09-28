@@ -3,12 +3,11 @@ import {LayoutService} from "./layout.service.js"
 import {CameraService} from "./camera.service.js"
 
 import {keyBindings} from "./config/key-bindings.js"
-import {GraphService} from "./display/graph.service.js"
-import {ProjectService} from "./project/project.service.js"
+import {G} from "./display/graph.service.js"
+import {P} from "./project/project.service.js"
 
 export async function main() {
     const layout = LayoutService.singleton;
-    const G = GraphService.singleton;
     await layout.start();
 
 
@@ -27,7 +26,7 @@ export async function main() {
         .start();
 
     $(async () => {
-        const project = await ProjectService.singleton.loadDefault();
+        const project = await P.loadDefault();
         await layout.changeProject(project);
     })
 }

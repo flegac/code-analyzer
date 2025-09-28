@@ -1,8 +1,8 @@
 import {Metadata} from "../project/metadata.model.js";
 import {ClusterService} from "./cluster/cluster.service.js";
-import {GraphService} from "./graph.service.js";
-import {StyleService} from "./style.service.js";
-import {ProjectService} from "../project/project.service.js";
+import {G} from "./graph.service.js";
+import {V} from "./visual.service.js";
+import {P} from "../project/project.service.js";
 import {ClosenessCentrality} from "./metrics/closeness.centrality.metrics.js";
 import {CycleCounter} from "./metrics/cycle.count.metrics.js";
 
@@ -10,19 +10,15 @@ export class NodeService extends Metadata {
     static singleton = new NodeService();
 
     updateMetrics(metrics = null) {
-        const P = ProjectService.singleton;
-        const S = StyleService.singleton;
         if (metrics === null) {
             const relation = P.project.relation();
-            if (S.links.metrics === 'centrality') {
+            if (V.links.metrics === 'centrality') {
                 metrics = new ClosenessCentrality(relation)
-            } else if (S.links.metrics === 'cycles') {
+            } else if (V.links.metrics === 'cycles') {
                 metrics = new CycleCounter(relation);
             }
         }
 
-
-        const G = GraphService.singleton;
         G.state.nodes.forEach(node => {
             const value = metrics.getValue(node);
             node.write(metrics.name, value);
@@ -30,7 +26,6 @@ export class NodeService extends Metadata {
     }
 
     updateGroup() {
-        const G = GraphService.singleton;
         const C = ClusterService.singleton;
 
         G.state.nodes.forEach(node => {
@@ -40,10 +35,8 @@ export class NodeService extends Metadata {
     }
 
     updateRadius() {
-        const G = GraphService.singleton;
-        const S = StyleService.singleton;
-        const sizeLabel = S.mesh.size;
-        const scaling = S.mesh.scaling;
+        const sizeLabel = V.mesh.size;
+        const scaling = V.mesh.scaling;
 
         G.state.nodes.forEach(node => {
             const value = node.read(sizeLabel) ?? 1;
@@ -53,7 +46,6 @@ export class NodeService extends Metadata {
     }
 
     updateColor() {
-        const G = GraphService.singleton;
         const groups = [...new Set(G.state.nodes.map(node => node.read('group')))];
 
         const colorScale = chroma.scale('Paired').mode('lch').colors(groups.length);
@@ -70,7 +62,6 @@ export class NodeService extends Metadata {
     }
 
     updateNavigation() {
-        const G = GraphService.singleton;
         // connectivity stats
         G.state.nodes.forEach(node => {
             node.write('outgoing', []);

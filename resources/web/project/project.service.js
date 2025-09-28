@@ -25,6 +25,7 @@ export class ProjectService {
     }
 
 }
+export const P = ProjectService.singleton;
 
 async function loadProject(projectName, fileList=null) {
     const reader = fileList === null ? new DefaultReader() : new FolderReader(projectName, fileList);

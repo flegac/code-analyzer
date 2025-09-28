@@ -1,18 +1,12 @@
-import {GraphService} from "./display/graph.service.js"
-import {StoreService} from "./store.service.js"
+import {G} from "./display/graph.service.js"
 
 const DEG_TO_RAD= Math.PI / 180;
 
 export class CameraService {
     static singleton = new CameraService();
     constructor() {
-        this.state = StoreService.singleton.store('camera', {
-            rotationSpeed: 3.5 * DEG_TO_RAD, // 3.5° par frame
-        });
+        this.rotationSpeed = 3.5 * DEG_TO_RAD, // 3.5° par frame
         this.target= new THREE.Vector3(0, 0, 0); // point central
-
-        this.alignFrontToAxis = throttle(this.alignFrontToAxis.bind(this), 200);
-        this.zoomToFit = throttle(this.zoomToFit.bind(this), 200);
         console.log('initialize', this);
     }
 
@@ -25,7 +19,7 @@ export class CameraService {
     }
 
     getGraph() {
-        return GraphService.singleton.getGraph();
+        return G.getGraph();
     }
 
     takeControl(graph) {
@@ -35,7 +29,7 @@ export class CameraService {
         graph.cam = this;
         this.getGraph().onNodeClick(node => {
             this.focusOn(node);
-            GraphService.singleton.select(node);
+            G.select(node);
         });
         return this;
     }
@@ -136,15 +130,4 @@ export class CameraService {
     }
 
 
-}
-
-function throttle(fn, delay) {
-    let lastCall = 0;
-    return (...args) => {
-        const now = Date.now();
-        if (now - lastCall >= delay) {
-            lastCall = now;
-            fn(...args);
-        }
-    };
 }

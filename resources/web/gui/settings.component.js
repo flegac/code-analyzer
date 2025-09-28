@@ -54,6 +54,7 @@ export class SettingsComponent extends BaseComponent {
 
     updateGui() {
         this.cluster.updateGui();
+        this.visuals.updateGui();
     }
 
 }
