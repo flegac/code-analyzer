@@ -1,7 +1,7 @@
 import { BaseComponent } from "./core/base.component.js";
 import { V } from "../display/visual.service.js"
-import { NodeService } from "../display/node.service.js";
-import {P } from "../project/project.service.js";
+import { NN } from "../display/node.service.js";
+import { P } from "../project/project.service.js";
 
 const STYLE = `
   .panel {
@@ -44,7 +44,7 @@ const TEMPLATE = `
       <div class="section-header">
         <sl-checkbox v-model="mesh.isVisible" @sl-change="meshVisibility" checked></sl-checkbox>
         <h3>Nodes</h3>
-        <sl-range v-model="mesh.scaling" min="0" max="50" step="0.1" @sl-input="scaling"></sl-range>
+        <sl-range v-model="mesh.scaling" min=".1" max="1." step="0.01" @sl-input="scaling"></sl-range>
       
       </div>
       
@@ -52,6 +52,7 @@ const TEMPLATE = `
         <label>Radius</label>
         <sl-select v-model="mesh.size" id="nodeRadius" @sl-input="selectNodeRadius"></sl-select>
       </div>
+      
 
       <!-- Texts -->
       <div class="section-header">
@@ -137,7 +138,6 @@ export class VisualsComponent extends BaseComponent {
   scaling(value) {
     V.mesh.scaling = value;
     V.updateNodeSizes()
-    // StyleService.singleton.apply()
   }
 
   textVisibility(value) {
@@ -170,7 +170,7 @@ export class VisualsComponent extends BaseComponent {
 
   selectMetrics(value) {
     V.links.metrics = value;
-    NodeService.singleton.updateMetrics();
+    NN.updateMetrics();
     V.apply();
 
   }
@@ -181,7 +181,10 @@ export class VisualsComponent extends BaseComponent {
   }
 
   updateGui() {
-    const metrics = ['cycles', 'centrality'];
+    const metrics = [
+      'centrality',
+      'cycles',
+    ];
     this._populateSelect('metrics', metrics);
 
     const numerics = P.project.numerics();

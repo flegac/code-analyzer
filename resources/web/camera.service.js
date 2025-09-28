@@ -131,3 +131,4 @@ export class CameraService {
 
 
 }
+export const CC = CameraService.singleton;

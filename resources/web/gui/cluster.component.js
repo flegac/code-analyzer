@@ -1,6 +1,6 @@
 import {BaseComponent} from "./core/base.component.js";
 import {P} from "../project/project.service.js"
-import {ClusterService} from "../display/cluster/cluster.service.js"
+import {CC} from "../display/cluster.service.js"
 import {V} from "../display/visual.service.js";
 import {PP} from "../display/physics.service.js";
 
@@ -48,8 +48,7 @@ const TEMPLATE = `
 
       <div class="slider-row">
         <label>Group by</label>
-         <sl-checkbox v-model="isActive" @sl-change="colorByGroup" checked disabled></sl-checkbox>
-         <sl-select v-model="attribute" id="clusterAttribute" @sl-input="colorByGroup"></sl-select>
+         <sl-select id="clusterAttribute" @sl-input="colorByGroup"></sl-select>
       </div>
 
       <div class="slider-row">
@@ -76,7 +75,7 @@ export class ClusterComponent extends BaseComponent {
                 colorDepth: 2,
                 attribute: 'group',
 
-                project: ClusterService.singleton.project,
+                project: CC.project,
                 colorByGroup: (event) => this.colorByGroup(event.target.value),
                 colorByDepth: (event) => this.colorByDepth(event.target.value),
                 collapseByDepth: (event) => this.collapseByDepth(event.target.value),
@@ -85,20 +84,17 @@ export class ClusterComponent extends BaseComponent {
     }
 
     colorByDepth(depth) {
-        const C = ClusterService.singleton;
-        C.setGroupByDepth(depth);
+        CC.setGroupByDepth(depth);
         V.apply()
     }
 
     colorByGroup(attribute) {
-        const C = ClusterService.singleton;
-        C.setGroupByLabel(attribute);
+        CC.setGroupByLabel(attribute);
         V.apply()
     }
 
     async collapseByDepth(depth) {
-        const C = ClusterService.singleton;
-        C.setCollapseByDepth(depth)
+        CC.setCollapseByDepth(depth)
         await PP.apply();
     }
 

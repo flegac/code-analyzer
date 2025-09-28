@@ -1,6 +1,6 @@
 import {BaseComponent} from "./core/base.component.js";
 import {P} from "../project/project.service.js"
-import {LayoutService} from "../layout.service.js"
+import {LL} from "../layout.service.js"
 
 export class ProjectComponent extends BaseComponent {
     constructor() {
@@ -16,7 +16,7 @@ export class ProjectComponent extends BaseComponent {
             if (!files || files.length === 0) return;
             const folderName = files[0].webkitRelativePath.split('/')[0];
             const project = await P.loadFolder(folderName, files);
-            await LayoutService.singleton.changeProject(project);
+            await LL.changeProject(project);
         });
     }
 

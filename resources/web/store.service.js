@@ -17,3 +17,4 @@ export class StoreService {
     }
 
 }
+export const SS = StoreService.singleton;

@@ -1,5 +1,5 @@
 import { AppLayout } from "./app.layout.js"
-import { CameraService } from "./camera.service.js"
+import { CC } from "./camera.service.js"
 
 import { G } from "./display/graph.service.js"
 import { V } from "./display/visual.service.js"
@@ -113,7 +113,7 @@ export class LayoutService {
 
             Billboard.startAutoOrientation(
                 () => G.getGraph().scene(),
-                () => CameraService.singleton.camera().position
+                () => CC.camera().position
             );
 
             this.rendererDebug.toggleVisibility({ visibility: false });
@@ -140,9 +140,10 @@ export class LayoutService {
 
 
         V.mesh.size = null;// P.state.numerics()[0];
-        V.mesh.color = P.project.categories()[0];
+        V.mesh.color = null; //P.project.categories()[0];
 
         this.settings.updateGui();
         V.apply();
     }
 }
+export const LL = LayoutService.singleton;

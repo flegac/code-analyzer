@@ -61,3 +61,4 @@ export class FilterService {
     }
 
 }
+export const FF = FilterService.singleton;

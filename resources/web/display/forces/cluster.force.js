@@ -1,11 +1,11 @@
-import {ClusterService} from "../cluster/cluster.service.js";
+import {CC} from "../cluster.service.js";
 
 export function clusterForce() {
     let nodes;
 
     function force(alpha) {
         try {
-            const groupMap = ClusterService.singleton.collapseStrategy.computeGroupMap(nodes);
+            const groupMap = CC.collapseStrategy.computeGroupMap(nodes);
             for (const group of groupMap.values()) {
                 applyGroupForces(group, alpha);
             }

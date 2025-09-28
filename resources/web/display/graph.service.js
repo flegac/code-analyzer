@@ -1,13 +1,13 @@
-import {LayoutService} from "../layout.service.js"
-import {CameraService} from "../camera.service.js"
+import { LL } from "../layout.service.js"
+import { CC } from "../camera.service.js"
 
-import {P} from "../project/project.service.js"
-import {V} from "./visual.service.js"
-import {PP} from "./physics.service.js"
-import {NodeService} from "./node.service.js"
+import { P } from "../project/project.service.js"
+import { V } from "./visual.service.js"
+import { PP } from "./physics.service.js"
+import { NN } from "./node.service.js"
 
-import {ClosenessCentrality} from "./metrics/closeness.centrality.metrics.js"
-import {CycleCounter} from "./metrics/cycle.count.metrics.js";
+import { ClosenessCentrality } from "./metrics/closeness.centrality.metrics.js"
+import { CycleCounter } from "./metrics/cycle.count.metrics.js";
 
 
 class GraphState {
@@ -48,7 +48,7 @@ export class GraphService {
 
         this._patchNaNPositions();
         this._autoResize(container);
-        CameraService.singleton.takeControl(container);
+        CC.takeControl(container);
 
     }
 
@@ -89,6 +89,23 @@ export class GraphService {
         });
     }
 
+getDiameter() {
+  const nodes = this.state.nodes;
+
+  const xs = nodes.map(n => n.x).filter(x => Number.isFinite(x));
+  const ys = nodes.map(n => n.y).filter(y => Number.isFinite(y));
+  const zs = nodes.map(n => n.z).filter(z => Number.isFinite(z));
+
+  if (xs.length === 0 || ys.length === 0 || zs.length === 0) return 0;
+
+  const dx = Math.max(...xs) - Math.min(...xs);
+  const dy = Math.max(...ys) - Math.min(...ys);
+  const dz = Math.max(...zs) - Math.min(...zs);
+
+  return (dx + dy + dz) / 3;
+}
+
+
     getGraph() {
         return this.state.graph;
     }
@@ -107,7 +124,6 @@ export class GraphService {
 
 
     async rebuildGraph() {
-        const N = NodeService.singleton;
         const project = P.project;
 
         this.state.selected = null;
@@ -136,16 +152,16 @@ export class GraphService {
                 x: old?.x,
                 y: old?.y,
                 z: old?.z,
-                read: label => N.read(label, id),
-                readAll: () => N.readAll(id),
-                write: (label, value) => N.write(label, id, value),
+                read: label => NN.read(label, id),
+                readAll: () => NN.readAll(id),
+                write: (label, value) => NN.write(label, id, value),
             };
             // copy project values in node
             // TODO: remove that ?
             project.labels().forEach(label => {
                 const value = project.read(label, id);
                 if (value !== null) {
-                    N.write(label, id, value)
+                    NN.write(label, id, value)
                 }
             });
 
@@ -160,18 +176,18 @@ export class GraphService {
             links: this.state.links
         });
 
-        N.updateMetrics();
-        N.updateGroup();
-        N.updateRadius();
-        N.updateColor();
-        N.updateNavigation();
+        NN.updateMetrics();
+        NN.updateGroup();
+        NN.updateRadius();
+        NN.updateColor();
+        NN.updateNavigation();
 
         V.rebuildMeshes();
 
         await PP.apply();
         V.apply();
 
-        LayoutService.singleton.table.rebuild();
+        LL.table.rebuild();
 
     }
 

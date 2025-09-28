@@ -1,5 +1,5 @@
 import { GraphModel } from "./graph.model.js"
-import { FilterService } from "../display/filter/filter.service.js"
+import { FF } from "../display/filter/filter.service.js"
 
 
 export class Project {
@@ -32,7 +32,7 @@ export class Project {
             return null;
         }
 
-        const pipeline = FilterService.singleton.pipeline();
+        const pipeline = FF.pipeline();
 
         const graph = pipeline.reduce((acc, mapper) => mapper(acc), this._relation);
         return new GraphModel('relation', graph);

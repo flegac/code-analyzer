@@ -1,10 +1,10 @@
-import {Metadata} from "../project/metadata.model.js";
-import {ClusterService} from "./cluster/cluster.service.js";
-import {G} from "./graph.service.js";
-import {V} from "./visual.service.js";
-import {P} from "../project/project.service.js";
-import {ClosenessCentrality} from "./metrics/closeness.centrality.metrics.js";
-import {CycleCounter} from "./metrics/cycle.count.metrics.js";
+import { Metadata } from "../project/metadata.model.js";
+import { CC } from "./cluster.service.js";
+import { G } from "./graph.service.js";
+import { V } from "./visual.service.js";
+import { P } from "../project/project.service.js";
+import { ClosenessCentrality } from "./metrics/closeness.centrality.metrics.js";
+import { CycleCounter } from "./metrics/cycle.count.metrics.js";
 
 export class NodeService extends Metadata {
     static singleton = new NodeService();
@@ -26,10 +26,8 @@ export class NodeService extends Metadata {
     }
 
     updateGroup() {
-        const C = ClusterService.singleton;
-
         G.state.nodes.forEach(node => {
-            const group = C.groupStrategy.apply(node);
+            const group = CC.groupStrategy.apply(node);
             node.write('group', group);
         });
     }
@@ -41,7 +39,10 @@ export class NodeService extends Metadata {
         G.state.nodes.forEach(node => {
             const value = node.read(sizeLabel) ?? 1;
             const radius = Math.max(1, Math.cbrt(1 + value));
-            node.write('radius', radius * scaling);
+
+            const maxSize = 100.;
+
+            node.write('radius', radius * scaling * maxSize);
         });
     }
 
@@ -64,15 +65,27 @@ export class NodeService extends Metadata {
     updateNavigation() {
         // connectivity stats
         G.state.nodes.forEach(node => {
-            node.write('outgoing', []);
-            node.write('incoming', []);
+            node.write('relation.in', []);
+            node.write('relation.out', []);
+            node.write('hierarchy.in', []);
+            node.write('hierarchy.out', []);
         });
         G.state.links.forEach(link => {
+            const label = link.label;
             const source = G.findNodeById(link.source.id || link.source);
             const target = G.findNodeById(link.target.id || link.target);
 
-            source.read('outgoing').push(target.id);
-            target.read('incoming').push(source.id);
+
+            if (label === 'hierarchy') {
+                target.read('hierarchy.in').push(source.id);
+                source.read('hierarchy.out').push(target.id);
+            }
+
+            if (label === 'relation') {
+                target.read('relation.in').push(source.id);
+                source.read('relation.out').push(target.id);
+            }
         });
     }
 }
+export const NN = NodeService.singleton;

@@ -1,6 +1,6 @@
 import {BaseComponent} from "./core/base.component.js"
 import {G} from "../display/graph.service.js"
-import {CameraService} from "../camera.service.js"
+import {CC} from "../camera.service.js"
 
 const STYLE = `
 .graph-navigation {
@@ -51,7 +51,7 @@ export class NavigationComponent extends BaseComponent {
 
         this.onClick = (id) => {
             const node = G.findNodeById(id);
-            CameraService.singleton.focusOn(node);
+            CC.focusOn(node);
             G.select(node);
         };
 
@@ -74,8 +74,8 @@ export class NavigationComponent extends BaseComponent {
         const selected = G.state.selected;
         if (selected === null) return;
 
-        const incoming = selected.read('incoming');
-        const outgoing = selected.read('outgoing');
+        const incoming = selected.read('relation.in');
+        const outgoing = selected.read('relation.out');
 
         const nodeName = selected?.id || 'Navigation';
 

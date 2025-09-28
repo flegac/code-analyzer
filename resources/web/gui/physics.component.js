@@ -35,6 +35,7 @@ const TEMPLATE = `
     <div class="slider-row">
       <sl-checkbox @sl-change="state.constraints.planar = $event.target.checked; apply()">Planar</sl-checkbox>
       <sl-checkbox @sl-change="state.constraints.spherical = $event.target.checked; apply()" checked>Spherical</sl-checkbox>
+      <sl-range v-model="state.constraints.sphericalDepth" min="1" max="10" step="1" @sl-input="state.constraints.sphericalDepth = $event.target.value; apply()"></sl-range>
     </div>
 
     <div class="slider-row">
@@ -61,7 +62,7 @@ export class PhysicsComponent extends BaseComponent {
       style: STYLE,
       state: {
         state: PP.state,
-        apply: PP.apply,
+        apply: () => PP.apply(),
       }
     });
   }

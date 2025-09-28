@@ -17,7 +17,7 @@ export const Fixer = {
 };
 
 const DEFAULT_OPTIONS = {
-    R: [2000, 500],
+    R: [1000],
     power: 1.,
     fixer: Fixer.soft
 };
@@ -56,16 +56,17 @@ export function sphericalConstraint(options = {}) {
 
 function assignRadii(nodes, R) {
     // const values = nodes.map(n => Math.hypot(n.x, n.y, n.z));
-    const values = nodes.map(n => n.read('incoming').length + n.read('outgoing').length);
-    console.log(values);
+    // const values = nodes.map(n => n.read('relation.in').length + n.read('relation.out').length);
+    const values = nodes.map(n => n.read('relation.in').length);
+    // const values = nodes.map(n => n.read('relation.out').length);
 
     const sortedIndices = values
         .map((d, i) => ({ index: i, value: d }))
-        .sort((a, b) => a.value - b.value)
+        .sort((a, b) => b.value - a.value)
         .map(obj => obj.index);
 
     // 🧠 Calcul des surfaces sphériques (4πr², mais on ignore 4π car c’est constant)
-    const surfaces = R.map(r => r * r);
+    const surfaces = R.map(r => r);
     const totalSurface = surfaces.reduce((sum, s) => sum + s, 0);
 
     // 📊 Calcul du nombre de sommets par couche selon le ratio de surface

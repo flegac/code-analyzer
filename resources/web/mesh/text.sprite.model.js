@@ -15,7 +15,7 @@ export class TextSprite {
     }
 
     resize(size) {
-        const scaling = size * this.baseSize;
+        const scaling = size * this.baseSize * 100;
         this.mesh.scale.set(this.aspect * scaling, scaling);
         return this;
     }

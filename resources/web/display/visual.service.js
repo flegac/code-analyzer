@@ -1,7 +1,7 @@
-import { StoreService } from "../store.service.js"
-import { CameraService } from "../camera.service.js"
+import { SS } from "../store.service.js"
+import { CC } from "../camera.service.js"
 
-import { NodeService } from "./node.service.js"
+import { NN } from "./node.service.js"
 import { G } from "./graph.service.js";
 
 import { NodeMeshModel } from "../mesh/node.mesh.model.js";
@@ -12,13 +12,13 @@ export class VisualService {
     static singleton = new VisualService();
 
     constructor() {
-        this.mesh = StoreService.singleton.store('mesh', {
+        this.mesh = SS.store('mesh', {
             isVisible: true,
-            scaling: 20.0,
+            scaling: .5,
             size: null,
             color: 'group',
         });
-        this.text = StoreService.singleton.store('text', {
+        this.text = SS.store('text', {
             isVisible: true,
             showModule: true,
             showClass: true,
@@ -28,9 +28,9 @@ export class VisualService {
             textColor: 'white',
             textOffsetY: 20,
         });
-        this.links = StoreService.singleton.store('links', {
+        this.links = SS.store('links', {
             opacity: .35,
-            metrics: 'cycles',
+            metrics: 'centrality',
             particles: 1,
             particleWidthMultiplier: 2.,
             width: 2.0,
@@ -67,7 +67,7 @@ export class VisualService {
     }
 
     visibleMesh(node) {
-        const degree = node.read('outgoing').length + node.read('incoming').length;
+        const degree = node.read('relation.out').length + node.read('relation.in').length;
         return (degree > 0) && this.mesh.isVisible;
     }
 
@@ -78,8 +78,14 @@ export class VisualService {
 
     getLabel(node) {
         const infos = node.readAll();
-        infos.incoming = infos.incoming.length;
-        infos.outgoing = infos.outgoing.length;
+        [
+            'relation.in',
+            'relation.out',
+            'hierarchy.in',
+            'hierarchy.out',
+        ].forEach(k => {
+            infos[k] = infos[k].length;
+        })
 
         for (const key in infos) {
             if (infos[key] === null || key.startsWith('_')) {
@@ -103,7 +109,7 @@ export class VisualService {
 
     rebuildMeshes() {
         console.log('VisualService.rebuildMeshes()');
-        const camPosition = CameraService.singleton.camera().position;
+        const camPosition = CC.camera().position;
         G.getGraph().nodeThreeObject((node) => this.getMesh(node, camPosition));
 
     }
@@ -122,9 +128,7 @@ export class VisualService {
     }
 
     updateNodeSizes() {
-        const N = NodeService.singleton;
-
-        N.updateRadius();
+        NN.updateRadius();
 
         G.state.nodes.forEach(node => {
             const meshes = node.read('_meshes');
@@ -156,12 +160,11 @@ export class VisualService {
     }
 
     apply() {
-        const N = NodeService.singleton;
 
         // ----- NODES ---------------------------------
-        N.updateGroup();
-        N.updateRadius();
-        N.updateColor();
+        NN.updateGroup();
+        NN.updateRadius();
+        NN.updateColor();
 
         //TODO: just modify color/scale of geometries
         this.rebuildMeshes()

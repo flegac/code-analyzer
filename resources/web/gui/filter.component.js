@@ -1,9 +1,9 @@
 import {BaseComponent} from "./core/base.component.js";
 import {P} from "../project/project.service.js"
-import {ClusterService} from "../display/cluster/cluster.service.js"
+import {CC} from "../display/cluster.service.js"
 import {V} from "../display/visual.service.js";
 import {PP} from "../display/physics.service.js";
-import {FilterService} from "../display/filter/filter.service.js"
+import {FF} from "../display/filter/filter.service.js"
 
 
 const STYLE = `
@@ -74,7 +74,7 @@ export class FilterComponent extends BaseComponent {
             state: {
                 isActive: true,
                 nodeName: null,
-                filterState: FilterService.singleton,
+                filterState: FF,
                 updateFilter: (event) => this.updateFilter(event.target.value),
                 apply: (event) => console.log(event.target.value),
                 applyPruning: (event) => this.applyPruning(event.target.value)
@@ -88,25 +88,22 @@ export class FilterComponent extends BaseComponent {
     }
 
     async applyPruning(value) {
-        FilterService.singleton.hierarchyPruneLevel = parseInt(value);
-        await FilterService.singleton.apply();
+        FF.hierarchyPruneLevel = parseInt(value);
+        await FF.apply();
     }
 
     colorByDepth(depth) {
-        const C = ClusterService.singleton;
-        C.setGroupByDepth(depth);
+        CC.setGroupByDepth(depth);
         V.apply()
     }
 
     colorByGroup(attribute) {
-        const C = ClusterService.singleton;
-        C.setGroupByLabel(attribute);
+        CC.setGroupByLabel(attribute);
         V.apply()
     }
 
     async collapseByDepth(depth) {
-        const C = ClusterService.singleton;
-        C.setCollapseByDepth(depth)
+        CC.setCollapseByDepth(depth)
         await PP.apply();
     }
 
