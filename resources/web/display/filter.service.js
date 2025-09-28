@@ -1,6 +1,6 @@
-import {P} from "../../project/project.service.js"
-import {GraphFilter} from "./graph.filter.model.js"
-import {G} from "../graph.service.js";
+import { P } from "../project/project.service.js"
+import { GraphFilter } from "./filter/graph.filter.js"
+import { G } from "./graph.service.js";
 
 
 export class FilterService {
@@ -8,15 +8,16 @@ export class FilterService {
 
     constructor() {
         this.hierarchyPruneLevel = 4;
+        this.forbiddenNodes = [];
     }
 
-    async apply() {
-        await G.rebuildGraph();
+    apply() {
+        G.rebuildGraph();
     }
 
     pipeline() {
         return [
-            graph => new GraphFilter(P.project.config()).apply(graph),
+            graph => new GraphFilter(P.project.config(), this.forbiddenNodes).apply(graph),
             this.nodeReducer((node) => {
                 return node.split('.').slice(0, this.hierarchyPruneLevel).join('.');
             })

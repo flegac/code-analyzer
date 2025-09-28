@@ -24,5 +24,4 @@ export class ProjectComponent extends BaseComponent {
         this.fileBrowser.click()
     }
 
-
 }

@@ -101,18 +101,16 @@ const TEMPLATE = `
         <div name="graph-settings"></div>
         <div name="navigation"></div>
         <div name="graph-filter"></div>       
+        <div name="graph-config"></div>       
       </div>
     </div>
 
     <!-- Panneau principal -->
     <div slot="end">
       <div name="graph-view">
-      
         <div name="graph-canvas"></div> 
         <div name="graph-table"></div>
         <div name="debug"></div>    
-
-
       </div>
     </div>
   </sl-split-panel>

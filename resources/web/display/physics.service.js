@@ -28,7 +28,7 @@ export class PhysicsService {
         console.log('initialize', this);
     }
 
-    async apply() {
+    apply() {
         const graph = G.getGraph();
         const state = this.state;
 

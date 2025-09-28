@@ -123,7 +123,7 @@ getDiameter() {
     }
 
 
-    async rebuildGraph() {
+    rebuildGraph() {
         const project = P.project;
 
         this.state.selected = null;
@@ -184,7 +184,7 @@ getDiameter() {
 
         V.rebuildMeshes();
 
-        await PP.apply();
+        PP.apply();
         V.apply();
 
         LL.table.rebuild();

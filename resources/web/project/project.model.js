@@ -1,5 +1,5 @@
 import { GraphModel } from "./graph.model.js"
-import { FF } from "../display/filter/filter.service.js"
+import { FF } from "../display/filter.service.js"
 
 
 export class Project {

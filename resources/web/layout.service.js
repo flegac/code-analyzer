@@ -14,6 +14,7 @@ import { NavigationComponent } from "./gui/navigation.component.js"
 import { RendererDebugComponent } from "./gui/renderer.debug.component.js"
 import { ToolBox } from "./gui/core/base.toolbox.component.js";
 import { ConfigComponent } from "./gui/config.component.js"
+import { FilterComponent } from "./gui/filter.component.js"
 
 import { Billboard } from "./mesh/billboard.mesh.model.js"
 
@@ -29,9 +30,11 @@ export class LayoutService {
         this.table = this.layout.addComponent('graph-table', new TableComponent());
 
         this.settings = this.layout.addComponent('graph-settings', new SettingsComponent());
+        this.filter = this.layout.addComponent('graph-filter', new FilterComponent());
         this.navigation = this.layout.addComponent('navigation', new NavigationComponent());
         this.rendererDebug = this.layout.addComponent('debug', new RendererDebugComponent());
-        this.graphFilter = this.layout.addComponent('graph-filter', new ConfigComponent());
+        this.config = this.layout.addComponent('graph-config', new ConfigComponent());
+        
         this.toolbox = this.layout.addComponent('graph-toolbox', this.createToolbar());
 
         this.layout.start();
@@ -61,6 +64,12 @@ export class LayoutService {
         ]);
 
         toolBox.newGroup([
+            
+            {
+                label: '🔍',
+                tooltip: 'Filter panel',
+                onClick: this.groupAction(this.filter),
+            },
             {
                 label: '🧭',
                 tooltip: 'Navigation panel',
@@ -73,8 +82,8 @@ export class LayoutService {
             },
             {
                 label: '🏷️',
-                tooltip: 'Filter panel',
-                onClick: this.groupAction(this.graphFilter),
+                tooltip: 'Config panel',
+                onClick: this.groupAction(this.config),
             },
         ]);
 
@@ -97,7 +106,8 @@ export class LayoutService {
             this.settings,
             this.navigation,
             this.table,
-            this.graphFilter
+            this.filter,
+            this.config
         ];
         return () => {
             BaseComponent.toggleGroupVisibility(g, item);
@@ -106,7 +116,7 @@ export class LayoutService {
     }
 
     async start() {
-        const target = this.settings;
+        const target = this.filter;
         $(() => {
             G.initGraph(this.graphPanel());
             const renderer = G.getGraph().renderer();
@@ -136,13 +146,14 @@ export class LayoutService {
         await G.rebuildGraph();
 
         this.table.rebuild();
-        this.graphFilter.rebuild(project.config());
+        this.config.rebuild(project.config());
 
 
         V.mesh.size = null;// P.state.numerics()[0];
         V.mesh.color = null; //P.project.categories()[0];
 
         this.settings.updateGui();
+        this.filter.updateGui();
         V.apply();
     }
 }

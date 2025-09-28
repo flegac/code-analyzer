@@ -30,7 +30,7 @@ const TEMPLATE = `
 <div name="graph-settings" class="graph-settings">
   <div class="drawer-cards">
   
-    ${['filter', 'cluster', 'physics', 'visuals',].map(name => `
+    ${[ 'cluster', 'physics', 'visuals',].map(name => `
       <sl-card class="drawer-card">
         <div name="${name}"></div>
       </sl-card>
@@ -46,7 +46,6 @@ export class SettingsComponent extends BaseComponent {
             template: TEMPLATE,
             style: STYLE
         });
-        this.filter = this.addComponent('filter', new FilterComponent());
         this.cluster = this.addComponent('cluster', new ClusterComponent());
         this.physics = this.addComponent('physics', new PhysicsComponent());
         this.visuals = this.addComponent('visuals', new VisualsComponent());
