@@ -12,9 +12,9 @@ export class NodeService extends Metadata {
     updateMetrics(metrics = null) {
         if (metrics === null) {
             const relation = P.project.relation();
-            if (V.links.metrics === 'centrality') {
+            if (V.state.links.metrics === 'centrality') {
                 metrics = new ClosenessCentrality(relation)
-            } else if (V.links.metrics === 'cycles') {
+            } else if (V.state.links.metrics === 'cycles') {
                 metrics = new CycleCounter(relation);
             }
         }
@@ -33,16 +33,14 @@ export class NodeService extends Metadata {
     }
 
     updateRadius() {
-        const sizeLabel = V.mesh.size;
-        const scaling = V.mesh.scaling;
+        const size = V.state.mesh.size;
+        const scaling = V.state.mesh.scaling;
 
         G.state.nodes.forEach(node => {
-            const value = node.read(sizeLabel) ?? 1;
-            const radius = Math.max(1, Math.cbrt(1 + value));
+            const value = node.read(size) ?? 1;
+            const radius = V.expectdRadius(value);
 
-            const maxSize = 100.;
-
-            node.write('radius', radius * scaling * maxSize);
+            node.write('radius', radius);
         });
     }
 

@@ -106,18 +106,18 @@ export class VisualsComponent extends BaseComponent {
       template: TEMPLATE,
       style: STYLE,
       state: {
-        mesh: V.mesh,
+        mesh: V.state.mesh,
         meshVisibility: (e) => this.meshVisibility(e.target.checked),
         scaling: _.throttle((e) => this.scaling(e.target.value), 100),
 
         selectNodeRadius: (e) => this.selectNodeRadius(e.target.value),
 
-        text: V.text,
+        text: V.state.text,
         textVisibility: (e) => this.textVisibility(e.target.checked),
         textShowModule: (e) => this.textShowModule(e.target.checked),
         textShowClass: (e) => this.textShowClass(e.target.checked),
 
-        links: V.links,
+        links: V.state.links,
         applyLinks: (e) => this.applyLinks(e.target.value),
         hierarchyIsVisible: (e) => this.hierarchyIsVisible(e.target.checked),
         relationIsVisible: (e) => this.relationIsVisible(e.target.checked),
@@ -131,52 +131,52 @@ export class VisualsComponent extends BaseComponent {
   }
 
   meshVisibility(value) {
-    V.mesh.isVisible = value;
+    V.state.mesh.isVisible = value;
     V.apply()
   }
 
   scaling(value) {
-    V.mesh.scaling = value;
+    V.state.mesh.scaling = value;
     V.updateNodeSizes()
   }
 
   textVisibility(value) {
-    V.text.isVisible = value;
+    V.state.text.isVisible = value;
     V.apply()
   }
 
   textShowModule(value) {
-    V.text.showModule = value;
+    V.state.text.showModule = value;
     V.apply()
   }
 
 
   textShowClass(value) {
-    V.text.showClass = value;
+    V.state.text.showClass = value;
     V.apply()
   }
 
 
   hierarchyIsVisible(value) {
-    V.links.hierarchy.isVisible = value;
+    V.state.links.hierarchy.isVisible = value;
     console.log('hierarchy.isVisible', value)
     V.apply()
   }
 
   relationIsVisible(value) {
-    V.links.relation.isVisible = value;
+    V.state.links.relation.isVisible = value;
     V.apply()
   }
 
   selectMetrics(value) {
-    V.links.metrics = value;
+    V.state.links.metrics = value;
     NN.updateMetrics();
     V.apply();
 
   }
 
   selectNodeRadius(value) {
-    V.mesh.size = value;
+    V.state.mesh.size = value;
     V.apply();
   }
 

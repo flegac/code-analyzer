@@ -1,48 +1,6 @@
 import { Project } from "./project.model.js"
-
-
-export class ProjectService {
-    static singleton = new ProjectService();
-
-    constructor() {
-        this.project = new Project();
-        console.log('initialize', this);
-    }
-
-    //----- modifications ---------------------------------------------------
-
-    loadProject(project) {
-        this.project = project;
-        return project;
-    }
-
-    async loadFolder(folderName, files) {
-        return await loadProject(folderName, files);
-    }
-
-    async loadDefault(projectName = 'projects/default') {
-        return await loadProject(projectName);
-    }
-
-}
-export const P = ProjectService.singleton;
-
-async function loadProject(projectName, fileList=null) {
-    const reader = fileList === null ? new DefaultReader() : new FolderReader(projectName, fileList);
-    const config = await reader.readJson(`${projectName}/config.json`)
-    const labels = config?.labels?.visible || [];
-
-    const nodes = {};
-    labels.forEach(async key => {
-        nodes[key] = await reader.readJson(`${projectName}/nodes/${key}.json`);
-    });
-    return new Project(
-        projectName,
-        await reader.readJson(`${projectName}/relation.json`),
-        nodes,
-        config,
-    );
-}
+import { PP } from "../display/physics.service.js"
+import { SS } from "../store.service.js"
 
 class DefaultReader {
     async readJson(path) {
@@ -55,6 +13,66 @@ class DefaultReader {
             return null;
         }
     }
+}
+
+export class ProjectService {
+    static singleton = new ProjectService();
+
+    constructor() {
+        this.reader = new DefaultReader();
+        this.project = null;
+        console.log('initialize', this);
+    }
+
+
+    //----- modifications ---------------------------------------------------
+
+    loadProject(project) {
+        this.project = project;
+        console.log('project loaded', this.project);
+        return project;
+    }
+
+    async loadFolder(folderName, files) {
+        return await loadProject(folderName, files);
+    }
+
+    async loadDefault() {
+        const config = await this.reader.readJson('projects/config.json');
+        console.log('app config:', config);
+        return await loadProject(`projects/${config.project}`);
+    }
+}
+
+export const P = ProjectService.singleton;
+
+async function loadProject(projectName, fileList = null) {
+    const reader = fileList === null ? new DefaultReader() : new FolderReader(projectName, fileList);
+    const config = await reader.readJson(`${projectName}/config.json`)
+    const labels = config?.labels?.visible || [];
+    const relation = config?.graph?.relation || 'relation.json';
+
+    //visuals
+    const visualspath = config?.visuals || 'default';
+    const visuals = await reader.readJson(`${projectName}/${visualspath}.visuals.json`);
+
+    if (visuals.physics) {
+        SS.update('physics', visuals.physics);
+        SS.update('visuals', visuals.visuals);
+        // PP.state.update(visuals.physics);
+    }
+
+
+    const nodes = {};
+    labels.forEach(async key => {
+        nodes[key] = await reader.readJson(`${projectName}/nodes/${key}.json`);
+    });
+    return new Project(
+        projectName,
+        await reader.readJson(`${projectName}/${relation}`),
+        nodes,
+        config,
+    );
 }
 
 

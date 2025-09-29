@@ -1,0 +1,53 @@
+{
+    "physics": {
+        "camAutoFit": false,
+        "isActive": true,
+        "friction": 0.25,
+        "constraints": {
+            "planar": false,
+            "spherical": false,
+            "sphericalDepth": 1
+        },
+        "clusterFactor": 0.5,
+        "repulsionFactor": 0.5,
+        "attractionFactor": 0.5,
+        "link": {
+            "relationStrengthFactor": 0.1
+        }
+    },
+    "visuals": {
+        "mesh": {
+            "isVisible": true,
+            "scaling": 0.5,
+            "size": null,
+            "color": "group"
+        },
+        "text": {
+            "isVisible": true,
+            "showModule": true,
+            "showClass": true,
+            "padding": 2,
+            "fontSize": 64,
+            "fontFamily": "Arial",
+            "textColor": "white",
+            "textOffsetY": 50
+        },
+        "links": {
+            "opacity": 0.35,
+            "metrics": "centrality",
+            "particles": 0,
+            "particleWidthMultiplier": 2.0,
+            "width": 2.0,
+            "colorLow": "#0f0",
+            "colorHigh": "#f00",
+            "relation": {
+                "isVisible": true,
+                "color": "#f00"
+            },
+            "hierarchy": {
+                "isVisible": true,
+                "color": "#fff"
+            }
+        }
+    }
+}

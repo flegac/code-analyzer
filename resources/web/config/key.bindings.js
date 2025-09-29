@@ -1,5 +1,5 @@
 import { CC } from "../camera.service.js"
-
+import {LL} from "../layout.service.js"
 
 export function keyBindings(app) {
     return {
@@ -21,6 +21,11 @@ export function keyBindings(app) {
         'c': () => CC.alignFrontToAxis('z'),
 
         ' ': () => CC.zoomToFit(),
+
+        '&': _.debounce(() => LL.showTable(), 100),
+        'é': _.debounce(() => LL.showFilter(), 100),
+        '"': _.debounce(() => LL.showSettings(), 100),
+        '\'': _.debounce(() => LL.showConfig(), 100),
 
     }
 }

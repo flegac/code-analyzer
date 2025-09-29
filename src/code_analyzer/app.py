@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
     # ----- STATS ANALYZER ---------------------------------------------
     # analyze_project(project, target)
-    
+
     node_path = target / 'nodes'
     node_path.mkdir(exist_ok=True, parents=True)
     

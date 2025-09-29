@@ -2,32 +2,18 @@ import {BaseComponent} from "./core/base.component.js";
 import {ClusterComponent} from "./cluster.component.js"
 import {VisualsComponent} from "./visuals.component.js"
 import {PhysicsComponent} from "./physics.component.js"
-import {FilterComponent} from "./filter.component.js"
+import {FilterComponent} from "./filter/filter.component.js"
 
 const STYLE = `
 .graph-settings {
   position: absolute;
   width: 300px;
   height: 100%;
-  
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(2px);
-  z-index: 1000;
-  box-shadow: var(--sl-shadow-large);
-  border-radius: var(--sl-border-radius-medium);
-  display: flex;
-  flex-direction: column;
-  overflow: auto;
-}
-.drawer-cards {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
 }
 `;
 
 const TEMPLATE = `
-<div name="graph-settings" class="graph-settings">
+<div name="graph-settings" class="graph-settings panel-style">
   <div class="drawer-cards">
   
     ${[ 'cluster', 'physics', 'visuals',].map(name => `
@@ -54,6 +40,7 @@ export class SettingsComponent extends BaseComponent {
     updateGui() {
         this.cluster.updateGui();
         this.visuals.updateGui();
+        this.physics.updateGui();
     }
 
 }

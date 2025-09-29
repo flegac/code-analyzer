@@ -25,6 +25,6 @@ export async function main() {
 
     $(async () => {
         const project = await P.loadDefault();
-        await LL.changeProject(project);
+        LL.changeProject(project);
     })
 }

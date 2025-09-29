@@ -2,18 +2,10 @@ import {BaseComponent} from "./core/base.component.js";
 import {V} from "../display/visual.service.js";
 
 const STYLE = `
-  .graph-filter {
+  .graph-config {
     position: absolute;
     width: 300px;
     height: 100%;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(2px);
-    z-index: 1000;
-    box-shadow: var(--sl-shadow-large);
-    border-radius: var(--sl-border-radius-medium);
-    display: flex;
-    flex-direction: column;
-    overflow: auto;
   }
 
   .group-block {
@@ -38,14 +30,10 @@ const STYLE = `
     justify-content: space-between;
   }
 
-  sl-tag {
-    margin-right: 0.25em;
-    margin-bottom: 0.25em;
-  }
 `;
 
 const TEMPLATE = `
-  <div class="graph-filter">
+  <div class="graph-config panel-style">
     <div class="group-block">
       <h4>Selected</h4>
       <div class="group-list" id="selected-list"></div>

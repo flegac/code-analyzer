@@ -34,6 +34,7 @@ export class GraphService {
         console.log('initialize', this);
     }
 
+
     initGraph(container) {
         console.log('G.initGraph', container);
 

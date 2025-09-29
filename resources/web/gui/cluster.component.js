@@ -11,27 +11,11 @@ const STYLE = `
     flex-direction: column;
     gap: 0.5em;
   }
-    
+
   .section-header {
     display: flex;
     align-items: center;
     gap: 1em;
-  }
-
-  .slider-row {
-    display: flex;
-    align-items: center;
-    gap: 1em;
-  }
-
-  .slider-row label {
-    width: 80px;
-  }
-
-  sl-range {
-    flex: 1;
-    --track-color-active: var(--sl-color-primary-600);
-    --track-color-inactive: var(--sl-color-primary-100);
   }
 
   h3 {

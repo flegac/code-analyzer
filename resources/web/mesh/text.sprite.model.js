@@ -8,10 +8,10 @@ export class TextSprite {
         const hasMesh = V.visibleMesh(node);
 
 
-        const offset = hasMesh ? V.mesh.scaling : 0
+        const offset = hasMesh ? V.state.mesh.scaling : 0
         this.mesh.position.set(0, offset, 10);
 
-        this.resize(V.mesh.scaling)
+        this.resize(V.state.mesh.scaling)
     }
 
     resize(size) {
@@ -27,19 +27,21 @@ export class TextSprite {
         const context = canvas.getContext('2d');
         context.clearRect(0, 0, canvas.width, canvas.height);
 
-        const fontSize = V.text.fontSize;
+        const config = V.state.text;
 
-        context.font = `${fontSize}px ${V.text.fontFamily}`;
+        const fontSize =config.fontSize;
+
+        context.font = `${fontSize}px ${V.state.text.fontFamily}`;
         const textWidth = context.measureText(text).width;
-        const textHeight = fontSize + 2 * V.text.padding;
+        const textHeight = fontSize + 2 *config.padding;
 
         const aspect = textWidth / textHeight;
 
         canvas.width = textWidth;
         canvas.height = textHeight;
 
-        context.font = `${fontSize}px ${V.text.fontFamily}`;
-        context.fillStyle = V.text.textColor;
+        context.font = `${fontSize}px ${V.state.text.fontFamily}`;
+        context.fillStyle =config.textColor;
         context.textBaseline = 'top';
         context.fillText(text, 0, 0);
         const texture = new THREE.CanvasTexture(canvas);
@@ -48,7 +50,7 @@ export class TextSprite {
             transparent: true,
         });
         const mesh = new THREE.Sprite(material);
-        mesh.position.set(0, V.text.textOffsetY, 1);
+        mesh.position.set(0, config.textOffsetY, 1);
         return [mesh, aspect];
     }
 }

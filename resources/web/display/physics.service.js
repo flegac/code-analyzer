@@ -2,6 +2,8 @@ import { SS } from "../store.service.js";
 import { clusterForce } from "./forces/cluster.force.js"
 import { sphericalConstraint, Fixer } from "./forces/spherical.constraint.force.js"
 import { G } from "./graph.service.js";
+import { V } from "./visual.service.js";
+
 
 export class PhysicsService {
     static singleton = new PhysicsService();
@@ -70,13 +72,17 @@ export class PhysicsService {
             // cluster
             graph.d3Force('cluster', clusterForce());
 
+            const n = G.state.nodes.length
+            const r = V.expectdRadius();
+            const radius = Math.sqrt(n) * r;
+            console.log(`n=${n} r=${r}`, radius);
 
             // spherical constraints
             const spherical = this.state.constraints.spherical
                 ? sphericalConstraint({
                     R: regularIntervals(
                         state.constraints.sphericalDepth,
-                        500, 2000,
+                        radius, 2 * radius,
                     ),
                     power: state.repulsionFactor,
                     // fixer: Fixer.soft,

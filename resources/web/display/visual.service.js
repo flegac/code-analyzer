@@ -7,59 +7,69 @@ import { G } from "./graph.service.js";
 import { NodeMeshModel } from "../mesh/node.mesh.model.js";
 
 
+const DEFAULT_STORE = SS.store('visuals', {
+    mesh: {
+        isVisible: true,
+        scaling: .5,
+        size: null,
+        color: 'group',
+    },
+    text: {
+        isVisible: true,
+        showModule: true,
+        showClass: true,
+        padding: 2,
+        fontSize: 64,
+        fontFamily: 'Arial',
+        textColor: 'white',
+        textOffsetY: 20,
+    },
+    links: {
+        opacity: 0.35,
+        metrics: 'centrality',
+        particles: 1,
+        particleWidthMultiplier: 2.,
+        width: 2.0,
+        colorLow: '#0f0',
+        colorHigh: '#f00',
+        relation: {
+            isVisible: true,
+            color: '#f00',
+        },
+        hierarchy: {
+            isVisible: true,
+            color: '#fff',
+        }
+    }
+});
 
 export class VisualService {
     static singleton = new VisualService();
 
     constructor() {
-        this.mesh = SS.store('mesh', {
-            isVisible: true,
-            scaling: .5,
-            size: null,
-            color: 'group',
-        });
-        this.text = SS.store('text', {
-            isVisible: true,
-            showModule: true,
-            showClass: true,
-            padding: 2,
-            fontSize: 64,
-            fontFamily: 'Arial',
-            textColor: 'white',
-            textOffsetY: 20,
-        });
-        this.links = SS.store('links', {
-            opacity: .35,
-            metrics: 'centrality',
-            particles: 1,
-            particleWidthMultiplier: 2.,
-            width: 2.0,
-            colorLow: '#0f0',
-            colorHigh: '#f00',
-            relation: {
-                isVisible: true,
-                color: '#f00',
-            },
-            hierarchy: {
-                isVisible: true,
-                color: '#fff',
-            }
-        });
+        this.state = DEFAULT_STORE;
         console.log('initialize', this);
     }
+
+    expectdRadius(value = 1) {
+        const radius = Math.max(1, Math.cbrt(1 + value));
+        const maxSize = 100.;
+        return radius * this.state.mesh.scaling * maxSize;
+    }
+
 
     visibleText(node) {
         const category = node.read('category');
 
-        if (!this.text.isVisible) {
+        if (!this.state.text.isVisible) {
             return false;
         }
 
-        if (category === 'Module' && !this.text.showModule) {
+        if (category === 'Module' && !this.state.text.showModule) {
             return false;
         }
 
-        if (category !== 'Module' && !this.text.showClass) {
+        if (category !== 'Module' && !this.state.text.showClass) {
             return false;
         }
 
@@ -68,7 +78,7 @@ export class VisualService {
 
     visibleMesh(node) {
         const degree = node.read('relation.out').length + node.read('relation.in').length;
-        return (degree > 0) && this.mesh.isVisible;
+        return (degree > 0) && this.state.mesh.isVisible;
     }
 
 
@@ -133,30 +143,31 @@ export class VisualService {
         G.state.nodes.forEach(node => {
             const meshes = node.read('_meshes');
             meshes.group.resizeBillboard(node.read('radius'))
-            meshes.group.resizeText(V.mesh.scaling)
+            meshes.group.resizeText(V.state.mesh.scaling)
         });
     }
 
     getLinkColor(link) {
+        const links = this.state.links;
         if (link.label === 'hierarchy') {
-            return this.links[link.label]?.color;
+            return links[link.label]?.color;
         }
 
         if (link.label === 'relation') {
             const source = G.findNodeById(link.source.id || link.source);
             const target = G.findNodeById(link.target.id || link.target);
 
-            const metrics = this.links.metrics;
+            const metrics = links.metrics;
 
             const value1 = source.read(metrics);
             const value2 = target.read(metrics);
             const value = (value1 + value2) * .5;
 
-            const c1 = this.links.colorLow;
-            const c2 = this.links.colorHigh;
+            const c1 = links.colorLow;
+            const c2 = links.colorHigh;
             return interpolateColor(c1, c2, value);
         }
-        return this.links[link.label]?.color ?? '#f00';
+        return links[link.label]?.color ?? '#f00';
     }
 
     apply() {
@@ -174,18 +185,19 @@ export class VisualService {
         graph.nodeLabel(this.getLabel);
 
         // ----- LINKS ----------------------------------
+        const links = this.state.links;
         graph
             .linkCurvature(.0)
-            .linkDirectionalParticles((link) => 1 + this.links.particles)
-            .linkDirectionalParticleWidth(this.links.particleWidthMultiplier * this.links.width)
+            .linkDirectionalParticles((link) => 1 + links.particles)
+            .linkDirectionalParticleWidth(links.particleWidthMultiplier * links.width)
             .linkDirectionalParticleSpeed(.01)
-            .linkWidth((link) => link.label === 'hierarchy' ? 10 : this.links.width)
+            .linkWidth((link) => link.label === 'hierarchy' ? 10 : links.width)
             .linkColor((link) => this.getLinkColor(link))
             .linkVisibility((link) => {
-                const hasWidth = this.links.width > 0;
-                return hasWidth && this.links[link.label]?.isVisible;
+                const hasWidth = links.width > 0;
+                return hasWidth && links[link.label]?.isVisible;
             })
-            .linkOpacity(this.links.opacity)
+            .linkOpacity(links.opacity)
             ;
     }
 }

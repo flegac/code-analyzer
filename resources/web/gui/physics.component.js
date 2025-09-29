@@ -7,22 +7,6 @@ const STYLE = `
     flex-direction: column;
     gap: 0.1cm;
   }
-
-  .slider-row {
-    display: flex;
-    align-items: center;
-    gap: 1em;
-  }
-
-  .slider-row label {
-    width: 80px;
-  }
-
-  sl-range {
-    flex: 1;
-    --track-color-active: var(--sl-color-primary-600);
-    --track-color-inactive: var(--sl-color-primary-100);
-  }
 `;
 
 const TEMPLATE = `
@@ -34,7 +18,7 @@ const TEMPLATE = `
 
     <div class="slider-row">
       <sl-checkbox @sl-change="state.constraints.planar = $event.target.checked; apply()">Planar</sl-checkbox>
-      <sl-checkbox @sl-change="state.constraints.spherical = $event.target.checked; apply()" checked>Spherical</sl-checkbox>
+      <sl-checkbox @sl-change="state.constraints.spherical = $event.target.checked; apply()">Spherical</sl-checkbox>
       <sl-range v-model="state.constraints.sphericalDepth" min="1" max="10" step="1" @sl-input="state.constraints.sphericalDepth = $event.target.value; apply()"></sl-range>
     </div>
 
@@ -66,5 +50,38 @@ export class PhysicsComponent extends BaseComponent {
       }
     });
   }
+
+  updateGui() {
+    const s = this.state.state;
+
+    // Switch: isActive
+    const switchEl = this.container.querySelector('sl-switch');
+    if (switchEl) switchEl.checked = s.isActive;
+
+    // Checkbox: planar
+    const planarEl = this.container.querySelectorAll('sl-checkbox')[0];
+    if (planarEl) planarEl.checked = s.constraints.planar;
+
+    // Checkbox: spherical
+    const sphericalEl = this.container.querySelectorAll('sl-checkbox')[1];
+    if (sphericalEl) sphericalEl.checked = s.constraints.spherical;
+
+    // Range: sphericalDepth
+    const depthEl = this.container.querySelector('sl-range[v-model="state.constraints.sphericalDepth"]');
+    if (depthEl) depthEl.value = s.constraints.sphericalDepth;
+
+    // Range: repulsionFactor
+    const repulsionEl = this.container.querySelector('sl-range[v-model="state.repulsionFactor"]');
+    if (repulsionEl) repulsionEl.value = s.repulsionFactor;
+
+    // Range: attractionFactor
+    const attractionEl = this.container.querySelector('sl-range[v-model="state.attractionFactor"]');
+    if (attractionEl) attractionEl.value = s.attractionFactor;
+
+    // Range: relationStrengthFactor
+    const relationEl = this.container.querySelector('sl-range[v-model="state.link.relationStrengthFactor"]');
+    if (relationEl) relationEl.value = s.link.relationStrengthFactor;
+  }
+
 
 }

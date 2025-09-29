@@ -1,4 +1,8 @@
 {
+  "visuals": "default",
+  "graph": {
+    "relation": "relation.json"
+  },
   "labels": {
     "visible": [
       "lines",
@@ -11,17 +15,9 @@
       "category"
     ]
   },
-  "selected": [
-    "organism.*"
-  ],
-  "excluded": [
-    "organism.engine.*",
-    "organism.main"
-  ],
+  "selected": [],
+  "excluded": [],
   "groups": {
-    "excluded": [
-      "easy_ecs.*",
-      "easy_kit.*"
-    ]
+    "excluded": []
   }
 }

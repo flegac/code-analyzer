@@ -4,11 +4,11 @@ import {P} from "../project/project.service.js";
 const STYLE = `
 [name=table-internal] {
   position: absolute;
-  bottom: 1rem;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 1cm);
-  max-height: calc(75% - 2cm);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: calc(100% - 0);
+  max-height: calc(75% - 10cm);
   
   z-index: 1000;
   overflow: auto;

@@ -1,4 +1,4 @@
-import {BaseComponent} from "./gui/core/base.component.js";
+import { BaseComponent } from "./gui/core/base.component.js";
 
 const CSS = `
 html, body {
@@ -48,6 +48,51 @@ sl-split-panel > [slot="end"] {
   pointer-events: none;
 }
 
+/***** PANEL STYLE ******************************/
+
+.panel-style {
+  background: rgba(50, 50, 50, 0.85);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+  box-shadow: var(--sl-shadow-large);
+  border-radius: var(--sl-border-radius-medium);
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.drawer-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+  sl-range {
+    flex: 1;
+    --track-color-active: var(--sl-color-primary-600);
+    --track-color-inactive: var(--sl-color-primary-100);
+  }
+
+  sl-tag {
+    margin-right: 0.25em;
+    margin-bottom: 0.25em;
+  }
+
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+  }
+
+  .slider-row label {
+    width: 80px;
+  }
+
+  sl-range {
+    flex: 1;
+    --track-color-active: var(--sl-color-primary-600);
+    --track-color-inactive: var(--sl-color-primary-100);
+  }
+
 /****** PANEL SPECIFIC **************************/
 
 /* Toolbox : bande verticale fixe à gauche */
@@ -70,9 +115,20 @@ sl-split-panel > [slot="end"] {
   overflow: hidden;
 }
 
+[name="graph-stats"] {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  border-radius: 4px;
+  z-index: 10;
+  font-family: sans-serif;
+  font-size: 0.9em;
+}
+
 
 /* Vue principale */
 [name=graph-view] {
+  position: relative;
   display: flex;
   flex-direction: row;
   height: 100%;
@@ -94,13 +150,12 @@ const TEMPLATE = `
   <div name="graph-toolbox"></div>
 
   <!-- Split panel à droite -->
-  <sl-split-panel style="--max: 300px;" position-in-pixels="0" primary="start">
+  <sl-split-panel style="--max: 300px;" position-in-pixels="300" primary="start">
     <!-- Panneau central -->
     <div slot="start">
       <div id="left-panel">
         <div name="graph-settings"></div>
-        <div name="navigation"></div>
-        <div name="graph-filter"></div>       
+        <div name="graph-filter"></div>
         <div name="graph-config"></div>       
       </div>
     </div>
@@ -110,7 +165,10 @@ const TEMPLATE = `
       <div name="graph-view">
         <div name="graph-canvas"></div> 
         <div name="graph-table"></div>
-        <div name="debug"></div>    
+        <div name="navigation"></div>
+        <div name="debug"></div>
+        <div name="graph-stats"></div>
+
       </div>
     </div>
   </sl-split-panel>
@@ -118,29 +176,35 @@ const TEMPLATE = `
 `;
 
 export class AppLayout extends BaseComponent {
-    constructor() {
-        super({
-            template: TEMPLATE,
-            style: CSS,
-            scripts: []
-        });
+  constructor() {
+    super({
+      template: TEMPLATE,
+      style: CSS,
+      scripts: []
+    });
+  }
+
+
+  openSplitPanel() {
+    const splitPanel = this.container.querySelector('sl-split-panel');
+    splitPanel.position = 1000;
+  }
+
+  updateSplitPanelVisibility() {
+    const splitPanel = this.container.querySelector('sl-split-panel');
+    const leftPanel = this.container.querySelector('#left-panel');
+
+    const visibleChild = Array.from(leftPanel.children).find(child => {
+      return !child.firstChild.classList.contains('hidden');
+    });
+
+    if (visibleChild) {
+      console.log('updateSplitPanelVisibility', visibleChild);
+      const width = visibleChild.scrollWidth;
+      splitPanel.position = 1000;
+    } else {
+      splitPanel.position = 0;
     }
-
-    updateSplitPanelVisibility() {
-        const splitPanel = this.container.querySelector('sl-split-panel');
-        const leftPanel = this.container.querySelector('#left-panel');
-
-        const visibleChild = Array.from(leftPanel.children).find(child => {
-            return !child.firstChild.classList.contains('hidden');
-        });
-
-        if (visibleChild) {
-            console.log('updateSplitPanelVisibility', visibleChild);
-            const width = visibleChild.scrollWidth;
-            splitPanel.position = 1000;
-        } else {
-            splitPanel.position = 0;
-        }
-    }
+  }
 
 }

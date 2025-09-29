@@ -14,7 +14,8 @@ import { NavigationComponent } from "./gui/navigation.component.js"
 import { RendererDebugComponent } from "./gui/renderer.debug.component.js"
 import { ToolBox } from "./gui/core/base.toolbox.component.js";
 import { ConfigComponent } from "./gui/config.component.js"
-import { FilterComponent } from "./gui/filter.component.js"
+import { FilterComponent } from "./gui/filter/filter.component.js"
+import { StatsComponent } from "./gui/stats.component.js"
 
 import { Billboard } from "./mesh/billboard.mesh.model.js"
 
@@ -34,6 +35,7 @@ export class LayoutService {
         this.navigation = this.layout.addComponent('navigation', new NavigationComponent());
         this.rendererDebug = this.layout.addComponent('debug', new RendererDebugComponent());
         this.config = this.layout.addComponent('graph-config', new ConfigComponent());
+        this.stats = this.layout.addComponent('graph-stats', new StatsComponent());
         
         this.toolbox = this.layout.addComponent('graph-toolbox', this.createToolbar());
 
@@ -41,6 +43,20 @@ export class LayoutService {
         console.log('initialize', this);
     }
 
+
+    showTable() {
+        this.table.toggleVisibility();
+//        this.closeAll(this.table);
+    }
+    showFilter() {
+        this.closeAll(this.filter);
+    }
+    showSettings() {
+        this.closeAll(this.settings);
+    }
+    showConfig() {
+        this.closeAll(this.config);
+    }
 
     createToolbar() {
         const toolBox = new ToolBox();
@@ -59,31 +75,26 @@ export class LayoutService {
             {
                 label: '📊',
                 tooltip: 'Node tabular data',
-                onClick: this.groupAction(this.table),
-            }
+                onClick: ()=>this.showTable(),
+            },
         ]);
 
         toolBox.newGroup([
-            
+
             {
                 label: '🔍',
                 tooltip: 'Filter panel',
-                onClick: this.groupAction(this.filter),
-            },
-            {
-                label: '🧭',
-                tooltip: 'Navigation panel',
-                onClick: this.groupAction(this.navigation),
+                onClick: ()=>this.showFilter(),
             },
             {
                 label: '⚙️',
                 tooltip: 'Settings panel',
-                onClick: this.groupAction(this.settings),
+                onClick: ()=>this.showSettings(),
             },
             {
                 label: '🏷️',
                 tooltip: 'Config panel',
-                onClick: this.groupAction(this.config),
+                onClick: ()=>this.showConfig(),
             },
         ]);
 
@@ -99,24 +110,47 @@ export class LayoutService {
     }
 
 
-    groupAction(item) {
+    closeAll(item=null) {
         const ll = this.layout;
-
         const g = [
-            this.settings,
-            this.navigation,
             this.table,
             this.filter,
+            this.settings,
             this.config
         ];
-        return () => {
-            BaseComponent.toggleGroupVisibility(g, item);
-            ll.updateSplitPanelVisibility();
-        };
+        g
+            .filter(_ => _ !== item)
+            .forEach(_ => _.toggleVisibility({visible: false}));
+        if( item !== null) {
+            item.toggleVisibility();
+        }
+        ll.updateSplitPanelVisibility();
     }
 
+
+    graphPanel() {
+        return this.graph.container;
+        // return this.layout.getPanel('graph-view');
+    }
+
+    changeProject(project) {
+        P.loadProject(project);
+        G.rebuildGraph();
+
+        this.table.rebuild();
+        this.config.rebuild(project.config());
+
+
+        V.state.mesh.size = null; // P.state.numerics()[0];
+        V.state.mesh.color = null; //P.project.categories()[0];
+
+        this.settings.updateGui();
+        this.filter.updateGui();
+        V.apply();
+    }
+
+
     async start() {
-        const target = this.filter;
         $(() => {
             G.initGraph(this.graphPanel());
             const renderer = G.getGraph().renderer();
@@ -126,35 +160,13 @@ export class LayoutService {
                 () => CC.camera().position
             );
 
-            this.rendererDebug.toggleVisibility({ visibility: false });
+            this.rendererDebug.toggleVisibility({ visible: false });
             this.rendererDebug.start(renderer);
-            this.groupAction(target)();
 
+            const target = this.filter;
+            this.closeAll(target);
             target.toggleVisibility();
-
         });
-
-    }
-
-    graphPanel() {
-        return this.graph.container;
-        // return this.layout.getPanel('graph-view');
-    }
-
-    async changeProject(project) {
-        P.loadProject(project);
-        await G.rebuildGraph();
-
-        this.table.rebuild();
-        this.config.rebuild(project.config());
-
-
-        V.mesh.size = null;// P.state.numerics()[0];
-        V.mesh.color = null; //P.project.categories()[0];
-
-        this.settings.updateGui();
-        this.filter.updateGui();
-        V.apply();
     }
 }
 export const LL = LayoutService.singleton;

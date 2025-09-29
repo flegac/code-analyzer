@@ -8,6 +8,7 @@ import tqdm
 from easy_kit.timing import time_func
 
 from code_analyzer.dependencies.dependency_cst_analyzer import DependencyCstAnalyzer
+from code_analyzer.project.module_cache import ModuleCache
 from code_analyzer.project.project import Project
 from code_analyzer.scope.module_ref import ModuleRef
 from code_analyzer.stats.code_stats import AggregatedCodeStats
@@ -21,16 +22,16 @@ class ProjectAnalyzer:
 
     @time_func
     def refresh_all(self):
-        for _ in tqdm.tqdm(self.project.modules):
-            self.refresh(_)
+        for ref_id, cache in tqdm.tqdm(self.modules.items()):
+            self.refresh(cache)
 
         for module in self.project.modules:
             self.update_imported(module)
 
     @time_func
-    def refresh(self, module: ModuleRef):
-        visitor = self.modules[module.ref_id]
-        module.get_tree(self.project.root).visit(visitor)
+    def refresh(self, module: ModuleCache):
+        visitor = self.modules[module.ref]
+        module.tree.visit(visitor)
 
     def update_imported(self, module: ModuleRef):
         count = 0
