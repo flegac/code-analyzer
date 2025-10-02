@@ -43,7 +43,7 @@ export class Injector {
         const hash = Injector.hash(styleText);
         const existing = document.head.querySelector(`style[my-hash="${hash}"]`);
         if (!existing) {
-            console.log(`loading <style> [...]`);
+            // console.log(`loading <style> [...]`);
             const elt = document.createElement('style');
             elt.textContent = styleText;
             elt.setAttribute('my-hash-id', hash);

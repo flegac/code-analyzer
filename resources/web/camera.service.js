@@ -1,16 +1,12 @@
-import {GraphService} from "./display/graph.service.js"
-import {StoreService} from "./store.service.js"
+import { G } from "./display/graph.service.js"
+
+const DEG_TO_RAD = Math.PI / 180;
 
 export class CameraService {
     static singleton = new CameraService();
     constructor() {
-        this.state = StoreService.singleton.store('camera', {
-            rotationSpeed: 3.5 * Math.PI / 180, // 3.5° par frame
-        });
-        this.target= new THREE.Vector3(0, 0, 0); // point central
-
-        this.alignFrontToAxis = throttle(this.alignFrontToAxis.bind(this), 200);
-        this.zoomToFit = throttle(this.zoomToFit.bind(this), 200);
+        this.rotationSpeed = 3.5 * DEG_TO_RAD, // 3.5° par frame
+            this.target = new THREE.Vector3(0, 0, 0); // point central
         console.log('initialize', this);
     }
 
@@ -23,7 +19,7 @@ export class CameraService {
     }
 
     getGraph() {
-        return GraphService.singleton.getGraph();
+        return G.getGraph();
     }
 
     takeControl(graph) {
@@ -33,21 +29,22 @@ export class CameraService {
         graph.cam = this;
         this.getGraph().onNodeClick(node => {
             this.focusOn(node);
-            GraphService.singleton.select(node);
+            G.select(node);
         });
         return this;
     }
 
     zoomToFit(durationMs = 25) {
         this.getGraph().zoomToFit(durationMs);
+        this.focusOn({ x: 0, y: 0, z: 0 });
     }
 
-    focusOn(node) {
+    focusOn(target) {
         const controls = this.controls();
         const camera = this.camera();
 
         // Nouvelle cible : le nœud cliqué
-        this.target.set(node.x, node.y, node.z);
+        this.target.set(target.x, target.y, target.z);
 
         // Recalcule le vecteur directionnel
         const front = new THREE.Vector3().subVectors(this.target, camera.position).normalize();
@@ -135,14 +132,4 @@ export class CameraService {
 
 
 }
-
-function throttle(fn, delay) {
-    let lastCall = 0;
-    return (...args) => {
-        const now = Date.now();
-        if (now - lastCall >= delay) {
-            lastCall = now;
-            fn(...args);
-        }
-    };
-}
+export const CC = CameraService.singleton;

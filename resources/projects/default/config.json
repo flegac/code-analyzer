@@ -1,27 +1,17 @@
 {
-  "labels": {
-    "visible": [
-      "lines",
-      "category"
-    ],
-    "numeric": [
-      "lines"
-    ],
-    "category": [
-      "category"
-    ]
-  },
-  "selected": [
-    "organism.*"
+  "preset": "default",
+  "relation": "relation",
+  "nodeValues": [
+    "category.text",
+    "lines.number"
   ],
-  "excluded": [
-    "organism.engine.*",
-    "organism.main"
-  ],
-  "groups": {
-    "excluded": [
-      "easy_ecs.*",
-      "easy_kit.*"
-    ]
+  "filter": {
+    "selected": [
+      "organism*"
+    ],
+    "excluded": [],
+    "groups": {
+      "excluded": []
+    }
   }
 }

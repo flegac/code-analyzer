@@ -1,28 +1,24 @@
-import {Metadata} from "../project/metadata.model.js";
-import {ClusterService} from "./cluster/cluster.service.js";
-import {GraphService} from "./graph.service.js";
-import {StyleService} from "./style.service.js";
-import {ProjectService} from "../project/project.service.js";
-import {ClosenessCentrality} from "./metrics/closeness.centrality.metrics.js";
-import {CycleCounter} from "./metrics/cycle.count.metrics.js";
+import { Metadata } from "../project/metadata.model.js";
+import { CC } from "./cluster.service.js";
+import { G } from "./graph.service.js";
+import { V } from "./visual.service.js";
+import { P } from "../project/project.service.js";
+import { ClosenessCentrality } from "./metrics/closeness.centrality.metrics.js";
+import { CycleCounter } from "./metrics/cycle.count.metrics.js";
 
 export class NodeService extends Metadata {
     static singleton = new NodeService();
 
     updateMetrics(metrics = null) {
-        const P = ProjectService.singleton;
-        const S = StyleService.singleton;
         if (metrics === null) {
             const relation = P.project.relation();
-            if (S.links.metrics === 'centrality') {
+            if (V.state.links.metrics === 'centrality') {
                 metrics = new ClosenessCentrality(relation)
-            } else if (S.links.metrics === 'cycles') {
+            } else if (V.state.links.metrics === 'cycles') {
                 metrics = new CycleCounter(relation);
             }
         }
 
-
-        const G = GraphService.singleton;
         G.state.nodes.forEach(node => {
             const value = metrics.getValue(node);
             node.write(metrics.name, value);
@@ -30,30 +26,26 @@ export class NodeService extends Metadata {
     }
 
     updateGroup() {
-        const G = GraphService.singleton;
-        const C = ClusterService.singleton;
-
+        console.log(`[cluster] group with strategy`, CC.groupStrategy)
         G.state.nodes.forEach(node => {
-            const group = C.groupStrategy.apply(node);
+            const group = CC.groupStrategy.apply(node);
             node.write('group', group);
         });
     }
 
     updateRadius() {
-        const G = GraphService.singleton;
-        const S = StyleService.singleton;
-        const sizeLabel = S.mesh.size;
-        const scaling = S.mesh.scaling;
+        const size = V.state.mesh.size;
+        const scaling = V.state.mesh.scaling;
 
         G.state.nodes.forEach(node => {
-            const value = node.read(sizeLabel) ?? 1;
-            const radius = Math.max(1, Math.cbrt(1 + value));
-            node.write('radius', radius * scaling);
+            const value = node.read(size) ?? 1;
+            const radius = V.expectdRadius(value);
+
+            node.write('radius', radius);
         });
     }
 
     updateColor() {
-        const G = GraphService.singleton;
         const groups = [...new Set(G.state.nodes.map(node => node.read('group')))];
 
         const colorScale = chroma.scale('Paired').mode('lch').colors(groups.length);
@@ -70,18 +62,29 @@ export class NodeService extends Metadata {
     }
 
     updateNavigation() {
-        const G = GraphService.singleton;
         // connectivity stats
         G.state.nodes.forEach(node => {
-            node.write('outgoing', []);
-            node.write('incoming', []);
+            node.write('relation.in', []);
+            node.write('relation.out', []);
+            node.write('hierarchy.in', []);
+            node.write('hierarchy.out', []);
         });
         G.state.links.forEach(link => {
+            const label = link.label;
             const source = G.findNodeById(link.source.id || link.source);
             const target = G.findNodeById(link.target.id || link.target);
 
-            source.read('outgoing').push(target.id);
-            target.read('incoming').push(source.id);
+
+            if (label === 'hierarchy') {
+                target.read('hierarchy.in').push(source.id);
+                source.read('hierarchy.out').push(target.id);
+            }
+
+            if (label === 'relation') {
+                target.read('relation.in').push(source.id);
+                source.read('relation.out').push(target.id);
+            }
         });
     }
 }
+export const NN = NodeService.singleton;

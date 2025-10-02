@@ -1,8 +1,8 @@
 import {BaseComponent} from "./core/base.component.js";
-import {ProjectService} from "../project/project.service.js"
-import {ClusterService} from "../display/cluster/cluster.service.js"
-import {StyleService} from "../display/style.service.js";
-import {PhysicsService} from "../display/physics.service.js";
+import {P} from "../project/project.service.js"
+import {CC} from "../display/cluster.service.js"
+import {V} from "../display/visual.service.js";
+import {PP} from "../display/physics.service.js";
 
 
 const STYLE = `
@@ -11,27 +11,11 @@ const STYLE = `
     flex-direction: column;
     gap: 0.5em;
   }
-    
+
   .section-header {
     display: flex;
     align-items: center;
     gap: 1em;
-  }
-
-  .slider-row {
-    display: flex;
-    align-items: center;
-    gap: 1em;
-  }
-
-  .slider-row label {
-    width: 80px;
-  }
-
-  sl-range {
-    flex: 1;
-    --track-color-active: var(--sl-color-primary-600);
-    --track-color-inactive: var(--sl-color-primary-100);
   }
 
   h3 {
@@ -48,14 +32,18 @@ const TEMPLATE = `
 
       <div class="slider-row">
         <label>Group by</label>
-         <sl-checkbox v-model="isActive" @sl-change="colorByGroup" checked disabled></sl-checkbox>
-         <sl-select v-model="attribute" id="clusterAttribute" @sl-input="colorByGroup"></sl-select>
+         <sl-select id="clusterAttribute" @sl-input="colorByGroup"></sl-select>
       </div>
 
       <div class="slider-row">
         <label>Color depth </label>
         <sl-range v-model="colorDepth" min="1" max="5" step="1" @sl-input="colorByDepth"></sl-range>
       </div>
+
+    <div class="slider-row">
+      <label>Color clusters</label>
+      <sl-range v-model="collapseClusters" min="1" max="20" step="1" @sl-input="colorByWard"></sl-range>
+    </div>
 
     <div class="slider-row">
       <label>Collapse depth</label>
@@ -72,39 +60,49 @@ export class ClusterComponent extends BaseComponent {
             style: STYLE,
             state: {
                 isActive: true,
-                collapseDepth: 2,
+                collapseDepth: 5,
+                collapseClusters: 5,
                 colorDepth: 2,
                 attribute: 'group',
 
-                project: ClusterService.singleton.project,
+                project: CC.project,
                 colorByGroup: (event) => this.colorByGroup(event.target.value),
                 colorByDepth: (event) => this.colorByDepth(event.target.value),
+                colorByWard: (event) => this.colorByWard(event.target.value),
                 collapseByDepth: (event) => this.collapseByDepth(event.target.value),
+                collapseByWard: (event) => this.collapseByWard(event.target.value),
             }
         });
-        // this.updateGui()
     }
 
     colorByDepth(depth) {
-        const C = ClusterService.singleton;
-        C.setGroupByDepth(depth);
-        StyleService.singleton.apply()
+        CC.setGroupByDepth(depth);
+        V.apply()
     }
 
     colorByGroup(attribute) {
-        const C = ClusterService.singleton;
-        C.setGroupByLabel(attribute);
-        StyleService.singleton.apply()
+        CC.setGroupByLabel(attribute);
+        V.apply()
     }
 
-    async collapseByDepth(depth) {
-        const C = ClusterService.singleton;
-        C.setCollapseByDepth(depth)
-        await PhysicsService.singleton.apply();
+    colorByWard(clusterNumber) {
+        CC.setGroupByWard(clusterNumber);
+        V.apply()
     }
+
+    collapseByDepth(depth) {
+        CC.setCollapseByDepth(depth)
+        PP.apply();
+    }
+
+    collapseByWard(clusterNumber) {
+        CC.setCollapseByWard(clusterNumber)
+        PP.apply();
+    }
+
 
     updateGui() {
-        const categories = ['group', ...ProjectService.singleton.project.categories()];
+        const categories = ['group', ...P.project.categories];
         this._populateSelect('clusterAttribute', categories);
     }
 

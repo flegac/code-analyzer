@@ -1,14 +1,14 @@
 import {BaseComponent} from "./core/base.component.js";
-import {ProjectService} from "../project/project.service.js";
+import {P} from "../project/project.service.js";
 
 const STYLE = `
 [name=table-internal] {
   position: absolute;
-  bottom: 1rem;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 1cm);
-  max-height: calc(75% - 2cm);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: calc(100% - 0);
+  max-height: calc(75% - 10cm);
   
   z-index: 1000;
   overflow: auto;
@@ -32,15 +32,13 @@ export class TableComponent extends BaseComponent {
     }
 
     async rebuild() {
-        const D = ProjectService.singleton;
-
-        const labels = D.project.labels();
+        const labels = P.project.labels;
         console.log(`table.rebuild: ${labels}`)
         const columns = this.generateColumnDefs(labels);
-        const rowData = D.project.relation().nodes().map(id =>
+        const rowData = P.project.relation().nodes().map(id =>
             labels.reduce((row, label) => {
                 // row[label] = M.read(label, id);
-                row[label] = D.project.read(label, id);
+                row[label] = P.project.read(label, id);
                 return row;
             }, {module: id})
         );

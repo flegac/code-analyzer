@@ -5,28 +5,16 @@ import Stats from "stats";
 const STYLE = `
 .graph-debug {
   position: absolute;
-  bottom: 0.5rem;
-  right: 0.5rem;
-  width: 300px;
+  top: 3cm;
+  right: 1em;
+  width: 4cm;
   height: auto;
   max-height: calc(100% - 2cm);
-
-  transform: none;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(2px);
-  z-index: 1000;
-  padding: 0.5rem;
-  box-shadow: var(--sl-shadow-large);
-  border-radius: var(--sl-border-radius-medium);
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  overflow: auto;
 }
 `;
 
 const TEMPLATE = `
-  <div name="graph-debug" class="graph-debug" style="display: flex; flex-direction: column; gap: 0.1em; padding: 0.1em;">
+  <div name="graph-debug" class="graph-debug panel-style">
     <div name="fps"></div>
     <span><strong>Draw Calls:</strong> <span>{{drawCalls}}</span></span>
     <span><strong>Geometries:</strong> <span>{{geometries}}</span></span>

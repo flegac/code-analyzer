@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
     # ----- STATS ANALYZER ---------------------------------------------
     # analyze_project(project, target)
-    
+
     node_path = target / 'nodes'
     node_path.mkdir(exist_ok=True, parents=True)
     
@@ -57,11 +57,11 @@ if __name__ == "__main__":
         _.ref.ref_id : ModuleStats.compute_category(_) 
         for _ in project.iter_modules()
     }
-    (node_path / 'category.json').write_text(json.dumps(category, indent=2, sort_keys=True))
+    (node_path / 'category.text.json').write_text(json.dumps(category, indent=2, sort_keys=True))
 
     lines = {
         _.ref.ref_id: ModuleStats.count_lines(_.path_from_root(project_root))
         for _ in project.iter_modules()
     }
-    (node_path / 'lines.json').write_text(json.dumps(lines, indent=2, sort_keys=True))
+    (node_path / 'lines.number.json').write_text(json.dumps(lines, indent=2, sort_keys=True))
 
