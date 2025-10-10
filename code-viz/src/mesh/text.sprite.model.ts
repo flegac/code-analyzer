@@ -1,0 +1,61 @@
+import * as THREE from "three";
+
+import { V } from "../visuals/visual.service.js";
+
+export class TextSprite {
+    baseSize: number;
+    mesh: any;
+    aspect: number;
+    constructor(node) {
+        this.baseSize = V.textSize(node);
+        [this.mesh, this.aspect] = this.createTextSprite(node);
+
+        const hasMesh = V.visibleMesh(node);
+
+
+        const offset = hasMesh ? V.state.mesh.scaling : 0
+        this.mesh.position.set(0, offset, 10);
+
+        this.resize(1.)
+    }
+
+    resize(size: number) {
+        const scaling = size * V.state.mesh.scaling * V.state.text.scaling * this.baseSize * 100;
+        this.mesh.scale.set(this.aspect * scaling, scaling);
+        return this;
+    }
+
+    createTextSprite(node) {
+        const text = V.textFormatter(node.id.split('.'));
+
+        const canvas = document.createElement('canvas');
+        const context: CanvasRenderingContext2D = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        const config = V.state.text;
+
+        const fontSize = config.fontSize;
+
+        context.font = `${fontSize}px ${V.state.text.fontFamily}`;
+        const textWidth: number = context.measureText(text).width;
+        const textHeight: number = fontSize + 2 * config.padding;
+
+        const aspect = textWidth / textHeight;
+
+        canvas.width = textWidth;
+        canvas.height = textHeight;
+
+        context.font = `${fontSize}px ${V.state.text.fontFamily}`;
+        context.fillStyle = config.textColor;
+        context.textBaseline = 'top';
+        context.fillText(text, 0, 0);
+        const texture = new THREE.CanvasTexture(canvas);
+        const material = new THREE.SpriteMaterial({
+            map: texture,
+            transparent: true,
+        });
+        const mesh = new THREE.Sprite(material);
+        mesh.position.set(0, config.textOffsetY, 1);
+        return [mesh, aspect];
+    }
+}

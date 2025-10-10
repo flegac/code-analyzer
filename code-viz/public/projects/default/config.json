@@ -1,0 +1,15 @@
+{
+  "preset": "default",
+  "relation": "relation2",
+  "nodeValues": [
+    "category.text",
+    "lines.number"
+  ],
+  "filter": {
+    "selected": [    ],
+    "excluded": [],
+    "groups": {
+      "excluded": []
+    }
+  }
+}

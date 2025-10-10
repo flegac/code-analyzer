@@ -1,0 +1,42 @@
+import * as THREE from "three";
+import { Billboard } from "./billboard.mesh.model.js";
+import { TextSprite } from "./text.sprite.model.js";
+import { V } from "../../visuals/visual.service.js";
+export class NodeMeshModel {
+    constructor(node, state, position) {
+        this.mesh = this.build(node, position);
+    }
+    resizeBillboard(size = 1.) {
+        const meshes = this.meshes;
+        if (meshes.billboard?.mesh) {
+            meshes.billboard.resize(size);
+        }
+    }
+    resizeText(size = 1.) {
+        const meshes = this.meshes;
+        if (meshes.text?.mesh) {
+            meshes.text.resize(size);
+        }
+    }
+    build(node, position) {
+        const group = new THREE.Group();
+        //mesh
+        const billboard = V.visibleMesh(node) ? new Billboard(node, position) : null;
+        //text
+        const textMesh = V.visibleText(node)
+            ? new TextSprite(node)
+            : null;
+        const meshes = {
+            group: this,
+            billboard: billboard,
+            text: textMesh === null ? null : textMesh,
+        };
+        node.write('_meshes', meshes);
+        this.meshes = meshes;
+        Object.entries(meshes).forEach(([key, value]) => {
+            if (value && value !== group && value.mesh)
+                group.add(value.mesh);
+        });
+        return group;
+    }
+}

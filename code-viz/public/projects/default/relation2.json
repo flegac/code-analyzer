@@ -1,0 +1,1049 @@
+{
+  "app.app-routing.module::AppRoutingModule": [],
+  "app.app.component::AppComponent": [],
+  "app.app.module::AppModule": [],
+  "app.app.server.module::AppServerModule": [],
+  "app.components.data-chamber.data-chamber-data-toolbar.data-chamber-data-toolbar.component::DataChamberDataToolbarComponent": [
+    "AfterViewInit",
+    "OnDestroy",
+    "Array",
+    "Map",
+    "Subscription",
+    "TabView",
+    "QueryList",
+    "app.core.user.user.settings.service::SessionView"
+  ],
+  "app.components.data-chamber.data-chamber-session-container.data-chamber-session-container.component::DataChamberSessionContainerComponent": [
+    "OnInit",
+    "OnDestroy",
+    "SplitComponent",
+    "app.components.data-chamber.data-chamber-views-container.data-chamber-views-container.component::DataChamberViewsContainerComponent",
+    "app.core.view.view.dto::ViewWithDatasetDTO",
+    "app.core.user.user.settings.service::SessionView"
+  ],
+  "app.components.data-chamber.data-chamber-views-container.data-chamber-views-container.component::DataChamberViewsContainerComponent": [
+    "OnInit",
+    "OnDestroy",
+    "AfterViewInit",
+    "QueryList",
+    "TabView",
+    "app.core.dataset.model.dataset.dto::DatasetWithDataDTO",
+    "EventEmitter",
+    "Subscription"
+  ],
+  "app.components.data-chamber.data-chamber-views-manager.data-chamber-views-manager.component::AutoCompleteCompleteEvent": [
+    "Event"
+  ],
+  "app.components.data-chamber.data-chamber-views-manager.data-chamber-views-manager.component::DataChamberViewsManagerComponent": [
+    "OnInit",
+    "OnDestroy",
+    "EventEmitter",
+    "Subscription",
+    "Boolean"
+  ],
+  "app.components.data-chamber.data-chamber.module::DataChamberModule": [],
+  "app.components.data-chamber.data-chambers-list.data-chambers-list.component::DataChambersListComponent": [
+    "OnInit",
+    "OnDestroy",
+    "UserRole",
+    "Subscription"
+  ],
+  "app.components.data-chamber.data_chamber-import-user-table.import-user-table-base.directive::ImportUserTableBaseDirective": [
+    "EventEmitter",
+    "Array"
+  ],
+  "app.components.data-chamber.data_chamber-import-user-table.import-user-table-modal.import-user-table-modal.component::ImportUserTableModalComponent": [
+    "app.components.data-chamber.data_chamber-import-user-table.import-user-table-base.directive::ImportUserTableBaseDirective",
+    "OnInit",
+    "StepItemId"
+  ],
+  "app.components.data-chamber.data_chamber-import-user-table.interfaces.import-user-table.interface::commonnColMapping": [],
+  "app.components.data-chamber.data_chamber-import-user-table.interfaces.import-user-table.interface::measureColMapping": [],
+  "app.components.data-chamber.data_chamber-import-user-table.interfaces.import-user-table.interface::conditionAndOtherColMapping": [],
+  "app.components.data-chamber.data_chamber-import-user-table.interfaces.import-user-table.interface::draggedSourceName": [
+    "DragAndDropLocation"
+  ],
+  "app.components.data-chamber.data_chamber-import-user-table.steps.aggregation-condition.aggregation-condition.component::AggregationConditionComponent": [
+    "app.components.data-chamber.data_chamber-import-user-table.steps.step-base.step-base.directive::StepBaseDirective",
+    "OnChanges"
+  ],
+  "app.components.data-chamber.data_chamber-import-user-table.steps.file-import.file-import.component::FileImportComponent": [
+    "app.components.data-chamber.data_chamber-import-user-table.steps.step-base.step-base.directive::StepBaseDirective",
+    "EventEmitter"
+  ],
+  "app.components.data-chamber.data_chamber-import-user-table.steps.measure.measure.component::MeasureComponent": [
+    "app.components.data-chamber.data_chamber-import-user-table.steps.step-base.step-base.directive::StepBaseDirective"
+  ],
+  "app.components.data-chamber.data_chamber-import-user-table.steps.meta-data.meta-data.component::MetaDataComponent": [
+    "app.components.data-chamber.data_chamber-import-user-table.steps.step-base.step-base.directive::StepBaseDirective"
+  ],
+  "app.components.data-chamber.data_chamber-import-user-table.steps.other.other.component::OtherComponent": [
+    "app.components.data-chamber.data_chamber-import-user-table.steps.step-base.step-base.directive::StepBaseDirective"
+  ],
+  "app.components.data-chamber.data_chamber-import-user-table.steps.step-base.step-base.directive::StepBaseDirective": [
+    "app.components.data-chamber.data_chamber-import-user-table.import-user-table-base.directive::ImportUserTableBaseDirective",
+    "OnInit"
+  ],
+  "app.components.data-chamber.data_chamber-import-user-table.steps.validation.validation.component::ValidationComponent": [
+    "app.components.data-chamber.data_chamber-import-user-table.steps.step-base.step-base.directive::StepBaseDirective",
+    "OnInit"
+  ],
+  "app.components.data-chamber.data_chamber-import-user-table.ui.aggregation-summary.aggregation-summary.component::AggregationSummaryComponent": [],
+  "app.components.data-chamber.data_chamber-import-user-table.ui.drag-and-drop-common-form.drag-and-drop-common-form.component::DragAndDropCommonFormComponent": [
+    "app.components.data-chamber.data_chamber-import-user-table.ui.draggable-and-droppable_base.draggable-and-droppable-base.directive::DraggableAndDroppableBaseDirective",
+    "EventEmitter"
+  ],
+  "app.components.data-chamber.data_chamber-import-user-table.ui.drag-and-drop-measure-form.drag-and-drop-measure-form.component::DragAndDropMeasureFormComponent": [
+    "app.components.data-chamber.data_chamber-import-user-table.ui.draggable-and-droppable_base.draggable-and-droppable-base.directive::DraggableAndDroppableBaseDirective",
+    "EventEmitter"
+  ],
+  "app.components.data-chamber.data_chamber-import-user-table.ui.draggable-and-droppable_base.draggable-and-droppable-base.directive::DraggableAndDroppableBaseDirective": [
+    "EventEmitter"
+  ],
+  "app.components.data-chamber.data_chamber-import-user-table.ui.draggable-column-name-list.draggable-column-name-list.component::DraggableColumnNameListComponent": [
+    "app.components.data-chamber.data_chamber-import-user-table.ui.draggable-and-droppable_base.draggable-and-droppable-base.directive::DraggableAndDroppableBaseDirective",
+    "EventEmitter"
+  ],
+  "app.components.data-chamber.data_chamber-import-user-table.ui.droppable-column-name-list.droppable-column-name-list.component::DroppableColumnNameListComponent": [
+    "app.components.data-chamber.data_chamber-import-user-table.ui.draggable-and-droppable_base.draggable-and-droppable-base.directive::DraggableAndDroppableBaseDirective",
+    "DragAndDropLocation",
+    "EventEmitter"
+  ],
+  "app.components.data-chamber.data_chamber-import-user-table.ui.table-preview.table-preview.component::TablePreviewComponent": [],
+  "app.components.data-chamber.data_chamber-update-dataset.custom-table-preview.custom-table-preview.component::CustomTablePreviewComponent": [],
+  "app.components.data-chamber.data_chamber-update-dataset.file-update.file-update.component::FileUpdateComponent": [
+    "EventEmitter"
+  ],
+  "app.components.data-chamber.data_chamber-update-dataset.update-dataset-modal.update-dataset-modal.component::UpdateDatasetModalComponent": [
+    "OnInit",
+    "app.core.user.model.user-table.dto::ExternalTable"
+  ],
+  "app.components.data-chamber.group-views-manager.group-views-manager.component::GroupNode": [
+    "Array"
+  ],
+  "app.components.data-chamber.group-views-manager.group-views-manager.component::GroupViewsManagerComponent": [
+    "OnInit",
+    "OnDestroy",
+    "Tree",
+    "TreeNode",
+    "Subscription"
+  ],
+  "app.components.data-chamber.interfaces.select-view.event::SelectViewEvent": [
+    "app.core.view.view.dto::ViewWithDatasetDTO"
+  ],
+  "app.components.data-views.dataset_view.dataset.view.module::DatasetViewModule": [],
+  "app.components.data-views.dataset_view.dataset_base_view.dataset.base.view.component::DatasetBaseViewComponent": [
+    "OnDestroy",
+    "ElementRef",
+    "Array",
+    "app.core.view.view.dto::AlignmentDTO",
+    "Subscription",
+    "app.core.dataset.model.dataset.dto::DatasetColumnDTO",
+    "app.core.dataset.model.dataset.dto::DatasetWithDataDTO",
+    "app.core.user.user.settings.service::SessionView"
+  ],
+  "app.components.data-views.dataset_view.dataset_gridmap_view.dataset.gridmap.view.component::DatasetGridmapViewComponent": [
+    "app.components.data-views.dataset_view.dataset_base_view.dataset.base.view.component::DatasetBaseViewComponent",
+    "AfterViewInit",
+    "OnDestroy",
+    "DataView",
+    "Listbox",
+    "Map",
+    "Array",
+    "LazyLoadEvent",
+    "SelectItem",
+    "DynamicDialogRef",
+    "EventEmitter"
+  ],
+  "app.components.data-views.dataset_view.dataset_plot_scatter_view.dataset.scatter.plot.view.component::DatasetScatterPlotViewComponent": [
+    "app.components.data-views.dataset_view.dataset_base_view.dataset.base.view.component::DatasetBaseViewComponent",
+    "AfterViewInit",
+    "OnDestroy",
+    "app.shared.components.dataset_scatter_plot.dataset.scatter.plot.component::DatasetScatterPlotComponent",
+    "app.shared.components.EchartScatterPlot.EchartScatterPlot.component::EchartScatterPlotComponent",
+    "EventEmitter"
+  ],
+  "app.components.data-views.dataset_view.dataset_plot_splom_view.dataset.splom.plot.view.component::DatasetSplomPlotViewComponent": [
+    "app.components.data-views.dataset_view.dataset_base_view.dataset.base.view.component::DatasetBaseViewComponent",
+    "AfterViewInit",
+    "OnDestroy",
+    "app.shared.components.dataset_splom_plot.dataset.splom.plot.component::DatasetSplomPlotComponent"
+  ],
+  "app.components.data-views.dataset_view.dataset_table_view.dataset.table.view.component::DatasetTableViewComponent": [
+    "app.components.data-views.dataset_view.dataset_base_view.dataset.base.view.component::DatasetBaseViewComponent",
+    "AfterViewInit",
+    "OnDestroy",
+    "Table",
+    "app.shared.directives.table.directive.dynamic.table.directive::DynamicTableDirective",
+    "EventEmitter",
+    "Map",
+    "LazyLoadEvent",
+    "DynamicDialogRef",
+    "Array",
+    "SelectItem"
+  ],
+  "app.components.data-views.dataset_view.datset_form_view.components.dataset-form-view-grid.component::FormViewConfig": [],
+  "app.components.data-views.dataset_view.datset_form_view.components.dataset-form-view-grid.component::DatasetFormViewGridComponent": [
+    "BlockableUI",
+    "GridsterComponent",
+    "QueryList",
+    "GridsterConfig",
+    "EventEmitter",
+    "app.core.dataset.model.dataset.dto::CompoundDTO",
+    "app.core.dataset.model.dataset.dto::DatasetColumnDTO",
+    "app.core.user.user.settings.service::SessionView",
+    "SelectItem",
+    "app.core.view.view.dto::AlignmentDTO"
+  ],
+  "app.components.data-views.dataset_view.datset_form_view.components.grid_tiles.one_to_many.table.tile.component::OneToManyTableTileComponent": [
+    "app.components.data-views.dataset_view.datset_form_view.components.grid_tiles.tile.base.component::TileBaseComponent",
+    "AfterViewInit",
+    "OnChanges",
+    "Table",
+    "app.shared.directives.table.directive.dynamic.table.directive::DynamicTableDirective",
+    "app.core.user.user.settings.service::SessionView",
+    "Subscription",
+    "app.core.dataset.model.dataset.dto::DatasetWithDataDTO",
+    "app.core.grid_tiles.one_to_many.table.grid.tile::OneToManyTableGridTile",
+    "EventEmitter",
+    "app.core.view.formatting-rules.service::FormattingRule"
+  ],
+  "app.components.data-views.dataset_view.datset_form_view.components.grid_tiles.one_to_one.table.tile.component::OneToOneTableTileComponent": [
+    "app.components.data-views.dataset_view.datset_form_view.components.grid_tiles.tile.base.component::TileBaseComponent",
+    "AfterViewInit",
+    "Table",
+    "app.shared.directives.table.directive.dynamic.table.directive::DynamicTableDirective",
+    "EventEmitter",
+    "app.core.grid_tiles.one_to_one.table.grid.tile::OneToOneTableGridTile",
+    "SelectItem",
+    "app.core.user.user.settings.service::SessionView"
+  ],
+  "app.components.data-views.dataset_view.datset_form_view.components.grid_tiles.single.parameter.tile.component::SingleParameterTileComponent": [
+    "app.components.data-views.dataset_view.datset_form_view.components.grid_tiles.tile.base.component::TileBaseComponent",
+    "app.core.grid_tiles.single.parameter.grid.tile::SingleParameterGridTile",
+    "SelectItem",
+    "app.core.user.user.settings.service::SessionView"
+  ],
+  "app.components.data-views.dataset_view.datset_form_view.components.grid_tiles.structure.card.tile.component::StructureCardTileComponent": [
+    "app.components.data-views.dataset_view.datset_form_view.components.grid_tiles.tile.base.component::TileBaseComponent",
+    "app.core.dataset.model.dataset.dto::DatasetColumnDTO",
+    "app.core.view.view.dto::AlignmentDTO"
+  ],
+  "app.components.data-views.dataset_view.datset_form_view.components.grid_tiles.tile.base.component::TileBaseComponent": [
+    "app.core.grid_tiles.base.grid.tile::BaseGridTile"
+  ],
+  "app.components.data-views.dataset_view.datset_form_view.components.grid_tiles.tile.container.component::TileContainerComponent": [
+    "OnChanges",
+    "OnInit",
+    "OnDestroy",
+    "OverlayPanel",
+    "ElementRef",
+    "app.core.dataset.model.dataset.dto::CompoundDTO",
+    "Array",
+    "app.core.grid_tiles.base.grid.tile::BaseGridTile",
+    "app.core.user.user.settings.service::SessionView",
+    "EventEmitter",
+    "SelectItem",
+    "DynamicDialogRef",
+    "Subscription",
+    "app.core.dataset.model.dataset.dto::DatasetColumnDTO"
+  ],
+  "app.components.data-views.dataset_view.datset_form_view.dataset.form.view.component::DatasetFormViewComponent": [
+    "app.components.data-views.dataset_view.dataset_base_view.dataset.base.view.component::DatasetBaseViewComponent",
+    "AfterViewInit",
+    "OnInit",
+    "app.components.data-views.dataset_view.datset_form_view.components.dataset-form-view-grid.component::DatasetFormViewGridComponent",
+    "DynamicDialogRef",
+    "Array",
+    "SelectItem",
+    "EventEmitter",
+    "app.components.data-views.dataset_view.datset_form_view.components.dataset-form-view-grid.component::FormViewConfig"
+  ],
+  "app.core.assay.assay-table-api.service::AssayTableApiService": [],
+  "app.core.common.alias.service::AliasService": [],
+  "app.core.common.app-blocker.service::AppBlockEvent": [],
+  "app.core.common.app-blocker.service::AppBlockerService": [
+    "Subject"
+  ],
+  "app.core.common.auth.service::AuthService": [
+    "EventEmitter",
+    "JwtHelperService"
+  ],
+  "app.core.common.autosave-session.service::AutosaveSessionService": [],
+  "app.core.common.computed-properties.service::Property": [],
+  "app.core.common.computed-properties.service::ComputedProperty": [],
+  "app.core.common.computed-properties.service::ComputedPropertiesService": [],
+  "app.core.common.cookie.service::CookieService": [],
+  "app.core.common.dialog.service::DialogService": [
+    "EventEmitter"
+  ],
+  "app.core.common.generic.event.service::GenericEventService": [],
+  "app.core.common.marvinjs.service::MarvinjsService": [],
+  "app.core.common.plugin-loader.client-plugin-loader.service::ClientPluginLoaderService": [
+    "app.core.common.plugin-loader.plugin-loader.service::PluginLoaderService"
+  ],
+  "app.core.common.plugin-loader.plugin-loader.service::PluginLoaderService": [],
+  "app.core.common.plugin-loader.server-plugin-loader.service::ServerPluginLoaderService": [
+    "app.core.common.plugin-loader.plugin-loader.service::PluginLoaderService"
+  ],
+  "app.core.common.plugins-config.provider::PluginsConfig": [],
+  "app.core.common.plugins-config.provider::PluginsConfigProvider": [
+    "app.core.common.plugins-config.provider::PluginsConfig"
+  ],
+  "app.core.common.request.cache.service::RequestCacheEntry": [
+    "HttpResponse"
+  ],
+  "app.core.common.request.cache.service::RequestCacheService": [
+    "Array"
+  ],
+  "app.core.common.request.cache.service::RequestCacheWithMap": [
+    "app.core.common.request.cache.service::RequestCacheService",
+    "Array"
+  ],
+  "app.core.common.transfer-state.service::TransferStateService": [],
+  "app.core.core.module::CoreModule": [],
+  "app.core.datachamber.datachambers.service::DataChamberDTO": [],
+  "app.core.datachamber.datachambers.service::DatachambersService": [
+    "EventEmitter"
+  ],
+  "app.core.datachamber.projects.service::ProjectsService": [],
+  "app.core.dataset.category.service::CategoryService": [
+    "Subject"
+  ],
+  "app.core.dataset.dataset.registry.service::ViewSelectionEvent": [
+    "Array"
+  ],
+  "app.core.dataset.dataset.registry.service::DatasetMetaChangedEvent": [
+    "app.core.dataset.model.dataset.dto::DatasetWithDataDTO"
+  ],
+  "app.core.dataset.dataset.registry.service::DatasetRegistryService": [
+    "EventEmitter",
+    "app.core.dataset.model.dataset.dto::DatasetWithDataDTO",
+    "Array",
+    "Map"
+  ],
+  "app.core.dataset.dataset.service::BackendFilter": [],
+  "app.core.dataset.dataset.service::BackendColumn": [
+    "app.core.dataset.dataset.service::BackendDataset"
+  ],
+  "app.core.dataset.dataset.service::BackendDatasetShort": [
+    "Date"
+  ],
+  "app.core.dataset.dataset.service::BackendDataset": [
+    "Date",
+    "Array"
+  ],
+  "app.core.dataset.dataset.service::BackendDatasetWithData": [
+    "app.core.dataset.dataset.service::BackendDataset",
+    "app.core.dataset.model.dataset.dto::DatasetDataDTO"
+  ],
+  "app.core.dataset.dataset.service::DatasetService": [],
+  "app.core.dataset.dynamic.table.service::DynamicTableService": [],
+  "app.core.dataset.model.dataset.dto::CompoundDTO": [],
+  "app.core.dataset.model.dataset.dto::DatasetDTO": [
+    "Date",
+    "Array"
+  ],
+  "app.core.dataset.model.dataset.dto::DatasetShortDTO": [
+    "Date"
+  ],
+  "app.core.dataset.model.dataset.dto::DatasetListDTO": [
+    "Array"
+  ],
+  "app.core.dataset.model.dataset.dto::DatasetDataDTO": [
+    "Array"
+  ],
+  "app.core.dataset.model.dataset.dto::DatasetFilterConditionDTO": [],
+  "app.core.dataset.model.dataset.dto::DatasetFilterConditionWithDataDTO": [
+    "app.core.dataset.model.dataset.dto::DatasetFilterConditionDTO",
+    "app.core.dataset.model.dataset.dto::AliasDTO",
+    "app.core.dataset.model.dataset.dto::CategoryDTO"
+  ],
+  "app.core.dataset.model.dataset.dto::DatasetWithFiltersDTO": [
+    "app.core.dataset.model.dataset.dto::DatasetDTO",
+    "Array"
+  ],
+  "app.core.dataset.model.dataset.dto::DatasetWithDataDTO": [
+    "app.core.dataset.model.dataset.dto::DatasetWithFiltersDTO",
+    "Array",
+    "app.core.dataset.model.dataset.dto::DatasetDataDTO"
+  ],
+  "app.core.dataset.model.dataset.dto::AliasDTO": [
+    "Array"
+  ],
+  "app.core.dataset.model.dataset.dto::CategoryDTO": [
+    "Array"
+  ],
+  "app.core.dataset.model.dataset.dto::DatasetColumnDTO": [
+    "app.core.dataset.model.dataset.dto::DatasetDTO",
+    "app.core.dataset.model.dataset.dto::AliasDTO",
+    "app.core.dataset.model.dataset.dto::CategoryDTO"
+  ],
+  "app.core.dataset.model.dataset.dto::DatasetColumnDataDTO": [
+    "Array"
+  ],
+  "app.core.dataset.model.dataset.dto::DatasetColumnWithDataDTO": [
+    "app.core.dataset.model.dataset.dto::DatasetColumnDTO",
+    "app.core.dataset.model.dataset.dto::DatasetColumnDataDTO"
+  ],
+  "app.core.dataset.model.plotly.color.sequence::StaticColorSequence": [],
+  "app.core.dataset.model.plotly.custom.trace.dto::CustomTraceBase": [
+    "CurveGroup",
+    "TraceType",
+    "LabelPosition"
+  ],
+  "app.core.dataset.model.plotly.custom.trace.dto::CustomLineTraceDto": [
+    "app.core.dataset.model.plotly.custom.trace.dto::CustomTraceBase",
+    "CurveGroup",
+    "LabelPosition",
+    "TraceType"
+  ],
+  "app.core.dataset.model.plotly.custom.trace.dto::CustomFilledShapeTraceDto": [
+    "app.core.dataset.model.plotly.custom.trace.dto::CustomTraceBase",
+    "CurveGroup",
+    "LabelPosition",
+    "TraceType"
+  ],
+  "app.core.dataset.model.plotly.custom.trace.dto::CustomDynamicEquationTraceDto": [
+    "app.core.dataset.model.plotly.custom.trace.dto::CustomTraceBase",
+    "CurveGroup",
+    "TraceType"
+  ],
+  "app.core.dataset.model.plotly.layout.interface::PlotlyAxis": [
+    "Array"
+  ],
+  "app.core.dataset.model.plotly.layout.interface::PlotlyLayout": [
+    "Array",
+    "app.core.dataset.model.plotly.layout.interface::PlotlyAxis"
+  ],
+  "app.core.dataset.model.plotly.layout.interface::PlotlyTrace": [
+    "Array"
+  ],
+  "app.core.dataset.model.plotly.layout.interface::PlotlyFont": [],
+  "app.core.dataset.model.plotly.layout.interface::PlotlyHoverLabel": [
+    "app.core.dataset.model.plotly.layout.interface::PlotlyFont"
+  ],
+  "app.core.dataset.model.plotly.layout.interface::PlotlyScatterLine": [],
+  "app.core.dataset.model.plotly.layout.interface::PlotlyScatterSelectedMarker": [],
+  "app.core.dataset.model.plotly.layout.interface::PlotlyScatterSelectedText": [],
+  "app.core.dataset.model.plotly.layout.interface::PlotlyScatterSelected": [
+    "app.core.dataset.model.plotly.layout.interface::PlotlyScatterSelectedMarker",
+    "app.core.dataset.model.plotly.layout.interface::PlotlyScatterSelectedText"
+  ],
+  "app.core.dataset.model.plotly.layout.interface::PlotlyScatterError": [
+    "Array"
+  ],
+  "app.core.dataset.model.plotly.layout.interface::PlotlyScatterMarkerGradient": [],
+  "app.core.dataset.model.plotly.layout.interface::PlotlyScatterMarkerLine": [],
+  "app.core.dataset.model.plotly.layout.interface::PlotlyColorScaleTitle": [
+    "app.core.dataset.model.plotly.layout.interface::PlotlyFont"
+  ],
+  "app.core.dataset.model.plotly.layout.interface::PlotlyColorScale": [
+    "Array",
+    "app.core.dataset.model.plotly.layout.interface::PlotlyFont",
+    "app.core.dataset.model.plotly.layout.interface::PlotlyColorScaleTitle"
+  ],
+  "app.core.dataset.model.plotly.layout.interface::PlotlyScatterMarker": [
+    "app.core.dataset.model.plotly.layout.interface::PlotlyColorScale",
+    "app.core.dataset.model.plotly.layout.interface::PlotlyScatterMarkerLine",
+    "app.core.dataset.model.plotly.layout.interface::PlotlyScatterMarkerGradient"
+  ],
+  "app.core.dataset.model.plotly.layout.interface::PlotlyScatterTrace": [
+    "Array",
+    "app.core.dataset.model.plotly.layout.interface::PlotlyHoverLabel",
+    "app.core.dataset.model.plotly.layout.interface::PlotlyScatterLine",
+    "app.core.dataset.model.plotly.layout.interface::PlotlyScatterMarker",
+    "app.core.dataset.model.plotly.layout.interface::PlotlyScatterSelected",
+    "app.core.dataset.model.plotly.layout.interface::PlotlyFont",
+    "app.core.dataset.model.plotly.layout.interface::PlotlyScatterError"
+  ],
+  "app.core.dataset.model.plotly.shape.sequence::ShapeSequence": [],
+  "app.core.dataset.structure.card.service::StructureCardService": [
+    "Array",
+    "EventEmitter"
+  ],
+  "app.core.eapps.app.dto::EAppsAppComponent": [],
+  "app.core.eapps.app.dto::EAppsAppRegistry": [
+    "ComponentRef"
+  ],
+  "app.core.errors.errors.dto::ErrorContextDTO": [],
+  "app.core.errors.errors.dto::ColumnNotInDatasetErrorDTO": [
+    "app.core.errors.errors.dto::ErrorContextDTO"
+  ],
+  "app.core.facade.user-table-facade.service::UserTableFacadeService": [],
+  "app.core.grid_tiles.base.grid.tile::TileConfig": [
+    "GridTileTypes",
+    "TableState"
+  ],
+  "app.core.grid_tiles.base.grid.tile::BaseGridTile": [
+    "GridsterItem",
+    "app.core.grid_tiles.base.grid.tile::TileConfig",
+    "TableState",
+    "app.core.dataset.model.dataset.dto::DatasetColumnDTO",
+    "GridTileTypes"
+  ],
+  "app.core.grid_tiles.one_to_many.table.grid.tile::OneToManyTileConfig": [
+    "app.core.grid_tiles.base.grid.tile::TileConfig",
+    "GridTileTypes",
+    "app.core.dataset.model.dataset.dto::DatasetColumnDTO"
+  ],
+  "app.core.grid_tiles.one_to_many.table.grid.tile::OneToManyTableGridTile": [
+    "app.core.grid_tiles.base.grid.tile::BaseGridTile"
+  ],
+  "app.core.grid_tiles.one_to_one.table.grid.tile::OneToOneTableGridTile": [
+    "app.core.grid_tiles.base.grid.tile::BaseGridTile"
+  ],
+  "app.core.grid_tiles.single.parameter.grid.tile::SingleParameterGridTile": [
+    "app.core.grid_tiles.base.grid.tile::BaseGridTile",
+    "app.core.dataset.model.dataset.dto::DatasetColumnDTO"
+  ],
+  "app.core.grid_tiles.structure.card.grid.tile::StructureCardGridTile": [
+    "app.core.grid_tiles.base.grid.tile::BaseGridTile"
+  ],
+  "app.core.guards.auth.guard::AuthGuard": [
+    "CanActivate",
+    "CanActivateChild"
+  ],
+  "app.core.guards.logout.guard::LogoutGuard": [
+    "CanActivate"
+  ],
+  "app.core.guards.session.guard::SessionGuard": [
+    "CanActivate",
+    "app.core.common.app-blocker.service::AppBlockEvent"
+  ],
+  "app.core.interceptors.caching.interceptor::CachingInterceptor": [
+    "HttpInterceptor"
+  ],
+  "app.core.interceptors.jwt.interceptor::JwtInterceptor": [
+    "HttpInterceptor"
+  ],
+  "app.core.interceptors.token.interceptor::TokenInterceptor": [
+    "HttpInterceptor"
+  ],
+  "app.core.plotting.custom.trace.creation.service::CurveFunctions": [],
+  "app.core.plotting.custom.trace.creation.service::CustomTraceCreationService": [],
+  "app.core.plotting.scatter.plot.service::PlotPoint": [],
+  "app.core.plotting.scatter.plot.service::PlotAxisKeys": [
+    "app.core.dataset.model.dataset.dto::DatasetColumnDTO"
+  ],
+  "app.core.plotting.scatter.plot.service::CategoricalAxisMaps": [
+    "Map"
+  ],
+  "app.core.plotting.scatter.plot.service::ScatterPlotService": [],
+  "app.core.session.model.column.mapping::ColumnMapping": [
+    "app.core.dataset.model.dataset.dto::DatasetColumnDTO"
+  ],
+  "app.core.session.model.dataset.view.toolbar.event::DatasetViewToolbarEvent": [
+    "Array",
+    "app.core.dataset.model.dataset.dto::DatasetColumnDTO",
+    "app.core.view.selection-bucket.service::SelectionBucket"
+  ],
+  "app.core.session.model.group.dto::GroupDTO": [],
+  "app.core.session.model.session.dto::SessionDTO": [
+    "app.core.session.model.session.dto::SessionSettingsDTO"
+  ],
+  "app.core.session.model.session.dto::SessionWithViewsDTO": [
+    "app.core.session.model.session.dto::SessionDTO"
+  ],
+  "app.core.session.model.session.dto::SessionSettingsDTO": [
+    "app.core.session.model.session.dto::RightToolbarStateDTO",
+    "app.core.session.model.session.dto::ToolbarStateDTO"
+  ],
+  "app.core.session.model.session.dto::ToolbarStateDTO": [],
+  "app.core.session.model.session.dto::RightToolbarStateDTO": [
+    "app.core.session.model.session.dto::ToolbarStateDTO"
+  ],
+  "app.core.session.model.view.grouping.mapping::ViewGroupingMapping": [],
+  "app.core.session.model.view.mapping::ViewMapping": [],
+  "app.core.session.model.view.selection::ViewSelection": [
+    "Map"
+  ],
+  "app.core.session.session.service::SessionService": [],
+  "app.core.session.session.view.registry.service::SessionViewRegistryService": [
+    "app.core.session.model.session.dto::SessionWithViewsDTO",
+    "Subject",
+    "Map"
+  ],
+  "app.core.user.model.group-user-search-result.dto::GroupUserSearchResultDTO": [],
+  "app.core.user.model.user-table.dto::CommonColumnDefinition": [],
+  "app.core.user.model.user-table.dto::ColumnDefinition": [
+    "app.core.user.model.user-table.dto::CommonColumnDefinition"
+  ],
+  "app.core.user.model.user-table.dto::MeasureColumnDefinition": [
+    "app.core.user.model.user-table.dto::ColumnDefinition"
+  ],
+  "app.core.user.model.user-table.dto::TableBase": [],
+  "app.core.user.model.user-table.dto::AssayTable": [
+    "app.core.user.model.user-table.dto::TableBase",
+    "Array",
+    "app.core.user.model.user-table.dto::CommonColumnDefinition"
+  ],
+  "app.core.user.model.user-table.dto::AggregatedCompoundLvlTable": [
+    "app.core.user.model.user-table.dto::TableBase",
+    "app.core.user.model.user-table.dto::CommonColumnDefinition"
+  ],
+  "app.core.user.model.user-table.dto::ExternalTable": [
+    "app.core.user.model.user-table.dto::TableBase",
+    "app.core.user.model.user-table.dto::CommonColumnDefinition"
+  ],
+  "app.core.user.model.user.dto::UserDTO": [],
+  "app.core.user.user-management.service::UserManagementService": [
+    "UserRole"
+  ],
+  "app.core.user.user.notification.service::UserNotification": [
+    "EventEmitter"
+  ],
+  "app.core.user.user.notification.service::UserNotificationService": [],
+  "app.core.user.user.settings.service::SessionView": [
+    "app.core.view.view.dto::ViewDTO",
+    "app.core.dataset.model.dataset.dto::DatasetWithDataDTO"
+  ],
+  "app.core.user.user.settings.service::UserSettings": [],
+  "app.core.user.user.settings.service::UserSettingsService": [],
+  "app.core.view.formatting-rules.service::Interval": [],
+  "app.core.view.formatting-rules.service::Property": [],
+  "app.core.view.formatting-rules.service::FormattingRule": [],
+  "app.core.view.formatting-rules.service::FormattingRulesService": [],
+  "app.core.view.selection-bucket.service::Owner": [],
+  "app.core.view.selection-bucket.service::SelectionBucket": [
+    "SelectionType",
+    "app.core.view.selection-bucket.service::Owner"
+  ],
+  "app.core.view.selection-bucket.service::SelectionBucketService": [],
+  "app.core.view.view-grouping.service::ViewGroupingService": [],
+  "app.core.view.view-template.service::ViewTemplateService": [],
+  "app.core.view.view.data.selection.service::ViewDataSelectionService": [
+    "EventEmitter"
+  ],
+  "app.core.view.view.dto::ViewDTO": [
+    "app.core.view.view.dto::ViewSettingsDTO"
+  ],
+  "app.core.view.view.dto::ViewWithDatasetDTO": [
+    "app.core.view.view.dto::ViewDTO"
+  ],
+  "app.core.view.view.dto::TableViewSettingsDTO": [
+    "app.core.view.view.dto::ViewSettingsDTO",
+    "TableState"
+  ],
+  "app.core.view.view.dto::GridMapViewSettingsDTO": [
+    "app.core.view.view.dto::ViewSettingsDTO"
+  ],
+  "app.core.view.view.dto::FormViewSettingsDTO": [
+    "app.core.view.view.dto::ViewSettingsDTO",
+    "app.components.data-views.dataset_view.datset_form_view.components.dataset-form-view-grid.component::FormViewConfig"
+  ],
+  "app.core.view.view.dto::ScatterPlotViewSettingsDTO": [
+    "app.core.view.view.dto::ViewSettingsDTO",
+    "app.shared.components.dataset_scatter_plot.dataset.scatter.plot.component::DatasetScatterPlotSettings"
+  ],
+  "app.core.view.view.dto::AlignmentDTO": [],
+  "app.core.view.view.dto::ViewSettingsDTO": [
+    "Array",
+    "app.core.view.view.dto::AlignmentDTO"
+  ],
+  "app.core.view.view.service::NewViewDTO": [
+    "app.core.view.view.dto::ViewSettingsDTO"
+  ],
+  "app.core.view.view.service::ViewTemplateDTO": [
+    "app.core.view.view.dto::ViewSettingsDTO",
+    "app.core.user.model.user.dto::UserDTO"
+  ],
+  "app.core.view.view.service::ViewService": [],
+  "app.pages.layout.components.app-block.app-block.component::AppBlockComponent": [
+    "Subscription"
+  ],
+  "app.pages.layout.components.bottombar.bottombar.component::BottombarComponent": [
+    "AfterViewInit",
+    "Carousel",
+    "Array"
+  ],
+  "app.pages.layout.components.topbar.topbar.component::ThemeMap": [],
+  "app.pages.layout.components.topbar.topbar.component::Theme": [],
+  "app.pages.layout.components.topbar.topbar.component::ThemeItem": [
+    "app.pages.layout.components.topbar.topbar.component::ThemeState"
+  ],
+  "app.pages.layout.components.topbar.topbar.component::ThemeState": [],
+  "app.pages.layout.components.topbar.topbar.component::TopbarComponent": [
+    "OnInit",
+    "OnDestroy",
+    "ElementRef",
+    "OverlayPanel",
+    "MenuItem",
+    "Array",
+    "DynamicDialogRef",
+    "Subscription"
+  ],
+  "app.pages.layout.layout-routing.module::LayoutRoutingModule": [],
+  "app.pages.layout.layout.module::LayoutModule": [],
+  "app.pages.layout.pages.layout.page::LayoutPage": [],
+  "app.pages.load_sessions.load-sessions-routing.module::LoadSessionsRoutingModule": [],
+  "app.pages.load_sessions.load-sessions.module::LoadSessionsModule": [],
+  "app.pages.load_sessions.pages.load-sessions.page::LoadSessionsPage": [
+    "OnInit",
+    "app.core.session.model.session.dto::SessionDTO",
+    "DynamicDialogRef"
+  ],
+  "app.pages.login.login-routing.module::LoginRoutingModule": [],
+  "app.pages.login.login.module::LoginModule": [],
+  "app.pages.login.pages.login.page::LoginPage": [
+    "OnInit",
+    "app.core.common.app-blocker.service::AppBlockEvent"
+  ],
+  "app.pages.session.components.NewSessionModal.new-session-modal.component::NewSessionModalComponent": [
+    "OnInit"
+  ],
+  "app.pages.session.pages.session.page::SessionPage": [
+    "OnInit",
+    "AfterViewInit",
+    "OnDestroy",
+    "app.components.data-chamber.data-chamber-session-container.data-chamber-session-container.component::DataChamberSessionContainerComponent",
+    "TabView",
+    "Subscription"
+  ],
+  "app.pages.session.session-routing.module::SessionRoutingModule": [],
+  "app.pages.session.session.module::SessionModule": [],
+  "app.shared.app.util::EAppsUtil": [],
+  "app.shared.components.EchartScatterPlot.EchartScatterPlot.component::DatasetScatterPlotSettings": [
+    "Map"
+  ],
+  "app.shared.components.EchartScatterPlot.EchartScatterPlot.component::PlotData": [
+    "app.shared.components.dataset_scatter_plot.dataset.scatter.plot.component::DatasetScatterPlotAxisData",
+    "Map"
+  ],
+  "app.shared.components.EchartScatterPlot.EchartScatterPlot.component::DatasetScatterPlotAxisData": [
+    "app.core.dataset.model.dataset.dto::DatasetColumnDataDTO"
+  ],
+  "app.shared.components.EchartScatterPlot.EchartScatterPlot.component::EchartScatterPlotComponent": [
+    "OnInit",
+    "OverlayPanel",
+    "app.shared.components.dataset_scatter_plot.components.dataset.scatter.plot.curves.component::DatasetScatterPlotCurvesComponent",
+    "app.shared.components.dataset_scatter_plot.components.dataset.scatter.plot.menu.component::DatasetScatterPlotMenuComponent",
+    "ElementRef",
+    "EChartsOption",
+    "Array",
+    "app.shared.components.dataset_scatter_plot.dataset.scatter.plot.component::DatasetScatterPlotSettings",
+    "app.core.plotting.scatter.plot.service::PlotAxisKeys",
+    "ECharts",
+    "app.shared.components.dataset_scatter_plot.dataset.scatter.plot.config::DatasetScatterPlotConfig",
+    "app.core.dataset.model.dataset.dto::DatasetShortDTO",
+    "app.core.dataset.model.plotly.layout.interface::PlotlyScatterTrace",
+    "Map",
+    "Subscription",
+    "app.core.dataset.model.dataset.dto::DatasetWithDataDTO",
+    "MutationObserver",
+    "EventEmitter",
+    "app.core.user.user.settings.service::SessionView",
+    "app.core.dataset.model.dataset.dto::DatasetColumnDTO",
+    "app.core.view.view.dto::AlignmentDTO"
+  ],
+  "app.shared.components.build-share.build-share.component::ShareGroup": [],
+  "app.shared.components.build-share.build-share.component::ShareableMember": [],
+  "app.shared.components.build-share.build-share.component::BuildShareComponent": [
+    "EventEmitter"
+  ],
+  "app.shared.components.dataset_plot_container.dataset.plot.container.component::DatasetPlotContainerComponent": [
+    "EventEmitter",
+    "Array",
+    "app.core.dataset.model.dataset.dto::DatasetWithDataDTO",
+    "app.core.dataset.model.dataset.dto::DatasetColumnDTO",
+    "app.core.view.view.dto::AlignmentDTO"
+  ],
+  "app.shared.components.dataset_scatter_plot.components.dataset.scatter.plot.colorscale-selector.component::DatasetScatterPlotColorscaleSelectorComponent": [
+    "EventEmitter"
+  ],
+  "app.shared.components.dataset_scatter_plot.components.dataset.scatter.plot.curves.component::DatasetScatterPlotCurvesComponent": [
+    "OnInit",
+    "app.core.dataset.model.plotly.layout.interface::PlotlyScatterTrace",
+    "Array"
+  ],
+  "app.shared.components.dataset_scatter_plot.components.dataset.scatter.plot.menu.component::CurveMenuOption": [
+    "CurveGroup"
+  ],
+  "app.shared.components.dataset_scatter_plot.components.dataset.scatter.plot.menu.component::DatasetScatterPlotMenuComponent": [],
+  "app.shared.components.dataset_scatter_plot.components.dataset.scatter.plot.title-editor.component::DatasetScatterPlotTitleEditorComponent": [
+    "EventEmitter"
+  ],
+  "app.shared.components.dataset_scatter_plot.dataset.scatter.plot.component::DatasetScatterPlotSettings": [
+    "Map"
+  ],
+  "app.shared.components.dataset_scatter_plot.dataset.scatter.plot.component::PlotData": [
+    "app.shared.components.dataset_scatter_plot.dataset.scatter.plot.component::DatasetScatterPlotAxisData",
+    "Map"
+  ],
+  "app.shared.components.dataset_scatter_plot.dataset.scatter.plot.component::DatasetScatterPlotAxisData": [
+    "app.core.dataset.model.dataset.dto::DatasetColumnDataDTO"
+  ],
+  "app.shared.components.dataset_scatter_plot.dataset.scatter.plot.component::DatasetScatterPlotComponent": [
+    "OnDestroy",
+    "AfterViewInit",
+    "PlotlyComponent",
+    "ElementRef",
+    "OverlayPanel",
+    "app.shared.components.dataset_scatter_plot.components.dataset.scatter.plot.curves.component::DatasetScatterPlotCurvesComponent",
+    "app.shared.components.dataset_scatter_plot.components.dataset.scatter.plot.menu.component::DatasetScatterPlotMenuComponent",
+    "app.shared.components.dataset_plot_container.dataset.plot.container.component::DatasetPlotContainerComponent",
+    "EventEmitter",
+    "app.core.user.user.settings.service::SessionView",
+    "app.core.dataset.model.dataset.dto::DatasetColumnDTO",
+    "Array",
+    "app.core.plotting.scatter.plot.service::PlotAxisKeys",
+    "app.shared.components.dataset_scatter_plot.dataset.scatter.plot.config::DatasetScatterPlotConfig",
+    "app.core.dataset.model.plotly.layout.interface::PlotlyAxis",
+    "app.core.dataset.model.plotly.layout.interface::PlotlyLayout",
+    "app.core.dataset.model.plotly.layout.interface::PlotlyScatterTrace",
+    "Map",
+    "app.core.dataset.model.dataset.dto::DatasetWithDataDTO",
+    "Subscription",
+    "app.shared.components.dataset_scatter_plot.dataset.scatter.plot.component::DatasetScatterPlotSettings"
+  ],
+  "app.shared.components.dataset_scatter_plot.dataset.scatter.plot.config::DatasetScatterPlotConfig": [
+    "app.core.dataset.model.plotly.layout.interface::PlotlyScatterTrace",
+    "app.core.dataset.model.plotly.layout.interface::PlotlyAxis",
+    "app.core.dataset.model.plotly.layout.interface::PlotlyLayout"
+  ],
+  "app.shared.components.dataset_splom_plot.dataset.splom.plot.component::DatasetSplomPlotComponent": [
+    "OnDestroy",
+    "app.shared.components.dataset_plot_container.dataset.plot.container.component::DatasetPlotContainerComponent",
+    "PlotlyComponent",
+    "EventEmitter",
+    "Array",
+    "app.core.dataset.model.plotly.layout.interface::PlotlyAxis",
+    "app.core.dataset.model.plotly.layout.interface::PlotlyLayout",
+    "app.core.dataset.model.dataset.dto::DatasetWithDataDTO",
+    "Map",
+    "Subscription"
+  ],
+  "app.shared.components.dataset_tool.dataset_export_pane.dataset.export.pane.component::DatasetExportPaneComponent": [
+    "OnDestroy",
+    "OnChanges",
+    "Array",
+    "app.core.user.user.settings.service::SessionView",
+    "app.core.dataset.model.dataset.dto::DatasetWithDataDTO",
+    "Subscription"
+  ],
+  "app.shared.components.dataset_tool.dataset_fields_pane.dataset.fields.pane.component::DatasetFieldsPaneComponent": [
+    "OnChanges",
+    "Array",
+    "app.core.dataset.model.dataset.dto::DatasetColumnDTO",
+    "DynamicDialogRef",
+    "UserRole",
+    "Subscription",
+    "ElementRef",
+    "TieredMenu",
+    "app.core.user.user.settings.service::SessionView"
+  ],
+  "app.shared.components.dataset_tool.dataset_filters.dataset.date.filter.component::DatasetDateFilterComponent": [
+    "AfterViewInit",
+    "EventEmitter",
+    "app.core.user.user.settings.service::SessionView",
+    "Array",
+    "app.core.dataset.model.dataset.dto::DatasetFilterConditionWithDataDTO"
+  ],
+  "app.shared.components.dataset_tool.dataset_filters.dataset.filter.pane.component::DatasetFilterPaneComponent": [
+    "AfterViewInit",
+    "OnDestroy",
+    "Array",
+    "app.core.dataset.model.dataset.dto::DatasetDTO",
+    "app.core.dataset.model.dataset.dto::DatasetFilterConditionWithDataDTO",
+    "app.core.user.user.settings.service::SessionView",
+    "app.core.dataset.model.dataset.dto::DatasetWithDataDTO",
+    "Subscription"
+  ],
+  "app.shared.components.dataset_tool.dataset_filters.dataset.nominal.filter.component::DatasetNominalFilterComponent": [
+    "AfterViewInit",
+    "EventEmitter",
+    "app.core.user.user.settings.service::SessionView",
+    "Array",
+    "app.core.dataset.model.dataset.dto::DatasetFilterConditionWithDataDTO"
+  ],
+  "app.shared.components.dataset_tool.dataset_filters.dataset.range.filter.component::DatasetRangeFilterComponent": [
+    "AfterViewInit",
+    "app.core.user.user.settings.service::SessionView",
+    "Array",
+    "EventEmitter",
+    "app.core.dataset.model.dataset.dto::DatasetFilterConditionWithDataDTO"
+  ],
+  "app.shared.components.dataset_tool.dataset_filters.dataset.selection.filter.component::DatasetSelectionFilterComponent": [
+    "OnInit",
+    "OnDestroy",
+    "OnChanges",
+    "app.core.user.user.settings.service::SessionView",
+    "app.core.dataset.model.dataset.dto::DatasetWithDataDTO",
+    "app.core.dataset.model.dataset.dto::DatasetFilterConditionWithDataDTO",
+    "app.core.view.selection-bucket.service::SelectionBucket",
+    "DynamicDialogRef",
+    "EventEmitter",
+    "Subscription"
+  ],
+  "app.shared.components.dataset_tool.dataset_filters.dataset.structure.filter.component::DatasetStructureFilterComponent": [
+    "AfterViewInit",
+    "EventEmitter",
+    "Array"
+  ],
+  "app.shared.components.share.share.component::ShareComponent": [
+    "OnInit",
+    "ShareableType",
+    "EventEmitter"
+  ],
+  "app.shared.components.structure_card.structure.card.component::StructureCardButton": [],
+  "app.shared.components.structure_card.structure.card.component::StructureCardClickEvent": [
+    "app.shared.components.structure_card.structure.card.component::StructureCardComponent",
+    "MouseEvent"
+  ],
+  "app.shared.components.structure_card.structure.card.component::StructureCardComponent": [
+    "OnInit",
+    "AfterContentInit",
+    "AfterViewInit",
+    "AfterViewChecked",
+    "Map",
+    "EventEmitter",
+    "SelectItem",
+    "Menu"
+  ],
+  "app.shared.components.structure_popup.structure.popup.dialog::StructurePopupDialogComponent": [
+    "OnDestroy",
+    "Subscription",
+    "Array"
+  ],
+  "app.shared.components.switch-button.switch-button.component::SwitchButtonComponent": [
+    "OnInit",
+    "EventEmitter"
+  ],
+  "app.shared.components.toast.toast.component::EAppsToastComponent": [
+    "OnDestroy",
+    "Toast",
+    "Subscription"
+  ],
+  "app.shared.components.users-selection-form.users-selection-form.component::AutoCompleteCompleteEvent": [
+    "Event"
+  ],
+  "app.shared.components.users-selection-form.users-selection-form.component::UsersSelectionFormComponent": [
+    "ShareableType",
+    "EventEmitter"
+  ],
+  "app.shared.dialogs.about.about-dialog.component::AboutDialogComponent": [
+    "OnDestroy",
+    "Subscription"
+  ],
+  "app.shared.dialogs.alias-modal.alias-modal.component::AliasModalComponent": [
+    "OnInit",
+    "Array",
+    "app.core.dataset.model.dataset.dto::DatasetColumnDTO"
+  ],
+  "app.shared.dialogs.category-modal.category-modal.component::CategoryModalComponent": [
+    "OnInit",
+    "app.core.dataset.model.dataset.dto::DatasetColumnDTO"
+  ],
+  "app.shared.dialogs.computed-properties-modal.computed-properties-modal.component::ComputedPropertiesModalComponent": [
+    "OnInit",
+    "app.core.dataset.model.dataset.dto::DatasetWithDataDTO",
+    "DynamicDialogRef"
+  ],
+  "app.shared.dialogs.computed-property-modal.computed-property-modal.component::ComputedPropertyModalComponent": [
+    "OnInit",
+    "ElementRef",
+    "app.core.dataset.model.dataset.dto::DatasetWithDataDTO",
+    "app.core.common.computed-properties.service::ComputedProperty",
+    "Array",
+    "SelectItem"
+  ],
+  "app.shared.dialogs.conditional-formatting-modal.conditional-formatting-modal.component::ConditionalFormattingModalComponent": [
+    "OnInit",
+    "app.core.dataset.model.dataset.dto::DatasetWithDataDTO",
+    "Array",
+    "SelectItem",
+    "app.core.dataset.model.dataset.dto::DatasetColumnDTO",
+    "app.core.view.formatting-rules.service::Property"
+  ],
+  "app.shared.dialogs.create-data-chamber-dialog.create-data-chamber-dialog.component::DCItemList": [],
+  "app.shared.dialogs.create-data-chamber-dialog.create-data-chamber-dialog.component::CreateDataChamberDialogComponent": [
+    "OnInit",
+    "OnDestroy",
+    "app.core.datachamber.datachambers.service::DataChamberDTO"
+  ],
+  "app.shared.dialogs.create-formatting-rule-modal.create-formatting-rule-modal.component::CreateFormattingRuleModalComponent": [
+    "OnInit"
+  ],
+  "app.shared.dialogs.create-selection-bucket.create-selection-bucket.component::CreateSelectionBucketComponent": [
+    "OnInit"
+  ],
+  "app.shared.dialogs.create-template-modal.create-template-modal.component::CreateTemplateModalComponent": [
+    "OnInit",
+    "app.core.user.user.settings.service::SessionView",
+    "app.core.view.view.dto::ViewDTO"
+  ],
+  "app.shared.dialogs.dataset-selection.dataset-selection.component::DatasetSelectionComponent": [
+    "OnInit"
+  ],
+  "app.shared.dialogs.manage-template-modal.manage-template-modal.component::ManageTemplateModalComponent": [
+    "OnInit",
+    "app.core.view.view.service::ViewTemplateDTO",
+    "DynamicDialogRef"
+  ],
+  "app.shared.dialogs.marvin_sketch.marvin.sketch.dialog::MarvinSketchDialog": [
+    "AfterViewInit",
+    "OnDestroy",
+    "ElementRef",
+    "Subscription"
+  ],
+  "app.shared.dialogs.renaming.renaming.component::RenamingComponent": [
+    "OnInit"
+  ],
+  "app.shared.dialogs.save-view-dialog.save-view-dialog.component::SaveViewDialogComponent": [
+    "app.shared.components.build-share.build-share.component::BuildShareComponent",
+    "app.core.user.user.settings.service::SessionView",
+    "Subscription"
+  ],
+  "app.shared.dialogs.selection-bucket-modal.selection-bucket-modal.component::SelectionBucketModalComponent": [
+    "OnInit",
+    "ElementRef",
+    "app.core.view.selection-bucket.service::SelectionBucket"
+  ],
+  "app.shared.dialogs.selection-bucket-structure-modal.selection-bucket-structure-modal.component::SelectionBucketStructureModalComponent": [
+    "OnInit"
+  ],
+  "app.shared.dialogs.session_expired.session.expired.dialog.component::SessionExpiredDialogComponent": [
+    "OnDestroy",
+    "Subject",
+    "Subscription"
+  ],
+  "app.shared.dialogs.share-datachambers-modal.share-datachambers-modal.component::ShareDatachambersModalComponent": [
+    "OnInit"
+  ],
+  "app.shared.dialogs.share-dataset-modal.share-dataset-modal.component::ShareDatasetModalComponent": [
+    "OnInit"
+  ],
+  "app.shared.dialogs.share-selection-bucket-modal.share-selection-bucket-modal.component::ShareSelectionBucketModalComponent": [
+    "OnInit"
+  ],
+  "app.shared.dialogs.share-session-dialog.share-session-dialog.component::ShareSessionDialogComponent": [
+    "OnChanges",
+    "app.core.session.model.session.dto::SessionDTO",
+    "Array"
+  ],
+  "app.shared.dialogs.share-template-component.share-template-component.component::ShareTemplateComponentComponent": [
+    "OnInit"
+  ],
+  "app.shared.dialogs.share-views-dialog.share-views-dialog.component::ShareViewsDialogComponent": [
+    "OnInit",
+    "Subscription"
+  ],
+  "app.shared.directives.table.directive.dynamic.table.column::DynamicTableColumn": [
+    "Element"
+  ],
+  "app.shared.directives.table.directive.dynamic.table.directive::DynamicTableDirective": [
+    "OnDestroy",
+    "AfterViewInit",
+    "Subscription"
+  ],
+  "app.shared.directives.table.directive.table.dragdrop.event::TableDragdropEvent": [],
+  "app.shared.directives.table.directive.unsort.table.directive::UnsortTableDirective": [],
+  "app.shared.shared.module::SharedModule": [],
+  "environments.eapps.environment::EAppsLocalStorageEnvironment": [],
+  "environments.eapps.environment::EAppsMarvinEnvironment": [],
+  "environments.eapps.environment::EAppsEnvironment": [
+    "environments.eapps.environment::EAppsMarvinEnvironment",
+    "environments.eapps.environment::EAppsLocalStorageEnvironment"
+  ],
+  "typings.d::Window": []
+}

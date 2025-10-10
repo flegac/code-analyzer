@@ -1,0 +1,39 @@
+from pathlib import Path
+
+from python_parser.project.module_cache import ModuleCache
+from python_parser.project.relation import Relation
+from python_parser.scope.config import PYTHON_FILE_RGLOB, PYTHON_FILE_REGEX
+
+ModuleId = str
+
+
+class Project:
+    def __init__(self, name: str, root: Path | str) -> None:
+        self.name = name
+        self.root = Path(root).absolute()
+        self.modules: dict[ModuleId, ModuleCache] = {}
+
+    def iter_files(self):
+        return {
+            path for path in self.root.rglob(PYTHON_FILE_RGLOB)
+            if PYTHON_FILE_REGEX.match(path.name)
+        }
+
+    def iter_modules(self):
+        return [_ for _ in self.modules.values()]
+
+    def parse(self):
+        print(f'project [{self.name}]: parsing ...')
+
+        modules = [
+            ModuleCache.from_path(self.root, _)
+            for _ in self.iter_files()
+        ]
+        self.modules = {
+            _.ref.ref_id: _
+            for _ in modules
+        }
+        return self
+
+    def hierarchy(self):
+        return Relation.hierarchy({_.ref for _ in self.modules.values()})
